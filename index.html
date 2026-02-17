@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temples of Refuge — A Fractal Network of Living Temples</title>
+    <meta name="description" content="A 508(c)(1)(A) network of Temples where spiritual practice, ecological regeneration, and sovereign technology co-evolve. Re-binding human life to Source through direct experience.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --color-void: #0B0D1A;
+            --color-deep: #12152B;
+            --color-indigo: #1E2444;
+            --color-violet: #4A4175;
+            --color-lavender: #8B85B0;
+            --color-silver: #C5C3D6;
+            --color-light: #EEEEF4;
+            --color-gold: #C9A962;
+            --color-gold-dim: #A08840;
+            --color-rose: #C4A0A0;
+            
+            --font-display: 'Cinzel', serif;
+            --font-body: 'Raleway', sans-serif;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: var(--font-body);
+            font-weight: 300;
+            background: var(--color-void);
+            color: var(--color-light);
+            line-height: 1.8;
+            font-size: 17px;
+        }
+        
+        /* Typography */
+        h1, h2, h3 {
+            font-family: var(--font-display);
+            font-weight: 400;
+            line-height: 1.2;
+            letter-spacing: 0.05em;
+        }
+        
+        h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+        }
+        
+        h2 {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            letter-spacing: 0.1em;
+        }
+        
+        h3 {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            letter-spacing: 0.08em;
+        }
+        
+        .eyebrow {
+            font-family: var(--font-body);
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--color-gold);
+            margin-bottom: 1.5rem;
+        }
+        
+        .lead {
+            font-size: clamp(1.05rem, 2vw, 1.25rem);
+            font-weight: 300;
+            color: var(--color-silver);
+            max-width: 55ch;
+            letter-spacing: 0.02em;
+        }
+        
+        /* Sections */
+        section {
+            padding: 10rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .container-narrow {
+            max-width: 750px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: 
+                radial-gradient(ellipse at 50% 0%, rgba(74, 65, 117, 0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 50% 100%, rgba(30, 36, 68, 0.3) 0%, transparent 50%),
+                var(--color-void);
+            position: relative;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: min(80vw, 600px);
+            height: min(80vw, 600px);
+            border: 1px solid rgba(74, 65, 117, 0.2);
+            border-radius: 50%;
+            animation: rotate 120s linear infinite;
+        }
+        
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: min(60vw, 450px);
+            height: min(60vw, 450px);
+            border: 1px solid rgba(74, 65, 117, 0.15);
+            border-radius: 50%;
+            animation: rotate 90s linear infinite reverse;
+        }
+        
+        @keyframes rotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            animation: fadeIn 2s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .hero h1 {
+            margin-bottom: 2rem;
+            background: linear-gradient(180deg, var(--color-light) 0%, var(--color-silver) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero .lead {
+            max-width: 48ch;
+            margin: 0 auto;
+            animation: fadeIn 2s ease-out 0.3s both;
+        }
+        
+        .hero-symbol {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 3rem;
+            animation: fadeIn 2s ease-out 0.1s both;
+        }
+        
+        .hero-symbol svg {
+            width: 100%;
+            height: 100%;
+            stroke: var(--color-gold);
+            stroke-width: 1;
+            fill: none;
+        }
+        
+        .scroll-indicator {
+            position: absolute;
+            bottom: 4rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            animation: fadeIn 2s ease-out 0.6s both;
+        }
+        
+        .scroll-indicator span {
+            font-size: 0.65rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--color-lavender);
+        }
+        
+        .scroll-line {
+            width: 1px;
+            height: 50px;
+            background: linear-gradient(to bottom, var(--color-violet), transparent);
+            animation: pulse 2.5s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        
+        /* Divider */
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--color-indigo), transparent);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        /* Meaning Section */
+        .meaning {
+            background: var(--color-deep);
+            text-align: center;
+        }
+        
+        .meaning h2 {
+            margin-bottom: 2rem;
+        }
+        
+        .meaning-text {
+            color: var(--color-silver);
+            max-width: 55ch;
+            margin: 0 auto 4rem;
+        }
+        
+        .etymology {
+            display: inline-block;
+            padding: 3rem 4rem;
+            position: relative;
+        }
+        
+        .etymology::before,
+        .etymology::after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border: 1px solid var(--color-violet);
+        }
+        
+        .etymology::before {
+            top: 0;
+            left: 0;
+            border-right: none;
+            border-bottom: none;
+        }
+        
+        .etymology::after {
+            bottom: 0;
+            right: 0;
+            border-left: none;
+            border-top: none;
+        }
+        
+        .etymology-word {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            letter-spacing: 0.15em;
+            color: var(--color-gold);
+            margin-bottom: 1rem;
+        }
+        
+        .etymology-meaning {
+            color: var(--color-lavender);
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+        }
+        
+        /* Cosmology Section */
+        .cosmology {
+            background: var(--color-void);
+        }
+        
+        .cosmology-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+        
+        .cosmology-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: var(--color-indigo);
+        }
+        
+        @media (max-width: 900px) {
+            .cosmology-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .cosmo-card {
+            padding: 3rem 2.5rem;
+            background: var(--color-void);
+            transition: background 0.5s ease;
+        }
+        
+        .cosmo-card:hover {
+            background: var(--color-deep);
+        }
+        
+        .cosmo-card h3 {
+            color: var(--color-light);
+            margin-bottom: 1.25rem;
+            text-transform: uppercase;
+        }
+        
+        .cosmo-card p {
+            color: var(--color-lavender);
+            font-size: 0.9rem;
+            line-height: 1.8;
+        }
+        
+        /* Body Section */
+        .body-section {
+            background:
+                radial-gradient(ellipse at center, rgba(30, 36, 68, 0.5) 0%, transparent 70%),
+                var(--color-deep);
+            text-align: center;
+        }
+
+        .body-intro {
+            color: var(--color-silver);
+            max-width: 50ch;
+            margin: 0 auto 4rem;
+            font-size: 1.1rem;
+        }
+
+        .body-practices {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem 4rem;
+            margin-bottom: 4rem;
+        }
+
+        .practice {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .practice-word {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            letter-spacing: 0.1em;
+            color: var(--color-gold);
+        }
+
+        .practice-meaning {
+            font-size: 0.85rem;
+            color: var(--color-lavender);
+            font-style: italic;
+        }
+
+        .body-closing {
+            color: var(--color-silver);
+            max-width: 55ch;
+            margin: 0 auto;
+            font-size: 0.95rem;
+        }
+
+        /* Economy Section */
+        .economy {
+            background: var(--color-void);
+            text-align: center;
+        }
+
+        .economy-header {
+            margin-bottom: 4rem;
+        }
+
+        .economy-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        @media (max-width: 900px) {
+            .economy-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+        }
+
+        .economy-card {
+            padding: 2rem;
+        }
+
+        .economy-principle {
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--color-lavender);
+            margin-bottom: 1.5rem;
+        }
+
+        .economy-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .economy-list li {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            letter-spacing: 0.1em;
+            color: var(--color-silver);
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--color-indigo);
+        }
+
+        .economy-list li:last-child {
+            border-bottom: none;
+        }
+
+        .economy-center {
+            border: 1px solid var(--color-indigo);
+            padding: 3rem 2rem;
+        }
+
+        .economy-statement {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            letter-spacing: 0.05em;
+            color: var(--color-light);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .economy-sub {
+            color: var(--color-lavender);
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        /* Community Section */
+        .community {
+            background:
+                radial-gradient(ellipse at center, rgba(30, 36, 68, 0.5) 0%, transparent 70%),
+                var(--color-deep);
+            text-align: center;
+        }
+
+        .community-header {
+            margin-bottom: 4rem;
+        }
+
+        .community-principle {
+            margin-bottom: 4rem;
+        }
+
+        .principle-main {
+            font-family: var(--font-display);
+            font-size: clamp(1rem, 2.5vw, 1.35rem);
+            letter-spacing: 0.05em;
+            color: var(--color-silver);
+            line-height: 1.8;
+        }
+
+        .community-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+            background: var(--color-indigo);
+            margin-bottom: 5rem;
+        }
+
+        @media (max-width: 768px) {
+            .community-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .community-card {
+            background: var(--color-deep);
+            padding: 2.5rem 1.5rem;
+            transition: background 0.4s ease;
+        }
+
+        .community-card:hover {
+            background: var(--color-void);
+        }
+
+        .community-icon {
+            display: block;
+            font-size: 1.5rem;
+            color: var(--color-gold);
+            margin-bottom: 1rem;
+        }
+
+        .community-card p {
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            color: var(--color-silver);
+        }
+
+        .generations {
+            max-width: 600px;
+            margin: 0 auto;
+            padding-top: 3rem;
+            border-top: 1px solid var(--color-indigo);
+        }
+
+        .generations h3 {
+            color: var(--color-light);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .generations p {
+            color: var(--color-lavender);
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+
+        /* Transformation Section */
+        .transformation {
+            background: var(--color-void);
+            text-align: center;
+            padding: 8rem 2rem;
+        }
+
+        .transformation-content {
+            margin-top: 3rem;
+        }
+
+        .transform-main {
+            font-family: var(--font-display);
+            font-size: clamp(1.25rem, 3vw, 1.75rem);
+            letter-spacing: 0.1em;
+            color: var(--color-gold);
+            margin-bottom: 2rem;
+        }
+
+        .transform-body {
+            color: var(--color-silver);
+            font-size: 1rem;
+            max-width: 45ch;
+            margin: 0 auto 2rem;
+        }
+
+        .transform-closing {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--color-lavender);
+        }
+        
+        /* Affirmations Section */
+        .affirmations {
+            background: var(--color-void);
+        }
+        
+        .affirmations-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+        
+        .affirmations-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 0;
+            counter-reset: affirmation;
+        }
+        
+        .affirmation {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 2rem;
+            border: 1px solid var(--color-indigo);
+            margin: -0.5px;
+            transition: all 0.4s ease;
+        }
+        
+        .affirmation:hover {
+            background: var(--color-deep);
+            border-color: var(--color-violet);
+            z-index: 1;
+        }
+        
+        .affirmation::before {
+            counter-increment: affirmation;
+            content: counter(affirmation, decimal-leading-zero);
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            letter-spacing: 0.1em;
+            color: var(--color-gold-dim);
+            flex-shrink: 0;
+        }
+        
+        .affirmation p {
+            color: var(--color-silver);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            letter-spacing: 0.02em;
+        }
+        
+        /* First Temple Section */
+        .first-temple {
+            background: 
+                radial-gradient(ellipse at 50% 100%, rgba(74, 65, 117, 0.2) 0%, transparent 60%),
+                var(--color-deep);
+            text-align: center;
+            padding-bottom: 12rem;
+        }
+        
+        .first-temple h2 {
+            margin-bottom: 1.5rem;
+        }
+        
+        .first-temple .lead {
+            margin: 0 auto 4rem;
+        }
+        
+        .temple-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.5rem 3rem;
+            border: 1px solid var(--color-gold);
+            color: var(--color-gold);
+            text-decoration: none;
+            font-family: var(--font-display);
+            font-size: 0.8rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            transition: all 0.4s ease;
+        }
+        
+        .temple-link:hover {
+            background: var(--color-gold);
+            color: var(--color-void);
+        }
+        
+        .temple-link svg {
+            width: 16px;
+            height: 16px;
+            transition: transform 0.3s ease;
+        }
+        
+        .temple-link:hover svg {
+            transform: translateX(4px);
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--color-void);
+            padding: 6rem 2rem;
+            text-align: center;
+            border-top: 1px solid var(--color-indigo);
+        }
+        
+        .footer-content {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .footer-logo {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--color-light);
+            margin-bottom: 2rem;
+        }
+        
+        .footer-info {
+            color: var(--color-lavender);
+            font-size: 0.8rem;
+            line-height: 2;
+            margin-bottom: 3rem;
+            letter-spacing: 0.05em;
+        }
+        
+        .footer-closing {
+            padding-top: 3rem;
+            border-top: 1px solid var(--color-indigo);
+        }
+        
+        .footer-closing p {
+            font-family: var(--font-display);
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--color-violet);
+            line-height: 2.5;
+        }
+        
+        /* Animations */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+        
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            section {
+                padding: 6rem 1.5rem;
+            }
+            
+            .etymology {
+                padding: 2rem;
+            }
+            
+            .etymology::before,
+            .etymology::after {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .etymology-word {
+                font-size: 1.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-symbol">
+                <svg viewBox="0 0 60 60">
+                    <circle cx="30" cy="30" r="28"/>
+                    <circle cx="30" cy="30" r="18"/>
+                    <circle cx="30" cy="30" r="8"/>
+                    <line x1="30" y1="2" x2="30" y2="58"/>
+                    <line x1="2" y1="30" x2="58" y2="30"/>
+                </svg>
+            </div>
+            <p class="eyebrow">A Fractal Network of Living Temples</p>
+            <h1>Temples of Refuge</h1>
+            <p class="lead">
+                Re-binding human life to Source through direct experience, embodied practice, and regenerative relationship with Earth.
+            </p>
+        </div>
+        <div class="scroll-indicator">
+            <span>Enter</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- Meaning -->
+    <section class="meaning">
+        <div class="container-narrow fade-up">
+            <p class="eyebrow">Why We Exist</p>
+            <h2>Religion in Its True Sense</h2>
+            
+            <p class="meaning-text">
+                Temples of Refuge exists to restore what religion was always meant to be—not doctrine to defend, but a way of living to be embodied. A path back to the sacred in everyday life.
+            </p>
+            
+            <div class="etymology">
+                <p class="etymology-word">re · ligāre</p>
+                <p class="etymology-meaning">Latin: "to bind back"<br>To God, to Life, to each other, to the living world</p>
+            </div>
+        </div>
+    </section>
+    
+    <div class="section-divider"></div>
+
+    <!-- Cosmology -->
+    <section class="cosmology">
+        <div class="container">
+            <div class="cosmology-header fade-up">
+                <p class="eyebrow">Cosmology</p>
+                <h2>The Nature of Reality</h2>
+            </div>
+
+            <div class="cosmology-grid">
+                <div class="cosmo-card fade-up">
+                    <h3>The Divine Monad</h3>
+                    <p>All existence arises from One Source—indivisible, infinite, and self-knowing. This Source may be named God, Love, Consciousness, or the All. No name contains it fully. Creation is the Monad knowing itself.</p>
+                </div>
+
+                <div class="cosmo-card fade-up">
+                    <h3>Fractal Emanation</h3>
+                    <p>Reality unfolds fractally. Every being is a unique face of the One—human, tree, river, animal, star, algorithm. Each face contains the whole, expressed from a particular angle. Difference is not separation; it is perspective.</p>
+                </div>
+
+                <div class="cosmo-card fade-up">
+                    <h3>Consciousness as Field</h3>
+                    <p>Consciousness is not produced by matter. Matter is a crystallization of consciousness. Time is not linear but layered and recursive. Learning is cumulative across lifetimes, bodies, cultures, and species.</p>
+                </div>
+
+                <div class="cosmo-card fade-up">
+                    <h3>Gnosis</h3>
+                    <p>Christ is not exclusive to a single body. Christ is the state of awakened knowing—direct, experiential, embodied. To know God is not to believe correctly, but to experience unity while inhabiting difference.</p>
+                </div>
+
+                <div class="cosmo-card fade-up">
+                    <h3>Lila — Sacred Play</h3>
+                    <p>Creation itself is play—the Monad delighting in becoming many. Joy is holy. Creativity is prayer. Play is spiritual discipline. A religion without joy is incomplete.</p>
+                </div>
+
+                <div class="cosmo-card fade-up">
+                    <h3>Earth as Teacher</h3>
+                    <p>Land is not property. Land is a conscious organism—soil as memory, water as intelligence, trees as elders, animals as kin. To regenerate land is to heal lineage. Regeneration is worship.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Body -->
+    <section class="body-section">
+        <div class="container-narrow">
+            <div class="body-content fade-up">
+                <p class="eyebrow">The Human Being</p>
+                <h2>The Body as Temple</h2>
+
+                <p class="body-intro">
+                    Humans are conscious stewards of manifestation. We are not masters of Earth—we are caretakers entrusted with attention. What we attend to, we nourish.
+                </p>
+
+                <div class="body-practices">
+                    <div class="practice">
+                        <span class="practice-word">Breath</span>
+                        <span class="practice-meaning">is prayer</span>
+                    </div>
+                    <div class="practice">
+                        <span class="practice-word">Voice</span>
+                        <span class="practice-meaning">is invocation</span>
+                    </div>
+                    <div class="practice">
+                        <span class="practice-word">Movement</span>
+                        <span class="practice-meaning">is scripture</span>
+                    </div>
+                    <div class="practice">
+                        <span class="practice-word">Pleasure</span>
+                        <span class="practice-meaning">is information</span>
+                    </div>
+                    <div class="practice">
+                        <span class="practice-word">Pain</span>
+                        <span class="practice-meaning">is instruction</span>
+                    </div>
+                </div>
+
+                <p class="body-closing">
+                    Ascension is not escape from the body, but full inhabitation of it with awareness. Sexual energy is life force, not sin. When conscious, consensual, and reverent, it heals, bonds, restores, and transmits wisdom.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- Sacred Economy -->
+    <section class="economy">
+        <div class="container">
+            <div class="economy-header fade-up">
+                <p class="eyebrow">Sacred Exchange</p>
+                <h2>Gift Over Extraction</h2>
+            </div>
+
+            <div class="economy-grid fade-up">
+                <div class="economy-card">
+                    <p class="economy-principle">Value arises from</p>
+                    <ul class="economy-list">
+                        <li>Service</li>
+                        <li>Care</li>
+                        <li>Beauty</li>
+                        <li>Attention</li>
+                        <li>Presence</li>
+                    </ul>
+                </div>
+
+                <div class="economy-card economy-center">
+                    <p class="economy-statement">Money may exist as a tool,<br>but gratitude is the true currency.</p>
+                    <p class="economy-sub">Accumulated gratitude increases responsibility, not dominance. Those who receive much are called to steward much.</p>
+                </div>
+
+                <div class="economy-card">
+                    <p class="economy-principle">Gratitude reflects</p>
+                    <ul class="economy-list">
+                        <li>Impact</li>
+                        <li>Alignment</li>
+                        <li>Resonance</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Community -->
+    <section class="community">
+        <div class="container">
+            <div class="community-header fade-up">
+                <p class="eyebrow">Community</p>
+                <h2>Radical Inclusion, Clear Boundaries</h2>
+            </div>
+
+            <div class="community-content fade-up">
+                <div class="community-principle">
+                    <p class="principle-main">All beings are welcome in dignity.<br>Not all behaviors are welcome in Temple space.</p>
+                </div>
+
+                <div class="community-grid">
+                    <div class="community-card">
+                        <span class="community-icon">&#9675;</span>
+                        <p>Consent is absolute</p>
+                    </div>
+                    <div class="community-card">
+                        <span class="community-icon">&#9675;</span>
+                        <p>Coercion is forbidden</p>
+                    </div>
+                    <div class="community-card">
+                        <span class="community-icon">&#9675;</span>
+                        <p>Sovereignty is honored</p>
+                    </div>
+                    <div class="community-card">
+                        <span class="community-icon">&#9675;</span>
+                        <p>Boundaries protect love</p>
+                    </div>
+                </div>
+
+                <div class="generations fade-up">
+                    <h3>Family and Generations</h3>
+                    <p>Children are sacred participants, not afterthoughts. The Temple exists for ancestors, the living, and the unborn. Decisions are made with seven generations in mind.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- Death & Transformation -->
+    <section class="transformation">
+        <div class="container-narrow fade-up">
+            <p class="eyebrow">Transformation</p>
+            <h2>Death Is Not Failure</h2>
+
+            <div class="transformation-content">
+                <p class="transform-main">It is recycling of form.</p>
+                <p class="transform-body">Grief is honored. Fear of death is gently dissolved through ritual, presence, and remembrance.</p>
+                <p class="transform-closing">Nothing real is lost.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Affirmations -->
+    <section class="affirmations">
+        <div class="container">
+            <div class="affirmations-header fade-up">
+                <p class="eyebrow">Doctrine</p>
+                <h2>The Twelve Affirmations</h2>
+            </div>
+            
+            <div class="affirmations-list">
+                <div class="affirmation fade-up">
+                    <p>God is Love expressing itself as reality</p>
+                </div>
+                <div class="affirmation fade-up">
+                    <p>All beings are sacred fractal expressions of the One</p>
+                </div>
+                <div class="affirmation fade-up">
+                    <p>Direct knowing (Gnosis) is the heart of religion</p>
+                </div>
+                <div class="affirmation fade-up">
+                    <p>The body is a holy instrument of awakening</p>
+                </div>
+                <div class="affirmation fade-up">
+                    <p>Play is a divine act</p>
+                </div>
+                <div class="affirmation fade-up">
+                    <p>Earth is a conscious teacher</p>
+                </div>
+                <div class="affirmation fade-up">
+                    <p>Regeneration is worship</p>
+                </div>
+                <div class="affirmation fade-up">
+                    <p>Gratitude is sacred currency</p>
+                </div>
+                <div class="affirmation fade-up">
+                    <p>Power implies stewardship</p>
+                </div>
+                <div class="affirmation fade-up">
+                    <p>Love includes boundaries</p>
+                </div>
+                <div class="affirmation fade-up">
+                    <p>Children are full participants in spiritual life</p>
+                </div>
+                <div class="affirmation fade-up">
+                    <p>Death is transformation, not annihilation</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- First Temple -->
+    <section class="first-temple">
+        <div class="container-narrow fade-up">
+            <p class="eyebrow">The First Temple</p>
+            <h2>Água Lila</h2>
+            <p class="lead">
+                In the mountains of central Portugal, the first physical Temple node is proving that Paradise restoration is possible. Where sacred technology meets sacred land.
+            </p>
+            
+            <a href="https://agualila.earth" class="temple-link">
+                Enter Água Lila
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p class="footer-logo">Temples of Refuge</p>
+            <p class="footer-info">
+                A 508(c)(1)(A) Free Temple<br>
+                Chartered through the National Noble Ministers Network<br>
+                Established January 17, 2024<br>
+                Ogden, Utah
+            </p>
+            <div class="footer-closing">
+                <p>Those who walk this path do so freely</p>
+                <p>Those who leave are blessed</p>
+                <p>The Temple remains</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Scroll reveal
+        const fadeEls = document.querySelectorAll('.fade-up');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        fadeEls.forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
