@@ -15,7 +15,7 @@
   /* ================================================================
      GOOGLE FONTS — all skin fonts
      ================================================================ */
-  var FONT_URL = 'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&family=Playfair+Display:wght@700;900&family=Raleway:ital,wght@0,200;0,300;0,400;0,500;0,600;1,300;1,400&display=swap';
+  var FONT_URL = 'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400&family=Instrument+Sans:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&family=Playfair+Display:wght@700;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Raleway:ital,wght@0,200;0,300;0,400;0,500;0,600;1,300;1,400&display=swap';
 
   function injectFonts() {
     if (document.getElementById('te-fonts')) return;
@@ -93,6 +93,51 @@
   --t-ac:#6bcfff;--t-a2:#b19cd9;\
   --t-ok:#98d8aa;--t-wn:#ffd93d;--t-er:#ff6b9d;\
   --t-glass:rgba(6,6,14,0.9);--t-glass-bd:rgba(180,170,220,0.12);\
+}\
+[data-skin="modern"]{\
+  --s-bg:#09090b;--s-bg2:#111114;--s-card:#151518;--s-hover:#1c1c20;\
+  --s-tx:#fafafa;--s-t2:#a0a0ab;--s-mt:#52525b;--s-gh:#3f3f46;\
+  --s-bd:#27272a;--s-b2:#1c1c20;\
+  --s-ac:#818cf8;\
+  --s-font:"Inter",-apple-system,system-ui,sans-serif;\
+  --s-display:"Inter",-apple-system,system-ui,sans-serif;\
+  --s-radius:10px;\
+  --t-bg:#09090b;--t-sf:#111114;--t-cd:#151518;--t-hv:#1c1c20;\
+  --t-tx:#fafafa;--t-t2:#a0a0ab;--t-mt:#52525b;--t-dm:#3f3f46;\
+  --t-bd:#27272a;--t-b2:#1c1c20;--t-bc:rgba(255,255,255,0.08);\
+  --t-ac:#818cf8;--t-a2:#6366f1;\
+  --t-ok:#34d399;--t-wn:#fbbf24;--t-er:#f87171;\
+  --t-glass:rgba(9,9,11,0.9);--t-glass-bd:rgba(255,255,255,0.08);\
+}\
+[data-skin="contemplative"]{\
+  --s-bg:#f4f0e6;--s-bg2:#ece7da;--s-card:#f4f0e6;--s-hover:#e5dfd0;\
+  --s-tx:#2a2420;--s-t2:#6b6358;--s-mt:#a09888;--s-gh:#c8c0b2;\
+  --s-bd:#d6cebe;--s-b2:#e5dfd0;\
+  --s-ac:#c4392a;\
+  --s-font:"Cormorant Garamond",Georgia,serif;\
+  --s-display:"Cormorant Garamond",Georgia,serif;\
+  --s-radius:2px;\
+  --t-bg:#f4f0e6;--t-sf:#ece7da;--t-cd:#f4f0e6;--t-hv:#e5dfd0;\
+  --t-tx:#2a2420;--t-t2:#6b6358;--t-mt:#a09888;--t-dm:#c8c0b2;\
+  --t-bd:#d6cebe;--t-b2:#e5dfd0;--t-bc:rgba(0,0,0,0.08);\
+  --t-ac:#c4392a;--t-a2:#a03020;\
+  --t-ok:#4a7a4e;--t-wn:#b8860b;--t-er:#c4392a;\
+  --t-glass:rgba(244,240,230,0.92);--t-glass-bd:rgba(0,0,0,0.08);\
+}\
+[data-skin="solarpunk"]{\
+  --s-bg:#f6faf2;--s-bg2:#ebf3e4;--s-card:#ffffff;--s-hover:#ddebd2;\
+  --s-tx:#1a2e1a;--s-t2:#4a6a3a;--s-mt:#88a878;--s-gh:#b8d0a8;\
+  --s-bd:#cce0bc;--s-b2:#ddebd2;\
+  --s-ac:#2d8a4e;\
+  --s-font:"Plus Jakarta Sans",-apple-system,sans-serif;\
+  --s-display:"Plus Jakarta Sans",-apple-system,sans-serif;\
+  --s-radius:16px;\
+  --t-bg:#f6faf2;--t-sf:#ebf3e4;--t-cd:#ffffff;--t-hv:#ddebd2;\
+  --t-tx:#1a2e1a;--t-t2:#4a6a3a;--t-mt:#88a878;--t-dm:#b8d0a8;\
+  --t-bd:#cce0bc;--t-b2:#ddebd2;--t-bc:rgba(0,0,0,0.06);\
+  --t-ac:#2d8a4e;--t-a2:#1e6b38;\
+  --t-ok:#2d8a4e;--t-wn:#c59000;--t-er:#c0392b;\
+  --t-glass:rgba(246,250,242,0.92);--t-glass-bd:rgba(0,0,0,0.06);\
 }';
 
   /* ================================================================
@@ -167,13 +212,16 @@
   /* ================================================================
      INTERNALS
      ================================================================ */
-  var VALID_SKINS = ['technical', 'organic', 'botanical', 'jewels'];
+  var VALID_SKINS = ['technical', 'organic', 'botanical', 'jewels', 'modern', 'contemplative', 'solarpunk'];
 
   var DEFAULT_LABELS = {
-    'technical': 'Technical',
-    'organic':   'Organic',
-    'botanical': 'Botanical',
-    'jewels':    'Jewels'
+    'technical':     'Technical',
+    'organic':       'Organic',
+    'botanical':     'Botanical',
+    'jewels':        'Jewels',
+    'modern':        'Modern',
+    'contemplative': 'Contemplative',
+    'solarpunk':     'Solarpunk'
   };
 
   var activePills = [];
