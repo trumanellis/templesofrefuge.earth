@@ -702,7 +702,27 @@
             margin-bottom: 3rem;
             letter-spacing: 0.05em;
         }
-        
+
+        .footer-nav {
+            margin-bottom: 3rem;
+        }
+
+        .footer-link {
+            color: var(--color-gold);
+            text-decoration: none;
+            font-family: var(--font-display);
+            font-size: 0.8rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--color-gold-dim);
+            padding-bottom: 0.25rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            border-color: var(--color-gold);
+        }
+
         .footer-closing {
             padding-top: 3rem;
             border-top: 1px solid var(--color-indigo);
@@ -1050,6 +1070,9 @@
                 Established January 17, 2024<br>
                 Ogden, Utah
             </p>
+            <nav class="footer-nav">
+                <a href="/articles/" class="footer-link">Writings</a>
+            </nav>
             <div class="footer-closing">
                 <p>Those who walk this path do so freely</p>
                 <p>Those who leave are blessed</p>
