@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-skin="jewels">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,23 +7,8 @@
     <title>Reading... — Temples of Refuge</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&family=Playfair+Display:wght@700;900&family=Raleway:ital,wght@0,200;0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --color-void: #0B0D1A;
-            --color-deep: #12152B;
-            --color-indigo: #1E2444;
-            --color-violet: #4A4175;
-            --color-lavender: #8B85B0;
-            --color-silver: #C5C3D6;
-            --color-light: #EEEEF4;
-            --color-gold: #C9A962;
-            --color-gold-dim: #A08840;
-            --color-rose: #C4A0A0;
-            --font-display: 'Cinzel', serif;
-            --font-body: 'Raleway', sans-serif;
-        }
-
         *, *::before, *::after {
             box-sizing: border-box;
             margin: 0;
@@ -31,12 +16,12 @@
         }
 
         body {
-            background-color: var(--color-void);
-            font-family: var(--font-body);
+            background-color: var(--t-bg);
+            font-family: var(--s-font);
             font-weight: 300;
             line-height: 1.8;
             font-size: 17px;
-            color: var(--color-light);
+            color: var(--t-tx);
         }
 
         .site-header {
@@ -45,9 +30,9 @@
         }
 
         .back-link {
-            color: var(--color-gold);
+            color: var(--t-ac);
             text-decoration: none;
-            font-family: var(--font-display);
+            font-family: var(--s-display);
             font-size: 0.75rem;
             letter-spacing: 0.15em;
             text-transform: uppercase;
@@ -67,21 +52,21 @@
         .site-footer {
             padding: 4rem 2rem;
             text-align: center;
-            border-top: 1px solid var(--color-indigo);
+            border-top: 1px solid var(--t-bd);
             margin-top: 4rem;
         }
 
         .footer-site-name {
-            font-family: var(--font-display);
+            font-family: var(--s-display);
             font-size: 0.75rem;
             letter-spacing: 0.2em;
             text-transform: uppercase;
-            color: var(--color-violet);
+            color: var(--t-dm);
             margin-top: 2rem;
         }
 
         .loading {
-            color: var(--color-lavender);
+            color: var(--t-mt);
             text-align: center;
             padding: 4rem 0;
             animation: pulse 2s infinite;
@@ -98,115 +83,115 @@
         }
 
         .error-title {
-            color: var(--color-rose);
-            font-family: var(--font-display);
+            color: var(--t-er);
+            font-family: var(--s-display);
             font-size: 1.5rem;
             margin-bottom: 1rem;
         }
 
         .error-text {
-            color: var(--color-lavender);
+            color: var(--t-mt);
             margin-bottom: 2rem;
         }
 
         /* Prose styles scoped under #article-body */
         #article-body h1 {
-            font-family: var(--font-display);
+            font-family: var(--s-display);
             font-size: clamp(2rem, 5vw, 3rem);
             font-weight: 400;
             text-align: center;
             margin-bottom: 1rem;
             line-height: 1.3;
-            background: linear-gradient(135deg, var(--color-light), var(--color-silver));
+            background: linear-gradient(135deg, var(--t-tx), var(--t-t2));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
         #article-body h2 {
-            font-family: var(--font-display);
+            font-family: var(--s-display);
             font-size: clamp(1.3rem, 3vw, 1.8rem);
             font-weight: 400;
-            color: var(--color-gold-dim);
+            color: var(--t-a2);
             margin-top: 4rem;
             margin-bottom: 1.5rem;
             line-height: 1.4;
         }
 
         #article-body h3 {
-            font-family: var(--font-display);
+            font-family: var(--s-display);
             font-size: clamp(1.1rem, 2.5vw, 1.4rem);
             font-weight: 400;
-            color: var(--color-gold);
+            color: var(--t-ac);
             margin-top: 2.5rem;
             margin-bottom: 1rem;
             line-height: 1.5;
         }
 
         #article-body h4 {
-            font-family: var(--font-body);
+            font-family: var(--s-font);
             font-size: 1.1rem;
             font-weight: 500;
-            color: var(--color-silver);
+            color: var(--t-t2);
             margin-top: 2rem;
             margin-bottom: 0.75rem;
             font-style: italic;
         }
 
         #article-body h5 {
-            font-family: var(--font-body);
+            font-family: var(--s-font);
             font-size: 0.95rem;
             font-weight: 400;
-            color: var(--color-lavender);
+            color: var(--t-mt);
             margin-top: 1.5rem;
             margin-bottom: 0.75rem;
         }
 
         #article-body p {
-            color: var(--color-silver);
+            color: var(--t-t2);
             line-height: 1.85;
             margin-bottom: 1.5rem;
             max-width: 65ch;
         }
 
         #article-body strong {
-            color: var(--color-light);
+            color: var(--t-tx);
             font-weight: 500;
         }
 
         #article-body em {
-            color: var(--color-light);
+            color: var(--t-tx);
         }
 
         #article-body a {
-            color: var(--color-gold);
+            color: var(--t-ac);
             text-decoration: none;
-            border-bottom: 1px solid var(--color-gold-dim);
+            border-bottom: 1px solid var(--t-a2);
             transition: border-color 0.3s;
         }
 
         #article-body a:hover {
-            border-color: var(--color-gold);
+            border-color: var(--t-ac);
         }
 
         #article-body hr {
             border: none;
             height: 1px;
-            background: linear-gradient(90deg, transparent, var(--color-indigo), var(--color-violet), var(--color-indigo), transparent);
+            background: linear-gradient(90deg, transparent, var(--t-bd), var(--t-dm), var(--t-bd), transparent);
             margin: 3rem 0;
         }
 
         #article-body blockquote {
-            border-left: 3px solid var(--color-violet);
+            border-left: 3px solid var(--t-dm);
             padding-left: 1.5rem;
             margin: 2rem 0;
             font-style: italic;
-            color: var(--color-lavender);
+            color: var(--t-mt);
         }
 
         #article-body ul,
         #article-body ol {
-            color: var(--color-silver);
+            color: var(--t-t2);
             margin-bottom: 1.5rem;
             padding-left: 1.5rem;
         }
@@ -216,20 +201,20 @@
         }
 
         #article-body code {
-            background: var(--color-deep);
+            background: var(--t-sf);
             padding: 0.15em 0.4em;
             border-radius: 3px;
             font-size: 0.9em;
-            color: var(--color-lavender);
+            color: var(--t-mt);
         }
 
         #article-body pre {
-            background: var(--color-deep);
+            background: var(--t-sf);
             padding: 1.5rem;
             border-radius: 6px;
             overflow-x: auto;
             margin-bottom: 1.5rem;
-            border: 1px solid var(--color-indigo);
+            border: 1px solid var(--t-bd);
         }
 
         #article-body pre code {
@@ -239,32 +224,32 @@
 
         /* Special blocks */
         .image-prompt {
-            background: var(--color-deep);
-            border: 1px solid var(--color-indigo);
+            background: var(--t-sf);
+            border: 1px solid var(--t-bd);
             border-radius: 8px;
             padding: 1.5rem 2rem;
             margin: 2rem 0;
         }
 
         .image-prompt-label {
-            font-family: var(--font-display);
+            font-family: var(--s-display);
             font-size: 0.7rem;
             letter-spacing: 0.15em;
             text-transform: uppercase;
-            color: var(--color-gold-dim);
+            color: var(--t-a2);
             margin-bottom: 0.75rem;
         }
 
         .image-prompt-text {
-            color: var(--color-lavender);
+            color: var(--t-mt);
             font-style: italic;
             font-size: 0.9rem;
             line-height: 1.7;
         }
 
         .substack-cta {
-            background: linear-gradient(135deg, var(--color-deep), var(--color-indigo));
-            border: 1px solid var(--color-violet);
+            background: linear-gradient(135deg, var(--t-sf), var(--t-bd));
+            border: 1px solid var(--t-dm);
             border-radius: 8px;
             padding: 2rem;
             margin: 2.5rem 0;
@@ -272,18 +257,18 @@
         }
 
         .substack-cta-caption {
-            color: var(--color-silver);
+            color: var(--t-t2);
             font-size: 0.95rem;
             margin-bottom: 1rem;
             font-style: italic;
         }
 
         .substack-cta-label {
-            font-family: var(--font-display);
+            font-family: var(--s-display);
             font-size: 0.75rem;
             letter-spacing: 0.15em;
             text-transform: uppercase;
-            color: var(--color-gold);
+            color: var(--t-ac);
             opacity: 0.7;
         }
 
@@ -336,6 +321,14 @@
         <p class="footer-site-name">Temples of Refuge</p>
     </footer>
 
+    <script src="/shared/theme-engine.js"></script>
+    <script>
+    ThemeEngine.init({
+      defaultSkin: 'jewels',
+      storageKey: 'tor-skin',
+      position: 'top-right'
+    });
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/marked@15/marked.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', async () => {

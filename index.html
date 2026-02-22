@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-skin="jewels">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,25 +9,9 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&family=Playfair+Display:wght@700;900&family=Raleway:ital,wght@0,200;0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
     
     <style>
-        :root {
-            --color-void: #0B0D1A;
-            --color-deep: #12152B;
-            --color-indigo: #1E2444;
-            --color-violet: #4A4175;
-            --color-lavender: #8B85B0;
-            --color-silver: #C5C3D6;
-            --color-light: #EEEEF4;
-            --color-gold: #C9A962;
-            --color-gold-dim: #A08840;
-            --color-rose: #C4A0A0;
-            
-            --font-display: 'Cinzel', serif;
-            --font-body: 'Raleway', sans-serif;
-        }
-        
         * {
             margin: 0;
             padding: 0;
@@ -39,17 +23,17 @@
         }
         
         body {
-            font-family: var(--font-body);
+            font-family: var(--s-font);
             font-weight: 300;
-            background: var(--color-void);
-            color: var(--color-light);
+            background: var(--t-bg);
+            color: var(--t-tx);
             line-height: 1.8;
             font-size: 17px;
         }
         
         /* Typography */
         h1, h2, h3 {
-            font-family: var(--font-display);
+            font-family: var(--s-display);
             font-weight: 400;
             line-height: 1.2;
             letter-spacing: 0.05em;
@@ -72,19 +56,19 @@
         }
         
         .eyebrow {
-            font-family: var(--font-body);
+            font-family: var(--s-font);
             font-size: 0.7rem;
             font-weight: 500;
             letter-spacing: 0.4em;
             text-transform: uppercase;
-            color: var(--color-gold);
+            color: var(--t-ac);
             margin-bottom: 1.5rem;
         }
         
         .lead {
             font-size: clamp(1.05rem, 2vw, 1.25rem);
             font-weight: 300;
-            color: var(--color-silver);
+            color: var(--t-t2);
             max-width: 55ch;
             letter-spacing: 0.02em;
         }
@@ -117,10 +101,10 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            background: 
-                radial-gradient(ellipse at 50% 0%, rgba(74, 65, 117, 0.15) 0%, transparent 60%),
-                radial-gradient(ellipse at 50% 100%, rgba(30, 36, 68, 0.3) 0%, transparent 50%),
-                var(--color-void);
+            background:
+                radial-gradient(ellipse at 50% 0%, var(--t-bc) 0%, transparent 60%),
+                radial-gradient(ellipse at 50% 100%, var(--t-glass-bd) 0%, transparent 50%),
+                var(--t-bg);
             position: relative;
         }
         
@@ -132,7 +116,7 @@
             transform: translate(-50%, -50%);
             width: min(80vw, 600px);
             height: min(80vw, 600px);
-            border: 1px solid rgba(74, 65, 117, 0.2);
+            border: 1px solid var(--t-bc);
             border-radius: 50%;
             animation: rotate 120s linear infinite;
         }
@@ -145,7 +129,7 @@
             transform: translate(-50%, -50%);
             width: min(60vw, 450px);
             height: min(60vw, 450px);
-            border: 1px solid rgba(74, 65, 117, 0.15);
+            border: 1px solid var(--t-bc);
             border-radius: 50%;
             animation: rotate 90s linear infinite reverse;
         }
@@ -168,7 +152,7 @@
         
         .hero h1 {
             margin-bottom: 2rem;
-            background: linear-gradient(180deg, var(--color-light) 0%, var(--color-silver) 100%);
+            background: linear-gradient(180deg, var(--t-tx) 0%, var(--t-t2) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -190,7 +174,7 @@
         .hero-symbol svg {
             width: 100%;
             height: 100%;
-            stroke: var(--color-gold);
+            stroke: var(--t-ac);
             stroke-width: 1;
             fill: none;
         }
@@ -211,13 +195,13 @@
             font-size: 0.65rem;
             letter-spacing: 0.3em;
             text-transform: uppercase;
-            color: var(--color-lavender);
+            color: var(--t-mt);
         }
         
         .scroll-line {
             width: 1px;
             height: 50px;
-            background: linear-gradient(to bottom, var(--color-violet), transparent);
+            background: linear-gradient(to bottom, var(--t-dm), transparent);
             animation: pulse 2.5s ease-in-out infinite;
         }
         
@@ -229,14 +213,14 @@
         /* Divider */
         .section-divider {
             height: 1px;
-            background: linear-gradient(90deg, transparent, var(--color-indigo), transparent);
+            background: linear-gradient(90deg, transparent, var(--t-bd), transparent);
             max-width: 400px;
             margin: 0 auto;
         }
         
         /* Meaning Section */
         .meaning {
-            background: var(--color-deep);
+            background: var(--t-sf);
             text-align: center;
         }
         
@@ -245,7 +229,7 @@
         }
         
         .meaning-text {
-            color: var(--color-silver);
+            color: var(--t-t2);
             max-width: 55ch;
             margin: 0 auto 4rem;
         }
@@ -262,7 +246,7 @@
             position: absolute;
             width: 80px;
             height: 80px;
-            border: 1px solid var(--color-violet);
+            border: 1px solid var(--t-dm);
         }
         
         .etymology::before {
@@ -280,22 +264,22 @@
         }
         
         .etymology-word {
-            font-family: var(--font-display);
+            font-family: var(--s-display);
             font-size: 2.5rem;
             letter-spacing: 0.15em;
-            color: var(--color-gold);
+            color: var(--t-ac);
             margin-bottom: 1rem;
         }
         
         .etymology-meaning {
-            color: var(--color-lavender);
+            color: var(--t-mt);
             font-size: 0.9rem;
             letter-spacing: 0.05em;
         }
         
         /* Cosmology Section */
         .cosmology {
-            background: var(--color-void);
+            background: var(--t-bg);
         }
         
         .cosmology-header {
@@ -307,7 +291,7 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 1px;
-            background: var(--color-indigo);
+            background: var(--t-bd);
         }
         
         @media (max-width: 900px) {
@@ -318,22 +302,22 @@
         
         .cosmo-card {
             padding: 3rem 2.5rem;
-            background: var(--color-void);
+            background: var(--t-bg);
             transition: background 0.5s ease;
         }
         
         .cosmo-card:hover {
-            background: var(--color-deep);
+            background: var(--t-sf);
         }
         
         .cosmo-card h3 {
-            color: var(--color-light);
+            color: var(--t-tx);
             margin-bottom: 1.25rem;
             text-transform: uppercase;
         }
         
         .cosmo-card p {
-            color: var(--color-lavender);
+            color: var(--t-mt);
             font-size: 0.9rem;
             line-height: 1.8;
         }
@@ -341,13 +325,13 @@
         /* Body Section */
         .body-section {
             background:
-                radial-gradient(ellipse at center, rgba(30, 36, 68, 0.5) 0%, transparent 70%),
-                var(--color-deep);
+                radial-gradient(ellipse at center, var(--t-bd) 0%, transparent 70%),
+                var(--t-sf);
             text-align: center;
         }
 
         .body-intro {
-            color: var(--color-silver);
+            color: var(--t-t2);
             max-width: 50ch;
             margin: 0 auto 4rem;
             font-size: 1.1rem;
@@ -369,20 +353,20 @@
         }
 
         .practice-word {
-            font-family: var(--font-display);
+            font-family: var(--s-display);
             font-size: 1.25rem;
             letter-spacing: 0.1em;
-            color: var(--color-gold);
+            color: var(--t-ac);
         }
 
         .practice-meaning {
             font-size: 0.85rem;
-            color: var(--color-lavender);
+            color: var(--t-mt);
             font-style: italic;
         }
 
         .body-closing {
-            color: var(--color-silver);
+            color: var(--t-t2);
             max-width: 55ch;
             margin: 0 auto;
             font-size: 0.95rem;
@@ -390,7 +374,7 @@
 
         /* Economy Section */
         .economy {
-            background: var(--color-void);
+            background: var(--t-bg);
             text-align: center;
         }
 
@@ -420,7 +404,7 @@
             font-size: 0.75rem;
             letter-spacing: 0.2em;
             text-transform: uppercase;
-            color: var(--color-lavender);
+            color: var(--t-mt);
             margin-bottom: 1.5rem;
         }
 
@@ -430,12 +414,12 @@
         }
 
         .economy-list li {
-            font-family: var(--font-display);
+            font-family: var(--s-display);
             font-size: 1rem;
             letter-spacing: 0.1em;
-            color: var(--color-silver);
+            color: var(--t-t2);
             padding: 0.5rem 0;
-            border-bottom: 1px solid var(--color-indigo);
+            border-bottom: 1px solid var(--t-bd);
         }
 
         .economy-list li:last-child {
@@ -443,21 +427,21 @@
         }
 
         .economy-center {
-            border: 1px solid var(--color-indigo);
+            border: 1px solid var(--t-bd);
             padding: 3rem 2rem;
         }
 
         .economy-statement {
-            font-family: var(--font-display);
+            font-family: var(--s-display);
             font-size: 1.25rem;
             letter-spacing: 0.05em;
-            color: var(--color-light);
+            color: var(--t-tx);
             margin-bottom: 1.5rem;
             line-height: 1.6;
         }
 
         .economy-sub {
-            color: var(--color-lavender);
+            color: var(--t-mt);
             font-size: 0.9rem;
             line-height: 1.7;
         }
@@ -465,8 +449,8 @@
         /* Community Section */
         .community {
             background:
-                radial-gradient(ellipse at center, rgba(30, 36, 68, 0.5) 0%, transparent 70%),
-                var(--color-deep);
+                radial-gradient(ellipse at center, var(--t-bd) 0%, transparent 70%),
+                var(--t-sf);
             text-align: center;
         }
 
@@ -479,10 +463,10 @@
         }
 
         .principle-main {
-            font-family: var(--font-display);
+            font-family: var(--s-display);
             font-size: clamp(1rem, 2.5vw, 1.35rem);
             letter-spacing: 0.05em;
-            color: var(--color-silver);
+            color: var(--t-t2);
             line-height: 1.8;
         }
 
@@ -490,7 +474,7 @@
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 1px;
-            background: var(--color-indigo);
+            background: var(--t-bd);
             margin-bottom: 5rem;
         }
 
@@ -501,50 +485,50 @@
         }
 
         .community-card {
-            background: var(--color-deep);
+            background: var(--t-sf);
             padding: 2.5rem 1.5rem;
             transition: background 0.4s ease;
         }
 
         .community-card:hover {
-            background: var(--color-void);
+            background: var(--t-bg);
         }
 
         .community-icon {
             display: block;
             font-size: 1.5rem;
-            color: var(--color-gold);
+            color: var(--t-ac);
             margin-bottom: 1rem;
         }
 
         .community-card p {
             font-size: 0.85rem;
             letter-spacing: 0.05em;
-            color: var(--color-silver);
+            color: var(--t-t2);
         }
 
         .generations {
             max-width: 600px;
             margin: 0 auto;
             padding-top: 3rem;
-            border-top: 1px solid var(--color-indigo);
+            border-top: 1px solid var(--t-bd);
         }
 
         .generations h3 {
-            color: var(--color-light);
+            color: var(--t-tx);
             margin-bottom: 1rem;
             text-transform: uppercase;
         }
 
         .generations p {
-            color: var(--color-lavender);
+            color: var(--t-mt);
             font-size: 0.95rem;
             line-height: 1.8;
         }
 
         /* Transformation Section */
         .transformation {
-            background: var(--color-void);
+            background: var(--t-bg);
             text-align: center;
             padding: 8rem 2rem;
         }
@@ -554,31 +538,31 @@
         }
 
         .transform-main {
-            font-family: var(--font-display);
+            font-family: var(--s-display);
             font-size: clamp(1.25rem, 3vw, 1.75rem);
             letter-spacing: 0.1em;
-            color: var(--color-gold);
+            color: var(--t-ac);
             margin-bottom: 2rem;
         }
 
         .transform-body {
-            color: var(--color-silver);
+            color: var(--t-t2);
             font-size: 1rem;
             max-width: 45ch;
             margin: 0 auto 2rem;
         }
 
         .transform-closing {
-            font-family: var(--font-display);
+            font-family: var(--s-display);
             font-size: 1rem;
             letter-spacing: 0.15em;
             text-transform: uppercase;
-            color: var(--color-lavender);
+            color: var(--t-mt);
         }
         
         /* Affirmations Section */
         .affirmations {
-            background: var(--color-void);
+            background: var(--t-bg);
         }
         
         .affirmations-header {
@@ -598,29 +582,29 @@
             align-items: center;
             gap: 1.5rem;
             padding: 2rem;
-            border: 1px solid var(--color-indigo);
+            border: 1px solid var(--t-bd);
             margin: -0.5px;
             transition: all 0.4s ease;
         }
         
         .affirmation:hover {
-            background: var(--color-deep);
-            border-color: var(--color-violet);
+            background: var(--t-sf);
+            border-color: var(--t-dm);
             z-index: 1;
         }
         
         .affirmation::before {
             counter-increment: affirmation;
             content: counter(affirmation, decimal-leading-zero);
-            font-family: var(--font-display);
+            font-family: var(--s-display);
             font-size: 1.25rem;
             letter-spacing: 0.1em;
-            color: var(--color-gold-dim);
+            color: var(--t-a2);
             flex-shrink: 0;
         }
         
         .affirmation p {
-            color: var(--color-silver);
+            color: var(--t-t2);
             font-size: 0.9rem;
             line-height: 1.5;
             letter-spacing: 0.02em;
@@ -629,8 +613,8 @@
         /* First Temple Section */
         .first-temple {
             background: 
-                radial-gradient(ellipse at 50% 100%, rgba(74, 65, 117, 0.2) 0%, transparent 60%),
-                var(--color-deep);
+                radial-gradient(ellipse at 50% 100%, var(--t-bc) 0%, transparent 60%),
+                var(--t-sf);
             text-align: center;
             padding-bottom: 12rem;
         }
@@ -648,10 +632,10 @@
             align-items: center;
             gap: 1.5rem;
             padding: 1.5rem 3rem;
-            border: 1px solid var(--color-gold);
-            color: var(--color-gold);
+            border: 1px solid var(--t-ac);
+            color: var(--t-ac);
             text-decoration: none;
-            font-family: var(--font-display);
+            font-family: var(--s-display);
             font-size: 0.8rem;
             letter-spacing: 0.2em;
             text-transform: uppercase;
@@ -659,8 +643,8 @@
         }
         
         .temple-link:hover {
-            background: var(--color-gold);
-            color: var(--color-void);
+            background: var(--t-ac);
+            color: var(--t-bg);
         }
         
         .temple-link svg {
@@ -675,10 +659,10 @@
         
         /* Footer */
         footer {
-            background: var(--color-void);
+            background: var(--t-bg);
             padding: 6rem 2rem;
             text-align: center;
-            border-top: 1px solid var(--color-indigo);
+            border-top: 1px solid var(--t-bd);
         }
         
         .footer-content {
@@ -687,20 +671,142 @@
         }
         
         .footer-logo {
-            font-family: var(--font-display);
+            font-family: var(--s-display);
             font-size: 1rem;
             letter-spacing: 0.2em;
             text-transform: uppercase;
-            color: var(--color-light);
+            color: var(--t-tx);
             margin-bottom: 2rem;
         }
         
         .footer-info {
-            color: var(--color-lavender);
+            color: var(--t-mt);
             font-size: 0.8rem;
             line-height: 2;
             margin-bottom: 3rem;
             letter-spacing: 0.05em;
+        }
+
+        /* Article Highlight */
+        .article-highlight {
+            padding: 4rem 2rem 6rem;
+        }
+
+        .article-highlight-card {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            border: 1px solid var(--t-a2);
+            border-radius: 2px;
+            overflow: hidden;
+            text-decoration: none;
+            background: var(--t-bg);
+            transition: border-color 0.4s ease, background 0.4s ease;
+        }
+
+        .article-highlight-card:hover {
+            border-color: var(--t-ac);
+            background: var(--t-sf);
+        }
+
+        .article-highlight-image {
+            width: 31.8%;
+            min-height: 280px;
+            flex-shrink: 0;
+            background: linear-gradient(160deg, var(--t-a2), var(--t-ac), var(--t-a2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .article-highlight-image::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                135deg,
+                transparent,
+                transparent 20px,
+                rgba(0, 0, 0, 0.08) 20px,
+                rgba(0, 0, 0, 0.08) 21px
+            );
+        }
+
+        .article-highlight-image-label {
+            font-family: var(--s-display);
+            font-size: 0.6rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--t-bg);
+            opacity: 0.6;
+            position: relative;
+            z-index: 1;
+        }
+
+        .article-highlight-body {
+            flex: 1;
+            padding: 2.5rem 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .article-highlight-eyebrow {
+            font-family: var(--s-display);
+            font-size: 0.6rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--t-a2);
+            margin-bottom: 1rem;
+        }
+
+        .article-highlight-title {
+            font-family: var(--s-display);
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            font-weight: 400;
+            color: var(--t-tx);
+            line-height: 1.4;
+            margin-bottom: 0.5rem;
+        }
+
+        .article-highlight-subtitle {
+            font-family: var(--s-font);
+            font-size: 0.9rem;
+            font-weight: 300;
+            color: var(--t-t2);
+            line-height: 1.6;
+            margin-bottom: 1.25rem;
+            max-width: 45ch;
+        }
+
+        .article-highlight-read {
+            font-family: var(--s-display);
+            font-size: 0.65rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--t-ac);
+            transition: opacity 0.3s;
+        }
+
+        .article-highlight-card:hover .article-highlight-read {
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .article-highlight-card {
+                flex-direction: column;
+            }
+
+            .article-highlight-image {
+                width: 100%;
+                min-height: 160px;
+            }
+
+            .article-highlight-body {
+                padding: 2rem 1.5rem;
+            }
         }
 
         .footer-nav {
@@ -708,32 +814,32 @@
         }
 
         .footer-link {
-            color: var(--color-gold);
+            color: var(--t-ac);
             text-decoration: none;
-            font-family: var(--font-display);
+            font-family: var(--s-display);
             font-size: 0.8rem;
             letter-spacing: 0.2em;
             text-transform: uppercase;
-            border-bottom: 1px solid var(--color-gold-dim);
+            border-bottom: 1px solid var(--t-a2);
             padding-bottom: 0.25rem;
             transition: border-color 0.3s ease;
         }
 
         .footer-link:hover {
-            border-color: var(--color-gold);
+            border-color: var(--t-ac);
         }
 
         .footer-closing {
             padding-top: 3rem;
-            border-top: 1px solid var(--color-indigo);
+            border-top: 1px solid var(--t-bd);
         }
         
         .footer-closing p {
-            font-family: var(--font-display);
+            font-family: var(--s-display);
             font-size: 0.75rem;
             letter-spacing: 0.15em;
             text-transform: uppercase;
-            color: var(--color-violet);
+            color: var(--t-dm);
             line-height: 2.5;
         }
         
@@ -794,6 +900,21 @@
             <span>Enter</span>
             <div class="scroll-line"></div>
         </div>
+    </section>
+
+    <!-- Article Highlight -->
+    <section class="article-highlight">
+        <a href="/articles/read.html?slug=gene-editing-collective" class="article-highlight-card fade-up">
+            <div class="article-highlight-image">
+                <span class="article-highlight-image-label">Article Image</span>
+            </div>
+            <div class="article-highlight-body">
+                <p class="article-highlight-eyebrow">Featured Essay</p>
+                <h2 class="article-highlight-title">Gene Editing a Collective Consciousness</h2>
+                <p class="article-highlight-subtitle">Every organization is alive. The question is what kind of creature you're building.</p>
+                <span class="article-highlight-read">Read →</span>
+            </div>
+        </a>
     </section>
 
     <!-- Meaning -->
@@ -1081,6 +1202,14 @@
         </div>
     </footer>
 
+    <script src="/shared/theme-engine.js"></script>
+    <script>
+    ThemeEngine.init({
+      defaultSkin: 'jewels',
+      storageKey: 'tor-skin',
+      position: 'top-right'
+    });
+    </script>
     <script>
         // Scroll reveal
         const fadeEls = document.querySelectorAll('.fade-up');
