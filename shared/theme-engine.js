@@ -63,6 +63,7 @@
   --t-ac:#4a7c59;--t-a2:#6b9e6b;\
   --t-ok:#4a7c59;--t-wn:#d4a037;--t-er:#c75050;\
   --t-glass:rgba(26,24,20,0.9);--t-glass-bd:rgba(75,124,89,0.15);\
+  --shadow-glow:0 0 8px rgba(74,124,89,0.25);\
 }\
 [data-skin="botanical"]{\
   --s-bg:#faf6ef;--s-bg2:#f5ede0;--s-card:#ffffff;--s-hover:#ede4d3;\
