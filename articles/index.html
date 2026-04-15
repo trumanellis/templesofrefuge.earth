@@ -76,6 +76,16 @@
             margin: 0 auto;
         }
 
+        .section-label {
+            font-family: var(--s-display);
+            font-size: 0.7rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--t-a2);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
         .section-divider {
             border: none;
             height: 1px;
@@ -244,6 +254,12 @@
     <hr class="section-divider">
 
     <main class="articles-container">
+        <p class="section-label">From Substack</p>
+        <div id="substack-articles"></div>
+
+        <hr class="section-divider">
+
+        <p class="section-label">Essays</p>
         <div id="articles-list">
             <p class="loading">Loading writings&hellip;</p>
         </div>
@@ -259,11 +275,18 @@
     </footer>
 
     <script src="/shared/theme-engine.js"></script>
+    <script src="/shared/substack-feed.js"></script>
     <script>
     ThemeEngine.init({
       defaultSkin: 'jewels',
       storageKey: 'tor-skin',
       position: 'top-right'
+    });
+    SubstackFeed.init({
+      container: '#substack-articles',
+      tag: 'TemplesOfRefuge',
+      limit: 6,
+      style: 'list'
     });
     </script>
     <script>

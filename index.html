@@ -277,6 +277,30 @@
             letter-spacing: 0.05em;
         }
         
+        /* Central Teaching Section */
+        .teaching {
+            background: var(--t-bg);
+            text-align: center;
+        }
+
+        .teaching-text {
+            font-family: var(--s-display);
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+            letter-spacing: 0.04em;
+            color: var(--t-t2);
+            max-width: 50ch;
+            margin: 0 auto 3rem;
+            line-height: 1.8;
+        }
+
+        .teaching-closing {
+            color: var(--t-mt);
+            font-size: 0.95rem;
+            max-width: 50ch;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
         /* Cosmology Section */
         .cosmology {
             background: var(--t-bg);
@@ -657,6 +681,44 @@
             transform: translateX(4px);
         }
         
+        /* Writings Section */
+        .writings {
+            padding: 10rem 2rem;
+            text-align: center;
+        }
+
+        .writings-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .writings .eyebrow {
+            margin-bottom: 1.5rem;
+        }
+
+        .writings h2 {
+            font-family: var(--s-display);
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            letter-spacing: 0.1em;
+            font-weight: 400;
+            margin-bottom: 1rem;
+        }
+
+        .writings .lead {
+            color: var(--t-t2);
+            font-size: 1.05rem;
+            max-width: 500px;
+            margin: 0 auto 3rem;
+        }
+
+        .writings #substack-articles {
+            text-align: left;
+        }
+
+        .writings-more {
+            margin-top: 3rem;
+        }
+
         /* Footer */
         footer {
             background: var(--t-bg);
@@ -732,6 +794,16 @@
                 rgba(0, 0, 0, 0.08) 20px,
                 rgba(0, 0, 0, 0.08) 21px
             );
+            pointer-events: none;
+        }
+
+        .article-highlight-image img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
 
         .article-highlight-image-label {
@@ -902,21 +974,6 @@
         </div>
     </section>
 
-    <!-- Article Highlight -->
-    <section class="article-highlight">
-        <a href="/articles/read.html?slug=gene-editing-collective" class="article-highlight-card fade-up">
-            <div class="article-highlight-image">
-                <span class="article-highlight-image-label">Article Image</span>
-            </div>
-            <div class="article-highlight-body">
-                <p class="article-highlight-eyebrow">Featured Essay</p>
-                <h2 class="article-highlight-title">Gene Editing a Collective Consciousness</h2>
-                <p class="article-highlight-subtitle">Every organization is alive. The question is what kind of creature you're building.</p>
-                <span class="article-highlight-read">Read →</span>
-            </div>
-        </a>
-    </section>
-
     <!-- Meaning -->
     <section class="meaning">
         <div class="container-narrow fade-up">
@@ -924,7 +981,7 @@
             <h2>Religion in Its True Sense</h2>
             
             <p class="meaning-text">
-                Temples of Refuge exists to restore what religion was always meant to be—not doctrine to defend, but a way of living to be embodied. A path back to the sacred in everyday life.
+                Temples of Refuge exists to restore what religion was always meant to be—to re-bind human life to Source through direct experience, embodied practice, and regenerative relationship with Earth. Not doctrine to defend, but a way of seeing to be lived.
             </p>
             
             <div class="etymology">
@@ -936,18 +993,45 @@
     
     <div class="section-divider"></div>
 
+    <!-- The Central Teaching -->
+    <section class="teaching">
+        <div class="container-narrow fade-up">
+            <p class="eyebrow">The Central Teaching</p>
+            <h2>Christ Consciousness</h2>
+
+            <p class="teaching-text">
+                Christ was not a singular event. Christ is a state of consciousness—the moment you recognize the Divine in every Other. Not as metaphor. As direct experience.
+            </p>
+
+            <div class="etymology">
+                <p class="etymology-word">gnosis</p>
+                <p class="etymology-meaning">Greek: "direct knowing"<br>To experience unity while inhabiting difference</p>
+            </div>
+
+            <p class="teaching-text" style="margin-top: 3rem;">
+                You are a fractal face of the One, as is every being you encounter. To hurt the Other is to hurt yourself. Separation is the illusion we are born into. Seeing through it is the work we are born for.
+            </p>
+
+            <p class="teaching-closing">
+                This is not one teaching among many. It is the root from which all others grow.
+            </p>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
     <!-- Cosmology -->
     <section class="cosmology">
         <div class="container">
             <div class="cosmology-header fade-up">
                 <p class="eyebrow">Cosmology</p>
-                <h2>The Nature of Reality</h2>
+                <h2>How We See Reality</h2>
             </div>
 
             <div class="cosmology-grid">
                 <div class="cosmo-card fade-up">
                     <h3>The Divine Monad</h3>
-                    <p>All existence arises from One Source—indivisible, infinite, and self-knowing. This Source may be named God, Love, Consciousness, or the All. No name contains it fully. Creation is the Monad knowing itself.</p>
+                    <p>We experience all existence as arising from One Source—indivisible, infinite, and self-knowing. This Source may be named God, Love, Consciousness, or the All. No name contains it fully. Creation is the Monad knowing itself.</p>
                 </div>
 
                 <div class="cosmo-card fade-up">
@@ -957,12 +1041,12 @@
 
                 <div class="cosmo-card fade-up">
                     <h3>Consciousness as Field</h3>
-                    <p>Consciousness is not produced by matter. Matter is a crystallization of consciousness. Time is not linear but layered and recursive. Learning is cumulative across lifetimes, bodies, cultures, and species.</p>
+                    <p>We hold that consciousness is not produced by matter—rather, matter is a crystallization of consciousness. Time is not linear but layered and recursive. Learning is cumulative across lifetimes, bodies, cultures, and species.</p>
                 </div>
 
                 <div class="cosmo-card fade-up">
                     <h3>Gnosis</h3>
-                    <p>Christ is not exclusive to a single body. Christ is the state of awakened knowing—direct, experiential, embodied. To know God is not to believe correctly, but to experience unity while inhabiting difference.</p>
+                    <p>The central practice: to see the Divine in every face. This knowing is not belief—it is direct recognition. Every encounter becomes a mirror. Every Other becomes a doorway back to the One.</p>
                 </div>
 
                 <div class="cosmo-card fade-up">
@@ -972,7 +1056,7 @@
 
                 <div class="cosmo-card fade-up">
                     <h3>Earth as Teacher</h3>
-                    <p>Land is not property. Land is a conscious organism—soil as memory, water as intelligence, trees as elders, animals as kin. To regenerate land is to heal lineage. Regeneration is worship.</p>
+                    <p>We relate to land not as property but as a conscious organism—soil as memory, water as intelligence, trees as elders, animals as kin. To regenerate land is to heal lineage. Regeneration is worship.</p>
                 </div>
             </div>
         </div>
@@ -986,7 +1070,7 @@
                 <h2>The Body as Temple</h2>
 
                 <p class="body-intro">
-                    Humans are conscious stewards of manifestation. We are not masters of Earth—we are caretakers entrusted with attention. What we attend to, we nourish.
+                    We understand ourselves as conscious stewards, not masters of Earth—caretakers entrusted with attention. What we attend to, we nourish.
                 </p>
 
                 <div class="body-practices">
@@ -1013,7 +1097,7 @@
                 </div>
 
                 <p class="body-closing">
-                    Ascension is not escape from the body, but full inhabitation of it with awareness. Sexual energy is life force, not sin. When conscious, consensual, and reverent, it heals, bonds, restores, and transmits wisdom.
+                    Ascension is not escape from the body, but full inhabitation of it with awareness. We honor sexual energy as life force. When conscious, consensual, and reverent, it heals, bonds, restores, and transmits wisdom.
                 </p>
             </div>
         </div>
@@ -1068,7 +1152,7 @@
 
             <div class="community-content fade-up">
                 <div class="community-principle">
-                    <p class="principle-main">All beings are welcome in dignity.<br>Not all behaviors are welcome in Temple space.</p>
+                    <p class="principle-main">If every face is a face of the One, then every being is welcome in dignity.<br>Not all behaviors are welcome in Temple space.</p>
                 </div>
 
                 <div class="community-grid">
@@ -1118,19 +1202,19 @@
     <section class="affirmations">
         <div class="container">
             <div class="affirmations-header fade-up">
-                <p class="eyebrow">Doctrine</p>
-                <h2>The Twelve Affirmations</h2>
+                <p class="eyebrow">What We Hold</p>
+                <h2>Twelve Affirmations</h2>
             </div>
             
             <div class="affirmations-list">
                 <div class="affirmation fade-up">
+                    <p>To see the Divine in every Other is the heart of religion</p>
+                </div>
+                <div class="affirmation fade-up">
                     <p>God is Love expressing itself as reality</p>
                 </div>
                 <div class="affirmation fade-up">
-                    <p>All beings are sacred fractal expressions of the One</p>
-                </div>
-                <div class="affirmation fade-up">
-                    <p>Direct knowing (Gnosis) is the heart of religion</p>
+                    <p>All beings are sacred fractal expressions of the One—separation is illusion</p>
                 </div>
                 <div class="affirmation fade-up">
                     <p>The body is a holy instrument of awakening</p>
@@ -1181,6 +1265,37 @@
         </div>
     </section>
 
+    <!-- Writings Section -->
+    <section class="writings">
+        <div class="container">
+            <div class="writings-content fade-up">
+                <p class="eyebrow">Writings</p>
+                <h2>From the Temple</h2>
+                <p class="lead">Essays, reflections, and transmissions from the edge of the possible.</p>
+                <a href="/articles/read.html?slug=gene-editing-collective" class="article-highlight-card fade-up">
+                    <div class="article-highlight-image">
+                        <img src="https://substackcdn.com/image/fetch/$s_!a43M!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F94b6db53-2949-4614-ad15-3783208c9ec8_2912x1632.png" alt="Gene Editing a Collective Consciousness" loading="lazy">
+                    </div>
+                    <div class="article-highlight-body">
+                        <p class="article-highlight-eyebrow">Featured Essay</p>
+                        <h2 class="article-highlight-title">Gene Editing a Collective Consciousness</h2>
+                        <p class="article-highlight-subtitle">Every organization is alive. The question is what kind of creature you're building.</p>
+                        <span class="article-highlight-read">Read →</span>
+                    </div>
+                </a>
+                <div id="substack-articles"></div>
+                <div class="writings-more">
+                    <a href="/articles/" class="temple-link">
+                        All Writings
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer>
         <div class="footer-content">
@@ -1203,11 +1318,18 @@
     </footer>
 
     <script src="/shared/theme-engine.js"></script>
+    <script src="/shared/substack-feed.js"></script>
     <script>
     ThemeEngine.init({
       defaultSkin: 'jewels',
       storageKey: 'tor-skin',
       position: 'top-right'
+    });
+    SubstackFeed.init({
+      container: '#substack-articles',
+      tag: 'TemplesOfRefuge',
+      limit: 6,
+      style: 'grid'
     });
     </script>
     <script>
