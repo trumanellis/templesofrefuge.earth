@@ -294,11 +294,35 @@
         }
 
         .teaching-closing {
-            color: var(--t-mt);
-            font-size: 0.95rem;
-            max-width: 50ch;
-            margin: 0 auto;
-            line-height: 1.8;
+            font-family: var(--s-display);
+            font-style: italic;
+            color: #e8c36a;
+            font-size: 1.35rem;
+            max-width: 42ch;
+            margin: 3rem auto 0;
+            line-height: 1.6;
+            text-align: center;
+            letter-spacing: 0.01em;
+            padding: 2rem 2.5rem;
+            border-radius: 14px;
+            background: linear-gradient(
+                135deg,
+                rgba(232, 195, 106, 0.08),
+                rgba(232, 195, 106, 0.02) 45%,
+                rgba(255, 255, 255, 0.04)
+            );
+            border: 1px solid rgba(232, 195, 106, 0.28);
+            backdrop-filter: blur(14px) saturate(1.1);
+            -webkit-backdrop-filter: blur(14px) saturate(1.1);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.08),
+                inset 0 0 40px rgba(232, 195, 106, 0.06),
+                0 8px 32px rgba(0, 0, 0, 0.25),
+                0 0 48px rgba(232, 195, 106, 0.12);
+            text-shadow:
+                0 0 18px rgba(232, 195, 106, 0.55),
+                0 0 38px rgba(232, 195, 106, 0.28),
+                0 0 72px rgba(232, 195, 106, 0.18);
         }
 
         /* Cosmology Section */
@@ -488,47 +512,136 @@
 
         .principle-main {
             font-family: var(--s-display);
-            font-size: clamp(1rem, 2.5vw, 1.35rem);
-            letter-spacing: 0.05em;
-            color: var(--t-t2);
-            line-height: 1.8;
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            letter-spacing: 0.02em;
+            color: var(--t-tx);
+            line-height: 1.6;
+            max-width: 32ch;
+            margin: 0 auto;
+        }
+
+        .principle-counterweight {
+            display: block;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            font-size: 0.95rem;
+            font-style: italic;
+            letter-spacing: 0.04em;
+            color: #e8c36a;
+            position: relative;
+        }
+
+        .principle-counterweight::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 1px;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(232, 195, 106, 0.55),
+                transparent
+            );
         }
 
         .community-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1px;
-            background: var(--t-bd);
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.25rem;
             margin-bottom: 5rem;
+            max-width: 880px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
         }
 
-        @media (max-width: 768px) {
+        .community-grid::before {
+            content: attr(data-pair-left);
+            position: absolute;
+            top: -2.25rem;
+            left: 25%;
+            transform: translateX(-50%);
+            font-family: var(--s-display);
+            font-size: 0.65rem;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--t-mt);
+        }
+
+        .community-grid::after {
+            content: attr(data-pair-right);
+            position: absolute;
+            top: -2.25rem;
+            left: 75%;
+            transform: translateX(-50%);
+            font-family: var(--s-display);
+            font-size: 0.65rem;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--t-mt);
+        }
+
+        @media (max-width: 640px) {
             .community-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: 1fr;
+            }
+            .community-grid::before,
+            .community-grid::after {
+                display: none;
             }
         }
 
         .community-card {
-            background: var(--t-sf);
-            padding: 2.5rem 1.5rem;
-            transition: background 0.4s ease;
+            padding: 2rem 1.75rem;
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            text-align: left;
+            border-radius: 12px;
+            background: linear-gradient(
+                135deg,
+                rgba(232, 195, 106, 0.05),
+                rgba(255, 255, 255, 0.02)
+            );
+            border: 1px solid rgba(232, 195, 106, 0.16);
+            backdrop-filter: blur(10px) saturate(1.05);
+            -webkit-backdrop-filter: blur(10px) saturate(1.05);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.05),
+                0 4px 18px rgba(0, 0, 0, 0.2);
+            transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .community-card:hover {
-            background: var(--t-bg);
+            transform: translateY(-2px);
+            border-color: rgba(232, 195, 106, 0.38);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.08),
+                0 6px 28px rgba(0, 0, 0, 0.28),
+                0 0 32px rgba(232, 195, 106, 0.1);
         }
 
-        .community-icon {
-            display: block;
-            font-size: 1.5rem;
-            color: var(--t-ac);
-            margin-bottom: 1rem;
+        .community-numeral {
+            font-family: var(--s-display);
+            font-style: italic;
+            font-size: 1.6rem;
+            color: #e8c36a;
+            letter-spacing: 0.05em;
+            flex-shrink: 0;
+            opacity: 0.9;
+            text-shadow: 0 0 18px rgba(232, 195, 106, 0.35);
         }
 
         .community-card p {
-            font-size: 0.85rem;
-            letter-spacing: 0.05em;
-            color: var(--t-t2);
+            font-family: var(--s-display);
+            font-size: 1.05rem;
+            letter-spacing: 0.02em;
+            color: var(--t-tx);
+            line-height: 1.4;
+            margin: 0;
         }
 
         .generations {
@@ -1152,24 +1265,27 @@
 
             <div class="community-content fade-up">
                 <div class="community-principle">
-                    <p class="principle-main">If every face is a face of the One, then every being is welcome in dignity.<br>Not all behaviors are welcome in Temple space.</p>
+                    <p class="principle-main">
+                        If every face is a face of the One, then every being is welcome in dignity.
+                        <span class="principle-counterweight">And not all behaviors are welcome in Temple space.</span>
+                    </p>
                 </div>
 
-                <div class="community-grid">
+                <div class="community-grid" data-pair-left="Welcome" data-pair-right="Boundary">
                     <div class="community-card">
-                        <span class="community-icon">&#9675;</span>
+                        <span class="community-numeral">I</span>
                         <p>Consent is absolute</p>
                     </div>
                     <div class="community-card">
-                        <span class="community-icon">&#9675;</span>
+                        <span class="community-numeral">I</span>
                         <p>Coercion is forbidden</p>
                     </div>
                     <div class="community-card">
-                        <span class="community-icon">&#9675;</span>
+                        <span class="community-numeral">II</span>
                         <p>Sovereignty is honored</p>
                     </div>
                     <div class="community-card">
-                        <span class="community-icon">&#9675;</span>
+                        <span class="community-numeral">II</span>
                         <p>Boundaries protect love</p>
                     </div>
                 </div>
