@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" data-skin="jewels">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Covenant — Temples of Refuge</title>
+    <meta name="description" content="The Indra's Network Membership Covenant — a living agreement between Temples of Refuge and those who join it. Founded on the One Commandment: recognize the divine in every Other and treat them as an extension of yourself.">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Temples of Refuge">
+    <meta property="og:title" content="The Covenant — Temples of Refuge">
+    <meta property="og:description" content="A living agreement between Temples of Refuge and those who join it.">
+    <meta property="og:url" content="https://templesofrefuge.earth/covenant.html">
+    <meta property="og:image" content="https://templesofrefuge.earth/assets/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="stylesheet" href="/shared/document.css">
+</head>
+<body>
+
+    <header class="site-header">
+        <a href="/" class="back-link">← Temples of Refuge</a>
+    </header>
+
+    <main>
+        <div class="container-narrow">
+            <section class="document-hero">
+                <p class="document-eyebrow">Foundations · The Covenant</p>
+                <h1 class="document-title">The Indra's Network<br>Membership Covenant</h1>
+                <p class="document-subtitle">A living agreement between Temples of Refuge<br>and those who join it</p>
+                <div class="document-divider"></div>
+            </section>
+
+            <article id="document-body">
+                <p class="loading">Loading the Covenant…</p>
+            </article>
+
+            <div id="error-state" style="display:none">
+                <p class="error-title">Document Not Available</p>
+                <p class="error-text"></p>
+                <a href="/" class="back-link">← Temples of Refuge</a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <nav class="footer-related" aria-label="Foundations">
+            <a href="/cosmology.html">Cosmology</a>
+            <a href="/covenant.html" class="current">Covenant</a>
+            <a href="/bylaws.html">Bylaws</a>
+        </nav>
+        <p class="footer-site-name">Temples of Refuge</p>
+    </footer>
+
+    <script src="/shared/theme-engine.js"></script>
+    <script>
+    ThemeEngine.init({
+      defaultSkin: 'jewels',
+      storageKey: 'tor-skin',
+      position: 'top-right'
+    });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/marked@15/marked.min.js"></script>
+    <script src="/shared/document-loader.js"></script>
+    <script>
+      DocumentLoader.load({ path: 'COVENANT.md' });
+    </script>
+
+</body>
+</html>

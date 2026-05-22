@@ -1,0 +1,310 @@
+/**
+ * document.css — long-form document styling for Temples of Refuge
+ *
+ * Used for canonical documents at the site root: the Cosmology, the
+ * Covenant, and the Bylaws. Styled to match the visual identity of
+ * index.html (jewels skin: Cinzel display, Raleway body, deep indigo
+ * background, cool-blue accents).
+ *
+ * Variables come from /shared/theme-engine.js — make sure that script
+ * is loaded on any page that uses this stylesheet.
+ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--t-bg);
+  font-family: var(--s-font);
+  font-weight: 300;
+  line-height: 1.8;
+  font-size: 17px;
+  color: var(--t-tx);
+  padding-top: 48px; /* leave room for ThemeEngine widget */
+}
+
+/* ---- Page chrome ---- */
+
+.site-header {
+  padding: 2rem;
+  text-align: center;
+}
+
+.back-link {
+  color: var(--t-ac);
+  text-decoration: none;
+  font-family: var(--s-display);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  transition: opacity 0.3s;
+}
+
+.back-link:hover {
+  opacity: 0.7;
+}
+
+.container-narrow {
+  max-width: 750px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+}
+
+/* Hero block at the top of each document */
+.document-hero {
+  text-align: center;
+  padding: 2rem 0 5rem;
+}
+
+.document-eyebrow {
+  font-family: var(--s-font);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--t-ac);
+  margin-bottom: 1.5rem;
+}
+
+.document-title {
+  font-family: var(--s-display);
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  line-height: 1.25;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(180deg, var(--t-tx) 0%, var(--t-t2) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.document-subtitle {
+  font-family: var(--s-display);
+  font-style: italic;
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  color: var(--t-t2);
+  max-width: 50ch;
+  margin: 0 auto;
+  letter-spacing: 0.03em;
+}
+
+.document-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--t-bd), var(--t-dm), var(--t-bd), transparent);
+  max-width: 400px;
+  margin: 3rem auto;
+}
+
+/* ---- Loading & error ---- */
+
+.loading {
+  color: var(--t-mt);
+  text-align: center;
+  padding: 4rem 0;
+  animation: docPulse 2s infinite;
+}
+
+@keyframes docPulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.4; }
+}
+
+#error-state {
+  text-align: center;
+  padding: 4rem 0;
+}
+
+.error-title {
+  color: var(--t-er);
+  font-family: var(--s-display);
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.error-text {
+  color: var(--t-mt);
+  margin-bottom: 2rem;
+}
+
+/* ---- Prose ---- */
+
+#document-body h1 {
+  /* h1 is rendered into .document-title above; suppress markdown h1 */
+  display: none;
+}
+
+#document-body h2 {
+  font-family: var(--s-display);
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+  font-weight: 400;
+  color: var(--t-a2);
+  margin-top: 4.5rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.35;
+  letter-spacing: 0.05em;
+}
+
+#document-body h3 {
+  font-family: var(--s-display);
+  font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+  font-weight: 400;
+  color: var(--t-ac);
+  margin-top: 2.75rem;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+}
+
+#document-body h4 {
+  font-family: var(--s-font);
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--t-t2);
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  font-style: italic;
+  letter-spacing: 0.02em;
+}
+
+#document-body p {
+  color: var(--t-t2);
+  line-height: 1.85;
+  margin-bottom: 1.5rem;
+}
+
+#document-body strong {
+  color: var(--t-tx);
+  font-weight: 500;
+}
+
+#document-body em {
+  color: var(--t-tx);
+  font-style: italic;
+}
+
+#document-body a {
+  color: var(--t-ac);
+  text-decoration: none;
+  border-bottom: 1px solid var(--t-a2);
+  transition: border-color 0.3s, opacity 0.3s;
+}
+
+#document-body a:hover {
+  border-color: var(--t-ac);
+  opacity: 0.85;
+}
+
+#document-body hr {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--t-bd), var(--t-dm), var(--t-bd), transparent);
+  margin: 3.5rem 0;
+}
+
+#document-body blockquote {
+  border-left: 2px solid var(--t-dm);
+  padding-left: 1.5rem;
+  margin: 2rem 0;
+  font-style: italic;
+  color: var(--t-t2);
+}
+
+#document-body ul,
+#document-body ol {
+  color: var(--t-t2);
+  margin-bottom: 1.5rem;
+  padding-left: 1.75rem;
+}
+
+#document-body li {
+  margin-bottom: 0.6rem;
+  line-height: 1.7;
+}
+
+#document-body code {
+  background: var(--t-sf);
+  padding: 0.15em 0.4em;
+  border-radius: 3px;
+  font-size: 0.9em;
+  color: var(--t-mt);
+}
+
+/* Signature / closing block — the trailing italic stanza in
+   COVENANT.md and BYLAWS.md sits inside the last sequence of
+   one-line italics. We style emphasised lines toward the end gently. */
+#document-body p em:only-child {
+  display: inline-block;
+}
+
+/* ---- Footer ---- */
+
+.site-footer {
+  padding: 4rem 2rem 6rem;
+  text-align: center;
+  border-top: 1px solid var(--t-bd);
+  margin-top: 4rem;
+}
+
+.footer-related {
+  display: flex;
+  justify-content: center;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 2.5rem;
+}
+
+.footer-related a {
+  color: var(--t-ac);
+  text-decoration: none;
+  font-family: var(--s-display);
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  transition: opacity 0.3s;
+}
+
+.footer-related a:hover {
+  opacity: 0.7;
+}
+
+.footer-related a.current {
+  color: var(--t-dm);
+  pointer-events: none;
+}
+
+.footer-site-name {
+  font-family: var(--s-display);
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--t-dm);
+}
+
+/* ---- Fade-up animation ---- */
+
+.fade-up {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---- Responsive ---- */
+
+@media (max-width: 768px) {
+  .container-narrow {
+    padding: 2.5rem 1.25rem;
+  }
+
+  .footer-related {
+    gap: 1.5rem;
+  }
+}

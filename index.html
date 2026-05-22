@@ -5,7 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Temples of Refuge — A Fractal Network of Living Temples</title>
     <meta name="description" content="A 508(c)(1)(A) network of Temples where spiritual practice, ecological regeneration, and sovereign technology co-evolve. Re-binding human life to Source through direct experience.">
-    
+
+    <!-- Open Graph / social previews -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Temples of Refuge">
+    <meta property="og:title" content="Temples of Refuge — A Fractal Network of Living Temples">
+    <meta property="og:description" content="A 508(c)(1)(A) network of Temples where spiritual practice, ecological regeneration, and sovereign technology co-evolve. Re-binding human life to Source through direct experience.">
+    <meta property="og:url" content="https://templesofrefuge.earth/">
+    <meta property="og:image" content="https://templesofrefuge.earth/assets/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Temples of Refuge — A Fractal Network of Living Temples">
+    <meta name="twitter:description" content="Spiritual practice, ecological regeneration, and sovereign technology co-evolving.">
+    <meta name="twitter:image" content="https://templesofrefuge.earth/assets/og-image.png">
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -996,6 +1008,10 @@
 
         .footer-nav {
             margin-bottom: 3rem;
+            display: flex;
+            justify-content: center;
+            gap: 2.25rem;
+            flex-wrap: wrap;
         }
 
         .footer-link {
@@ -1012,6 +1028,28 @@
 
         .footer-link:hover {
             border-color: var(--t-ac);
+        }
+
+        .footer-nav-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.65rem;
+        }
+
+        .footer-nav-label {
+            font-family: var(--s-font);
+            font-size: 0.65rem;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--t-mt);
+        }
+
+        .footer-nav-group-links {
+            display: flex;
+            gap: 1.75rem;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         .footer-closing {
@@ -1417,13 +1455,27 @@
         <div class="footer-content">
             <p class="footer-logo">Temples of Refuge</p>
             <p class="footer-info">
-                A 508(c)(1)(A) Free Temple<br>
-                Chartered through the National Noble Ministers Network<br>
-                Established January 17, 2024<br>
+                An Association of Churches<br>
+                Mandatorily tax-exempt under §501(c)(3) and §508(c)(1)(A)<br>
+                Established January 17, 2024 · Reconstituted 2026<br>
                 Ogden, Utah
             </p>
-            <nav class="footer-nav">
-                <a href="/articles/" class="footer-link">Writings</a>
+            <nav class="footer-nav" aria-label="Site">
+                <div class="footer-nav-group">
+                    <span class="footer-nav-label">Foundations</span>
+                    <div class="footer-nav-group-links">
+                        <a href="/cosmology.html" class="footer-link">Cosmology</a>
+                        <a href="/covenant.html" class="footer-link">Covenant</a>
+                        <a href="/bylaws.html" class="footer-link">Bylaws</a>
+                    </div>
+                </div>
+                <div class="footer-nav-group">
+                    <span class="footer-nav-label">More</span>
+                    <div class="footer-nav-group-links">
+                        <a href="/articles/" class="footer-link">Writings</a>
+                        <a href="https://agualila.earth" class="footer-link">Água Lila</a>
+                    </div>
+                </div>
             </nav>
             <div class="footer-closing">
                 <p>Those who walk this path do so freely</p>

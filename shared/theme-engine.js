@@ -15,7 +15,7 @@
   /* ================================================================
      GOOGLE FONTS — all skin fonts
      ================================================================ */
-  var FONT_URL = 'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400&family=Instrument+Sans:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&family=Playfair+Display:wght@700;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Raleway:ital,wght@0,200;0,300;0,400;0,500;0,600;1,300;1,400&display=swap';
+  var FONT_URL = 'https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;0,6..96,700;0,6..96,900;1,6..96,400;1,6..96,500&family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400&family=Instrument+Sans:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&family=Playfair+Display:wght@700;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Quicksand:wght@300;400;500;600;700&family=Raleway:ital,wght@0,200;0,300;0,400;0,500;0,600;1,300;1,400&display=swap';
 
   function injectFonts() {
     if (document.getElementById('te-fonts')) return;
@@ -139,6 +139,21 @@
   --t-ac:#2d8a4e;--t-a2:#1e6b38;\
   --t-ok:#2d8a4e;--t-wn:#c59000;--t-er:#c0392b;\
   --t-glass:rgba(246,250,242,0.92);--t-glass-bd:rgba(0,0,0,0.06);\
+}\
+[data-skin="annabelle"]{\
+  --s-bg:#fce4d8;--s-bg2:#f5d4c4;--s-card:#fff2ec;--s-hover:#eec4b0;\
+  --s-tx:#341f22;--s-t2:#613b3e;--s-mt:#9a6e90;--s-gh:#c4a0b8;\
+  --s-bd:#e8b8aa;--s-b2:#f0c8ba;\
+  --s-ac:#d0683e;\
+  --s-font:"Quicksand",-apple-system,sans-serif;\
+  --s-display:"Bodoni Moda",Georgia,serif;\
+  --s-radius:20px;\
+  --t-bg:#fce4d8;--t-sf:#f5d4c4;--t-cd:#fff2ec;--t-hv:#eec4b0;\
+  --t-tx:#341f22;--t-t2:#613b3e;--t-mt:#9a6e90;--t-dm:#c4a0b8;\
+  --t-bd:#e8b8aa;--t-b2:#f0c8ba;--t-bc:rgba(52,31,34,0.12);\
+  --t-ac:#d0683e;--t-a2:#e5a010;\
+  --t-ok:#6a9e58;--t-wn:#e5a010;--t-er:#c04040;\
+  --t-glass:rgba(252,228,216,0.92);--t-glass-bd:rgba(52,31,34,0.12);\
 }';
 
   /* ================================================================
@@ -189,6 +204,7 @@
 .te-pill:hover{border-color:var(--s-ac);color:var(--s-ac)}\
 .te-pill.active{background:var(--s-ac);color:var(--s-bg);border-color:var(--s-ac)}\
 [data-skin="botanical"] .te-pill.active{color:#fff}\
+[data-skin="annabelle"] .te-pill.active{color:#fff}\
 @media(max-width:640px){\
   .te-bar{padding:0 12px}\
   .te-pill{font-size:9px;padding:3px 8px}\
@@ -213,7 +229,7 @@
   /* ================================================================
      INTERNALS
      ================================================================ */
-  var VALID_SKINS = ['technical', 'organic', 'botanical', 'jewels', 'modern', 'contemplative', 'solarpunk'];
+  var VALID_SKINS = ['technical', 'organic', 'botanical', 'jewels', 'modern', 'contemplative', 'solarpunk', 'annabelle'];
 
   var DEFAULT_LABELS = {
     'technical':     'Technical',
@@ -222,7 +238,8 @@
     'jewels':        'Jewels',
     'modern':        'Modern',
     'contemplative': 'Contemplative',
-    'solarpunk':     'Solarpunk'
+    'solarpunk':     'Solarpunk',
+    'annabelle':     'Annabelle'
   };
 
   var activePills = [];

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" data-skin="jewels">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Bylaws — Temples of Refuge</title>
+    <meta name="description" content="The Bylaws of Temples of Refuge — the legal and structural form of an association of churches under U.S. and Utah law. The architecture through which the Covenant is held.">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Temples of Refuge">
+    <meta property="og:title" content="The Bylaws — Temples of Refuge">
+    <meta property="og:description" content="The legal and structural form of Temples of Refuge as an association of churches.">
+    <meta property="og:url" content="https://templesofrefuge.earth/bylaws.html">
+    <meta property="og:image" content="https://templesofrefuge.earth/assets/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="stylesheet" href="/shared/document.css">
+</head>
+<body>
+
+    <header class="site-header">
+        <a href="/" class="back-link">← Temples of Refuge</a>
+    </header>
+
+    <main>
+        <div class="container-narrow">
+            <section class="document-hero">
+                <p class="document-eyebrow">Foundations · The Bylaws</p>
+                <h1 class="document-title">Bylaws of<br>Temples of Refuge</h1>
+                <p class="document-subtitle">An Association of Churches — the architecture<br>through which the Covenant is held</p>
+                <div class="document-divider"></div>
+            </section>
+
+            <article id="document-body">
+                <p class="loading">Loading the Bylaws…</p>
+            </article>
+
+            <div id="error-state" style="display:none">
+                <p class="error-title">Document Not Available</p>
+                <p class="error-text"></p>
+                <a href="/" class="back-link">← Temples of Refuge</a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <nav class="footer-related" aria-label="Foundations">
+            <a href="/cosmology.html">Cosmology</a>
+            <a href="/covenant.html">Covenant</a>
+            <a href="/bylaws.html" class="current">Bylaws</a>
+        </nav>
+        <p class="footer-site-name">Temples of Refuge</p>
+    </footer>
+
+    <script src="/shared/theme-engine.js"></script>
+    <script>
+    ThemeEngine.init({
+      defaultSkin: 'jewels',
+      storageKey: 'tor-skin',
+      position: 'top-right'
+    });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/marked@15/marked.min.js"></script>
+    <script src="/shared/document-loader.js"></script>
+    <script>
+      DocumentLoader.load({ path: 'BYLAWS.md' });
+    </script>
+
+</body>
+</html>
