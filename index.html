@@ -22,7 +22,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&family=Playfair+Display:wght@700;900&family=Raleway:ital,wght@0,200;0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
-    
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsvectormap@1.7.0/dist/jsvectormap.min.css">
+
     <style>
         * {
             margin: 0;
@@ -109,6 +111,7 @@
         /* Hero */
         .hero {
             min-height: 100vh;
+            padding: 0 2rem;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -118,37 +121,6 @@
                 radial-gradient(ellipse at 50% 100%, var(--t-glass-bd) 0%, transparent 50%),
                 var(--t-bg);
             position: relative;
-        }
-        
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: min(80vw, 600px);
-            height: min(80vw, 600px);
-            border: 1px solid var(--t-bc);
-            border-radius: 50%;
-            animation: rotate 120s linear infinite;
-        }
-        
-        .hero::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: min(60vw, 450px);
-            height: min(60vw, 450px);
-            border: 1px solid var(--t-bc);
-            border-radius: 50%;
-            animation: rotate 90s linear infinite reverse;
-        }
-        
-        @keyframes rotate {
-            from { transform: translate(-50%, -50%) rotate(0deg); }
-            to { transform: translate(-50%, -50%) rotate(360deg); }
         }
         
         .hero-content {
@@ -163,32 +135,33 @@
         }
         
         .hero h1 {
-            margin-bottom: 2rem;
+            margin-bottom: 1rem;
             background: linear-gradient(180deg, var(--t-tx) 0%, var(--t-t2) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        
+
+        .hero .eyebrow {
+            margin-bottom: 1rem;
+        }
+
         .hero .lead {
             max-width: 48ch;
             margin: 0 auto;
             animation: fadeIn 2s ease-out 0.3s both;
         }
-        
+
         .hero-symbol {
-            width: 60px;
-            height: 60px;
-            margin: 0 auto 3rem;
+            width: min(440px, calc(100vh - 480px), 70vw);
+            margin: 0 auto 1rem;
             animation: fadeIn 2s ease-out 0.1s both;
         }
-        
-        .hero-symbol svg {
+
+        .hero-symbol img {
             width: 100%;
-            height: 100%;
-            stroke: var(--t-ac);
-            stroke-width: 1;
-            fill: none;
+            height: auto;
+            display: block;
         }
         
         .scroll-indicator {
@@ -303,38 +276,6 @@
             max-width: 50ch;
             margin: 0 auto 3rem;
             line-height: 1.8;
-        }
-
-        .teaching-closing {
-            font-family: var(--s-display);
-            font-style: italic;
-            color: #e8c36a;
-            font-size: 1.35rem;
-            max-width: 42ch;
-            margin: 3rem auto 0;
-            line-height: 1.6;
-            text-align: center;
-            letter-spacing: 0.01em;
-            padding: 2rem 2.5rem;
-            border-radius: 14px;
-            background: linear-gradient(
-                135deg,
-                rgba(232, 195, 106, 0.08),
-                rgba(232, 195, 106, 0.02) 45%,
-                rgba(255, 255, 255, 0.04)
-            );
-            border: 1px solid rgba(232, 195, 106, 0.28);
-            backdrop-filter: blur(14px) saturate(1.1);
-            -webkit-backdrop-filter: blur(14px) saturate(1.1);
-            box-shadow:
-                inset 0 1px 0 rgba(255, 255, 255, 0.08),
-                inset 0 0 40px rgba(232, 195, 106, 0.06),
-                0 8px 32px rgba(0, 0, 0, 0.25),
-                0 0 48px rgba(232, 195, 106, 0.12);
-            text-shadow:
-                0 0 18px rgba(232, 195, 106, 0.55),
-                0 0 38px rgba(232, 195, 106, 0.28),
-                0 0 72px rgba(232, 195, 106, 0.18);
         }
 
         /* Cosmology Section */
@@ -761,25 +702,141 @@
         
         /* First Temple Section */
         .first-temple {
-            background: 
+            background:
                 radial-gradient(ellipse at 50% 100%, var(--t-bc) 0%, transparent 60%),
                 var(--t-sf);
             text-align: center;
             padding-bottom: 12rem;
         }
-        
+
         .first-temple h2 {
             margin-bottom: 1.5rem;
         }
-        
+
         .first-temple .lead {
             margin: 0 auto 4rem;
         }
-        
+
+        .temple-preview {
+            display: block;
+            max-width: 760px;
+            margin: 0 auto;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .temple-preview-frame {
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.4);
+            box-shadow:
+                0 30px 80px -20px rgba(0, 0, 0, 0.55),
+                0 0 0 1px rgba(255, 255, 255, 0.02);
+            transition: transform 0.5s ease, box-shadow 0.5s ease, border-color 0.5s ease;
+        }
+
+        .temple-preview:hover .temple-preview-frame {
+            transform: translateY(-4px);
+            border-color: rgba(193, 154, 219, 0.4);
+            box-shadow:
+                0 40px 100px -20px rgba(0, 0, 0, 0.7),
+                0 0 60px -20px var(--t-ac);
+        }
+
+        .temple-preview-chrome {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.85rem 1.1rem;
+            background: rgba(0, 0, 0, 0.55);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .temple-preview-chrome span.dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.18);
+        }
+
+        .temple-preview-url {
+            margin: 0 auto;
+            transform: translateX(-18px);
+            font-family: var(--s-display);
+            font-size: 0.7rem;
+            letter-spacing: 0.18em;
+            color: rgba(255, 255, 255, 0.45);
+            text-transform: lowercase;
+        }
+
+        .temple-preview-image {
+            position: relative;
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .temple-preview-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.55;
+            transition: transform 6s ease, opacity 0.6s ease;
+        }
+
+        .temple-preview:hover .temple-preview-image img {
+            transform: scale(1.06);
+            opacity: 0.7;
+        }
+
+        .temple-preview-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(180deg, rgba(10, 8, 20, 0.15) 0%, rgba(10, 8, 20, 0.55) 100%);
+        }
+
+        .temple-preview-eyebrow {
+            font-family: var(--s-display);
+            font-size: 0.65rem;
+            letter-spacing: 0.32em;
+            text-transform: uppercase;
+            color: var(--t-ac);
+            margin: 0 0 1rem;
+            opacity: 0.9;
+        }
+
+        .temple-preview-title {
+            font-family: var(--s-display);
+            font-size: clamp(2rem, 5vw, 3.25rem);
+            letter-spacing: 0.04em;
+            font-weight: 400;
+            color: #fff;
+            margin: 0 0 0.75rem;
+            line-height: 1;
+        }
+
+        .temple-preview-tagline {
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.78);
+            margin: 0;
+            font-size: 1rem;
+            max-width: 28ch;
+            line-height: 1.5;
+        }
+
         .temple-link {
             display: inline-flex;
             align-items: center;
             gap: 1.5rem;
+            margin-top: 3rem;
             padding: 1.5rem 3rem;
             border: 1px solid var(--t-ac);
             color: var(--t-ac);
@@ -790,22 +847,224 @@
             text-transform: uppercase;
             transition: all 0.4s ease;
         }
-        
+
+        .temple-preview:hover .temple-link,
         .temple-link:hover {
             background: var(--t-ac);
             color: var(--t-bg);
         }
-        
+
         .temple-link svg {
             width: 16px;
             height: 16px;
             transition: transform 0.3s ease;
         }
-        
+
+        .temple-preview:hover .temple-link svg,
         .temple-link:hover svg {
             transform: translateX(4px);
         }
-        
+
+        @media (max-width: 640px) {
+            .temple-preview-url {
+                font-size: 0.6rem;
+                letter-spacing: 0.12em;
+            }
+            .temple-preview-overlay {
+                padding: 1.25rem;
+            }
+            .temple-link {
+                padding: 1.25rem 2rem;
+                margin-top: 2rem;
+            }
+        }
+
+        /* Network Title */
+        .first-temple .network-title {
+            font-size: clamp(1.6rem, 4vw, 2.4rem);
+            margin-bottom: 1.25rem;
+        }
+
+        /* Two-pane layout: map on left, temple cards on right */
+        .network-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+            gap: 2rem;
+            align-items: stretch;
+        }
+
+        .temples-rail {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            min-width: 0;
+        }
+        .temples-rail .temple-preview {
+            max-width: none;
+            width: 100%;
+            margin: 0;
+        }
+        .temples-rail .temple-preview-title {
+            font-size: clamp(1.4rem, 2.4vw, 2rem);
+        }
+        .temples-rail .temple-preview-eyebrow {
+            font-size: 0.6rem;
+            margin-bottom: 0.5rem;
+        }
+        .temples-rail .temple-preview-tagline {
+            font-size: 0.85rem;
+            max-width: 22ch;
+        }
+        .temples-rail .temple-preview-overlay {
+            padding: 1.25rem;
+        }
+        .temples-rail .temple-preview-chrome {
+            padding: 0.6rem 0.85rem;
+        }
+        .temples-rail .temple-preview-url {
+            font-size: 0.6rem;
+        }
+
+        /* World Map */
+        .network-map {
+            margin: 0;
+            padding: 1.25rem 1.5rem;
+            border: 1px solid var(--t-bd);
+            border-radius: 14px;
+            background:
+                radial-gradient(ellipse at 50% 50%, var(--t-sf) 0%, transparent 75%),
+                var(--t-bg);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .network-map::before,
+        .network-map::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 14px;
+            pointer-events: none;
+        }
+        .network-map::before {
+            border: 1px solid var(--t-bc);
+            transform: scale(1.005);
+            opacity: 0.4;
+        }
+
+        /* Container the jsvectormap library renders into */
+        #temple-network-map {
+            width: 100%;
+            flex: 1;
+            min-height: 320px;
+            position: relative;
+        }
+
+        /* Library defaults override — minor polish + skin alignment */
+        #temple-network-map .jvm-container { background: transparent; }
+        #temple-network-map .jvm-region {
+            transition: fill 0.4s ease, stroke 0.4s ease;
+        }
+        .jvm-tooltip {
+            background: var(--t-cd);
+            color: var(--t-tx);
+            border: 1px solid var(--t-bd);
+            font-family: var(--s-display);
+            font-size: 0.65rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            padding: 0.55rem 0.9rem;
+            border-radius: 6px;
+            box-shadow: 0 8px 30px -8px rgba(0, 0, 0, 0.45);
+        }
+
+        /* Pulse halo (a sibling <circle> injected behind Água Lila's marker) */
+        @keyframes templeMarkerPulse {
+            0%, 100% { transform: scale(1);   opacity: 0.35; }
+            50%      { transform: scale(2.4); opacity: 0;    }
+        }
+        .marker-pulse-halo {
+            fill: var(--t-ac);
+            transform-box: fill-box;
+            transform-origin: center;
+            animation: templeMarkerPulse 2.8s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        /* Active marker — glowing and slightly accented */
+        .jvm-marker.marker-active {
+            filter: drop-shadow(0 0 6px var(--t-ac));
+            transition: r 0.3s ease, fill 0.3s ease;
+        }
+        .jvm-marker { cursor: default; }
+        .jvm-marker.marker-active { cursor: pointer; }
+
+        /* Join CTA Card */
+        .temple-cta .temple-preview-frame {
+            border: 1px solid var(--t-ac);
+            box-shadow: 0 24px 60px -28px var(--t-ac), 0 0 0 1px var(--t-bc);
+        }
+        .temple-cta .temple-preview-chrome {
+            border-bottom: 1px solid var(--t-ac);
+            background: var(--t-cd);
+        }
+        .temple-cta .temple-preview-url {
+            color: var(--t-ac);
+            opacity: 0.85;
+            font-style: italic;
+        }
+        .temple-cta .cta-body {
+            padding: 2rem 1.75rem 2.25rem;
+            text-align: center;
+            background:
+                radial-gradient(ellipse at 50% 0%, var(--t-hv) 0%, transparent 70%),
+                var(--t-cd);
+        }
+        .temples-rail .temple-cta .temple-preview-eyebrow {
+            color: var(--t-ac);
+            opacity: 0.95;
+            margin-bottom: 0.85rem;
+            font-size: 0.62rem;
+            letter-spacing: 0.32em;
+        }
+        .temples-rail .temple-cta .temple-preview-title {
+            color: var(--t-tx);
+            margin: 0 0 1rem;
+            font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+        }
+        .temple-cta .cta-text {
+            color: var(--t-t2);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            max-width: 38ch;
+            margin: 0 auto 1.75rem;
+        }
+        .temple-cta .temple-link {
+            margin-top: 0;
+            padding: 1rem 1.75rem;
+            font-size: 0.7rem;
+        }
+        .temple-cta:hover .temple-preview-frame {
+            transform: translateY(-3px);
+            box-shadow: 0 30px 70px -20px var(--t-ac), 0 0 0 1px var(--t-ac);
+        }
+        .temple-cta:hover .temple-link {
+            background: var(--t-ac);
+            color: var(--t-bg);
+        }
+        .temple-cta:hover .temple-link svg { transform: translateX(4px); }
+
+        @media (max-width: 860px) {
+            .network-layout {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .network-map { padding: 1rem; }
+            #temple-network-map { height: clamp(280px, 56vw, 400px); }
+            .temples-rail { max-width: 560px; margin: 0 auto; width: 100%; }
+        }
+
         /* Writings Section */
         .writings {
             padding: 10rem 2rem;
@@ -836,12 +1095,125 @@
             margin: 0 auto 3rem;
         }
 
-        .writings #substack-articles {
+        .writings-more {
+            margin-top: 3rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .publication-card {
+            display: flex;
+            align-items: stretch;
+            width: 100%;
+            max-width: 720px;
+            margin: 0 auto;
+            border: 1px solid var(--t-a2);
+            border-radius: 2px;
+            background: var(--t-bg);
+            text-decoration: none;
+            transition: border-color 0.4s ease, background 0.4s ease;
+        }
+
+        .publication-card:hover {
+            border-color: var(--t-ac);
+            background: var(--t-sf);
+        }
+
+        .publication-card-banner {
+            flex-shrink: 0;
+            width: 38%;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .publication-card-banner img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 8px;
+        }
+
+        .publication-card-body {
+            flex: 1;
+            padding: 2rem 2.5rem 2rem 0.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
             text-align: left;
         }
 
-        .writings-more {
-            margin-top: 3rem;
+        .publication-card-eyebrow {
+            font-family: var(--s-display);
+            font-size: 0.6rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--t-a2);
+            margin-bottom: 0.75rem;
+        }
+
+        .publication-card-title {
+            font-family: var(--s-display);
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: var(--t-tx);
+            letter-spacing: 0.05em;
+            margin-bottom: 1.25rem;
+            line-height: 1.2;
+        }
+
+        .publication-card-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: var(--s-display);
+            font-size: 0.65rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--t-ac);
+            transition: opacity 0.3s ease;
+        }
+
+        .publication-card-action svg {
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+        }
+
+        .publication-card:hover .publication-card-action {
+            opacity: 0.85;
+        }
+
+        .archive-link {
+            font-family: var(--s-display);
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--t-ac);
+            text-decoration: none;
+            opacity: 0.65;
+            transition: opacity 0.3s ease;
+        }
+
+        .archive-link:hover {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .publication-card {
+                flex-direction: column;
+            }
+
+            .publication-card-banner {
+                width: 100%;
+                padding: 1.25rem;
+            }
+
+            .publication-card-body {
+                padding: 0 1.5rem 1.5rem;
+            }
         }
 
         /* Footer */
@@ -948,6 +1320,7 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
+            text-align: left;
         }
 
         .article-highlight-eyebrow {
@@ -1104,17 +1477,11 @@
     <!-- Hero -->
     <section class="hero">
         <div class="hero-content">
+            <h1>Temples of Refuge</h1>
             <div class="hero-symbol">
-                <svg viewBox="0 0 60 60">
-                    <circle cx="30" cy="30" r="28"/>
-                    <circle cx="30" cy="30" r="18"/>
-                    <circle cx="30" cy="30" r="8"/>
-                    <line x1="30" y1="2" x2="30" y2="58"/>
-                    <line x1="2" y1="30" x2="58" y2="30"/>
-                </svg>
+                <img src="assets/Final-Logo/01-Royal/icon/icon-transparent.svg" alt="Temples of Refuge icon">
             </div>
             <p class="eyebrow">A Fractal Network of Living Temples</p>
-            <h1>Temples of Refuge</h1>
             <p class="lead">
                 Re-binding human life to Source through direct experience, embodied practice, and regenerative relationship with Earth.
             </p>
@@ -1161,10 +1528,6 @@
 
             <p class="teaching-text" style="margin-top: 3rem;">
                 You are a fractal face of the One, as is every being you encounter. To hurt the Other is to hurt yourself. Separation is the illusion we are born into. Seeing through it is the work we are born for.
-            </p>
-
-            <p class="teaching-closing">
-                This is not one teaching among many. It is the root from which all others grow.
             </p>
         </div>
     </section>
@@ -1401,21 +1764,61 @@
         </div>
     </section>
 
-    <!-- First Temple -->
+    <!-- The Network -->
     <section class="first-temple">
-        <div class="container-narrow fade-up">
-            <p class="eyebrow">The First Temple</p>
-            <h2>Água Lila</h2>
-            <p class="lead">
-                In the mountains of central Portugal, the first physical Temple node is proving that Paradise restoration is possible. Where sacred technology meets sacred land.
-            </p>
-            
-            <a href="https://agualila.earth" class="temple-link">
-                Enter Água Lila
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M5 12h14M12 5l7 7-7 7"/>
-                </svg>
-            </a>
+        <div class="container fade-up">
+            <h2 class="network-title">Network of Temples</h2>
+
+            <div class="network-layout">
+                <!-- Left pane: world map (jsvectormap, see script before </body>) -->
+                <div class="network-map" aria-label="Map of Temple Network nodes">
+                    <div id="temple-network-map" role="img" aria-label="World map showing Temple nodes — Água Lila active, three future nodes"></div>
+                </div>
+
+                <!-- Right pane: stacked temple cards -->
+                <div class="temples-rail">
+                    <a href="https://agualila.earth" class="temple-preview" data-node="agua-lila" target="_blank" rel="noopener">
+                        <div class="temple-preview-frame">
+                            <div class="temple-preview-chrome">
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                                <span class="temple-preview-url">agualila.earth</span>
+                            </div>
+                            <div class="temple-preview-image">
+                                <img src="https://agualila.earth/assets/monastery-hillside-morning-mist-valley.jpeg" alt="Água Lila — monastery hillside in central Portugal at morning mist" loading="lazy">
+                                <div class="temple-preview-overlay">
+                                    <p class="temple-preview-eyebrow">Paradise in Action</p>
+                                    <h3 class="temple-preview-title">Água Lila</h3>
+                                    <p class="temple-preview-tagline">Where sacred technology meets sacred land</p>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="mailto:hello@templesofrefuge.earth?subject=Network%20of%20Temples%20%E2%80%94%20stewardship%20inquiry" class="temple-preview temple-cta" data-node="join">
+                        <div class="temple-preview-frame">
+                            <div class="temple-preview-chrome">
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                                <span class="temple-preview-url">your.temple</span>
+                            </div>
+                            <div class="cta-body">
+                                <p class="temple-preview-eyebrow">Open Inquiry</p>
+                                <h3 class="temple-preview-title">Found a Temple</h3>
+                                <p class="cta-text">If you're holding land, intention, or community for a new node, we'd like to talk.</p>
+                                <span class="temple-link">
+                                    Get in Touch
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -1437,14 +1840,23 @@
                         <span class="article-highlight-read">Read →</span>
                     </div>
                 </a>
-                <div id="substack-articles"></div>
                 <div class="writings-more">
-                    <a href="/articles/" class="temple-link">
-                        All Writings
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M5 12h14M12 5l7 7-7 7"/>
-                        </svg>
+                    <a href="https://aeonmyths.substack.com" target="_blank" rel="noopener" class="publication-card">
+                        <div class="publication-card-banner">
+                            <img src="assets/Myths.png" alt="Myths for a New Æon">
+                        </div>
+                        <div class="publication-card-body">
+                            <p class="publication-card-eyebrow">Also Published On</p>
+                            <h3 class="publication-card-title">Myths for a New Æon</h3>
+                            <span class="publication-card-action">
+                                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                    <path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/>
+                                </svg>
+                                Follow on Substack →
+                            </span>
+                        </div>
                     </a>
+                    <a href="/articles/" class="archive-link">Browse the full archive →</a>
                 </div>
             </div>
         </div>
@@ -1477,27 +1889,15 @@
                     </div>
                 </div>
             </nav>
-            <div class="footer-closing">
-                <p>Those who walk this path do so freely</p>
-                <p>Those who leave are blessed</p>
-                <p>The Temple remains</p>
-            </div>
         </div>
     </footer>
 
     <script src="/shared/theme-engine.js"></script>
-    <script src="/shared/substack-feed.js"></script>
     <script>
     ThemeEngine.init({
       defaultSkin: 'jewels',
       storageKey: 'tor-skin',
       position: 'top-right'
-    });
-    SubstackFeed.init({
-      container: '#substack-articles',
-      tag: 'TemplesOfRefuge',
-      limit: 6,
-      style: 'grid'
     });
     </script>
     <script>
@@ -1510,8 +1910,90 @@
                 }
             });
         }, { threshold: 0.1 });
-        
+
         fadeEls.forEach(el => observer.observe(el));
+    </script>
+
+    <!-- Temple Network world map (jsvectormap) -->
+    <script src="https://cdn.jsdelivr.net/npm/jsvectormap@1.7.0/dist/jsvectormap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsvectormap@1.7.0/dist/maps/world.js"></script>
+    <script>
+    (function () {
+        const root = document.documentElement;
+        const target = document.getElementById('temple-network-map');
+        if (!target || typeof jsVectorMap === 'undefined') return;
+
+        const tok = (name) => getComputedStyle(root).getPropertyValue(name).trim();
+
+        const NODES = [
+            { name: 'Água Lila', coords: [40.1, -7.9], status: 'active', href: 'https://agualila.earth' }
+        ];
+
+        let map = null;
+
+        function injectHalo() {
+            const svg = target.querySelector('svg');
+            if (!svg) return;
+            const markers = svg.querySelectorAll('.jvm-marker');
+            if (!markers.length) return;
+            const active = markers[0];
+            active.classList.add('marker-active');
+            // Insert pulse halo behind the active marker
+            const cx = active.getAttribute('cx');
+            const cy = active.getAttribute('cy');
+            if (cx == null || cy == null) return;
+            const halo = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            halo.setAttribute('cx', cx);
+            halo.setAttribute('cy', cy);
+            halo.setAttribute('r', '10');
+            halo.setAttribute('class', 'marker-pulse-halo');
+            active.parentNode.insertBefore(halo, active);
+        }
+
+        function render() {
+            if (map) { try { map.destroy(); } catch (e) {} target.innerHTML = ''; }
+
+            const land   = tok('--t-hv')  || tok('--t-sf') || '#18183a';
+            const border = tok('--t-t2')  || tok('--t-bd') || '#666';
+            const accent = tok('--t-ac')  || '#6bcfff';
+            const muted  = tok('--t-mt')  || '#888';
+            const card   = tok('--t-cd')  || '#0b0b18';
+
+            map = new jsVectorMap({
+                selector: '#temple-network-map',
+                map: 'world',
+                backgroundColor: 'transparent',
+                zoomButtons: false,
+                zoomOnScroll: false,
+                draggable: false,
+                regionStyle: {
+                    initial: { fill: land, stroke: border, strokeWidth: 0.4, strokeOpacity: 0.4, fillOpacity: 1 },
+                    hover:   { fill: land, fillOpacity: 1, cursor: 'default' }
+                },
+                markers: NODES.map((n) => ({
+                    name: n.name,
+                    coords: n.coords,
+                    style: n.status === 'active'
+                        ? { fill: accent, r: 6, stroke: card, strokeWidth: 2 }
+                        : { fill: muted, r: 4, stroke: border, strokeWidth: 1, strokeDasharray: '2 2', fillOpacity: 0.6 }
+                })),
+                markerStyle: {
+                    hover: { fill: accent, r: 8, cursor: 'pointer' }
+                },
+                onMarkerClick(_e, idx) {
+                    const node = NODES[idx];
+                    if (node && node.href) window.open(node.href, '_blank', 'noopener');
+                }
+            });
+
+            // jsvectormap renders synchronously; tag active marker + inject pulse halo
+            requestAnimationFrame(injectHalo);
+        }
+
+        if (document.readyState !== 'loading') render();
+        else document.addEventListener('DOMContentLoaded', render);
+        document.addEventListener('skinchange', render);
+    })();
     </script>
 </body>
 </html>
