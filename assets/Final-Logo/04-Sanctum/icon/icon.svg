@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="-350 -350 700 700" xmlns="http://www.w3.org/2000/svg" fill="none" role="img" aria-label="Temples of Refuge">
+  <title>Temples of Refuge</title>
+  <desc>Fractal Flower of Life mark — each circle contains the same pattern at smaller scale.</desc>
+  <defs>
+    <linearGradient id="violetGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6B3FA0"/>
+      <stop offset="100%" stop-color="#2D124A"/>
+    </linearGradient>
+    <linearGradient id="violetGradSoft" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8A65C0"/>
+      <stop offset="100%" stop-color="#4A2680"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C99846"/>
+      <stop offset="100%" stop-color="#7E5414"/>
+    </linearGradient>
+    <radialGradient id="centerGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFE4A0"/>
+      <stop offset="60%" stop-color="#D49B30"/>
+      <stop offset="100%" stop-color="#8B5A1A"/>
+    </radialGradient>
+    <g id="seedFractal" stroke="url(#goldGrad)" stroke-width="0.9" opacity="0.85">
+      <circle cx="0" cy="0" r="33"/>
+      <circle cx="33" cy="0" r="33"/>
+      <circle cx="16.5" cy="28.579" r="33"/>
+      <circle cx="-16.5" cy="28.579" r="33"/>
+      <circle cx="-33" cy="0" r="33"/>
+      <circle cx="-16.5" cy="-28.579" r="33"/>
+      <circle cx="16.5" cy="-28.579" r="33"/>
+    </g>
+  </defs>
+  <rect x="-350" y="-350" width="700" height="700" fill="#F4ECDB"/>
+  <!-- Outer ring of the icon -->
+  <circle cx="0" cy="0" r="318" stroke="#A87520" stroke-width="1" opacity="0.55"/>
+  <circle cx="0" cy="0" r="305" stroke="url(#goldGrad)" stroke-width="3.5"/>
+
+  <!-- Outer Flower of Life (12 faint violet circles) -->
+  <g stroke="url(#violetGradSoft)" stroke-width="1.1" opacity="0.5">
+    <circle cx="150"  cy="86.603"  r="100"/>
+    <circle cx="0"    cy="173.205" r="100"/>
+    <circle cx="-150" cy="86.603"  r="100"/>
+    <circle cx="-150" cy="-86.603" r="100"/>
+    <circle cx="0"    cy="-173.205" r="100"/>
+    <circle cx="150"  cy="-86.603" r="100"/>
+    <circle cx="200"  cy="0"        r="100"/>
+    <circle cx="100"  cy="173.205"  r="100"/>
+    <circle cx="-100" cy="173.205"  r="100"/>
+    <circle cx="-200" cy="0"        r="100"/>
+    <circle cx="-100" cy="-173.205" r="100"/>
+    <circle cx="100"  cy="-173.205" r="100"/>
+  </g>
+
+  <!-- Network rays (gold) -->
+  <g stroke="url(#goldGrad)" stroke-width="0.9" opacity="0.55" stroke-linecap="round">
+    <line x1="0" y1="0" x2="100"  y2="0"/>
+    <line x1="0" y1="0" x2="50"   y2="86.603"/>
+    <line x1="0" y1="0" x2="-50"  y2="86.603"/>
+    <line x1="0" y1="0" x2="-100" y2="0"/>
+    <line x1="0" y1="0" x2="-50"  y2="-86.603"/>
+    <line x1="0" y1="0" x2="50"   y2="-86.603"/>
+  </g>
+
+  <!-- Hexagonal frame -->
+  <polygon
+    points="100,0  50,86.603  -50,86.603  -100,0  -50,-86.603  50,-86.603"
+    stroke="url(#goldGrad)" stroke-width="0.7" opacity="0.45" stroke-linejoin="round"/>
+
+  <!-- Main Seed of Life (7 bold violet circles) -->
+  <g stroke="url(#violetGrad)" stroke-width="2.6">
+    <circle cx="0"   cy="0"       r="100"/>
+    <circle cx="100" cy="0"       r="100"/>
+    <circle cx="50"  cy="86.603"  r="100"/>
+    <circle cx="-50" cy="86.603"  r="100"/>
+    <circle cx="-100" cy="0"      r="100"/>
+    <circle cx="-50" cy="-86.603" r="100"/>
+    <circle cx="50"  cy="-86.603" r="100"/>
+  </g>
+
+  <!-- Fractal seeds inside each main circle -->
+  <use href="#seedFractal" x="0"    y="0"/>
+  <use href="#seedFractal" x="100"  y="0"/>
+  <use href="#seedFractal" x="50"   y="86.603"/>
+  <use href="#seedFractal" x="-50"  y="86.603"/>
+  <use href="#seedFractal" x="-100" y="0"/>
+  <use href="#seedFractal" x="-50"  y="-86.603"/>
+  <use href="#seedFractal" x="50"   y="-86.603"/>
+
+  <!-- Central source -->
+  <circle cx="0" cy="0" r="16" stroke="#A87520" stroke-width="0.8" opacity="0.6"/>
+  <circle cx="0" cy="0" r="9"  fill="url(#centerGlow)"/>
+  <circle cx="0" cy="0" r="2.5" fill="#FFF1C8"/>
+
+</svg>
