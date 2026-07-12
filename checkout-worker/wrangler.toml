@@ -1,0 +1,13 @@
+name = "tor-checkout"
+main = "src/index.js"
+compatibility_date = "2024-11-01"
+
+# Public, non-secret configuration.
+[vars]
+# Origins allowed to call this Worker (your live site + local previews).
+ALLOWED_ORIGINS = "https://templesofrefuge.earth,https://www.templesofrefuge.earth,https://syncengine.earth,https://www.syncengine.earth,http://localhost:8000,http://localhost:8002,http://localhost:8003"
+# The Stripe product each offering is recorded against (the "Donation / Offering" product).
+PRODUCT_ID = "prod_UqVlyjujBeFQMX"
+
+# SECRET — never put the Stripe secret key here. Set it out-of-band with:
+#   wrangler secret put STRIPE_SECRET_KEY
