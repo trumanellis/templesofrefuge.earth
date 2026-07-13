@@ -220,26 +220,36 @@
       return;
     }
 
+    // A failed request (CORS, network) fires BOTH onreadystatechange
+    // (readyState 4, status 0) and onerror. Guard so the callback — and
+    // therefore the render — runs at most once.
+    var done = false;
+    function finish(err, posts) {
+      if (done) return;
+      done = true;
+      callback(err, posts);
+    }
+
     var xhr = new XMLHttpRequest();
     xhr.open('GET', API_URL, true);
     xhr.setRequestHeader('Accept', 'application/json');
     xhr.onreadystatechange = function () {
       if (xhr.readyState !== 4) return;
       if (xhr.status < 200 || xhr.status >= 300) {
-        callback(new Error('HTTP ' + xhr.status));
+        finish(new Error('HTTP ' + xhr.status));
         return;
       }
       try {
         var data = JSON.parse(xhr.responseText);
         var posts = Array.isArray(data) ? data : (data.posts || []);
         setCache(posts);
-        callback(null, posts);
+        finish(null, posts);
       } catch (e) {
-        callback(new Error('JSON parse error: ' + e.message));
+        finish(new Error('JSON parse error: ' + e.message));
       }
     };
     xhr.onerror = function () {
-      callback(new Error('Network error'));
+      finish(new Error('Network error'));
     };
     xhr.send();
   }
