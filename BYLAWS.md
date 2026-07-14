@@ -35,7 +35,7 @@ The spirit lives in the Covenant. The architecture lives here. Where they appear
 
 **2.1 Two-Layer Membership.** Affiliation with the Association exists in two layers, neither of which conveys ownership in the assets of the Association:
 
-(a) **Association Membership** is established by any person making a donation to the Association in an amount they can genuinely offer and signing the Covenant. Association Membership is lifetime and non-revocable except for material breach of the Covenant, fraud, or harm to others.
+(a) **Association Membership** is established by any person making a donation to the Association in an amount they can genuinely offer and signing the Covenant. Association Membership continues for life unless the Member withdraws under Section 2.5, and is non-revocable by the Association except for material breach of the Covenant, fraud, or harm to others.
 
 (b) **Temple Participation** is the relationship between a Member and one or more constituent Temples. A Member may participate in zero, one, or many Temples. Each Temple maintains its own roster of participants under its own bylaws and local covenant, consistent with the Association's standards.
 
@@ -55,7 +55,7 @@ Membership is spiritual affiliation, not proof of personhood, and carries no gov
 
 **2.4 Initiatory Practice.** The Inner Council shall maintain a written Initiatory Practice describing the Process in detail. The Practice shall include: a path through service for those without sponsors; the right of every candidate to be heard before the full Council of Stewards; no test of conformity beyond sincere alignment with the One Commandment; periodic review of admission patterns by the Council of Stewards. Member Temples may add local elements consistent with the Practice but may not impose stricter or looser standards than the Practice provides.
 
-**2.5 Departure.** Any Member or Steward may withdraw at any time. The departing person retains the right to export their identity and gratitude history in a portable format. Departure is honored, not punished. No social shunning. Withdrawal from a Temple does not terminate Association Membership or Stewardship.
+**2.5 Departure.** Any Member or Steward may withdraw from the Association, or from any Temple, at any time, effective upon notice through the Engine or in writing. Withdrawal from the Association terminates Membership and any Stewardship. The departing person retains the right to export their identity and gratitude history in a portable format, and may further request erasure of their personal data from the Synchronicity Engine; upon such request the Association shall erase or irreversibly anonymize the person's identifying data within a reasonable time, retaining only what is required by law or necessary to preserve the integrity of aggregate governance and financial records, in which the person shall no longer be identifiable. Departure is honored, not punished. No social shunning. Withdrawal from a Temple alone does not terminate Association Membership or Stewardship.
 
 **2.6 Removal.** Membership or Stewardship may be revoked, only for the causes named in 2.1(a), by two-thirds vote of the Council of Stewards after notice through the Engine or in writing and an opportunity to be heard. Good-faith dissent is not cause for removal. Restorative process precedes punitive action where possible.
 
