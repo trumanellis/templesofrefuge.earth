@@ -40,7 +40,7 @@
   --s-bd:#27272a;--s-b2:#1c1c20;\
   --s-ac:#818cf8;\
   --s-font:"Inter",-apple-system,system-ui,sans-serif;\
-  --s-display:"Inter",-apple-system,system-ui,sans-serif;\
+  --s-display:"Cormorant Garamond",Georgia,serif;\
   --s-radius:12px;\
   --t-bg:#09090b;--t-sf:#111114;--t-cd:#151518;--t-hv:#1c1c20;\
   --t-tx:#fafafa;--t-t2:#a0a0ab;--t-mt:#52525b;--t-dm:#3f3f46;\
@@ -150,8 +150,8 @@
 }\
 @keyframes teOrbDrift{from{transform:translate(-40px,0) scale(1)}to{transform:translate(40px,30px) scale(1.08)}}\
 @media(prefers-reduced-motion:reduce){[data-skin="technical"] body::after{animation:none}}\
-[data-skin="technical"] h1{text-transform:none;letter-spacing:-0.04em;font-weight:800;line-height:1.0;font-size:clamp(36px,7vw,78px)}\
-[data-skin="technical"] h2{text-transform:none;letter-spacing:-0.03em;font-weight:800;line-height:1.1;font-size:clamp(30px,5vw,56px)}\
+[data-skin="technical"] h1{text-transform:none;letter-spacing:-0.01em;font-weight:700;line-height:1.02;font-size:clamp(40px,7.5vw,84px)}\
+[data-skin="technical"] h2{text-transform:none;letter-spacing:-0.005em;font-weight:600;line-height:1.12;font-size:clamp(32px,5.5vw,60px)}\
 [data-skin="technical"] h3{text-transform:none;letter-spacing:normal;font-weight:600}\
 [data-skin="technical"] body{line-height:1.7}\
 [data-skin="technical"] strong{color:var(--t-tx);font-weight:500}\
@@ -163,6 +163,7 @@
 }\
 [data-skin="technical"] .hero-cta{\
   background:var(--signature);border:none;color:#fff;\
+  font-family:var(--s-font);\
   text-transform:none;letter-spacing:0;font-weight:500;font-size:0.95rem;\
   border-radius:8px;box-shadow:0 0 20px rgba(129,140,248,0.2);\
 }\
@@ -205,10 +206,6 @@
 [data-skin="technical"] .te-bar{background:rgba(9,9,11,0.85);backdrop-filter:blur(20px) saturate(180%)}\
 [data-skin="jewels"] .te-bar{background:rgba(6,6,14,0.85);backdrop-filter:blur(20px) saturate(180%)}\
 .te-section{display:flex;align-items:center;gap:16px}\
-.te-label{\
-  font-family:var(--font-mono);font-size:9px;letter-spacing:0.2em;\
-  text-transform:uppercase;color:var(--s-mt);flex-shrink:0;\
-}\
 .te-pills{display:flex;gap:6px}\
 .te-pill{\
   padding:3px 12px;\
@@ -301,10 +298,6 @@
       var section = document.createElement('div');
       section.className = 'te-section';
 
-      var label = document.createElement('span');
-      label.className = 'te-label';
-      label.textContent = 'Skin';
-
       var pillsWrap = document.createElement('div');
       pillsWrap.className = 'te-pills';
 
@@ -325,7 +318,6 @@
 
       activePills.push({ pills: pillEls });
 
-      section.appendChild(label);
       section.appendChild(pillsWrap);
       bar.appendChild(section);
       document.body.appendChild(bar);
