@@ -24,6 +24,23 @@ syncengine.earth, www.syncengine.earth {
 	}
 }
 
+agualila.earth, www.agualila.earth {
+	root * /var/www/agualila
+	file_server
+	encode zstd gzip
+
+	header {
+		?Cache-Control "public, max-age=3600"
+	}
+}
+
+# Work tracker — Node/Fastify app (see ../work.agualila.earth), bound to
+# localhost:3200 by the work-agualila systemd service. Caddy terminates TLS
+# and proxies; the app never binds a public port.
+work.agualila.earth {
+	reverse_proxy 127.0.0.1:3200
+}
+
 # --- OPTIONAL, later ---
 # Expose the relay admin API over TLS on a subdomain instead of only localhost.
 # Leave commented for the infra-only pass (admin stays bound to 127.0.0.1:9090).
