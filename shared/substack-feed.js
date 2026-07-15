@@ -17,7 +17,15 @@
   /* ================================================================
      CONSTANTS
      ================================================================ */
-  var API_URL = 'https://aeonmyths.substack.com/api/v1/posts?limit=50';
+  // Browsers can't call Substack's API directly — it sends no
+  // Access-Control-Allow-Origin — so the feed is fetched through a small CORS
+  // proxy: the checkout Worker's /substack-posts route (checkout-worker/src/
+  // index.js). resolveApiUrl() below picks the proxy base per site.
+  var DIRECT_API_URL = 'https://aeonmyths.substack.com/api/v1/posts?limit=50';
+  // Fallback proxy base for sites that don't load shared/cta-widgets.js (e.g.
+  // agualila.earth). Swap the subdomain for your deployed Worker; keep it in
+  // sync with CHECKOUT_API_URL in shared/cta-widgets.js.
+  var DEFAULT_PROXY_URL = 'https://tor-checkout.CHANGE-ME.workers.dev/substack-posts';
   var BASE_URL = 'https://aeonmyths.substack.com';
   var CACHE_KEY = 'substack-feed-cache';
   var CACHE_TTL = 1800000; // 30 minutes
@@ -213,7 +221,22 @@
   /* ================================================================
      FETCH
      ================================================================ */
-  function fetchPosts(callback) {
+  // Pick the feed endpoint. Order: explicit cfg.proxyUrl → the shared
+  // CTAConfig checkout Worker (+ '/substack-posts') on sites that load
+  // cta-widgets.js → the DEFAULT_PROXY_URL constant. Passing 'direct' hits
+  // Substack straight (only works from a same-origin proxy, kept for testing).
+  function resolveApiUrl(cfg) {
+    if (cfg.proxyUrl === 'direct') return DIRECT_API_URL;
+    if (cfg.proxyUrl) return cfg.proxyUrl;
+    var base =
+      (window.CTAConfig && window.CTAConfig.CHECKOUT_API_URL) ||
+      (window.CTAWidgets && window.CTAWidgets.config &&
+        window.CTAWidgets.config.CHECKOUT_API_URL);
+    if (base) return base.replace(/\/+$/, '') + '/substack-posts';
+    return DEFAULT_PROXY_URL;
+  }
+
+  function fetchPosts(apiUrl, callback) {
     var cached = getCached();
     if (cached) {
       callback(null, cached);
@@ -231,7 +254,7 @@
     }
 
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', API_URL, true);
+    xhr.open('GET', apiUrl, true);
     xhr.setRequestHeader('Accept', 'application/json');
     xhr.onreadystatechange = function () {
       if (xhr.readyState !== 4) return;
@@ -332,6 +355,9 @@
      * @param {string} cfg.tag        - Hashtag to filter by, without # (default: '')
      * @param {number} cfg.limit      - Max cards to render (default: 6)
      * @param {string} cfg.style      - 'grid' or 'list' (default: 'grid')
+     * @param {string} cfg.proxyUrl   - CORS proxy endpoint override; 'direct'
+     *                                  hits Substack straight (default: auto —
+     *                                  see resolveApiUrl)
      */
     init: function (cfg) {
       cfg = cfg || {};
@@ -339,6 +365,7 @@
       var tag = cfg.tag || '';
       var limit = typeof cfg.limit === 'number' ? cfg.limit : 6;
       var style = cfg.style === 'list' ? 'list' : 'grid';
+      var apiUrl = resolveApiUrl(cfg);
 
       injectStyle('sf-styles', FEED_CSS);
 
@@ -348,7 +375,7 @@
         return;
       }
 
-      fetchPosts(function (err, posts) {
+      fetchPosts(apiUrl, function (err, posts) {
         if (err) {
           console.warn('SubstackFeed: fetch failed —', err.message);
           renderFallback(container);

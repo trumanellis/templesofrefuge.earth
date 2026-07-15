@@ -1,0 +1,20 @@
+# /etc/indras-relay/relay.toml
+# Schema: IndrasNetwork/crates/indras-relay/src/config.rs (RelayConfig)
+
+# Persistent data: relay's own secret.key, blob store, registration state.
+data_dir = "/var/lib/indras-relay"
+
+display_name = "Temples of Refuge relay"
+
+# Admin HTTP API — localhost ONLY. Never expose this publicly without TLS + a
+# strong token in front of it. The setup script replaces the token below.
+admin_bind  = "127.0.0.1:9090"
+admin_token = "REPLACE_WITH_A_REAL_TOKEN"   # code warns if left as "change-me"
+
+# owner_player_id: set this to YOUR PlayerId (32-byte hex, from your ./se
+# identity) to make this relay act as your personal server. Left unset here so
+# first boot comes up as a general blind relay; fill in and restart once you've
+# extracted the PlayerId.
+# owner_player_id = "..."
+
+# [storage] / [tiers] / [quota] use sane defaults; tune disk limits later.

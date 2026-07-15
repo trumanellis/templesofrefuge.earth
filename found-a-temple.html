@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" data-skin="technical">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Found a Temple — Temples of Refuge</title>
+    <meta name="description" content="If you are holding land, intention, or community for a new node in the Network of Temples, begin the conversation here.">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Temples of Refuge">
+    <meta property="og:title" content="Found a Temple — Temples of Refuge">
+    <meta property="og:description" content="Holding land, intention, or community for a new node? We'd like to talk.">
+    <meta property="og:url" content="https://templesofrefuge.earth/found-a-temple.html">
+    <meta property="og:image" content="https://templesofrefuge.earth/assets/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="stylesheet" href="/shared/document.css">
+</head>
+<body>
+
+    <header class="site-header">
+        <a href="/" class="back-link">← Temples of Refuge</a>
+    </header>
+
+    <main>
+        <div class="container-narrow">
+            <section class="document-hero">
+                <p class="document-eyebrow">Network of Temples</p>
+                <h1 class="document-title">Found a Temple</h1>
+                <p class="document-subtitle">If you're holding land, intention, or community<br>for a new node, we'd like to talk</p>
+                <div class="document-divider"></div>
+            </section>
+
+            <p style="text-align:center;color:var(--t-t2);line-height:1.8;max-width:46ch;margin:0 auto 3rem;">
+                A Temple joins the network by adopting the Covenant and committing to the
+                Initiatory Practice. There is no application to win — only a relationship to begin.
+                Tell us what you are stewarding and we will reach back.
+            </p>
+
+            <form class="cta-form" id="found-temple-form" data-cta-subject="Found a Temple — stewardship inquiry">
+                <div class="cta-field">
+                    <label for="ft-name">Your name <span class="req">*</span></label>
+                    <input type="text" id="ft-name" name="name" required autocomplete="name" placeholder="The name you go by">
+                </div>
+
+                <div class="cta-field">
+                    <label for="ft-email">Email <span class="req">*</span></label>
+                    <input type="email" id="ft-email" name="email" required autocomplete="email" placeholder="where we can reach you">
+                </div>
+
+                <div class="cta-field">
+                    <label for="ft-location">Where in the world</label>
+                    <input type="text" id="ft-location" name="location" placeholder="Region, country, or coordinates">
+                </div>
+
+                <div class="cta-field">
+                    <label for="ft-steward">What you are holding</label>
+                    <select id="ft-steward" name="holding">
+                        <option value="">Choose what fits</option>
+                        <option value="Land">Land</option>
+                        <option value="Intention">Intention</option>
+                        <option value="Community">Community</option>
+                        <option value="Land &amp; community">Land &amp; community</option>
+                        <option value="All three">All three</option>
+                        <option value="Still discerning">Still discerning</option>
+                    </select>
+                </div>
+
+                <div class="cta-field">
+                    <label for="ft-message">Tell us more <span class="req">*</span></label>
+                    <textarea id="ft-message" name="message" required placeholder="What are you stewarding, and what are you hoping to grow?"></textarea>
+                </div>
+
+                <!-- honeypot: bots fill this, humans never see it -->
+                <input type="checkbox" name="botcheck" class="cta-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+                <p class="cta-form-error" hidden></p>
+                <button type="submit" class="cta-submit">Begin the conversation</button>
+            </form>
+
+            <div class="cta-form-success" id="found-temple-success" hidden>
+                <div class="ok-mark">✦</div>
+                <h3>Received with gratitude</h3>
+                <p>Your message is on its way to us. We read every inquiry by hand and will
+                   reach back to begin the conversation. Welcome to the edge of the possible.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <nav class="footer-related" aria-label="Foundations">
+            <a href="/cosmology.html">Cosmology</a>
+            <a href="/covenant.html">Covenant</a>
+            <a href="/bylaws.html">Bylaws</a>
+            <a href="/join.html">Become a Member</a>
+        </nav>
+        <p class="footer-site-name">Temples of Refuge</p>
+    </footer>
+
+    <script src="/shared/theme-engine.js"></script>
+    <script>
+    ThemeEngine.init({
+      defaultSkin: 'technical',
+      storageKey: 'tor-skin',
+      position: 'top-right'
+    });
+    </script>
+    <script src="/shared/cta-widgets.js"></script>
+    <script>
+      CTAWidgets.wireForm('#found-temple-form', { successSelector: '#found-temple-success' });
+    </script>
+
+</body>
+</html>

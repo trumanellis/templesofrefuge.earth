@@ -18,6 +18,11 @@
 
 const STRIPE_API = 'https://api.stripe.com/v1';
 
+// Currencies the offering supports. All are two-decimal, so the donor's chosen
+// numeral maps to minor units as number × 100 uniformly — the sacred number is
+// preserved (11 → €11 / £11 / $11), never FX-converted.
+const ALLOWED_CURRENCIES = new Set(['usd', 'eur', 'gbp', 'cad', 'aud']);
+
 const COVENANT_MESSAGE =
   'By making this offering you sign the Covenant and affirm the One Commandment — ' +
   'to recognize the divine in every Other and treat them as an extension of yourself. ' +
@@ -41,6 +46,9 @@ export default {
       }
       if (request.method === 'GET' && url.pathname === '/session-status') {
         return await sessionStatus(url, env, okOrigin);
+      }
+      if (request.method === 'GET' && url.pathname === '/substack-posts') {
+        return await substackPosts(env, okOrigin);
       }
       return json({ error: 'Not found' }, 404, okOrigin);
     } catch (err) {
@@ -90,10 +98,17 @@ async function createSession(request, env, origin) {
     return json({ error: 'Invalid request body' }, 400, origin);
   }
 
-  // Amount arrives in cents so we never do float math on money.
+  // Amount arrives in minor units (the numeral × 100) so we never do float math.
   const cents = Math.round(Number(body.amount));
   if (!Number.isFinite(cents) || cents < 100 || cents > 1000000) {
-    return json({ error: 'Offering must be between $1 and $10,000.' }, 400, origin);
+    return json({ error: 'Offering must be between 1 and 10,000.' }, 400, origin);
+  }
+
+  // The donor's chosen currency — the numeral is charged as-is in it (11 → €11),
+  // never converted. Defaults to USD; anything off the allowlist is rejected.
+  const currency = String(body.currency || 'usd').toLowerCase();
+  if (!ALLOWED_CURRENCIES.has(currency)) {
+    return json({ error: 'Unsupported currency.' }, 400, origin);
   }
 
   // Send the donor back to the same origin that launched checkout.
@@ -101,11 +116,16 @@ async function createSession(request, env, origin) {
 
   const form = new URLSearchParams();
   form.set('mode', 'payment');
-  form.set('ui_mode', 'embedded');
+  // Embedded Checkout — recent Stripe API versions renamed this ui_mode from
+  // 'embedded' to 'embedded_page'; the client still drives it via initEmbeddedCheckout.
+  form.set('ui_mode', 'embedded_page');
   form.set('return_url', returnUrl);
   form.set('payment_method_types[0]', 'card');
+  // Disable Adaptive Pricing so Stripe never FX-converts the offering into a
+  // local currency — the sacred numeral must stay exact (no $11 → €10.04).
+  form.set('adaptive_pricing[enabled]', 'false');
   form.set('line_items[0][quantity]', '1');
-  form.set('line_items[0][price_data][currency]', 'usd');
+  form.set('line_items[0][price_data][currency]', currency);
   form.set('line_items[0][price_data][product]', env.PRODUCT_ID);
   form.set('line_items[0][price_data][unit_amount]', String(cents));
   form.set('custom_text[submit][message]', COVENANT_MESSAGE);
@@ -134,4 +154,37 @@ async function sessionStatus(url, env, origin) {
     200,
     origin
   );
+}
+
+// CORS proxy for the shared Substack feed widget (shared/substack-feed.js).
+// The browser can't call Substack directly — its API sends no
+// Access-Control-Allow-Origin — so the widget fetches this route instead and
+// we fetch Substack server-to-server (no CORS applies) and re-emit the JSON
+// with our own origin-gated CORS headers.
+const SUBSTACK_API = 'https://aeonmyths.substack.com/api/v1/posts?limit=50';
+
+async function substackPosts(env, origin) {
+  if (!origin) return json({ error: 'Origin not allowed' }, 403, origin);
+
+  // A UA header avoids some bot-blocking. cf.cacheTtl caches the upstream JSON
+  // at the edge for 30 min so we hammer neither Substack nor cold-fetch every
+  // visitor (replaces the widget's sessionStorage cache).
+  const res = await fetch(SUBSTACK_API, {
+    headers: {
+      Accept: 'application/json',
+      'User-Agent': 'IndrasNetwork-SubstackFeed/1.0 (+https://templesofrefuge.earth)',
+    },
+    cf: { cacheTtl: 1800, cacheEverything: true },
+  });
+  if (!res.ok) return json({ error: `Substack ${res.status}` }, 502, origin);
+
+  const posts = await res.json();
+  return new Response(JSON.stringify(posts), {
+    status: 200,
+    headers: {
+      'Content-Type': 'application/json',
+      'Cache-Control': 'public, max-age=1800',
+      ...corsHeaders(origin),
+    },
+  });
 }

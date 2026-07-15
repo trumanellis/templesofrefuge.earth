@@ -1,0 +1,32 @@
+# /etc/caddy/Caddyfile
+# Serves both static sites with automatic HTTPS (Let's Encrypt).
+# Caddy provisions a certificate per hostname once DNS points at this box.
+
+templesofrefuge.earth, www.templesofrefuge.earth {
+	root * /var/www/templesofrefuge
+	file_server
+	encode zstd gzip
+
+	# Static-site niceties
+	header {
+		# modest caching for assets; HTML stays fresh
+		?Cache-Control "public, max-age=3600"
+	}
+}
+
+syncengine.earth, www.syncengine.earth {
+	root * /var/www/syncengine
+	file_server
+	encode zstd gzip
+
+	header {
+		?Cache-Control "public, max-age=3600"
+	}
+}
+
+# --- OPTIONAL, later ---
+# Expose the relay admin API over TLS on a subdomain instead of only localhost.
+# Leave commented for the infra-only pass (admin stays bound to 127.0.0.1:9090).
+# sync.syncengine.earth {
+# 	reverse_proxy 127.0.0.1:9090
+# }

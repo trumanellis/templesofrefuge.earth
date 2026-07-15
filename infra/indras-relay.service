@@ -1,0 +1,28 @@
+# /etc/systemd/system/indras-relay.service
+# Headless SyncEngine (Indras) blind relay — always-on personal server.
+
+[Unit]
+Description=Indras Relay (headless SyncEngine)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=indras
+Group=indras
+ExecStart=/usr/local/bin/indras-relay --config /etc/indras-relay/relay.toml
+Restart=on-failure
+RestartSec=3
+Environment=RUST_LOG=indras_relay=info
+
+# Persistent state lives here (relay secret.key, blob store, registrations).
+StateDirectory=indras-relay
+# Hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/indras-relay
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

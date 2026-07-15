@@ -41,13 +41,12 @@
     // ── Inline embedded checkout (preferred when both are set) ──
     // Stripe PUBLISHABLE key (pk_live_… / pk_test_…) — public by design, safe here.
     // Dashboard → Developers → API keys → Publishable key.
-    // Stripe PUBLISHABLE key (pk_live_… / pk_test_…) — public by design, safe here.
-    // Dashboard → Developers → API keys → Publishable key.
-    STRIPE_PUBLISHABLE_KEY: 'REPLACE_ME_STRIPE_PUBLISHABLE_KEY',
+    // LOCAL TEST values (uncommitted) — swap to pk_live_… + deployed Worker URL for prod.
+    STRIPE_PUBLISHABLE_KEY: 'pk_test_51TqoTrGvkk6jsZYuVSiVkOQcWKt4tVtIjFSwGRwy4YtJEuKnG8PrbzLXaX12YNI0tp6RjoU1b5l8RAidlIlZr8XZ00Y0RUWKt0',
 
-    // The deployed Cloudflare Worker base URL (see checkout-worker/README.md),
-    // e.g. https://tor-checkout.<subdomain>.workers.dev  — no trailing slash.
-    CHECKOUT_API_URL: 'REPLACE_ME_CHECKOUT_API_URL',
+    // The Cloudflare Worker base URL. LOCAL: http://localhost:8787 ·
+    // LIVE: https://tor-checkout.<subdomain>.workers.dev  — no trailing slash.
+    CHECKOUT_API_URL: 'http://localhost:8787',
 
     // Optional / future: opencollective.com collective URL. When set, the join
     // page can prefer this transparency-aligned option over Stripe.
