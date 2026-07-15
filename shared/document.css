@@ -1,102 +1,126 @@
-/**
- * document.css — long-form document styling for Temples of Refuge
+/*
+ * document.css — unified long-form document styling for Temples of Refuge.
  *
- * Used for canonical documents at the site root: the Cosmology, the
- * Covenant, and the Bylaws. Styled to match the visual identity of
- * index.html (jewels skin: Cinzel display, Raleway body, deep indigo
- * background, cool-blue accents).
+ * ONE design language for the canonical documents (Cosmology, Covenant,
+ * Bylaws) and the doc-shaped pages (Join, Found a Temple): a minimal
+ * "Apple editorial" reading experience.
  *
- * Variables come from /shared/theme-engine.js — make sure that script
- * is loaded on any page that uses this stylesheet.
+ * Skin-aware by design. Colours come from the active skin's --t-* tokens
+ * (set by /shared/theme-engine.js) so the site-wide skin switcher recolours
+ * every page. TYPOGRAPHY is fixed — New York serif for display, San
+ * Francisco / system sans for body — and does NOT change between skins
+ * (theme-engine locks --s-display/--s-font to the same Apple stack). Any
+ * page using this stylesheet must load theme-engine.js.
+ *
+ * Pages whose markdown repeats the subtitle as an `### ...` immediately
+ * after the title (Covenant, Bylaws) should set <body class="doc-has-subtitle">
+ * so that leading in-body h3 — a duplicate of the hero subtitle — is hidden.
  */
 
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+:root {
+  --font-display: "New York", ui-serif, Georgia, "Times New Roman", serif;
+  --font-body: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+  --measure: 40rem;
+  --title-size: clamp(2.6rem, 7vw, 4rem);
 }
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { -webkit-text-size-adjust: 100%; }
 
 body {
-  background-color: var(--t-bg);
-  font-family: var(--s-font);
-  font-weight: 300;
-  line-height: 1.8;
-  font-size: 17px;
+  background: var(--t-bg);
   color: var(--t-tx);
-  padding-top: 48px; /* leave room for ThemeEngine widget */
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 19px;
+  line-height: 1.7;
+  letter-spacing: -0.005em;
+  padding-top: 48px; /* room for the ThemeEngine control bar */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
-/* ---- Page chrome ---- */
+::selection { background: var(--t-bc); }
+
+/* ---- Chrome ---- */
 
 .site-header {
-  padding: 2rem;
-  text-align: center;
+  position: relative;
+  z-index: 1;
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 2.25rem 1.5rem 0;
 }
 
 .back-link {
-  color: var(--t-ac);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  color: var(--t-mt);
   text-decoration: none;
-  font-family: var(--s-display);
-  font-size: 0.75rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  transition: opacity 0.3s;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  transition: color 0.25s ease;
 }
+.back-link:hover { color: var(--t-ac); }
 
-.back-link:hover {
-  opacity: 0.7;
+main {
+  position: relative;
+  z-index: 1;
+  padding: 0 1.5rem;
 }
 
 .container-narrow {
-  max-width: 750px;
+  max-width: var(--measure);
   margin: 0 auto;
-  padding: 4rem 2rem;
 }
 
-/* Hero block at the top of each document */
+/* ---- Hero ---- */
+
 .document-hero {
   text-align: center;
-  padding: 2rem 0 5rem;
+  padding: 6rem 0 4.5rem;
 }
 
 .document-eyebrow {
-  font-family: var(--s-font);
-  font-size: 0.7rem;
-  font-weight: 500;
-  letter-spacing: 0.4em;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
   color: var(--t-ac);
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .document-title {
-  font-family: var(--s-display);
-  font-size: clamp(2rem, 5vw, 3rem);
-  font-weight: 400;
-  letter-spacing: 0.08em;
-  line-height: 1.25;
-  margin-bottom: 1.5rem;
-  background: linear-gradient(180deg, var(--t-tx) 0%, var(--t-t2) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--title-size);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--t-tx);
 }
 
 .document-subtitle {
-  font-family: var(--s-display);
+  font-family: var(--font-display);
   font-style: italic;
-  font-size: clamp(1rem, 2vw, 1.2rem);
-  color: var(--t-t2);
-  max-width: 50ch;
-  margin: 0 auto;
-  letter-spacing: 0.03em;
+  font-weight: 400;
+  font-size: clamp(1.15rem, 2.6vw, 1.5rem);
+  line-height: 1.5;
+  color: var(--t-mt);
+  max-width: 36ch;
+  margin: 1.75rem auto 0;
+  letter-spacing: 0;
 }
 
 .document-divider {
+  width: 2rem;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--t-bd), var(--t-dm), var(--t-bd), transparent);
-  max-width: 400px;
-  margin: 3rem auto;
+  background: var(--t-dm);
+  margin: 3.5rem auto 0;
 }
 
 /* ---- Loading & error ---- */
@@ -105,206 +129,215 @@ body {
   color: var(--t-mt);
   text-align: center;
   padding: 4rem 0;
+  font-size: 1rem;
   animation: docPulse 2s infinite;
 }
+@keyframes docPulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
 
-@keyframes docPulse {
-  0%, 100% { opacity: 1; }
-  50%      { opacity: 0.4; }
-}
-
-#error-state {
-  text-align: center;
-  padding: 4rem 0;
-}
-
-.error-title {
-  color: var(--t-er);
-  font-family: var(--s-display);
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-}
-
-.error-text {
-  color: var(--t-mt);
-  margin-bottom: 2rem;
-}
+#error-state { text-align: center; padding: 4rem 0; }
+.error-title { color: var(--t-er); font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 1rem; }
+.error-text { color: var(--t-mt); margin-bottom: 2rem; }
 
 /* ---- Prose ---- */
 
-#document-body h1 {
-  /* h1 is rendered into .document-title above; suppress markdown h1 */
-  display: none;
+#document-body {
+  position: relative;
+  z-index: 1;
+  padding-bottom: 2rem;
 }
 
+/* Canonical title lives in the hero; suppress the markdown h1. */
+#document-body h1 { display: none; }
+
+/* Pages whose markdown repeats the subtitle as a leading `### ...` set
+   .doc-has-subtitle so that duplicate is hidden (the hero shows it). */
+.doc-has-subtitle #document-body h3:first-of-type { display: none; }
+
+/* Major sections (Roman numerals / Articles). A hairline above each gives
+   Apple-style breathing room between major movements of the document. */
 #document-body h2 {
-  font-family: var(--s-display);
-  font-size: clamp(1.4rem, 3vw, 1.9rem);
-  font-weight: 400;
-  color: var(--t-a2);
-  margin-top: 4.5rem;
-  margin-bottom: 1.5rem;
-  line-height: 1.35;
-  letter-spacing: 0.05em;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  color: var(--t-tx);
+  margin: 5.5rem 0 2rem;
+  padding-top: 3.5rem;
+  border-top: 1px solid var(--t-bd);
 }
 
+/* Numbered / named subsections. */
 #document-body h3 {
-  font-family: var(--s-display);
-  font-size: clamp(1.1rem, 2.5vw, 1.4rem);
-  font-weight: 400;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.25rem, 2.6vw, 1.5rem);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
   color: var(--t-ac);
-  margin-top: 2.75rem;
-  margin-bottom: 1rem;
-  line-height: 1.4;
-  letter-spacing: 0.04em;
+  margin: 3rem 0 1.1rem;
 }
 
 #document-body h4 {
-  font-family: var(--s-font);
-  font-size: 1.1rem;
-  font-weight: 500;
-  color: var(--t-t2);
-  margin-top: 2rem;
-  margin-bottom: 0.75rem;
-  font-style: italic;
-  letter-spacing: 0.02em;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--t-tx);
+  margin: 2rem 0 0.75rem;
 }
 
 #document-body p {
   color: var(--t-t2);
-  line-height: 1.85;
-  margin-bottom: 1.5rem;
+  margin: 0 0 1.5rem;
+  line-height: 1.72;
+  letter-spacing: -0.003em;
 }
 
-#document-body strong {
-  color: var(--t-tx);
-  font-weight: 500;
-}
-
-#document-body em {
-  color: var(--t-tx);
-  font-style: italic;
-}
+#document-body strong { color: var(--t-tx); font-weight: 600; }
+#document-body em { color: var(--t-tx); font-style: italic; }
 
 #document-body a {
   color: var(--t-ac);
   text-decoration: none;
-  border-bottom: 1px solid var(--t-a2);
-  transition: border-color 0.3s, opacity 0.3s;
+  border-bottom: 1px solid color-mix(in srgb, var(--t-ac) 40%, transparent);
+  transition: border-color 0.25s ease;
 }
-
-#document-body a:hover {
-  border-color: var(--t-ac);
-  opacity: 0.85;
-}
+#document-body a:hover { border-bottom-color: var(--t-ac); }
 
 #document-body hr {
   border: none;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--t-bd), var(--t-dm), var(--t-bd), transparent);
-  margin: 3.5rem 0;
+  background: var(--t-bd);
+  margin: 3rem 0;
+  display: none; /* headings already separate sections; keep rules subtle */
 }
 
 #document-body blockquote {
-  border-left: 2px solid var(--t-dm);
-  padding-left: 1.5rem;
+  border-left: 2px solid var(--t-ac);
+  padding-left: 1.4rem;
   margin: 2rem 0;
+  font-family: var(--font-display);
   font-style: italic;
-  color: var(--t-t2);
+  font-size: 1.2rem;
+  color: var(--t-tx);
 }
 
-#document-body ul,
+/* Unordered lists — refined em-dash markers, not filled discs. */
+#document-body ul {
+  list-style: none;
+  margin: 0 0 1.5rem;
+  padding: 0;
+}
+#document-body ul li {
+  position: relative;
+  padding-left: 1.6rem;
+  margin-bottom: 0.65rem;
+  color: var(--t-t2);
+  line-height: 1.6;
+}
+#document-body ul li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.72em;
+  width: 0.7rem;
+  height: 1px;
+  background: var(--t-dm);
+}
+
+/* Ordered lists — numbered creeds / clauses. */
 #document-body ol {
+  list-style: none;
+  counter-reset: creed;
+  margin: 0 0 1.5rem;
+  padding: 0;
+}
+#document-body ol li {
+  counter-increment: creed;
+  position: relative;
+  padding-left: 3rem;
+  margin-bottom: 0.9rem;
   color: var(--t-t2);
-  margin-bottom: 1.5rem;
-  padding-left: 1.75rem;
+  line-height: 1.6;
+  min-height: 1.6em;
+}
+#document-body ol li::before {
+  content: counter(creed);
+  position: absolute;
+  left: 0;
+  top: 0.05em;
+  width: 2rem;
+  text-align: right;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  color: var(--t-ac);
+  font-variant-numeric: tabular-nums;
 }
 
-#document-body li {
-  margin-bottom: 0.6rem;
-  line-height: 1.7;
-}
+/* Nested lists shouldn't carry the trailing paragraph margin. */
+#document-body li > ul,
+#document-body li > ol { margin-top: 0.5rem; margin-bottom: 0; }
 
-#document-body code {
-  background: var(--t-sf);
-  padding: 0.15em 0.4em;
-  border-radius: 3px;
-  font-size: 0.9em;
-  color: var(--t-mt);
-}
+/* ---- Member CTA & footer ---- */
 
-/* Signature / closing block — the trailing italic stanza in
-   COVENANT.md and BYLAWS.md sits inside the last sequence of
-   one-line italics. We style emphasised lines toward the end gently. */
-#document-body p em:only-child {
-  display: inline-block;
+.cta-wrap {
+  position: relative;
+  z-index: 1;
+  max-width: var(--measure);
+  margin: 4rem auto 0;
+  padding: 0 1.5rem;
 }
-
-/* ---- Footer ---- */
 
 .site-footer {
-  padding: 4rem 2rem 6rem;
+  position: relative;
+  z-index: 1;
+  max-width: var(--measure);
+  margin: 5rem auto 0;
+  padding: 3.5rem 1.5rem 5rem;
   text-align: center;
   border-top: 1px solid var(--t-bd);
-  margin-top: 4rem;
 }
 
 .footer-related {
   display: flex;
   justify-content: center;
-  gap: 2.5rem;
+  gap: 2rem;
   flex-wrap: wrap;
   margin-bottom: 2.5rem;
 }
-
 .footer-related a {
-  color: var(--t-ac);
+  color: var(--t-mt);
   text-decoration: none;
-  font-family: var(--s-display);
-  font-size: 0.75rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  transition: opacity 0.3s;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  transition: color 0.25s ease;
 }
-
-.footer-related a:hover {
-  opacity: 0.7;
-}
-
-.footer-related a.current {
-  color: var(--t-dm);
-  pointer-events: none;
-}
+.footer-related a:hover { color: var(--t-ac); }
+.footer-related a.current { color: var(--t-tx); pointer-events: none; }
 
 .footer-site-name {
-  font-family: var(--s-display);
-  font-size: 0.75rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--t-dm);
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  color: var(--t-mt);
 }
 
-/* ---- Fade-up animation ---- */
+/* ---- Reveal on scroll ---- */
 
 .fade-up {
   opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
+  transform: translateY(16px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.fade-up.visible { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-up { opacity: 1; transform: none; transition: none; }
 }
 
-.fade-up.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ---- Responsive ---- */
-
-@media (max-width: 768px) {
-  .container-narrow {
-    padding: 2.5rem 1.25rem;
-  }
-
-  .footer-related {
-    gap: 1.5rem;
-  }
+@media (max-width: 600px) {
+  body { font-size: 18px; }
+  .document-hero { padding: 4rem 0 3.5rem; }
+  #document-body h2 { margin-top: 4rem; padding-top: 2.75rem; }
 }

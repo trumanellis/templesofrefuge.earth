@@ -17,7 +17,7 @@
 
     <link rel="stylesheet" href="/shared/document.css">
 </head>
-<body>
+<body class="doc-has-subtitle">
 
     <header class="site-header">
         <a href="/" class="back-link">← Temples of Refuge</a>
@@ -26,9 +26,9 @@
     <main>
         <div class="container-narrow">
             <section class="document-hero">
-                <p class="document-eyebrow">Foundations · The Bylaws</p>
+                <p class="document-eyebrow">Foundations</p>
                 <h1 class="document-title">Bylaws of<br>Temples of Refuge</h1>
-                <p class="document-subtitle">An Association of Churches — the architecture<br>through which the Covenant is held</p>
+                <p class="document-subtitle">An Association of Churches — the architecture through which the Covenant is held</p>
                 <div class="document-divider"></div>
             </section>
 
@@ -44,9 +44,9 @@
         </div>
     </main>
 
-    <section style="padding:0 2rem 2rem">
+    <div class="cta-wrap">
         <div id="member-cta-mount"></div>
-    </section>
+    </div>
 
     <footer class="site-footer">
         <nav class="footer-related" aria-label="Foundations">
@@ -61,11 +61,7 @@
 
     <script src="/shared/theme-engine.js"></script>
     <script>
-    ThemeEngine.init({
-      defaultSkin: 'technical',
-      storageKey: 'tor-skin',
-      position: 'top-right'
-    });
+    ThemeEngine.init({ defaultSkin: 'technical', storageKey: 'tor-skin', position: 'top-right' });
     </script>
     <script src="/shared/cta-widgets.js"></script>
     <script>

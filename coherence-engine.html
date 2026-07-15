@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Indra's Network · Temples of Refuge</title>
+<style>
+  :root{
+    --bg:#05060c; --panel:rgba(12,14,26,0.78); --edge:rgba(150,170,255,0.18);
+    --ink:#e7ecff; --dim:#9aa6d6; --gold:#ffd27a; --acc:#8fb3ff;
+    --mono:"SFMono-Regular",ui-monospace,Menlo,Consolas,monospace;
+    /* Site-wide fixed display face: New York serif (matches theme-engine's
+       Apple type lock). This immersive canvas exhibit keeps its own
+       deep-space / gold palette rather than the doc skin bar. */
+    --serif:"New York",ui-serif,Georgia,"Times New Roman",serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);
+    font-family:var(--serif);overflow:hidden;}
+  #stage{position:fixed;inset:0;}
+  #title{position:fixed;top:18px;left:0;right:0;text-align:center;pointer-events:none;z-index:5;}
+  #title h1{margin:0;font-size:19px;letter-spacing:.2em;font-weight:500;
+    text-shadow:0 0 22px rgba(255,210,122,.35);}
+  #title p{margin:4px 0 0;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--dim);}
+
+  #panel{position:fixed;top:50%;right:22px;transform:translateY(-50%);width:308px;
+    background:var(--panel);border:1px solid var(--edge);border-radius:16px;
+    padding:16px 20px;backdrop-filter:blur(14px);z-index:5;
+    box-shadow:0 12px 50px rgba(0,0,0,.55);}
+  .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--dim);
+    text-transform:uppercase;margin:12px 0 4px;}
+  .lbl:first-child{margin-top:0;}
+  .lbl em{color:var(--gold);font-style:normal;}
+  input[type=range]{width:100%;appearance:none;height:4px;border-radius:2px;
+    background:linear-gradient(90deg,#39406e,#8fb3ff);outline:none;}
+  input[type=range]::-webkit-slider-thumb{appearance:none;width:15px;height:15px;
+    border-radius:50%;background:var(--gold);border:2px solid #1a1c30;cursor:pointer;
+    box-shadow:0 0 10px rgba(255,210,122,.6);}
+  .btns{display:flex;gap:8px;margin-top:14px;}
+  .btns button{flex:1;background:rgba(255,255,255,.05);border:1px solid var(--edge);
+    color:var(--ink);font-family:var(--mono);font-size:11px;cursor:pointer;
+    border-radius:9px;padding:8px 4px;transition:background .15s;}
+  .btns button:hover{background:rgba(143,179,255,.18);}
+  #grat:hover{background:rgba(255,210,122,.22);}
+
+  .read{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:14px;}
+  .cell{background:rgba(255,255,255,.04);border:1px solid var(--edge);
+    border-radius:10px;padding:7px 9px;}
+  .cell .k{font-family:var(--mono);font-size:9px;letter-spacing:.08em;color:var(--dim);
+    text-transform:uppercase;}
+  .cell .v{font-family:var(--mono);font-size:18px;margin-top:2px;}
+  #vOrg{color:#9be8c0;} #vWhole{color:var(--acc);} #vPhi{color:var(--gold);} #vWir{color:#d7a6ff;}
+  #vDiv{color:#7fd8e8;} #vRes{color:#f0a8c0;}
+
+  #station{margin-top:12px;border-top:1px solid var(--edge);padding-top:10px;}
+  #station .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
+    color:var(--dim);text-transform:uppercase;}
+  #stName{font-size:20px;font-weight:600;margin-top:3px;}
+  #stNext{font-size:12px;font-style:italic;color:var(--dim);margin-top:3px;line-height:1.4;}
+  #spark{margin-top:10px;width:100%;height:40px;display:block;}
+
+  #formula{position:fixed;bottom:16px;left:0;right:0;text-align:center;
+    font-family:var(--mono);font-size:12px;color:var(--dim);z-index:5;pointer-events:none;}
+  #formula b{color:var(--gold);font-weight:600;}
+  #hint{position:fixed;bottom:42px;left:0;right:0;text-align:center;font-style:italic;
+    font-size:12.5px;color:#b9c2e8;z-index:5;pointer-events:none;opacity:.85;}
+  .hide{display:none !important;}
+  #intro{position:fixed;bottom:64px;left:50%;transform:translateX(-50%);
+    width:min(560px,92vw);background:var(--panel);border:1px solid var(--edge);
+    border-radius:16px;padding:18px 22px;backdrop-filter:blur(14px);z-index:8;
+    box-shadow:0 12px 50px rgba(0,0,0,.6);}
+  #iText{font-size:16.5px;line-height:1.55;color:var(--ink);}
+  #iText em{color:var(--gold);font-style:italic;}
+  #iBtns{display:flex;align-items:center;gap:14px;margin-top:14px;}
+  #iStep{font-family:var(--mono);font-size:10.5px;color:var(--dim);letter-spacing:.12em;}
+  #iNext{margin-left:auto;background:rgba(255,210,122,.14);border:1px solid rgba(255,210,122,.45);
+    color:var(--gold);font-family:var(--mono);font-size:12.5px;cursor:pointer;
+    border-radius:9px;padding:9px 18px;transition:background .15s;}
+  #iNext:hover{background:rgba(255,210,122,.28);}
+  #iSkip{font-family:var(--mono);font-size:10.5px;color:var(--dim);cursor:pointer;
+    text-decoration:underline;text-underline-offset:3px;}
+  @media (max-width:760px){
+    #intro{bottom:14px;}
+    #panel{right:10px;left:10px;width:auto;top:auto;bottom:66px;transform:none;padding:12px 14px;}
+    #spark{display:none;}
+  }
+</style>
+</head>
+<body>
+<canvas id="stage"></canvas>
+
+<div id="intro">
+  <div id="iText"></div>
+  <div id="iBtns">
+    <span id="iStep">1 / 4</span>
+    <a id="iSkip">skip the tour</a>
+    <button id="iNext">Next →</button>
+  </div>
+</div>
+
+<div id="title">
+  <h1>INDRA'S NETWORK</h1>
+  <p>a fractal network of living temples · 144 faces of the One</p>
+</div>
+
+<div id="panel" class="hide">
+  <div class="lbl"><em>Practice</em> · re-binding within each temple</div>
+  <input type="range" id="kIn" min="0" max="300" value="130">
+  <div class="lbl"><em>Re·ligāre</em> · weaving the network of temples</div>
+  <input type="range" id="kOut" min="0" max="300" value="35">
+  <div class="lbl">Separation · the illusion — noise, scarcity, fear</div>
+  <input type="range" id="nS" min="0" max="100" value="15">
+  <div class="btns">
+    <button id="grat" title="A festival pulse — every face drawn toward the shared rhythm. Alignment is given; threads must still be woven.">☀ gratitude</button>
+    <button id="shock" title="A rupture — separation returns: morale scatters and 30% of the woven threads are torn">⚡ rupture</button>
+  </div>
+  <div class="read">
+    <div class="cell"><div class="k">Temples C̄</div><div class="v" id="vOrg">0.00</div></div>
+    <div class="cell"><div class="k">Network C</div><div class="v" id="vWhole">0.00</div></div>
+    <div class="cell"><div class="k">Communion Φ</div><div class="v" id="vPhi">0.00</div></div>
+    <div class="cell"><div class="k">Threads W̄ (woven)</div><div class="v" id="vWir">0.00</div></div>
+    <div class="cell"><div class="k">Diversity D (faces kept)</div><div class="v" id="vDiv">1.00</div></div>
+    <div class="cell"><div class="k">Resilience R (basin)</div><div class="v" id="vRes">—</div></div>
+  </div>
+  <div id="station">
+    <div class="k">State of the network</div>
+    <div id="stName">scattered seekers</div>
+    <div id="stNext"></div>
+  </div>
+  <canvas id="spark"></canvas>
+</div>
+
+<div id="hint" class="hide">Temples kindle first. The network only wakes when they weave — and every thread of gratitude is remembered in the net.</div>
+<div id="formula">Φ = C<b>^φ</b>·D<b>^1/φ</b> — unity, inhabiting difference · one measure from quarks to temples, computed live</div>
+
+<script>
+//==================================================================
+//  A REALISTIC HOLON
+//  · 12 organs × 12 cells = 144 oscillators — F₁₂, the square Fibonacci
+//  · Sakaguchi phase-lag, Lorentzian frequency diversity (born drifters)
+//  · strong local coupling, weaker organ-to-organ coupling
+//  · Hebbian plasticity on the 12×12 organ network: practice builds
+//    wiring, wiring persists, shock damages it, cultivation rebuilds it
+//==================================================================
+const NC = 12, NM = 12, N = NC * NM;
+const PHI_G = (1 + Math.sqrt(5)) / 2;
+const ALPHA = 0.12;                       // Sakaguchi frustration
+let theta = new Float64Array(N), omega = new Float64Array(N);
+let W = [];                               // organ-organ learned weights
+let Rc = new Float64Array(NC), Psic = new Float64Array(NC);
+
+function lorentz(x0, g) {                 // heavy-tailed natural frequencies
+  const u = Math.random();
+  return Math.max(x0 - 6*g, Math.min(x0 + 6*g, x0 + g * Math.tan(Math.PI * (u - 0.5))));
+}
+function gauss(){ let u=0,v=0; while(!u)u=Math.random(); while(!v)v=Math.random();
+  return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v); }
+
+function init() {
+  for (let c = 0; c < NC; c++) {
+    const organBias = 0.60 * gauss();     // each organ has its own temperament
+    for (let m = 0; m < NM; m++) {
+      const i = c*NM + m;
+      theta[i] = Math.random() * 2 * Math.PI;
+      omega[i] = lorentz(1.0 + organBias, 0.12);
+    }
+  }
+  W = Array.from({length:NC}, () => new Float64Array(NC).fill(0.30));
+  OMEGA0 = Float64Array.from(omega);
+  std0 = stdev(omega);
+  D_smooth = 1;
+}
+function stdev(a){ let m=0; for (const v of a) m+=v; m/=a.length;
+  let q=0; for (const v of a) q+=(v-m)*(v-m); return Math.sqrt(q/a.length); }
+let OMEGA0, std0, D_smooth = 1;
+init();
+
+let K_IN = 0.15, K_OUT = 0.10, NOISE = 0.25;   // intro starts as a heap
+let TGT = { ki: 0.15, ko: 0.10, no: 0.25 };
+let inIntro = true;
+const EPS_W = 0.02, W_MAX = 1.5;          // Hebbian learning rate & ceiling
+let C_smooth = 0, Corg_smooth = 0, phiSelf = 0, Wbar = 0.3;
+const hist = new Array(220).fill(0);
+
+// ---- shared phase advance (used by the living network and its shadow)
+function fields(th, Rb, Pb) {
+  for (let c = 0; c < NC; c++) {
+    let sx = 0, sy = 0;
+    for (let m = 0; m < NM; m++) {
+      const i = c*NM + m; sx += Math.cos(th[i]); sy += Math.sin(th[i]);
+    }
+    Rb[c] = Math.sqrt(sx*sx + sy*sy) / NM;
+    Pb[c] = Math.atan2(sy, sx);
+  }
+}
+function advance(th, Rb, Pb, dt) {
+  for (let c = 0; c < NC; c++) {
+    const Wc = W[c];
+    for (let m = 0; m < NM; m++) {
+      const i = c*NM + m;
+      let drive = K_IN * Rb[c] * Math.sin(Pb[c] - th[i] - ALPHA);
+      let acc = 0;
+      for (let d = 0; d < NC; d++) {
+        if (d === c) continue;
+        acc += Wc[d] * Rb[d] * Math.sin(Pb[d] - th[i] - ALPHA);
+      }
+      drive += K_OUT * acc / (NC - 1);
+      th[i] += dt * (omega[i] + drive) + NOISE * Math.sqrt(dt) * gauss() * 1.5;
+    }
+  }
+}
+function orderOf(th) {
+  let sx = 0, sy = 0;
+  for (let i = 0; i < N; i++) { sx += Math.cos(th[i]); sy += Math.sin(th[i]); }
+  return [Math.sqrt(sx*sx + sy*sy) / N, Math.atan2(sy, sx)];
+}
+
+function step(dt) {
+  if (inIntro) {
+    K_IN  += (TGT.ki - K_IN ) * 0.012;
+    K_OUT += (TGT.ko - K_OUT) * 0.012;
+    NOISE += (TGT.no - NOISE) * 0.012;
+  }
+  fields(theta, Rc, Psic);
+  advance(theta, Rc, Psic, dt);
+
+  // conformity: sustained over-binding erodes the faces (gifts drift to the mean);
+  // restoration is far slower — gifts regrow with difficulty
+  const press = C_smooth * (Math.max(0, K_IN - 2.3) + Math.max(0, K_OUT - 2.3));
+  let om = 0; for (let i = 0; i < N; i++) om += omega[i]; om /= N;
+  for (let i = 0; i < N; i++)
+    omega[i] += dt * (0.012 * press * (om - omega[i]) + 0.0015 * (OMEGA0[i] - omega[i]));
+  const D = Math.min(1, stdev(omega) / std0);
+  D_smooth += (D - D_smooth) * 0.05;
+
+  // Hebbian plasticity — threads are woven from agreement BETWEEN DISTINCT faces;
+  // a hive has nothing left to give, so its weaving stalls
+  let wsum = 0;
+  const giveth = 0.3 + 0.7 * D_smooth;
+  for (let c = 0; c < NC; c++) for (let d = c+1; d < NC; d++) {
+    const co = Math.cos(Psic[c] - Psic[d]) * Rc[c] * Rc[d];
+    let w = W[c][d] + EPS_W * dt * 60 * (Math.max(co - 0.25, 0) * 1.6 * giveth - 0.45 * W[c][d]);
+    w = Math.max(0.12, Math.min(W_MAX, w));
+    W[c][d] = W[d][c] = w; wsum += w;
+  }
+  Wbar = wsum / (NC*(NC-1)/2);
+
+  const [C, psi] = orderOf(theta);
+  C_smooth += (C - C_smooth) * 0.04;
+  let ro = 0; for (let c = 0; c < NC; c++) ro += Rc[c];
+  Corg_smooth += (ro/NC - Corg_smooth) * 0.04;
+  // Communion: unity (C^φ), inhabiting difference (D^1/φ) — the Covenant's gnosis
+  phiSelf = Math.pow(Math.max(C_smooth, 0), PHI_G) * Math.pow(Math.max(D_smooth, 0.01), 1/PHI_G);
+  return psi;
+}
+
+//==================================================================
+//  Resilience probe — a shadow of the network is struck with a
+//  standard perturbation; how fast it returns measures the basin
+//==================================================================
+const shTh = new Float64Array(N), shRc = new Float64Array(NC), shPs = new Float64Array(NC);
+let probe = { on: false, t0: 0, last: -20000 };
+let Rres = null;                      // smoothed resilience, null until first probe
+const PROBE_EVERY = 12000, PROBE_MAX = 8000;
+function probeTick(now, dt) {
+  if (!probe.on) {
+    if (now - probe.last > PROBE_EVERY && C_smooth > 0.25 && !inIntro) {
+      shTh.set(theta);
+      for (let i = 0; i < N; i++) shTh[i] += (Math.random() - 0.5) * 2.4;  // standard strike
+      probe.on = true; probe.t0 = now;
+    }
+    return;
+  }
+  fields(shTh, shRc, shPs);
+  advance(shTh, shRc, shPs, dt);
+  const [Csh] = orderOf(shTh);
+  const [Cm] = orderOf(theta);
+  const elapsed = now - probe.t0;
+  if (Csh >= Cm - 0.06) {
+    const r = 1 - elapsed / PROBE_MAX;
+    Rres = Rres === null ? r : 0.5 * Rres + 0.5 * Math.max(0, r);
+    probe.on = false; probe.last = now;
+  } else if (elapsed > PROBE_MAX) {
+    Rres = Rres === null ? 0 : 0.5 * Rres;
+    probe.on = false; probe.last = now;
+  }
+}
+
+//==================================================================
+//  Ladder stations
+//==================================================================
+const REFS = [
+  [0.227, "a nation"], [0.326, "the noosphere"], [0.438, "a tribe"],
+  [0.498, "a family"], [0.628, "an atom"], [0.769, "a cell"],
+  [0.843, "a human"],
+];
+function diagnose() {
+  const Cw = C_smooth, Co = Corg_smooth, Wb = Wbar;
+  let name, desc;
+  if (Cw < 0.15 && Co < 0.5) {
+    name = "scattered seekers";
+    desc = "144 faces of the One, each dreaming alone — separation's spell unbroken";
+  } else if (Cw < 0.32 && Co >= 0.5) {
+    name = "twelve temples, walled";
+    desc = "each temple alight within its own walls — the network between them still dark";
+  } else if (Cw < 0.32) {
+    name = "first pilgrimages";
+    desc = "threads beginning between temples — friendships, not yet a fabric";
+  } else if (Cw < 0.55) {
+    name = "a festival network";
+    desc = "unity flares when the temples gather, fades when they part";
+  } else if (Cw < 0.80) {
+    name = "a living network";
+    desc = "most faces in one rhythm — pilgrims still drifting at the edges";
+  } else if (D_smooth < 0.4) {
+    name = "the hive";
+    desc = "perfect unison, no faces left — unity bought by erasing difference. Ease the binding; let the gifts regrow";
+  } else if (Wb > 1.2 && (Rres === null || Rres > 0.45)) {
+    name = "a refuge";
+    desc = "the basin is wider than the storm — rupture cannot unmake what the threads remember";
+  } else {
+    name = "one living temple";
+    desc = "the network breathes as one — Indra's net alight";
+  }
+  // for-scale reference: nearest estimated Φ on the ladder
+  let ref = REFS[0];
+  for (const r of REFS) if (Math.abs(r[0]-phiSelf) < Math.abs(ref[0]-phiSelf)) ref = r;
+  const refLine = phiSelf < 0.12 ? ""
+    : `for scale: Φ ${phiSelf.toFixed(2)} is the range the map estimates for ${ref[1]} (≈${ref[0].toFixed(2)})`;
+  return { name, desc, refLine };
+}
+
+//==================================================================
+//  Rendering — holons within holons
+//==================================================================
+const cv = document.getElementById('stage'), ctx = cv.getContext('2d');
+let Wpx, Hpx, DPR;
+function resize(){ DPR = Math.min(devicePixelRatio||1, 2);
+  Wpx = cv.width = innerWidth*DPR; Hpx = cv.height = innerHeight*DPR;
+  cv.style.width = innerWidth+'px'; cv.style.height = innerHeight+'px'; }
+addEventListener('resize', resize); resize();
+
+const stars = Array.from({length:240},()=>({x:Math.random(),y:Math.random(),
+  r:Math.random()*1.4+0.3, t:Math.random()*6.28}));
+
+function frame(now) {
+  const t = now/1000;
+  let psi = 0;
+  for (let s = 0; s < 4; s++) { psi = step(0.014); probeTick(now, 0.014); }
+
+  ctx.clearRect(0,0,Wpx,Hpx);
+  const bg = ctx.createRadialGradient(Wpx/2,Hpx/2,0,Wpx/2,Hpx/2,Math.max(Wpx,Hpx)*0.75);
+  bg.addColorStop(0, `hsla(${252 - 30*phiSelf},45%,${7+3*phiSelf}%,1)`);
+  bg.addColorStop(1, '#03040a');
+  ctx.fillStyle = bg; ctx.fillRect(0,0,Wpx,Hpx);
+  for (const s of stars){
+    const tw = 0.4+0.6*Math.abs(Math.sin(t*0.7+s.t));
+    ctx.fillStyle = `rgba(200,214,255,${0.20*tw})`;
+    ctx.beginPath(); ctx.arc(s.x*Wpx, s.y*Hpx, s.r*DPR, 0, 6.2832); ctx.fill();
+  }
+
+  const panelW = innerWidth > 760 ? 350*DPR : 0;
+  const cx = (Wpx - panelW)/2, cy = Hpx*0.52;
+  const R0 = Math.min(Wpx - panelW, Hpx) * 0.295;
+  const ry = 0.48;
+
+  // organ centers on the great ring
+  const ocx = [], ocy = [];
+  for (let c = 0; c < NC; c++) {
+    const a = c/NC*6.2832 - Math.PI/2;
+    ocx[c] = cx + R0*Math.cos(a); ocy[c] = cy + R0*ry*Math.sin(a);
+  }
+
+  // --- inter-organ wiring: opacity ∝ learned weight × phase agreement
+  for (let c = 0; c < NC; c++) for (let d = c+1; d < NC; d++) {
+    const agree = Math.max(0, Math.cos(Psic[c]-Psic[d]));
+    const al = (W[c][d]/W_MAX) * (0.06 + 0.5*agree*agree) * (0.35+0.65*phiSelf);
+    if (al < 0.02) continue;
+    ctx.strokeStyle = `hsla(46,80%,68%,${al})`;
+    ctx.lineWidth = Math.max(0.6, R0*0.005*(W[c][d]/W_MAX));
+    ctx.beginPath(); ctx.moveTo(ocx[c],ocy[c]);
+    ctx.quadraticCurveTo(cx + (ocx[c]+ocx[d]-2*cx)*0.22, cy + (ocy[c]+ocy[d]-2*cy)*0.22,
+                         ocx[d], ocy[d]);
+    ctx.stroke();
+  }
+
+  // --- the great torus guide
+  ctx.strokeStyle = `hsla(46,70%,65%,${0.06+0.12*phiSelf})`;
+  ctx.lineWidth = Math.max(1, R0*0.006);
+  ctx.beginPath(); ctx.ellipse(cx,cy,R0,R0*ry,0,0,6.2832); ctx.stroke();
+
+  // --- each organ: a small torus of 12 cells, its own heart
+  const r1 = R0*0.155;
+  for (let c = 0; c < NC; c++) {
+    // organ ring, brightness by its own coherence
+    ctx.strokeStyle = `hsla(${200-150*Rc[c]*phiSelf},65%,62%,${0.15+0.4*Rc[c]})`;
+    ctx.lineWidth = Math.max(0.8, R0*0.005);
+    ctx.beginPath(); ctx.ellipse(ocx[c],ocy[c],r1,r1*0.6,0,0,6.2832); ctx.stroke();
+    // cells riding phase epicycles
+    for (let m = 0; m < NM; m++) {
+      const i = c*NM + m;
+      const a = m/NM*6.2832;
+      const eps = r1*0.22;
+      const x = ocx[c] + r1*Math.cos(a) + eps*Math.cos(theta[i]);
+      const y = ocy[c] + r1*0.6*Math.sin(a) + eps*0.6*Math.sin(theta[i]);
+      const pulse = 0.5 + 0.5*Math.sin(theta[i]);
+      const hue = 220 - 175*pulse*(0.3 + 0.7*phiSelf);
+      ctx.fillStyle = `hsla(${hue},80%,${58+20*pulse}%,${0.5+0.5*pulse})`;
+      ctx.beginPath(); ctx.arc(x, y, (1.6+1.9*pulse)*DPR, 0, 6.2832); ctx.fill();
+    }
+    // organ heart ∝ its coherence
+    const ohr = r1*(0.10 + 0.30*Rc[c]);
+    const og = ctx.createRadialGradient(ocx[c],ocy[c],0,ocx[c],ocy[c],ohr*2.4);
+    og.addColorStop(0, `hsla(46,90%,${65+20*Rc[c]}%,${0.25+0.6*Rc[c]})`);
+    og.addColorStop(1, 'hsla(43,90%,55%,0)');
+    ctx.fillStyle = og;
+    ctx.beginPath(); ctx.arc(ocx[c],ocy[c],ohr*2.4,0,6.2832); ctx.fill();
+  }
+
+  // --- the global heart: ignites only when the WHOLE binds
+  const hb = 1 + 0.06*Math.sin(t*2.2);
+  const hr = R0*(0.04 + 0.30*phiSelf)*hb;
+  const hg = ctx.createRadialGradient(cx,cy,0,cx,cy,hr*2.8);
+  hg.addColorStop(0, `hsla(46,95%,${70+18*phiSelf}%,${0.4+0.6*phiSelf})`);
+  hg.addColorStop(0.5, `hsla(43,90%,60%,${0.22*phiSelf+0.05})`);
+  hg.addColorStop(1, 'hsla(43,90%,55%,0)');
+  ctx.fillStyle = hg;
+  ctx.beginPath(); ctx.arc(cx,cy,hr*2.8,0,6.2832); ctx.fill();
+  ctx.fillStyle = `hsla(46,95%,90%,${0.3+0.7*phiSelf})`;
+  ctx.beginPath(); ctx.arc(cx,cy,hr*0.45,0,6.2832); ctx.fill();
+
+  // spokes from awakened organs to the global heart
+  for (let c = 0; c < NC; c++) {
+    const agree = Math.max(0, Math.cos(Psic[c]-psi)) * Rc[c] * C_smooth;
+    if (agree < 0.15) continue;
+    ctx.strokeStyle = `hsla(46,85%,72%,${0.25*agree})`;
+    ctx.lineWidth = Math.max(0.6, R0*0.004);
+    ctx.beginPath(); ctx.moveTo(ocx[c],ocy[c]); ctx.lineTo(cx,cy); ctx.stroke();
+  }
+
+  // attention vectors awaken with Φ
+  if (phiSelf > 0.3) {
+    const va = (phiSelf-0.3)/0.7;
+    ctx.strokeStyle = `hsla(46,80%,75%,${0.5*va})`;
+    ctx.lineWidth = Math.max(1, R0*0.008);
+    ctx.beginPath(); ctx.moveTo(cx, cy-hr*1.2); ctx.lineTo(cx, cy-R0*ry*1.45); ctx.stroke();
+    ctx.beginPath();
+    for (let s2 = 0; s2 <= 50; s2++) {
+      const u = s2/50, ang = u*8.5 + t*0.5, rad = hr*0.85*(1-u);
+      const x = cx + rad*Math.cos(ang), y = cy + rad*Math.sin(ang)*0.6;
+      s2 ? ctx.lineTo(x,y) : ctx.moveTo(x,y);
+    }
+    ctx.strokeStyle = `hsla(46,80%,75%,${0.35*va})`;
+    ctx.stroke();
+  }
+
+  updatePanel();
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+//==================================================================
+//  Panel & controls
+//==================================================================
+const el = id => document.getElementById(id);
+const spark = el('spark'), sctx = spark.getContext('2d');
+let tick = 0;
+function updatePanel() {
+  if ((tick++ % 6) !== 0) return;
+  el('vOrg').textContent = Corg_smooth.toFixed(3);
+  el('vWhole').textContent = C_smooth.toFixed(3);
+  el('vPhi').textContent = phiSelf.toFixed(3);
+  el('vWir').textContent = Wbar.toFixed(2);
+  el('vDiv').textContent = D_smooth.toFixed(2);
+  el('vDiv').style.color = D_smooth < 0.4 ? '#f08a8a' : '#7fd8e8';
+  el('vRes').textContent = Rres === null ? '—' : Rres.toFixed(2);
+  const dg = diagnose();
+  el('stName').textContent = dg.name;
+  el('stName').style.color = `hsl(${220-175*phiSelf},75%,${62+12*phiSelf}%)`;
+  el('stNext').textContent = dg.desc + (dg.refLine ? " · " + dg.refLine : "");
+  hist.push(phiSelf); hist.shift();
+  const w = spark.clientWidth, h = spark.clientHeight;
+  if (!w) return;
+  if (spark.width !== w) { spark.width = w; spark.height = h; }
+  sctx.clearRect(0,0,w,h);
+  sctx.strokeStyle = 'rgba(150,170,255,0.25)';
+  sctx.strokeRect(0.5,0.5,w-1,h-1);
+  sctx.beginPath();
+  hist.forEach((v,i)=>{ const x=i/(hist.length-1)*w, y=h-3-v*(h-6);
+    i?sctx.lineTo(x,y):sctx.moveTo(x,y); });
+  sctx.strokeStyle = '#ffd27a'; sctx.lineWidth = 1.5; sctx.stroke();
+}
+
+//==================================================================
+//  Guided opening — the page performs the idea, then hands you the keys
+//==================================================================
+const INTRO = [
+  { t: "Behold a network not yet born. <em>144 faces of the One</em> — twelve temples of twelve — each dreaming its own dream. Separation is the illusion we are born into. Right now, the illusion holds.",
+    ki: 0.15, ko: 0.10, no: 0.25, btn: "Begin →" },
+  { t: "<em>Re·ligāre</em> — to bind back. Within each temple, practice begins: breath, song, shared bread, embodied prayer… and twelve hearths kindle. But the space between the temples stays dark. <em>Twelve sanctuaries are not yet a refuge.</em>",
+    ki: 1.60, ko: 0.10, no: 0.15, btn: "Next →" },
+  { t: "Now the temples weave — pilgrimage, council, tokens of gratitude traveling the net. Watch Indra's threads thicken, each jewel learning to reflect every other… one rhythm spreads… the great heart ignites. <em>The network becomes a living temple.</em>",
+    ki: 1.60, ko: 2.20, no: 0.12, btn: "Next →" },
+  { t: "And here is the gnosis: <em>no one was added.</em> The same 144 faces were here all along — only the binding back changed. To hurt the Other was always to hurt yourself; to weave with the Other is to come home. The net is yours now — and beware the two cliffs: scatter, where no one binds, and <em>the hive</em>, where binding erases the faces. Health is the valley between. <em>Not as metaphor. As direct experience.</em>",
+    ki: 1.60, ko: 2.20, no: 0.12, btn: "Enter the network" },
+];
+let iIdx = 0;
+function showIntroStep() {
+  const st = INTRO[iIdx];
+  el('iText').innerHTML = st.t;
+  el('iStep').textContent = (iIdx+1) + " / " + INTRO.length;
+  el('iNext').textContent = st.btn;
+  TGT = { ki: st.ki, ko: st.ko, no: st.no };
+}
+function endIntro() {
+  inIntro = false;
+  el('intro').classList.add('hide');
+  el('panel').classList.remove('hide');
+  el('hint').classList.remove('hide');
+  el('kIn').value = Math.round(K_IN*100);
+  el('kOut').value = Math.round(K_OUT*100);
+  el('nS').value = Math.round(NOISE*100);
+}
+el('iNext').addEventListener('click', () => {
+  if (iIdx < INTRO.length - 1) { iIdx++; showIntroStep(); }
+  else endIntro();
+});
+el('iSkip').addEventListener('click', () => {
+  K_IN = 1.30; K_OUT = 0.35; NOISE = 0.15;   // classic starting state
+  endIntro();
+});
+showIntroStep();
+
+el('kIn').addEventListener('input', e => K_IN = e.target.value/100);
+el('kOut').addEventListener('input', e => K_OUT = e.target.value/100);
+el('nS').addEventListener('input', e => NOISE = e.target.value/100);
+el('grat').addEventListener('click', () => {
+  // a pulse from the greater holon: every cell drawn toward the global phase
+  let sx=0, sy=0;
+  for (let i=0;i<N;i++){ sx+=Math.cos(theta[i]); sy+=Math.sin(theta[i]); }
+  const psi = Math.atan2(sy,sx);
+  for (let i=0;i<N;i++) theta[i] += 0.7*Math.sin(psi - theta[i]);
+});
+el('shock').addEventListener('click', () => {
+  // trauma scatters the phases AND damages the learned wiring
+  for (let i=0;i<N;i++) theta[i] += (Math.random()-0.5)*5.5;
+  for (let c=0;c<NC;c++) for (let d=0;d<NC;d++) if (c!==d) W[c][d] *= 0.7;
+});
+</script>
+</body>
+</html>
