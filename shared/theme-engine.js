@@ -128,6 +128,24 @@
 }';
 
   /* ================================================================
+     FIXED APPLE TYPOGRAPHY — site-wide type lock
+     The skins change COLOR only; typography stays constant across all
+     of them (New York serif for display, San Francisco / system sans
+     for body). We override each skin's --s-display/--s-font here rather
+     than editing every skin block. html[data-skin] (0,1,1) outranks the
+     bare [data-skin="x"] (0,1,0) rules above, so this always wins.
+     ================================================================ */
+  var APPLE_TYPE_CSS = '\
+:root{\
+  --font-apple-display:"New York",ui-serif,Georgia,"Times New Roman",serif;\
+  --font-apple-body:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",system-ui,sans-serif;\
+}\
+html[data-skin]{\
+  --s-display:var(--font-apple-display);\
+  --s-font:var(--font-apple-body);\
+}';
+
+  /* ================================================================
      ENGINE SKIN CSS — aesthetics derived from DESIGN.md
      (Synchronicity Engine / Indra's Network). Scoped to the skin so
      the other skins are untouched. Tokens alone can't express these:
@@ -159,7 +177,7 @@
   font-family:var(--font-mono);font-weight:500;letter-spacing:0.14em;font-size:10px;\
 }\
 [data-skin="technical"] .etymology-word{\
-  font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;letter-spacing:0.02em;\
+  font-family:var(--font-apple-display);font-style:italic;letter-spacing:0.02em;\
 }\
 [data-skin="technical"] .hero-cta{\
   background:var(--signature);border:none;color:#fff;\
@@ -236,6 +254,7 @@
   injectFonts();
   injectStyle('te-shared', SHARED_CSS);
   injectStyle('te-skins', SKIN_CSS);
+  injectStyle('te-apple-type', APPLE_TYPE_CSS);
   injectStyle('te-engine', ENGINE_CSS);
   injectStyle('te-toggle-css', TOGGLE_CSS);
 
