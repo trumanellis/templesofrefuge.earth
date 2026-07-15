@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-skin="jewels">
+<html lang="en" data-skin="technical">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -44,22 +44,33 @@
         </div>
     </main>
 
+    <section style="padding:0 2rem 2rem">
+        <div id="member-cta-mount"></div>
+    </section>
+
     <footer class="site-footer">
         <nav class="footer-related" aria-label="Foundations">
             <a href="/cosmology.html">Cosmology</a>
             <a href="/covenant.html" class="current">Covenant</a>
             <a href="/bylaws.html">Bylaws</a>
+            <a href="/join.html">Become a Member</a>
         </nav>
+        <div id="newsletter-mount" style="margin:0 auto 3rem"></div>
         <p class="footer-site-name">Temples of Refuge</p>
     </footer>
 
     <script src="/shared/theme-engine.js"></script>
     <script>
     ThemeEngine.init({
-      defaultSkin: 'jewels',
+      defaultSkin: 'technical',
       storageKey: 'tor-skin',
       position: 'top-right'
     });
+    </script>
+    <script src="/shared/cta-widgets.js"></script>
+    <script>
+      CTAWidgets.memberCTA('#member-cta-mount');
+      CTAWidgets.footerNewsletter('#newsletter-mount');
     </script>
     <script src="https://cdn.jsdelivr.net/npm/marked@15/marked.min.js"></script>
     <script src="/shared/document-loader.js"></script>

@@ -15,7 +15,7 @@
   /* ================================================================
      GOOGLE FONTS — all skin fonts
      ================================================================ */
-  var FONT_URL = 'https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;0,6..96,700;0,6..96,900;1,6..96,400;1,6..96,500&family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400&family=Instrument+Sans:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&family=Playfair+Display:wght@700;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Quicksand:wght@300;400;500;600;700&family=Raleway:ital,wght@0,200;0,300;0,400;0,500;0,600;1,300;1,400&display=swap';
+  var FONT_URL = 'https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;0,6..96,700;0,6..96,900;1,6..96,400;1,6..96,500&family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400&family=Instrument+Sans:wght@400;500;600&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=JetBrains+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&family=Playfair+Display:wght@700;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Quicksand:wght@300;400;500;600;700&family=Raleway:ital,wght@0,200;0,300;0,400;0,500;0,600;1,300;1,400&display=swap';
 
   function injectFonts() {
     if (document.getElementById('te-fonts')) return;
@@ -35,19 +35,20 @@
      ================================================================ */
   var SKIN_CSS = '\
 [data-skin="technical"]{\
-  --s-bg:#0d0d0d;--s-bg2:#141414;--s-card:#1a1a1a;--s-hover:#222;\
-  --s-tx:#eee;--s-t2:#999;--s-mt:#666;--s-gh:#444;\
-  --s-bd:#2a2a2a;--s-b2:#1f1f1f;\
-  --s-ac:#00d4aa;\
-  --s-font:"DM Sans",-apple-system,sans-serif;\
-  --s-display:"Playfair Display",Georgia,serif;\
+  --s-bg:#09090b;--s-bg2:#111114;--s-card:#151518;--s-hover:#1c1c20;\
+  --s-tx:#fafafa;--s-t2:#a0a0ab;--s-mt:#52525b;--s-gh:#3f3f46;\
+  --s-bd:#27272a;--s-b2:#1c1c20;\
+  --s-ac:#818cf8;\
+  --s-font:"Inter",-apple-system,system-ui,sans-serif;\
+  --s-display:"Inter",-apple-system,system-ui,sans-serif;\
   --s-radius:12px;\
-  --t-bg:#0d0d0d;--t-sf:#141414;--t-cd:#1a1a1a;--t-hv:#222;\
-  --t-tx:#eee;--t-t2:#999;--t-mt:#666;--t-dm:#444;\
-  --t-bd:#2a2a2a;--t-b2:#1f1f1f;--t-bc:rgba(255,255,255,0.1);\
-  --t-ac:#00d4aa;--t-a2:#00b894;\
-  --t-ok:#22c55e;--t-wn:#ffd93d;--t-er:#ff6b6b;\
-  --t-glass:rgba(13,13,13,0.85);--t-glass-bd:rgba(255,255,255,0.1);\
+  --t-bg:#09090b;--t-sf:#111114;--t-cd:#151518;--t-hv:#1c1c20;\
+  --t-tx:#fafafa;--t-t2:#a0a0ab;--t-mt:#52525b;--t-dm:#3f3f46;\
+  --t-bd:#27272a;--t-b2:#1c1c20;--t-bc:rgba(129,140,248,0.12);\
+  --t-ac:#818cf8;--t-a2:#c084fc;\
+  --t-ok:#34d399;--t-wn:#fbbf24;--t-er:#f87171;\
+  --t-glass:rgba(9,9,11,0.85);--t-glass-bd:rgba(255,255,255,0.06);\
+  --signature:linear-gradient(135deg,#818cf8 0%,#c084fc 50%,#f472b6 100%);\
 }\
 [data-skin="organic"]{\
   --s-bg:#1a1814;--s-bg2:#2c2820;--s-card:#2c2820;--s-hover:#3d3628;\
@@ -95,21 +96,6 @@
   --t-ok:#98d8aa;--t-wn:#ffd93d;--t-er:#ff6b9d;\
   --t-glass:rgba(6,6,14,0.9);--t-glass-bd:rgba(180,170,220,0.12);\
 }\
-[data-skin="modern"]{\
-  --s-bg:#09090b;--s-bg2:#111114;--s-card:#151518;--s-hover:#1c1c20;\
-  --s-tx:#fafafa;--s-t2:#a0a0ab;--s-mt:#52525b;--s-gh:#3f3f46;\
-  --s-bd:#27272a;--s-b2:#1c1c20;\
-  --s-ac:#818cf8;\
-  --s-font:"Inter",-apple-system,system-ui,sans-serif;\
-  --s-display:"Inter",-apple-system,system-ui,sans-serif;\
-  --s-radius:10px;\
-  --t-bg:#09090b;--t-sf:#111114;--t-cd:#151518;--t-hv:#1c1c20;\
-  --t-tx:#fafafa;--t-t2:#a0a0ab;--t-mt:#52525b;--t-dm:#3f3f46;\
-  --t-bd:#27272a;--t-b2:#1c1c20;--t-bc:rgba(255,255,255,0.08);\
-  --t-ac:#818cf8;--t-a2:#6366f1;\
-  --t-ok:#34d399;--t-wn:#fbbf24;--t-er:#f87171;\
-  --t-glass:rgba(9,9,11,0.9);--t-glass-bd:rgba(255,255,255,0.08);\
-}\
 [data-skin="contemplative"]{\
   --s-bg:#f4f0e6;--s-bg2:#ece7da;--s-card:#f4f0e6;--s-hover:#e5dfd0;\
   --s-tx:#2a2420;--s-t2:#6b6358;--s-mt:#a09888;--s-gh:#c8c0b2;\
@@ -139,22 +125,52 @@
   --t-ac:#2d8a4e;--t-a2:#1e6b38;\
   --t-ok:#2d8a4e;--t-wn:#c59000;--t-er:#c0392b;\
   --t-glass:rgba(246,250,242,0.92);--t-glass-bd:rgba(0,0,0,0.06);\
-}\
-[data-skin="annabelle"]{\
-  --s-bg:#fce4d8;--s-bg2:#f5d4c4;--s-card:#fff2ec;--s-hover:#eec4b0;\
-  --s-tx:#341f22;--s-t2:#613b3e;--s-mt:#9a6e90;--s-gh:#c4a0b8;\
-  --s-bd:#e8b8aa;--s-b2:#f0c8ba;\
-  --s-ac:#d0683e;\
-  --s-font:"Quicksand",-apple-system,sans-serif;\
-  --s-display:"Bodoni Moda",Georgia,serif;\
-  --s-radius:20px;\
-  --t-bg:#fce4d8;--t-sf:#f5d4c4;--t-cd:#fff2ec;--t-hv:#eec4b0;\
-  --t-tx:#341f22;--t-t2:#613b3e;--t-mt:#9a6e90;--t-dm:#c4a0b8;\
-  --t-bd:#e8b8aa;--t-b2:#f0c8ba;--t-bc:rgba(52,31,34,0.12);\
-  --t-ac:#d0683e;--t-a2:#e5a010;\
-  --t-ok:#6a9e58;--t-wn:#e5a010;--t-er:#c04040;\
-  --t-glass:rgba(252,228,216,0.92);--t-glass-bd:rgba(52,31,34,0.12);\
 }';
+
+  /* ================================================================
+     ENGINE SKIN CSS — aesthetics derived from DESIGN.md
+     (Synchronicity Engine / Indra's Network). Scoped to the skin so
+     the other skins are untouched. Tokens alone can't express these:
+     the dot-grid canvas, the ambient orb, the Inter tracking rules
+     (no uppercase, negative tracking, weight-800 hero), the mono
+     eyebrow voice, the ornamental etymology voice, and the single
+     signature-gradient CTA.
+     ================================================================ */
+  var ENGINE_CSS = '\
+[data-skin="technical"] body::before{\
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;\
+  background-image:radial-gradient(circle,rgba(129,140,248,0.05) 1px,transparent 1px);\
+  background-size:24px 24px;\
+}\
+[data-skin="technical"] body::after{\
+  content:"";position:fixed;top:-140px;left:50%;width:600px;height:600px;\
+  margin-left:-300px;z-index:0;pointer-events:none;\
+  background:radial-gradient(circle,rgba(129,140,248,0.06) 0%,rgba(192,132,252,0.03) 40%,transparent 70%);\
+  animation:teOrbDrift 20s ease-in-out infinite alternate;\
+}\
+@keyframes teOrbDrift{from{transform:translate(-40px,0) scale(1)}to{transform:translate(40px,30px) scale(1.08)}}\
+@media(prefers-reduced-motion:reduce){[data-skin="technical"] body::after{animation:none}}\
+[data-skin="technical"] h1{text-transform:none;letter-spacing:-0.04em;font-weight:800;line-height:1.0;font-size:clamp(36px,7vw,78px)}\
+[data-skin="technical"] h2{text-transform:none;letter-spacing:-0.03em;font-weight:800;line-height:1.1;font-size:clamp(30px,5vw,56px)}\
+[data-skin="technical"] h3{text-transform:none;letter-spacing:normal;font-weight:600}\
+[data-skin="technical"] body{line-height:1.7}\
+[data-skin="technical"] strong{color:var(--t-tx);font-weight:500}\
+[data-skin="technical"] .eyebrow{\
+  font-family:var(--font-mono);font-weight:500;letter-spacing:0.14em;font-size:10px;\
+}\
+[data-skin="technical"] .etymology-word{\
+  font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;letter-spacing:0.02em;\
+}\
+[data-skin="technical"] .hero-cta{\
+  background:var(--signature);border:none;color:#fff;\
+  text-transform:none;letter-spacing:0;font-weight:500;font-size:0.95rem;\
+  border-radius:8px;box-shadow:0 0 20px rgba(129,140,248,0.2);\
+}\
+[data-skin="technical"] .hero-cta:hover{\
+  opacity:1;filter:brightness(1.1);\
+  box-shadow:0 0 28px rgba(129,140,248,0.35);\
+}\
+[data-skin="technical"] .scroll-indicator{display:none}';
 
   /* ================================================================
      SHARED CONSTANTS
@@ -186,7 +202,7 @@
   background:var(--s-bg);border-bottom:1px solid var(--s-bd);\
   transition:all .5s ease;\
 }\
-[data-skin="technical"] .te-bar{background:rgba(13,13,13,0.9);backdrop-filter:blur(20px) saturate(180%)}\
+[data-skin="technical"] .te-bar{background:rgba(9,9,11,0.85);backdrop-filter:blur(20px) saturate(180%)}\
 [data-skin="jewels"] .te-bar{background:rgba(6,6,14,0.85);backdrop-filter:blur(20px) saturate(180%)}\
 .te-section{display:flex;align-items:center;gap:16px}\
 .te-label{\
@@ -204,7 +220,6 @@
 .te-pill:hover{border-color:var(--s-ac);color:var(--s-ac)}\
 .te-pill.active{background:var(--s-ac);color:var(--s-bg);border-color:var(--s-ac)}\
 [data-skin="botanical"] .te-pill.active{color:#fff}\
-[data-skin="annabelle"] .te-pill.active{color:#fff}\
 @media(max-width:640px){\
   .te-bar{padding:0 12px}\
   .te-pill{font-size:9px;padding:3px 8px}\
@@ -224,22 +239,21 @@
   injectFonts();
   injectStyle('te-shared', SHARED_CSS);
   injectStyle('te-skins', SKIN_CSS);
+  injectStyle('te-engine', ENGINE_CSS);
   injectStyle('te-toggle-css', TOGGLE_CSS);
 
   /* ================================================================
      INTERNALS
      ================================================================ */
-  var VALID_SKINS = ['technical', 'organic', 'botanical', 'jewels', 'modern', 'contemplative', 'solarpunk', 'annabelle'];
+  var VALID_SKINS = ['technical', 'organic', 'botanical', 'jewels', 'contemplative', 'solarpunk'];
 
   var DEFAULT_LABELS = {
-    'technical':     'Technical',
+    'technical':     'SyncEngine',
     'organic':       'Organic',
     'botanical':     'Botanical',
     'jewels':        'Jewels',
-    'modern':        'Modern',
     'contemplative': 'Contemplative',
-    'solarpunk':     'Solarpunk',
-    'annabelle':     'Annabelle'
+    'solarpunk':     'Solarpunk'
   };
 
   var activePills = [];

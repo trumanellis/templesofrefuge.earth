@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-skin="jewels">
+<html lang="en" data-skin="technical">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,59 +17,51 @@
 
     <link rel="stylesheet" href="/shared/document.css">
     <style>
-      /* Page-specific accents — reuse jewels tokens from theme-engine.js */
-      .commandment{max-width:640px;margin:0 auto 3.5rem;text-align:center;
-        border:1px solid var(--t-bd);border-radius:18px;background:var(--t-cd);
-        padding:2.75rem 2rem}
-      .commandment-eyebrow{font-family:var(--s-font);font-size:.7rem;font-weight:500;
-        letter-spacing:.4em;text-transform:uppercase;color:var(--t-ac);margin-bottom:1.25rem}
-      .commandment-words{font-family:var(--s-display);font-weight:400;
-        font-size:clamp(1.35rem,3.2vw,1.85rem);line-height:1.5;letter-spacing:.03em;
-        color:var(--t-tx)}
-      .join-intro{max-width:46ch;margin:0 auto 3rem;text-align:center;
-        color:var(--t-t2);line-height:1.85}
-      .join-step-label{font-family:var(--s-display);font-size:.75rem;letter-spacing:.25em;
-        text-transform:uppercase;color:var(--t-a2);text-align:center;margin:0 0 1.75rem}
-      .covenant-reveal{max-width:560px;margin:0 auto 2.5rem;
-        border:1px solid var(--t-bd);border-radius:12px;background:var(--t-b2);
-        padding:.25rem 1.25rem}
-      .covenant-reveal summary{cursor:pointer;padding:1rem 0;
-        font-family:var(--s-display);font-size:.8rem;letter-spacing:.15em;
-        text-transform:uppercase;color:var(--t-ac);list-style:none}
-      .covenant-reveal summary::-webkit-details-marker{display:none}
-      .covenant-reveal[open] summary{border-bottom:1px solid var(--t-bd);margin-bottom:1rem}
-      .covenant-reveal #document-body{font-size:.95rem}
-      /* The offering IS the hero action — expansive, central. */
-      .offering-hero{max-width:640px;margin:0 auto 3.5rem;text-align:center}
-      .offering-lead{font-family:var(--s-display);font-weight:400;
-        font-size:clamp(1.15rem,2.6vw,1.5rem);line-height:1.6;letter-spacing:.01em;
-        color:var(--t-tx);max-width:34ch;margin:0 auto 2.25rem}
-      .offering-note{color:var(--t-t2);line-height:1.75;margin:1.5rem 0;font-size:.95rem}
-      .offering-action{margin:0 0 1.75rem}
-      .offering-btn{display:block;width:100%;box-sizing:border-box;
-        font-family:var(--s-display);font-size:clamp(.85rem,1.7vw,1.05rem);
-        letter-spacing:.22em;text-transform:uppercase;color:var(--t-bg);background:var(--t-ac);
-        border:1px solid var(--t-ac);border-radius:16px;padding:1.6rem 2rem;
-        text-decoration:none;transition:opacity .25s,transform .25s,box-shadow .25s;
-        box-shadow:0 14px 44px -14px color-mix(in srgb, var(--t-ac) 60%, transparent)}
-      .offering-btn:hover{opacity:.94;transform:translateY(-2px);
-        box-shadow:0 20px 54px -14px color-mix(in srgb, var(--t-ac) 70%, transparent)}
-      .offering-fineprint{color:var(--t-mt);font-size:.9rem;line-height:1.7;
-        max-width:44ch;margin:0 auto}
-      .offering-fineprint strong{color:var(--t-t2);font-weight:500}
-      .offering-skip{display:block;max-width:46ch;margin:0 auto;font-size:.85rem;
-        color:var(--t-mt);line-height:1.6;text-align:center}
-      .offering-skip a{color:var(--t-ac)}
+      /* ── Layout: asymmetric two-column membership page ── */
+      .join-shell{max-width:1060px;margin:0 auto;padding:2.5rem 2rem 4rem}
+      .offering-hero{display:grid;grid-template-columns:1fr;gap:2.25rem;align-items:start}
+      @media(min-width:900px){
+        .offering-hero{grid-template-columns:1.05fr 1fr;gap:3.5rem;padding-top:1.5rem}
+      }
 
-      /* ── Amount selector (the hero offering UI) ── */
-      .amount-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.6rem;
-        max-width:560px;margin:0 auto 1rem}
-      @media(min-width:420px){.amount-grid{grid-template-columns:repeat(3,1fr)}}
-      @media(min-width:560px){.amount-grid{grid-template-columns:repeat(5,1fr)}}
+      /* Left column — the message */
+      .join-message .document-eyebrow{margin-bottom:1rem;text-align:left}
+      .join-message .document-title{text-align:left;font-size:clamp(2rem,4.6vw,2.85rem);
+        letter-spacing:.06em;margin-bottom:1rem;line-height:1.15}
+      .join-sub{font-family:var(--s-display);font-style:italic;
+        font-size:clamp(1rem,1.7vw,1.2rem);color:var(--t-t2);line-height:1.5;margin:0 0 2.25rem}
+      .commandment-quote{border-left:2px solid var(--t-ac);
+        padding:.15rem 0 .15rem 1.35rem;margin:0 0 2rem}
+      .cq-label{font-family:var(--s-font);font-size:.66rem;font-weight:500;
+        letter-spacing:.28em;text-transform:uppercase;color:var(--t-ac);margin:0 0 .6rem}
+      .cq-words{font-family:var(--s-display);font-style:italic;
+        font-size:clamp(1.15rem,2.1vw,1.45rem);line-height:1.5;color:var(--t-tx);margin:0}
+      .join-close{color:var(--t-t2);line-height:1.75;font-size:.98rem;margin:0;max-width:44ch}
+      .join-close strong{color:var(--t-tx);font-weight:500}
+
+      /* Right column — the offering panel */
+      .offering-panel{border:1px solid var(--t-bd);border-radius:20px;
+        background:var(--t-b2);padding:2rem 1.75rem}
+      .offering-panel-label{font-family:var(--s-font);font-size:.66rem;font-weight:500;
+        letter-spacing:.28em;text-transform:uppercase;color:var(--t-ac);
+        text-align:center;margin:0 0 1.35rem}
+
+      /* Currency selector — the numeral is preserved; only the symbol changes */
+      .currency-row{display:flex;gap:.4rem;margin:0 0 1rem}
+      .currency-chip{flex:1;font-family:var(--s-font);font-size:.7rem;font-weight:500;
+        letter-spacing:.08em;color:var(--t-t2);background:var(--t-cd);
+        border:1px solid var(--t-bd);border-radius:10px;padding:.55rem .3rem;
+        cursor:pointer;transition:border-color .2s,color .2s,background .2s}
+      .currency-chip:hover{border-color:var(--t-ac);color:var(--t-tx)}
+      .currency-chip[aria-pressed="true"]{border-color:var(--t-ac);color:var(--t-ac);
+        background:color-mix(in srgb, var(--t-ac) 12%, transparent)}
+
+      /* Amount chips */
+      .amount-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.6rem;margin:0 0 1rem}
       .amount-chip{display:flex;flex-direction:column;align-items:center;gap:.25rem;
         font-family:var(--s-display);letter-spacing:.03em;line-height:1.1;
         color:var(--t-tx);background:var(--t-cd);border:1px solid var(--t-bd);
-        border-radius:12px;padding:.85rem .35rem;cursor:pointer;
+        border-radius:12px;padding:.8rem .4rem;cursor:pointer;
         transition:border-color .2s,background .2s,transform .2s}
       .amount-chip:hover{border-color:var(--t-ac);transform:translateY(-1px)}
       .amount-chip[aria-pressed="true"]{border-color:var(--t-ac);color:var(--t-tx);
@@ -79,34 +71,68 @@
         text-transform:uppercase;color:var(--t-t2)}
       .amount-chip:hover .chip-mean,
       .amount-chip[aria-pressed="true"] .chip-mean{color:var(--t-ac)}
-      .amount-custom{display:flex;align-items:center;gap:.5rem;max-width:560px;
-        margin:0 auto 1.5rem;border:1px solid var(--t-bd);border-radius:12px;
-        background:var(--t-cd);padding:.35rem 1rem;transition:border-color .2s,box-shadow .2s}
+
+      /* Custom amount */
+      .amount-custom{display:flex;align-items:center;gap:.5rem;margin:0 0 1rem;
+        border:1px solid var(--t-bd);border-radius:12px;background:var(--t-cd);
+        padding:.35rem 1rem;transition:border-color .2s,box-shadow .2s}
       .amount-custom:focus-within{border-color:var(--t-ac);
         box-shadow:0 0 0 3px color-mix(in srgb, var(--t-ac) 16%, transparent)}
       .amount-custom span{font-family:var(--s-display);font-size:1.15rem;color:var(--t-mt)}
       .amount-custom input{flex:1;border:none;background:transparent;color:var(--t-tx);
         font-family:var(--s-font);font-size:1.1rem;padding:.6rem 0;outline:none}
-      .offer-error{color:#e6857a;font-size:.9rem;margin:.75rem auto 0;max-width:440px;
-        min-height:1.2em;text-align:center}
-      /* Numerology (default) + arithmology (optional, on table hit) readout */
-      .amount-read{max-width:560px;margin:-.5rem auto 1.25rem;text-align:center}
-      .read-num{font-family:var(--s-font);font-size:.82rem;letter-spacing:.03em;
+
+      /* Numerology (default) + arithmology (on table hit) readout */
+      .amount-read{margin:-.25rem 0 1.1rem;text-align:center;min-height:1.2em}
+      .read-num{font-family:var(--s-font);font-size:.8rem;letter-spacing:.03em;
         color:var(--t-t2);margin:0;line-height:1.5}
       .read-num b{color:var(--t-tx);font-weight:600}
-      .read-arith{font-family:var(--s-font);font-size:.82rem;letter-spacing:.03em;
-        color:var(--t-ac);margin:.35rem 0 0;line-height:1.5}
+      .read-arith{font-family:var(--s-font);font-size:.8rem;letter-spacing:.03em;
+        color:var(--t-ac);margin:.3rem 0 0;line-height:1.5}
       .read-arith b{font-weight:600}
-      /* The button as <button> mirrors .offering-btn */
-      button.offering-btn{cursor:pointer;font-family:var(--s-display)}
-      #checkout{max-width:560px;margin:1.5rem auto 0}
-      .member-welcome{max-width:560px;margin:0 auto;text-align:center;
+      .offer-error{color:#e6857a;font-size:.9rem;margin:.5rem 0 0;
+        min-height:1.2em;text-align:center}
+
+      /* Primary CTA */
+      .offering-action{margin:0}
+      .offering-btn{display:block;width:100%;box-sizing:border-box;
+        font-family:var(--s-display);font-size:clamp(.82rem,1.5vw,.98rem);
+        letter-spacing:.2em;text-transform:uppercase;color:var(--t-bg);background:var(--t-ac);
+        border:1px solid var(--t-ac);border-radius:14px;padding:1.35rem 1.5rem;
+        text-decoration:none;transition:opacity .25s,transform .25s,box-shadow .25s;
+        box-shadow:0 14px 40px -16px color-mix(in srgb, var(--t-ac) 60%, transparent)}
+      .offering-btn:hover{opacity:.94;transform:translateY(-2px);
+        box-shadow:0 20px 50px -16px color-mix(in srgb, var(--t-ac) 70%, transparent)}
+      button.offering-btn{cursor:pointer}
+      .offering-note{color:var(--t-t2);line-height:1.7;font-size:.95rem;text-align:center}
+      #checkout{margin:1rem 0 0}
+      .offering-fineprint{color:var(--t-mt);font-size:.85rem;line-height:1.65;
+        text-align:center;margin:1.25rem 0 0}
+      .offering-fineprint strong{color:var(--t-t2);font-weight:500}
+
+      /* Quiet secondary actions — beneath the message, left column */
+      .join-aside{margin:2.25rem 0 0;text-align:left}
+      .covenant-reveal{border:1px solid var(--t-bd);border-radius:12px;
+        background:var(--t-b2);padding:.1rem 1.25rem;margin:0 0 1.25rem;text-align:left}
+      .covenant-reveal summary{cursor:pointer;padding:.9rem 0;
+        font-family:var(--s-display);font-size:.75rem;letter-spacing:.13em;
+        text-transform:uppercase;color:var(--t-ac);list-style:none}
+      .covenant-reveal summary::-webkit-details-marker{display:none}
+      .covenant-reveal[open] summary{border-bottom:1px solid var(--t-bd);margin-bottom:1rem}
+      .covenant-reveal #document-body{font-size:.95rem}
+      .offering-skip{display:block;font-size:.82rem;color:var(--t-mt);line-height:1.6}
+      .offering-skip a{color:var(--t-ac)}
+
+      /* Return state */
+      .member-welcome{max-width:560px;margin:2rem auto 0;text-align:center;
         border:1px solid var(--t-bd);border-radius:18px;background:var(--t-cd);
         padding:3.25rem 2rem}
       .member-welcome .ok-mark{font-size:2rem;color:var(--t-ac);margin-bottom:1rem}
       .member-welcome h2{font-family:var(--s-display);font-weight:400;
         font-size:clamp(1.5rem,4vw,2rem);color:var(--t-tx);margin:0 0 1rem}
       .member-welcome p{color:var(--t-t2);line-height:1.8;max-width:42ch;margin:0 auto}
+
+      @media(max-width:768px){.join-shell{padding:2rem 1.25rem 3rem}}
     </style>
 </head>
 <body>
@@ -116,70 +142,80 @@
     </header>
 
     <main>
-        <div class="container-narrow">
-            <section class="document-hero">
-                <p class="document-eyebrow">Membership</p>
-                <h1 class="document-title">Become a Member</h1>
-                <p class="document-subtitle">An affiliation of the heart —<br>the first breath of relationship</p>
-                <div class="document-divider"></div>
-            </section>
-
-            <section class="commandment" aria-label="The One Commandment">
-                <p class="commandment-eyebrow">The One Commandment</p>
-                <p class="commandment-words">Recognize the divine in every Other and treat them as an extension of yourself.</p>
-            </section>
-
-            <section class="offering-hero" id="offering-hero" aria-label="Sign the Covenant">
-                <p class="offering-lead">To become a Member is to affirm this Commandment and seal it
-                    with an offering — your signature on the Covenant.</p>
-
-                <div id="amount-step">
-                    <div class="amount-grid" id="amount-grid" role="group" aria-label="Choose your offering">
-                        <button type="button" class="amount-chip" data-cents="1100"><span class="chip-amt">$11</span><span class="chip-mean">Awakening</span></button>
-                        <button type="button" class="amount-chip" data-cents="3300"><span class="chip-amt">$33</span><span class="chip-mean">Compassion</span></button>
-                        <button type="button" class="amount-chip" data-cents="5500" aria-pressed="true"><span class="chip-amt">$55</span><span class="chip-mean">Change</span></button>
-                        <button type="button" class="amount-chip" data-cents="7700"><span class="chip-amt">$77</span><span class="chip-mean">Wisdom</span></button>
-                        <button type="button" class="amount-chip" data-cents="10800"><span class="chip-amt">$108</span><span class="chip-mean">Wholeness</span></button>
-                        <button type="button" class="amount-chip" data-cents="33300"><span class="chip-amt">$333</span><span class="chip-mean">Alignment</span></button>
-                        <button type="button" class="amount-chip" data-cents="55500"><span class="chip-amt">$555</span><span class="chip-mean">Rebirth</span></button>
-                        <button type="button" class="amount-chip" data-cents="77700"><span class="chip-amt">$777</span><span class="chip-mean">Fortune</span></button>
-                        <button type="button" class="amount-chip" data-cents="99900"><span class="chip-amt">$999</span><span class="chip-mean">Completion</span></button>
-                        <button type="button" class="amount-chip" data-cents="111100"><span class="chip-amt">$1111</span><span class="chip-mean">Portal</span></button>
+        <div class="join-shell">
+            <section class="offering-hero" id="offering-hero" aria-label="Become a Member">
+                <div class="join-message">
+                    <p class="document-eyebrow">Membership</p>
+                    <h1 class="document-title">Become a Member</h1>
+                    <p class="join-sub">An affiliation of the heart — the first breath of relationship.</p>
+                    <div class="commandment-quote">
+                        <p class="cq-label">The One Commandment</p>
+                        <p class="cq-words">Recognize the divine in every Other and treat them as an extension of yourself.</p>
                     </div>
-                    <label class="amount-custom">
-                        <span>$</span>
-                        <input type="number" id="amount-custom" inputmode="decimal" min="1" step="1"
-                               placeholder="Another amount" aria-label="Another amount in dollars">
-                    </label>
-                    <div class="amount-read" aria-live="polite">
-                        <p class="read-num" id="read-num" hidden></p>
-                        <p class="read-arith" id="read-arith" hidden></p>
+                    <p class="join-close">To become a Member is to affirm this Commandment and seal it
+                        with an offering — <strong>your signature on the Covenant</strong>. Membership is for life.</p>
+
+                    <div class="join-aside">
+                        <details class="covenant-reveal">
+                            <summary>Read the full Covenant before you sign ▾</summary>
+                            <article id="document-body">
+                                <p class="loading">Loading the Covenant…</p>
+                            </article>
+                        </details>
+
+                        <span class="offering-skip">
+                            Offering time or skill instead of funds? That's enough — no one aligned with the
+                            Commandment is turned away. Tell us how you'd like to serve at
+                            <a href="mailto:ola@templesofrefuge.earth?subject=My%20offering%20of%20time%20or%20skill">ola@templesofrefuge.earth</a>.
+                        </span>
                     </div>
-                    <div class="offering-action">
-                        <button type="button" class="offering-btn" id="offer-continue">Donate to Join →</button>
-                    </div>
-                    <p class="offer-error" id="offer-error" role="alert"></p>
                 </div>
 
-                <div id="checkout"><!-- Stripe Embedded Checkout mounts here --></div>
+                <div class="offering-panel">
+                    <p class="offering-panel-label">Your Offering</p>
 
-                <p class="offering-fineprint">Your name and email travel with the offering — that is
-                    your signature, recorded. <strong>No one aligned with the Commandment is turned
-                    away for lack of funds.</strong> Membership is for life.</p>
+                    <div id="amount-step">
+                        <div class="currency-row" id="currency-row" role="group" aria-label="Choose a currency">
+                            <button type="button" class="currency-chip" data-cur="usd" data-sym="$" aria-pressed="true">USD</button>
+                            <button type="button" class="currency-chip" data-cur="eur" data-sym="€">EUR</button>
+                            <button type="button" class="currency-chip" data-cur="gbp" data-sym="£">GBP</button>
+                            <button type="button" class="currency-chip" data-cur="cad" data-sym="$">CAD</button>
+                            <button type="button" class="currency-chip" data-cur="aud" data-sym="$">AUD</button>
+                        </div>
+                        <div class="amount-grid" id="amount-grid" role="group" aria-label="Choose your offering">
+                            <button type="button" class="amount-chip" data-cents="1100"><span class="chip-amt">$11</span><span class="chip-mean">Awakening</span></button>
+                            <button type="button" class="amount-chip" data-cents="3300"><span class="chip-amt">$33</span><span class="chip-mean">Compassion</span></button>
+                            <button type="button" class="amount-chip" data-cents="5500" aria-pressed="true"><span class="chip-amt">$55</span><span class="chip-mean">Change</span></button>
+                            <button type="button" class="amount-chip" data-cents="7700"><span class="chip-amt">$77</span><span class="chip-mean">Wisdom</span></button>
+                            <button type="button" class="amount-chip" data-cents="10800"><span class="chip-amt">$108</span><span class="chip-mean">Wholeness</span></button>
+                            <button type="button" class="amount-chip" data-cents="33300"><span class="chip-amt">$333</span><span class="chip-mean">Alignment</span></button>
+                            <button type="button" class="amount-chip" data-cents="55500"><span class="chip-amt">$555</span><span class="chip-mean">Rebirth</span></button>
+                            <button type="button" class="amount-chip" data-cents="77700"><span class="chip-amt">$777</span><span class="chip-mean">Fortune</span></button>
+                            <button type="button" class="amount-chip" data-cents="99900"><span class="chip-amt">$999</span><span class="chip-mean">Completion</span></button>
+                            <button type="button" class="amount-chip" data-cents="111100"><span class="chip-amt">$1111</span><span class="chip-mean">Portal</span></button>
+                        </div>
+                        <label class="amount-custom">
+                            <span>$</span>
+                            <input type="number" id="amount-custom" inputmode="decimal" min="1" step="1"
+                                   placeholder="Another amount" aria-label="Another amount in dollars">
+                        </label>
+                        <div class="amount-read" aria-live="polite">
+                            <p class="read-num" id="read-num" hidden></p>
+                            <p class="read-arith" id="read-arith" hidden></p>
+                        </div>
+                        <div class="offering-action">
+                            <button type="button" class="offering-btn" id="offer-continue">Donate to Join →</button>
+                        </div>
+                        <p class="offer-error" id="offer-error" role="alert"></p>
+                    </div>
+
+                    <div id="checkout"><!-- Stripe Embedded Checkout mounts here --></div>
+
+                    <p class="offering-fineprint">Your name and email travel with the offering — that is
+                        your signature, recorded. <strong>No one aligned with the Commandment is turned
+                        away for lack of funds.</strong></p>
+                </div>
             </section>
-
-            <details class="covenant-reveal">
-                <summary>Read the full Covenant before you sign ▾</summary>
-                <article id="document-body">
-                    <p class="loading">Loading the Covenant…</p>
-                </article>
-            </details>
-
-            <span class="offering-skip">
-                Offering time or skill instead of funds? That's enough — no one aligned with the
-                Commandment is turned away. Tell us how you'd like to serve at
-                <a href="mailto:ola@templesofrefuge.earth?subject=My%20offering%20of%20time%20or%20skill">ola@templesofrefuge.earth</a>.
-            </span>
 
             <section class="member-welcome" id="member-welcome" hidden>
                 <div class="ok-mark">✦</div>
@@ -202,7 +238,7 @@
     <script src="/shared/theme-engine.js"></script>
     <script>
     ThemeEngine.init({
-      defaultSkin: 'jewels',
+      defaultSkin: 'technical',
       storageKey: 'tor-skin',
       position: 'top-right'
     });
@@ -281,9 +317,32 @@
         var errEl = document.getElementById('offer-error');
         var continueBtn = document.getElementById('offer-continue');
         var chips = Array.prototype.slice.call(grid.querySelectorAll('.amount-chip'));
-        var chosenCents = 5500; // default $55
+        var chosenCents = 5500; // default 55
         var readNum = document.getElementById('read-num');
         var readArith = document.getElementById('read-arith');
+
+        // Currency — the numeral is charged as-is in the chosen currency (11 → €11),
+        // never FX-converted. All supported currencies are two-decimal.
+        var curRow = document.getElementById('currency-row');
+        var curChips = Array.prototype.slice.call(curRow.querySelectorAll('.currency-chip'));
+        var customSym = custom.querySelector('span');
+        var chosenCurrency = 'usd';
+        var curSymbol = '$';
+        function applyCurrency() {
+          chips.forEach(function (c) {
+            var n = Math.round(parseInt(c.getAttribute('data-cents'), 10) / 100);
+            c.querySelector('.chip-amt').textContent = curSymbol + n;
+          });
+          if (customSym) customSym.textContent = curSymbol;
+        }
+        curChips.forEach(function (cc) {
+          cc.addEventListener('click', function () {
+            curChips.forEach(function (c) { c.setAttribute('aria-pressed', c === cc ? 'true' : 'false'); });
+            chosenCurrency = cc.getAttribute('data-cur');
+            curSymbol = cc.getAttribute('data-sym');
+            applyCurrency();
+          });
+        });
 
         // Numerology — digital-root reduction, preserving master numbers 11/22/33.
         var NUM_MEANINGS = {
@@ -432,7 +491,7 @@
 
         continueBtn.addEventListener('click', function () {
           if (!(chosenCents >= 100 && chosenCents <= 1000000)) {
-            errEl.textContent = 'Please choose an offering between $1 and $10,000.';
+            errEl.textContent = 'Please choose an offering between ' + curSymbol + '1 and ' + curSymbol + '10,000.';
             return;
           }
           continueBtn.textContent = 'Preparing…';
@@ -443,7 +502,7 @@
               return fetch(apiUrl + '/create-session', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ amount: chosenCents })
+                body: JSON.stringify({ amount: chosenCents, currency: chosenCurrency })
               }).then(function (r) {
                 return r.json().then(function (d) {
                   if (!r.ok) throw new Error(d.error || 'Could not start checkout.');

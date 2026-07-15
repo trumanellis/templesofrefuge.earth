@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-skin="jewels">
+<html lang="en" data-skin="technical">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -1485,7 +1485,17 @@
             <p class="lead">
                 Re-binding human life to Source through direct experience, embodied practice, and regenerative relationship with Earth.
             </p>
+            <a href="/join.html" class="hero-cta">Become a Member</a>
         </div>
+        <style>
+          .hero-cta{display:inline-block;margin-top:2.5rem;font-family:var(--s-display);
+            font-size:.8rem;letter-spacing:.22em;text-transform:uppercase;
+            color:var(--t-bg);background:var(--t-ac);border:1px solid var(--t-ac);
+            border-radius:10px;padding:1rem 2rem;text-decoration:none;
+            transition:opacity .25s,transform .2s,box-shadow .3s}
+          .hero-cta:hover{opacity:.9;transform:translateY(-2px);
+            box-shadow:0 16px 40px -20px color-mix(in srgb, var(--t-ac) 60%, transparent)}
+        </style>
         <div class="scroll-indicator">
             <span>Enter</span>
             <div class="scroll-line"></div>
@@ -1796,7 +1806,7 @@
                         </div>
                     </a>
 
-                    <a href="mailto:hello@templesofrefuge.earth?subject=Network%20of%20Temples%20%E2%80%94%20stewardship%20inquiry" class="temple-preview temple-cta" data-node="join">
+                    <a href="/found-a-temple.html" class="temple-preview temple-cta" data-node="join">
                         <div class="temple-preview-frame">
                             <div class="temple-preview-chrome">
                                 <span class="dot"></span>
@@ -1858,6 +1868,7 @@
                     </a>
                     <a href="/articles/" class="archive-link">Browse the full archive →</a>
                 </div>
+                <div id="newsletter-mount" style="margin-top:4rem"></div>
             </div>
         </div>
     </section>
@@ -1895,10 +1906,14 @@
     <script src="/shared/theme-engine.js"></script>
     <script>
     ThemeEngine.init({
-      defaultSkin: 'jewels',
+      defaultSkin: 'technical',
       storageKey: 'tor-skin',
       position: 'top-right'
     });
+    </script>
+    <script src="/shared/cta-widgets.js"></script>
+    <script>
+      CTAWidgets.footerNewsletter('#newsletter-mount');
     </script>
     <script>
         // Scroll reveal
