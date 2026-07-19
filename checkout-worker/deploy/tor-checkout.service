@@ -1,0 +1,31 @@
+# /etc/systemd/system/tor-checkout.service
+# Temples of Refuge — Stripe checkout backend (Node) behind Caddy, localhost-bound.
+# Modeled on ../../work.agualila.earth/infra/work-agualila.service.
+#
+# The code ships inside the templesofrefuge site clone, so it deploys with the
+# site's normal `git pull` — no separate rsync. Stateless (no DB, no writable
+# paths); config/secrets come from /etc/tor-checkout/env.
+
+[Unit]
+Description=Temples of Refuge — Stripe checkout backend (Node)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=torcheck
+Group=torcheck
+WorkingDirectory=/var/www/templesofrefuge/checkout-worker
+ExecStart=/usr/bin/node /var/www/templesofrefuge/checkout-worker/src/node-server.js
+EnvironmentFile=/etc/tor-checkout/env
+Restart=on-failure
+RestartSec=3
+
+# Hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

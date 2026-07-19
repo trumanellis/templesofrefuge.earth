@@ -28,6 +28,11 @@
 (function () {
   'use strict';
 
+  // Local preview (localhost) uses Stripe TEST mode + the local checkout server;
+  // the live site uses LIVE mode + the self-hosted checkout endpoint. Both keys
+  // below are PUBLISHABLE (public by design); the secret key lives only on the box.
+  var isLocal = /^(localhost|127\.0\.0\.1|\[::1\]|0\.0\.0\.0)$/.test(location.hostname);
+
   var CTAConfig = {
     // web3forms.com → enter hello@templesofrefuge.earth → key is emailed to you.
     // One key serves every form on the site. Public; only lets people email YOU.
@@ -41,12 +46,15 @@
     // ── Inline embedded checkout (preferred when both are set) ──
     // Stripe PUBLISHABLE key (pk_live_… / pk_test_…) — public by design, safe here.
     // Dashboard → Developers → API keys → Publishable key.
-    // LOCAL TEST values (uncommitted) — swap to pk_live_… + deployed Worker URL for prod.
-    STRIPE_PUBLISHABLE_KEY: 'pk_test_51TqoTrGvkk6jsZYuVSiVkOQcWKt4tVtIjFSwGRwy4YtJEuKnG8PrbzLXaX12YNI0tp6RjoU1b5l8RAidlIlZr8XZ00Y0RUWKt0',
+    STRIPE_PUBLISHABLE_KEY: isLocal
+      ? 'pk_test_51TqoTrGvkk6jsZYuVSiVkOQcWKt4tVtIjFSwGRwy4YtJEuKnG8PrbzLXaX12YNI0tp6RjoU1b5l8RAidlIlZr8XZ00Y0RUWKt0'
+      : 'REPLACE_ME_STRIPE_PK_LIVE',
 
-    // The Cloudflare Worker base URL. LOCAL: http://localhost:8787 ·
-    // LIVE: https://tor-checkout.<subdomain>.workers.dev  — no trailing slash.
-    CHECKOUT_API_URL: 'http://localhost:8787',
+    // Checkout backend base URL (no trailing slash). LOCAL: the Node dev server ·
+    // LIVE: the self-hosted service on the Hetzner box behind Caddy.
+    CHECKOUT_API_URL: isLocal
+      ? 'http://localhost:8787'
+      : 'https://checkout.templesofrefuge.earth',
 
     // Optional / future: opencollective.com collective URL. When set, the join
     // page can prefer this transparency-aligned option over Stripe.

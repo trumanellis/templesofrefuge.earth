@@ -41,6 +41,13 @@ work.agualila.earth {
 	reverse_proxy 127.0.0.1:3200
 }
 
+# Temples of Refuge — Stripe checkout backend (Node/self-hosted). Bound to
+# localhost:8787 by the tor-checkout systemd service; Caddy terminates TLS and
+# proxies. Serves every origin in the service's ALLOWED_ORIGINS.
+checkout.templesofrefuge.earth {
+	reverse_proxy 127.0.0.1:8787
+}
+
 # --- OPTIONAL, later ---
 # Expose the relay admin API over TLS on a subdomain instead of only localhost.
 # Leave commented for the infra-only pass (admin stays bound to 127.0.0.1:9090).

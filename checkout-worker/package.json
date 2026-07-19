@@ -2,10 +2,12 @@
   "name": "tor-checkout",
   "version": "1.0.0",
   "private": true,
-  "description": "Temples of Refuge — Stripe embedded-checkout backend (Cloudflare Worker).",
+  "type": "module",
+  "description": "Temples of Refuge — Stripe embedded-checkout backend (self-hosted Node service behind Caddy).",
   "scripts": {
-    "dev": "wrangler dev",
-    "deploy": "wrangler deploy"
+    "start": "node src/node-server.js",
+    "dev:worker": "wrangler dev",
+    "deploy:worker": "wrangler deploy"
   },
   "devDependencies": {
     "wrangler": "^3.90.0"

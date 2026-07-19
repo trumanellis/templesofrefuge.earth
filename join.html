@@ -514,6 +514,15 @@
             step.hidden = true;
             checkout.mount('#checkout');
           }).catch(function (err) {
+            // Backend unreachable or errored at click-time — rather than
+            // dead-ending the donor, degrade gracefully to the hosted Stripe
+            // donation page (which lives on Stripe's own infrastructure).
+            var hosted = CTAWidgets.isConfigured(cfg.STRIPE_PAYMENT_LINK_URL) ? cfg.STRIPE_PAYMENT_LINK_URL : null;
+            if (hosted) {
+              errEl.textContent = 'Taking you to our secure donation page…';
+              window.location.href = hosted;
+              return;
+            }
             continueBtn.textContent = 'Donate to Join →';
             continueBtn.style.pointerEvents = '';
             errEl.textContent = err.message || 'Something went wrong. Please try again.';
