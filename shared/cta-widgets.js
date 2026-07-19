@@ -48,7 +48,7 @@
     // Dashboard → Developers → API keys → Publishable key.
     STRIPE_PUBLISHABLE_KEY: isLocal
       ? 'pk_test_51TqoTrGvkk6jsZYuVSiVkOQcWKt4tVtIjFSwGRwy4YtJEuKnG8PrbzLXaX12YNI0tp6RjoU1b5l8RAidlIlZr8XZ00Y0RUWKt0'
-      : 'REPLACE_ME_STRIPE_PK_LIVE',
+      : 'pk_live_51TqoTrGvkk6jsZYugRfw4uJI6WfUNALFXWtCxDg2HF55ilUc4knUVDcz2hGFoJkIs7XgI8MtuPGnnnlN51y27XVv00Wvkk4pq7',
 
     // Checkout backend base URL (no trailing slash). LOCAL: the Node dev server ·
     // LIVE: the self-hosted service on the Hetzner box behind Caddy.
