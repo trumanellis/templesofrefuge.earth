@@ -125,7 +125,7 @@ A religion without joy is incomplete.
 
 ### 2. Ceremony as Play
 
-Ceremony at Água Lila includes:
+Ceremony in Temple space includes:
 
 - Music
 - Toning
@@ -143,7 +143,7 @@ Play refines intuition and dissolves fear. Fear blocks gnosis. Therefore, play i
 
 Land is not property. Land is a conscious organism.
 
-Água Lila recognizes:
+Temples of Refuge recognizes:
 
 - Soil as memory
 - Water as intelligence
@@ -171,7 +171,7 @@ There is no separation between ecology and spirituality.
 
 ### 1. Gift over Extraction
 
-Água Lila rejects extractive economics.
+Temples of Refuge rejects extractive economics.
 
 Value arises from:
 
@@ -203,7 +203,7 @@ Those who receive much are called to steward much.
 
 All beings are welcome in dignity. Not all behaviors are welcome in Temple space.
 
-Água Lila maintains sacred containers:
+Temples of Refuge maintains sacred containers:
 
 - Consent is absolute
 - Coercion is forbidden
@@ -216,7 +216,7 @@ Boundaries protect love.
 
 Children are sacred participants, not afterthoughts.
 
-Água Lila exists for:
+Temples of Refuge exists for:
 
 - ancestors
 - the living
@@ -237,7 +237,7 @@ When aligned, it:
 - preserves memory
 - reduces domination
 
-Água Lila supports sovereign, decentralized, human-aligned technology that serves life rather than extracting from it.
+Temples of Refuge supports sovereign, decentralized, human-aligned technology that serves life rather than extracting from it.
 
 ---
 
@@ -253,7 +253,7 @@ Nothing real is lost.
 
 ## X. Doctrinal Summary — Affirmations
 
-Água Lila affirms that:
+Temples of Refuge affirms that:
 
 1. God is Love expressing itself as reality
 2. All beings are sacred fractal expressions of the One
@@ -272,9 +272,9 @@ Nothing real is lost.
 
 ## Closing Statement
 
-Água Lila is not a belief system to defend. It is a way of living to be embodied.
+This covenant is not a belief system to defend. It is a way of living to be embodied.
 
 Those who walk this path do so freely. Those who leave are blessed.
 
-The Temple remains —  
-in land, in bodies, in memory, and in the living field of Love.
+You do not enter the Temple. You remember that you are it —  
+in land, in body, in breath, and in the living field of Love.
