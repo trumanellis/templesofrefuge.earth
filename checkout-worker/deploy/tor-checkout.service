@@ -13,8 +13,10 @@ Wants=network-online.target
 
 [Service]
 Type=simple
-User=torcheck
-Group=torcheck
+# Throwaway system user managed by systemd — no useradd/group needed. systemd
+# reads EnvironmentFile as root before dropping privileges, so the secret file
+# stays root-only and the service still runs unprivileged.
+DynamicUser=yes
 WorkingDirectory=/var/www/templesofrefuge/checkout-worker
 ExecStart=/usr/bin/node /var/www/templesofrefuge/checkout-worker/src/node-server.js
 EnvironmentFile=/etc/tor-checkout/env

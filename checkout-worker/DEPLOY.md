@@ -31,13 +31,16 @@ ssh truman@89.167.41.185 'git -C /var/www/templesofrefuge pull --ff-only'
 
 Confirms `/var/www/templesofrefuge/checkout-worker/src/node-server.js` exists on the box.
 
-## 3. Service user + secrets
+## 3. Secrets
+
+The systemd unit uses `DynamicUser` (a throwaway user), so there's no user or
+group to create. systemd reads the env file as root before dropping privileges,
+so it stays root-only.
 
 ```
-sudo useradd --system --no-create-home --shell /usr/sbin/nologin torcheck   # if not present
-sudo install -d -o root -g torcheck -m 750 /etc/tor-checkout
+sudo install -d -m 755 /etc/tor-checkout
 sudo cp /var/www/templesofrefuge/checkout-worker/deploy/env.example /etc/tor-checkout/env
-sudo chown root:torcheck /etc/tor-checkout/env && sudo chmod 640 /etc/tor-checkout/env
+sudo chmod 600 /etc/tor-checkout/env
 sudo nano /etc/tor-checkout/env      # paste your sk_live_ key; check ALLOWED_ORIGINS + PRODUCT_ID
 ```
 
