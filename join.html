@@ -271,23 +271,49 @@
         var sessionId = new URLSearchParams(window.location.search).get('session_id');
         if (sessionId && apiUrl) {
           hero.hidden = true;
-          fetch(apiUrl + '/session-status?session_id=' + encodeURIComponent(sessionId))
-            .then(function (r) { return r.json(); })
-            .then(function (s) {
-              if (s.status === 'complete') {
-                if (s.customer_name) {
-                  document.getElementById('member-welcome-text').textContent =
-                    'Your offering is your signature, ' + s.customer_name +
-                    '. You are a Member for life — an affiliation of the heart.';
+          var welcomeText = document.getElementById('member-welcome-text');
+          var welcomeHead = welcome.querySelector('h2');
+          var doneHead = welcomeHead ? welcomeHead.textContent : '';
+          // Acknowledge immediately so a paying donor never sees the offering grid
+          // or a blank page while Stripe settles the session.
+          if (welcomeHead) welcomeHead.textContent = 'Confirming your offering…';
+          welcome.hidden = false;
+
+          // Poll: the session can be a beat behind the redirect, and a transient
+          // network blip shouldn't dump a paid donor back onto the form.
+          var attempts = 0, maxAttempts = 6;
+          function confirmMembership() {
+            attempts++;
+            fetch(apiUrl + '/session-status?session_id=' + encodeURIComponent(sessionId))
+              .then(function (r) { return r.json(); })
+              .then(function (s) {
+                if (s.status === 'complete') {
+                  if (welcomeHead) welcomeHead.textContent = doneHead;
+                  if (s.customer_name) {
+                    welcomeText.textContent =
+                      'Your offering is your signature, ' + s.customer_name +
+                      '. You are a Member for life — an affiliation of the heart.';
+                  }
+                } else if (attempts < maxAttempts) {
+                  setTimeout(confirmMembership, 1500); // still settling — retry
+                } else {
+                  // Genuinely not completed — restore the offering form.
+                  welcome.hidden = true;
+                  if (welcomeHead) welcomeHead.textContent = doneHead;
+                  hero.hidden = false;
                 }
-                document.querySelector('.covenant-reveal').hidden = true;
-                document.querySelector('.offering-skip').hidden = true;
-                welcome.hidden = false;
-              } else {
-                hero.hidden = false; // not completed — let them try again
-              }
-            })
-            .catch(function () { hero.hidden = false; });
+              })
+              .catch(function () {
+                if (attempts < maxAttempts) {
+                  setTimeout(confirmMembership, 1500);
+                } else {
+                  welcome.hidden = true;
+                  if (welcomeHead) welcomeHead.textContent = doneHead;
+                  hero.hidden = false;
+                }
+              });
+          }
+          confirmMembership();
           return;
         }
 
