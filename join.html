@@ -422,7 +422,7 @@
         // never FX-converted. All supported currencies are two-decimal.
         var curRow = document.getElementById('currency-row');
         var curChips = Array.prototype.slice.call(curRow.querySelectorAll('.currency-chip'));
-        var customSym = custom.querySelector('span');
+        var customSym = document.querySelector('.amount-custom span');
         var chosenCurrency = 'usd';
         var curSymbol = '$';
         function applyCurrency() {
