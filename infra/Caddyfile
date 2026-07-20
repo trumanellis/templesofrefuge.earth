@@ -48,6 +48,14 @@ checkout.templesofrefuge.earth {
 	reverse_proxy 127.0.0.1:8787
 }
 
+# Indra's Network — donation gateway (Rust, indras-donation-gateway in the
+# agent1 repo). Turns a paid Stripe session into a one-shot founding-gift code
+# the app redeems at first launch. Bound to localhost:8788 by its systemd
+# service; claims ledger persists in /var/lib/indras-donation-gateway.
+api.templesofrefuge.earth {
+	reverse_proxy 127.0.0.1:8788
+}
+
 # --- OPTIONAL, later ---
 # Expose the relay admin API over TLS on a subdomain instead of only localhost.
 # Leave commented for the infra-only pass (admin stays bound to 127.0.0.1:9090).
