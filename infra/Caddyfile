@@ -1,42 +1,74 @@
 # /etc/caddy/Caddyfile
-# Serves both static sites with automatic HTTPS (Let's Encrypt).
+# Serves the sibling static sites with automatic HTTPS (Let's Encrypt).
 # Caddy provisions a certificate per hostname once DNS points at this box.
+#
+# Each static site uses the handle{} form (not a bare file_server) so the
+# `/_deploy` auto-deploy hook can sit alongside the file server: POST /_deploy
+# is reverse-proxied to the webhook-deploy service (127.0.0.1:9000), which
+# git-pulls the matching /var/www checkout (routed by Host). All three sites
+# are registered in /etc/webhook-deploy/sites.json. See
+# syncengine.earth/deploy/README.md.
+#
+# IMPORTANT: keep the /_deploy handlers when editing — removing them silently
+# breaks push-to-deploy for that site.
 
 templesofrefuge.earth, www.templesofrefuge.earth {
-	root * /var/www/templesofrefuge
-	file_server
 	encode zstd gzip
-
-	# Static-site niceties
 	header {
-		# modest caching for assets; HTML stays fresh
 		?Cache-Control "public, max-age=3600"
+	}
+
+	handle /_deploy {
+		reverse_proxy 127.0.0.1:9000
+	}
+	handle {
+		root * /var/www/templesofrefuge
+		file_server
 	}
 }
 
 syncengine.earth, www.syncengine.earth {
-	root * /var/www/syncengine
-	file_server
 	encode zstd gzip
-
 	header {
 		?Cache-Control "public, max-age=3600"
+	}
+
+	handle /_deploy {
+		reverse_proxy 127.0.0.1:9000
+	}
+
+	# App downloads (the .dmg/.apk + pick-your-platform page). Served from a
+	# non-git dir so the large binaries stay out of the repo and auto-deploy.
+	# DOWNLOAD_ARTIFACT_URL (donation gateway) points at https://syncengine.earth/get/.
+	redir /get /get/
+	handle_path /get/* {
+		root * /var/www/downloads
+		file_server
+	}
+
+	handle {
+		root * /var/www/syncengine
+		file_server
 	}
 }
 
 agualila.earth, www.agualila.earth {
-	root * /var/www/agualila
-	file_server
 	encode zstd gzip
-
 	header {
 		?Cache-Control "public, max-age=3600"
 	}
+
+	handle /_deploy {
+		reverse_proxy 127.0.0.1:9000
+	}
+	handle {
+		root * /var/www/agualila
+		file_server
+	}
 }
 
-# Work tracker — Node/Fastify app (see ../work.agualila.earth), bound to
-# localhost:3200 by the work-agualila systemd service. Caddy terminates TLS
-# and proxies; the app never binds a public port.
+# Work tracker — Node/Fastify app, bound to localhost:3200 by the work-agualila
+# systemd service. Caddy terminates TLS and proxies; the app never binds public.
 work.agualila.earth {
 	reverse_proxy 127.0.0.1:3200
 }
@@ -58,7 +90,6 @@ api.templesofrefuge.earth {
 
 # --- OPTIONAL, later ---
 # Expose the relay admin API over TLS on a subdomain instead of only localhost.
-# Leave commented for the infra-only pass (admin stays bound to 127.0.0.1:9090).
 # sync.syncengine.earth {
 # 	reverse_proxy 127.0.0.1:9090
 # }
