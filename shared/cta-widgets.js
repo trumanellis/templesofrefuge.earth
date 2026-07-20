@@ -56,6 +56,13 @@
       ? 'http://localhost:8787'
       : 'https://checkout.templesofrefuge.earth',
 
+    // Donation gateway base URL — /claim turns a paid Stripe session into the
+    // one-time founding-gift code the SyncEngine app redeems at first launch.
+    // Shown on the post-donation screen (same as syncengine.earth/join).
+    GATEWAY_API_URL: isLocal
+      ? 'http://localhost:8788'
+      : 'https://api.templesofrefuge.earth',
+
     // Optional / future: opencollective.com collective URL. When set, the join
     // page can prefer this transparency-aligned option over Stripe.
     OPENCOLLECTIVE_URL: 'REPLACE_ME_OPENCOLLECTIVE_URL',

@@ -136,6 +136,27 @@
         font-size:clamp(1.5rem,4vw,2rem);color:var(--t-tx);margin:0 0 1rem}
       .member-welcome p{color:var(--t-t2);line-height:1.8;max-width:42ch;margin:0 auto}
 
+      /* ── Founding-gift code (from the donation gateway) ── */
+      .member-code{margin-top:1.75rem;padding-top:1.6rem;border-top:1px solid var(--t-bd)}
+      .member-code-label{font-family:var(--s-font);font-size:.66rem;font-weight:500;
+        letter-spacing:.28em;text-transform:uppercase;color:var(--t-ac);margin:0 0 .85rem}
+      .member-code-row{display:flex;align-items:center;justify-content:center;
+        gap:.65rem;flex-wrap:wrap}
+      .member-code-value{font-family:ui-monospace,"SF Mono",Menlo,monospace;
+        font-size:.82rem;letter-spacing:.02em;color:var(--t-tx);background:var(--t-b2);
+        border:1px solid var(--t-bd);border-radius:10px;padding:.6rem .85rem;
+        word-break:break-all;max-width:100%}
+      .member-code-copy{font-family:var(--s-font);font-size:.7rem;letter-spacing:.08em;
+        text-transform:uppercase;color:var(--t-t2);background:var(--t-cd);
+        border:1px solid var(--t-bd);border-radius:10px;padding:.6rem .85rem;
+        cursor:pointer;transition:color .2s,border-color .2s}
+      .member-code-copy:hover{color:var(--t-ac);border-color:var(--t-ac)}
+      .member-code-note{font-size:.8rem;color:var(--t-mt);max-width:46ch;
+        margin:.9rem auto 0;line-height:1.6}
+      .member-code-get{display:inline-block;margin-top:1.1rem;color:var(--t-ac);
+        font-weight:500;text-decoration:none}
+      .member-code-get:hover{text-decoration:underline}
+
       @media(max-width:768px){.join-shell{padding:2rem 1.25rem 3rem}}
     </style>
 </head>
@@ -226,6 +247,17 @@
                 <h2>Welcome, Member</h2>
                 <p id="member-welcome-text">Your offering is your signature. You are a Member for life
                    — an affiliation of the heart.</p>
+                <div class="member-code" id="member-code" hidden>
+                    <p class="member-code-label">Your founding-gift code</p>
+                    <div class="member-code-row">
+                        <code class="member-code-value" id="member-code-value"></code>
+                        <button type="button" class="member-code-copy" id="member-code-copy">Copy</button>
+                    </div>
+                    <p class="member-code-note">SyncEngine asks for this code the first time it opens.
+                        Enter it there and your founding gift is sealed to your name — one use, yours
+                        alone, recognized by every peer you meet.</p>
+                    <a class="member-code-get" id="member-code-get" hidden>Get the app →</a>
+                </div>
             </section>
         </div>
     </main>
@@ -298,6 +330,7 @@
                       'Your offering is your signature, ' + s.customer_name +
                       '. You are a Member for life — an affiliation of the heart.';
                   }
+                  fetchFoundingCode();
                 } else if (attempts < maxAttempts) {
                   setTimeout(confirmMembership, 1500); // still settling — retry
                 } else {
@@ -318,6 +351,40 @@
               });
           }
           confirmMembership();
+
+          // The founding-gift code: the donation gateway records the session when
+          // Stripe's webhook lands — that can trail the redirect by a few seconds
+          // (404 until then), so poll patiently. If the gateway isn't reachable the
+          // welcome stands on its own; revisiting this same URL recovers the code.
+          var gatewayUrl = CTAWidgets.isConfigured(cfg.GATEWAY_API_URL) ? cfg.GATEWAY_API_URL : null;
+          var codeAttempts = 0, maxCodeAttempts = 10;
+          function fetchFoundingCode() {
+            if (!gatewayUrl) return;
+            codeAttempts++;
+            fetch(gatewayUrl + '/claim?session_id=' + encodeURIComponent(sessionId))
+              .then(function (r) {
+                if (!r.ok) throw new Error('not recorded yet');
+                return r.json();
+              })
+              .then(function (c) {
+                document.getElementById('member-code-value').textContent = c.nonce;
+                var get = document.getElementById('member-code-get');
+                if (c.download_url) { get.href = c.download_url; get.hidden = false; }
+                document.getElementById('member-code').hidden = false;
+              })
+              .catch(function () {
+                if (codeAttempts < maxCodeAttempts) setTimeout(fetchFoundingCode, 3000);
+              });
+          }
+
+          var copyBtn = document.getElementById('member-code-copy');
+          copyBtn.addEventListener('click', function () {
+            navigator.clipboard.writeText(document.getElementById('member-code-value').textContent)
+              .then(function () {
+                copyBtn.textContent = 'Copied';
+                setTimeout(function () { copyBtn.textContent = 'Copy'; }, 2000);
+              });
+          });
           return;
         }
 
