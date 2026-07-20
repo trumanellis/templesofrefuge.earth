@@ -17,6 +17,10 @@
 
     <link rel="stylesheet" href="/shared/document.css">
     <style>
+      /* The [hidden] attribute must win over class display rules (e.g. the grid
+         below) — otherwise hero.hidden=true can't hide the offering panel. */
+      [hidden]{display:none !important}
+
       /* ── Layout: asymmetric two-column membership page ── */
       .join-shell{max-width:1060px;margin:0 auto;padding:2.5rem 2rem 4rem}
       .offering-hero{display:grid;grid-template-columns:1fr;gap:2.25rem;align-items:start}
