@@ -296,19 +296,6 @@
             margin: 0 auto 2.5rem;
             max-width: 44ch;
         }
-        .lineage {
-            display: flex; flex-wrap: wrap; justify-content: center;
-            gap: 0.75rem 1rem;
-            max-width: 720px; margin: 3rem auto 0;
-        }
-        .lineage span {
-            font-family: var(--s-display);
-            font-size: 0.66rem; letter-spacing: 0.22em; text-transform: uppercase;
-            color: var(--t-mt);
-            border: 1px solid var(--t-bd); border-radius: 999px;
-            padding: 0.5rem 1.1rem;
-        }
-
         /* ---- Ways to practice ---- */
         .practice-grid {
             display: grid;
@@ -332,6 +319,154 @@
             display: block; margin-top: 1rem;
             font-family: var(--s-display); font-size: 0.7rem;
             letter-spacing: 0.2em; text-transform: uppercase; color: var(--t-ac);
+        }
+        /* Cards double as controls for the configuration animation */
+        .practice-card { cursor: pointer; position: relative; }
+        .practice-card::after {
+            content: ""; position: absolute; left: 0; top: 0; bottom: 0;
+            width: 2px; background: var(--t-ac);
+            opacity: 0; transition: opacity 0.45s ease;
+        }
+        .practice-card.is-active::after { opacity: 1; }
+        .practice-card.is-active { background: var(--t-sf); }
+        .practice-card.is-active .practice-num { color: var(--t-ac); }
+
+        /* ---- Configuration animation stage ---- */
+        .practice-stage {
+            --stage-core:#fff6df;
+            --stage-glow:rgba(255,205,110,0.85);
+            --stage-link:rgba(255,241,214,0.5);
+            position: relative;
+            width: 100%; max-width: 640px;
+            /* Landscape frame = the portrait mat (960x1371) turned 90deg */
+            margin: 0 auto 3.5rem; aspect-ratio: 1371 / 960;
+            border-radius: 16px; overflow: hidden;
+            border: 1px solid var(--t-bd);
+            background: #05060a;
+            box-shadow: 0 30px 70px -40px rgba(0,0,0,0.8);
+            cursor: pointer; user-select: none;
+        }
+        /* The source image is portrait; rotate it 90deg and size its layout box
+           to the swapped dimensions so it fills the landscape frame uncropped. */
+        .practice-stage .stage-bg {
+            position: absolute; top: 50%; left: 50%;
+            width: 70.02%; height: 142.81%;
+            transform: translate(-50%, -50%) rotate(90deg);
+            object-fit: cover; opacity: 0.9;
+        }
+        .practice-stage .stage-veil {
+            position: absolute; inset: 0;
+            background:
+                radial-gradient(circle at 50% 50%, transparent 35%, rgba(5,6,10,0.55) 100%),
+                linear-gradient(180deg, rgba(5,6,10,0.35), transparent 30%);
+        }
+        .practice-stage .stage-overlay {
+            position: absolute; inset: 0; width: 100%; height: 100%;
+            overflow: visible;
+        }
+        .practice-stage .cfg {
+            opacity: 0; transition: opacity 0.7s ease; pointer-events: none;
+        }
+        .practice-stage[data-mode="solo"]    .cfg-solo,
+        .practice-stage[data-mode="partner"] .cfg-partner,
+        .practice-stage[data-mode="family"]  .cfg-family { opacity: 1; }
+
+        .practice-stage .person {
+            fill: var(--stage-core);
+            filter: drop-shadow(0 0 3px var(--stage-glow))
+                    drop-shadow(0 0 7px var(--stage-glow));
+            transform-box: fill-box; transform-origin: center;
+            transform: scale(0);
+        }
+        .practice-stage .cfg-solo.is-live    .person,
+        .practice-stage .cfg-partner.is-live .person,
+        .practice-stage .cfg-family.is-live  .person {
+            animation: nodePop 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards,
+                       nodeBreathe 3.4s ease-in-out 0.7s infinite;
+        }
+        /* Within each group the altar/ripple circles precede the persons in
+           document order, so :nth-of-type is offset by those leading circles:
+           partner altar = circle 1 (persons 2-3); family altar = circle 1 (persons 2-7). */
+        .practice-stage .cfg-partner.is-live .person:nth-of-type(3) { animation-delay: 0.12s, 0.82s; }
+        .practice-stage .cfg-family.is-live  .person:nth-of-type(2) { animation-delay: 0s,    0.70s; }
+        .practice-stage .cfg-family.is-live  .person:nth-of-type(3) { animation-delay: 0.09s, 0.79s; }
+        .practice-stage .cfg-family.is-live  .person:nth-of-type(4) { animation-delay: 0.18s, 0.88s; }
+        .practice-stage .cfg-family.is-live  .person:nth-of-type(5) { animation-delay: 0.27s, 0.97s; }
+        .practice-stage .cfg-family.is-live  .person:nth-of-type(6) { animation-delay: 0.36s, 1.06s; }
+        .practice-stage .cfg-family.is-live  .person:nth-of-type(7) { animation-delay: 0.45s, 1.15s; }
+
+        .practice-stage .link {
+            fill: none; stroke: var(--stage-link); stroke-width: 0.6;
+            stroke-linejoin: round;
+            stroke-dasharray: var(--len, 400); stroke-dashoffset: var(--len, 400);
+        }
+        .practice-stage .cfg.is-live .link {
+            animation: linkDraw 1.1s ease 0.35s forwards;
+        }
+        .practice-stage .altar {
+            fill: var(--stage-glow);
+            filter: drop-shadow(0 0 4px var(--stage-glow));
+            transform-box: fill-box; transform-origin: center; transform: scale(0);
+        }
+        .practice-stage .cfg.is-live .altar { animation: nodePop 0.5s ease 0.3s forwards; }
+
+        .practice-stage .ripple {
+            fill: none; stroke: var(--stage-glow); stroke-width: 0.5;
+            transform-box: fill-box; transform-origin: center; opacity: 0;
+        }
+        .practice-stage .cfg-solo.is-live .ripple { animation: ripple 2.8s ease-out infinite; }
+        .practice-stage .cfg-solo.is-live .ripple.r2 { animation-delay: 1.4s; }
+
+        .practice-stage .stage-caption {
+            position: absolute; left: 1.1rem; bottom: 1rem; z-index: 2;
+            display: flex; align-items: baseline; gap: 0.55rem;
+            color: #f4efe4; text-shadow: 0 1px 8px rgba(0,0,0,0.7);
+        }
+        .practice-stage .cap-num {
+            font-family: var(--s-display); font-style: italic;
+            font-size: 1.15rem; color: var(--stage-glow);
+        }
+        .practice-stage .cap-label {
+            font-family: var(--s-display); font-size: 1.35rem; letter-spacing: 0.02em;
+        }
+        .practice-stage .stage-dots {
+            position: absolute; right: 1.1rem; bottom: 1.25rem; z-index: 2;
+            display: flex; gap: 0.5rem;
+        }
+        .practice-stage .stage-dots i {
+            width: 6px; height: 6px; border-radius: 50%;
+            background: rgba(255,255,255,0.3); transition: all 0.4s ease;
+        }
+        .practice-stage[data-mode="solo"]    .stage-dots i:nth-child(1),
+        .practice-stage[data-mode="partner"] .stage-dots i:nth-child(2),
+        .practice-stage[data-mode="family"]  .stage-dots i:nth-child(3) {
+            background: var(--stage-glow); box-shadow: 0 0 6px var(--stage-glow);
+        }
+
+        @keyframes nodePop {
+            0% { transform: scale(0); }
+            70% { transform: scale(1.18); }
+            100% { transform: scale(1); }
+        }
+        @keyframes nodeBreathe {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.12); }
+        }
+        @keyframes linkDraw { to { stroke-dashoffset: 0; } }
+        @keyframes ripple {
+            0% { transform: scale(0.4); opacity: 0.8; }
+            100% { transform: scale(3.2); opacity: 0; }
+        }
+        @media (max-width: 720px) {
+            .practice-stage { max-width: 460px; margin-bottom: 2.5rem; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .practice-stage .person,
+            .practice-stage .altar { transform: scale(1); }
+            .practice-stage .cfg.is-live .person,
+            .practice-stage .cfg.is-live .altar,
+            .practice-stage .cfg-solo.is-live .ripple { animation: none; }
+            .practice-stage .link { stroke-dashoffset: 0; }
         }
 
         /* ---- Material ---- */
@@ -586,7 +721,7 @@
                 <h2>One Pattern, Two Skies</h2>
                 <p class="lead">
                     The same living geometry rendered in two atmospheres — choose the one
-                    that calls you, or hold space for both.
+                    that calls you, or claim both.
                 </p>
             </div>
 
@@ -655,13 +790,6 @@
                     granite at the Osirion temple in Abydos, Egypt. Leonardo da Vinci doodled
                     extensively with the pattern in the Codex Atlanticus.
                 </p>
-                <div class="lineage">
-                    <span>Assyrian Thresholds</span>
-                    <span>Roman Mosaics</span>
-                    <span>Islamic Art</span>
-                    <span>Osirion · Abydos</span>
-                    <span>Da Vinci · Codex Atlanticus</span>
-                </div>
             </div>
         </div>
     </section>
@@ -677,8 +805,54 @@
                 </p>
             </div>
 
+            <!-- Configuration animation: circles arrange on the Metatron backdrop -->
+            <div class="practice-stage fade-up" id="practiceStage" data-mode="solo"
+                 role="button" tabindex="0" aria-label="Practice configurations — tap to advance">
+                <img class="stage-bg" alt=""
+                     src="/assets/web/fractal-metatron-960.jpg"
+                     srcset="/assets/web/fractal-metatron-480.jpg 480w,
+                             /assets/web/fractal-metatron-960.jpg 960w"
+                     sizes="640px" loading="lazy" decoding="async">
+                <div class="stage-veil"></div>
+                <svg class="stage-overlay" viewBox="0 0 142.8 100"
+                     preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+                    <!-- Node coordinates measured against the rotated mat's
+                         Metatron hexagram: 6 outer vertices + golden center. -->
+                    <!-- Solo: one presence at the heart -->
+                    <g class="cfg cfg-solo">
+                        <circle class="ripple"    cx="71.5" cy="50" r="6"></circle>
+                        <circle class="ripple r2" cx="71.5" cy="50" r="6"></circle>
+                        <circle class="person"    cx="71.5" cy="50" r="4.6"></circle>
+                    </g>
+                    <!-- Partner: two facing each other across the mat, altar between -->
+                    <g class="cfg cfg-partner">
+                        <line class="link" style="--len:90" x1="27" y1="50" x2="117" y2="50"></line>
+                        <circle class="altar"  cx="71.5" cy="50" r="1.9"></circle>
+                        <circle class="person" cx="27"   cy="50" r="4.8"></circle>
+                        <circle class="person" cx="117"  cy="50" r="4.8"></circle>
+                    </g>
+                    <!-- Family: up to six around the geometry -->
+                    <g class="cfg cfg-family">
+                        <polygon class="link" style="--len:281"
+                                 points="117,50 96,9 47,9 27,50 47,91 96,91"></polygon>
+                        <circle class="altar"  cx="71.5" cy="50" r="1.6"></circle>
+                        <circle class="person" cx="117"  cy="50" r="4.4"></circle>
+                        <circle class="person" cx="96"   cy="9"  r="4.4"></circle>
+                        <circle class="person" cx="47"   cy="9"  r="4.4"></circle>
+                        <circle class="person" cx="27"   cy="50" r="4.4"></circle>
+                        <circle class="person" cx="47"   cy="91" r="4.4"></circle>
+                        <circle class="person" cx="96"   cy="91" r="4.4"></circle>
+                    </g>
+                </svg>
+                <div class="stage-caption">
+                    <span class="cap-num" data-cap-num>i.</span>
+                    <span class="cap-label" data-cap-label>Solo</span>
+                </div>
+                <div class="stage-dots"><i></i><i></i><i></i></div>
+            </div>
+
             <div class="practice-grid fade-up">
-                <div class="practice-card">
+                <div class="practice-card" data-mode="solo">
                     <span class="practice-num">i.</span>
                     <h3>Solo</h3>
                     <p>
@@ -687,7 +861,7 @@
                         simple presence at the heart of the pattern.
                     </p>
                 </div>
-                <div class="practice-card">
+                <div class="practice-card" data-mode="partner">
                     <span class="practice-num">ii.</span>
                     <h3>Partner</h3>
                     <p>
@@ -696,7 +870,7 @@
                         corners, back-to-back, or facing forward side-by-side.
                     </p>
                 </div>
-                <div class="practice-card">
+                <div class="practice-card" data-mode="family">
                     <span class="practice-num">iii.</span>
                     <h3>Family</h3>
                     <p>
@@ -761,6 +935,16 @@
         .chip:hover{border-color:var(--t-ac);color:var(--t-tx)}
         .chip[aria-pressed="true"]{border-color:var(--t-ac);color:var(--t-tx);
             background:color-mix(in srgb,var(--t-ac) 12%,transparent)}
+        .order-row-print{flex-wrap:wrap}
+        .edition-preview{flex-basis:100%;display:flex;gap:1rem;align-items:center;
+            margin-top:1rem;padding:.85rem;border:1px solid var(--t-bd);border-radius:14px;
+            background:var(--t-b2)}
+        .edition-preview img{width:96px;height:144px;object-fit:cover;border-radius:8px;
+            flex-shrink:0;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+        .edition-preview-body{display:flex;flex-direction:column;gap:.35rem}
+        .edition-preview-name{font-family:var(--s-display);font-size:.95rem;
+            letter-spacing:.02em;color:var(--t-tx)}
+        .edition-preview-desc{font-size:.8rem;line-height:1.45;color:var(--t-t2)}
         .qty{display:flex;align-items:center;gap:1rem}
         .qty-btn{width:2rem;height:2rem;border-radius:50%;border:1px solid var(--t-bd);
             background:var(--t-b2);color:var(--t-tx);font-size:1.1rem;line-height:1;cursor:pointer;
@@ -809,11 +993,18 @@
                         <button type="button" class="chip" data-cur="gbp" data-sym="£" aria-pressed="false">GBP £</button>
                     </div>
                 </div>
-                <div class="order-row">
+                <div class="order-row order-row-print">
                     <span class="order-label">Print</span>
                     <div class="chips" id="edition-row">
                         <button type="button" class="chip" data-ed="cosmic" aria-pressed="true">Cosmic</button>
                         <button type="button" class="chip" data-ed="heaven-on-earth" aria-pressed="false">Heaven on Earth</button>
+                    </div>
+                    <div class="edition-preview" id="edition-preview">
+                        <img id="edition-preview-img" src="assets/web/fractal-metatron-480.jpg" alt="" decoding="async" width="96" height="144">
+                        <div class="edition-preview-body">
+                            <span class="edition-preview-name" id="edition-preview-name">Cosmic</span>
+                            <span class="edition-preview-desc" id="edition-preview-desc">Metatron's Cube over a deep-space starfield — indigo, gold and green.</span>
+                        </div>
                     </div>
                 </div>
                 <div class="order-row">
@@ -955,13 +1146,34 @@
             });
             state.currency = b.getAttribute('data-cur'); render();
         });
+        var EDITIONS = {
+            'cosmic': {
+                img: 'assets/web/fractal-metatron-480.jpg',
+                name: 'Cosmic',
+                desc: "Metatron's Cube over a deep-space starfield — indigo, gold and green."
+            },
+            'heaven-on-earth': {
+                img: 'assets/web/heaven-on-earth-480.jpg',
+                name: 'Heaven on Earth',
+                desc: "Metatron's Cube over a soft iridescent watercolor sky with butterflies."
+            }
+        };
+        function updateEditionPreview() {
+            var ed = EDITIONS[state.edition]; if (!ed) return;
+            $('edition-preview-img').src = ed.img;
+            $('edition-preview-img').alt = ed.name + ' print';
+            $('edition-preview-name').textContent = ed.name;
+            $('edition-preview-desc').textContent = ed.desc;
+        }
         $('edition-row').addEventListener('click', function (e) {
             var b = e.target.closest('.chip'); if (!b) return;
             Array.prototype.forEach.call(this.children, function (c) {
                 c.setAttribute('aria-pressed', c === b ? 'true' : 'false');
             });
             state.edition = b.getAttribute('data-ed');
+            updateEditionPreview();
         });
+        updateEditionPreview();
         $('qty-inc').addEventListener('click', function () {
             state.qty = Math.min(10, state.qty + 1); $('qty-val').textContent = state.qty; render();
         });
@@ -1030,6 +1242,84 @@
             });
         }, { threshold: 0.1 });
         fadeEls.forEach(el => observer.observe(el));
+    </script>
+    <script>
+        // Ways-to-Practice configuration animation
+        (function practiceAnim() {
+            var stage = document.getElementById('practiceStage');
+            if (!stage) return;
+
+            var MODES = [
+                { key: 'solo',    num: 'i.',   label: 'Solo' },
+                { key: 'partner', num: 'ii.',  label: 'Partner' },
+                { key: 'family',  num: 'iii.', label: 'Family' }
+            ];
+            var cards = Array.prototype.slice.call(
+                document.querySelectorAll('.practice-card[data-mode]'));
+            var capNum = stage.querySelector('[data-cap-num]');
+            var capLabel = stage.querySelector('[data-cap-label]');
+            var reduce = window.matchMedia('(prefers-reduce-motion: reduce)').matches ||
+                         window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            var idx = 0, timer = null, pauseUntil = 0;
+            var CYCLE = 3600, PAUSE = 7000;
+
+            function show(i) {
+                idx = (i + MODES.length) % MODES.length;
+                var m = MODES[idx];
+                stage.setAttribute('data-mode', m.key);
+                capNum.textContent = m.num;
+                capLabel.textContent = m.label;
+                // retrigger entrance animations by toggling the live class
+                stage.querySelectorAll('.cfg').forEach(function (g) {
+                    g.classList.remove('is-live');
+                });
+                var active = stage.querySelector('.cfg-' + m.key);
+                if (active) { void active.offsetWidth; active.classList.add('is-live'); }
+                cards.forEach(function (c) {
+                    c.classList.toggle('is-active', c.getAttribute('data-mode') === m.key);
+                });
+            }
+
+            function tick() {
+                if (Date.now() >= pauseUntil) show(idx + 1);
+            }
+            function start() {
+                if (timer || reduce) return;
+                timer = setInterval(tick, CYCLE);
+            }
+            function jumpTo(key, hold) {
+                var i = MODES.findIndex(function (m) { return m.key === key; });
+                if (i < 0) return;
+                if (hold) pauseUntil = Date.now() + PAUSE;
+                show(i);
+            }
+
+            cards.forEach(function (c) {
+                var key = c.getAttribute('data-mode');
+                c.addEventListener('mouseenter', function () { jumpTo(key, true); });
+                c.addEventListener('click', function () { jumpTo(key, true); });
+            });
+            stage.addEventListener('click', function () {
+                pauseUntil = Date.now() + PAUSE; show(idx + 1);
+            });
+            stage.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault(); pauseUntil = Date.now() + PAUSE; show(idx + 1);
+                }
+            });
+            // Pause the loop when the section scrolls out of view
+            if ('IntersectionObserver' in window) {
+                new IntersectionObserver(function (entries) {
+                    entries.forEach(function (en) {
+                        if (en.isIntersecting) start();
+                        else if (timer) { clearInterval(timer); timer = null; }
+                    });
+                }, { threshold: 0.25 }).observe(stage);
+            } else { start(); }
+
+            show(0);
+        })();
     </script>
 </body>
 </html>
