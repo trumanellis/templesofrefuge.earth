@@ -13,8 +13,10 @@
 //   PRODUCT_ID         — the Stripe product each offering is recorded against
 //
 // Routes:
-//   POST /create-session   { amount }        -> { client_secret }
-//   GET  /session-status  ?session_id=...     -> { status, customer_email, ... }
+//   POST /create-session   { amount, currency }                 -> { client_secret }  (offering)
+//   POST /create-session   { order_type:'ceremony-mat', ... }   -> { client_secret }  (product)
+//   GET  /session-status  ?session_id=...                        -> { status, customer_email, ... }
+//   GET  /founding-status                                        -> { remaining, open, founding_price, ... }
 
 const STRIPE_API = 'https://api.stripe.com/v1';
 
@@ -27,6 +29,30 @@ const COVENANT_MESSAGE =
   'By making this offering you sign the Covenant and affirm the One Commandment — ' +
   'to recognize the divine in every Other and treat them as an extension of yourself. ' +
   'Membership is for life.';
+
+// ── The Ceremony Mat — first physical offering ──────────────────────────────
+// A fixed-catalog product, so its price is SERVER-authoritative: the client
+// asks to buy a mat, and this Worker decides the price. The founding tier is
+// offered for the first MAT_FOUNDING_LIMIT units sold, after which the regular
+// price applies automatically (see foundingSold + createSession). The numeral
+// is charged as-is per currency (247 → $247 / €247 / £247), never FX-converted.
+const MAT_FOUNDING_CENTS = 24700; // founding: 247
+const MAT_REGULAR_CENTS  = 33300; // regular: 333
+const MAT_FOUNDING_LIMIT = 100;   // units at the founding price
+const MAT_MESSAGE =
+  'Thank you for reserving a Ceremony Mat — the first physical offering of ' +
+  'Temples of Refuge. We will email you shipping details as the founding run ' +
+  'is prepared.';
+
+// return_url is allow-listed to our own pages so it can never be an open redirect.
+const RETURN_PATHS = new Set(['/join.html', '/ceremony-mats.html']);
+
+// Countries the mat ships to: US, UK, EU-27, plus EFTA neighbours.
+const SHIP_COUNTRIES = [
+  'US', 'GB', 'IE', 'PT', 'ES', 'FR', 'DE', 'NL', 'BE', 'LU', 'IT', 'AT',
+  'DK', 'SE', 'FI', 'EE', 'LV', 'LT', 'PL', 'CZ', 'SK', 'SI', 'HR', 'HU',
+  'RO', 'BG', 'GR', 'CY', 'MT', 'CH', 'NO',
+];
 
 export default {
   async fetch(request, env) {
@@ -46,6 +72,9 @@ export default {
       }
       if (request.method === 'GET' && url.pathname === '/session-status') {
         return await sessionStatus(url, env, okOrigin);
+      }
+      if (request.method === 'GET' && url.pathname === '/founding-status') {
+        return await foundingStatus(env, okOrigin);
       }
       if (request.method === 'GET' && url.pathname === '/substack-posts') {
         return await substackPosts(env, okOrigin);
@@ -98,21 +127,16 @@ async function createSession(request, env, origin) {
     return json({ error: 'Invalid request body' }, 400, origin);
   }
 
-  // Amount arrives in minor units (the numeral × 100) so we never do float math.
-  const cents = Math.round(Number(body.amount));
-  if (!Number.isFinite(cents) || cents < 100 || cents > 1000000) {
-    return json({ error: 'Offering must be between 1 and 10,000.' }, 400, origin);
-  }
-
-  // The donor's chosen currency — the numeral is charged as-is in it (11 → €11),
+  // The chosen currency — the numeral is charged as-is in it (247 → €247),
   // never converted. Defaults to USD; anything off the allowlist is rejected.
   const currency = String(body.currency || 'usd').toLowerCase();
   if (!ALLOWED_CURRENCIES.has(currency)) {
     return json({ error: 'Unsupported currency.' }, 400, origin);
   }
 
-  // Send the donor back to the same origin that launched checkout.
-  const returnUrl = `${origin}/join.html?session_id={CHECKOUT_SESSION_ID}`;
+  // Send the buyer back to the page that launched checkout (allow-listed).
+  const returnPath = RETURN_PATHS.has(body.return_path) ? body.return_path : '/join.html';
+  const returnUrl = `${origin}${returnPath}?session_id={CHECKOUT_SESSION_ID}`;
 
   const form = new URLSearchParams();
   form.set('mode', 'payment');
@@ -121,17 +145,111 @@ async function createSession(request, env, origin) {
   form.set('ui_mode', 'embedded_page');
   form.set('return_url', returnUrl);
   form.set('payment_method_types[0]', 'card');
-  // Disable Adaptive Pricing so Stripe never FX-converts the offering into a
-  // local currency — the sacred numeral must stay exact (no $11 → €10.04).
+  // Disable Adaptive Pricing so Stripe never FX-converts the numeral into a
+  // local currency — the sacred numeral must stay exact (no $247 → €231).
   form.set('adaptive_pricing[enabled]', 'false');
-  form.set('line_items[0][quantity]', '1');
   form.set('line_items[0][price_data][currency]', currency);
-  form.set('line_items[0][price_data][product]', env.PRODUCT_ID);
-  form.set('line_items[0][price_data][unit_amount]', String(cents));
-  form.set('custom_text[submit][message]', COVENANT_MESSAGE);
+
+  if (body.order_type === 'ceremony-mat') {
+    // ── The Ceremony Mat (physical product) ──
+    // Price is SERVER-authoritative — never trusted from the client — and the
+    // founding tier closes automatically once MAT_FOUNDING_LIMIT units sell.
+    const quantity = clampInt(body.quantity, 1, 10, 1);
+    let sold = 0;
+    try { sold = await foundingSold(env); } catch { sold = 0; } // fail open to founding
+    const founding = sold < MAT_FOUNDING_LIMIT;
+    const cents = founding ? MAT_FOUNDING_CENTS : MAT_REGULAR_CENTS;
+
+    const edition =
+      body.edition === 'heaven-on-earth' ? 'heaven-on-earth' :
+      body.edition === 'cosmic' ? 'cosmic' : 'unspecified';
+    const editionLabel =
+      edition === 'heaven-on-earth' ? 'Heaven on Earth print' :
+      edition === 'cosmic' ? 'Cosmic print' : 'print chosen after order';
+
+    form.set('line_items[0][quantity]', String(quantity));
+    form.set('line_items[0][price_data][unit_amount]', String(cents));
+    form.set('line_items[0][price_data][product_data][name]',
+      'The Ceremony Mat — ' + (founding ? 'Founding Edition' : 'Standard Edition'));
+    form.set('line_items[0][price_data][product_data][description]',
+      '140 × 210 cm coconut-rubber ceremony mat · ' + editionLabel + ' · shipping included');
+
+    // Physical fulfilment — collect a shipping address and phone number.
+    SHIP_COUNTRIES.forEach((c, i) =>
+      form.set(`shipping_address_collection[allowed_countries][${i}]`, c));
+    form.set('phone_number_collection[enabled]', 'true');
+    form.set('custom_text[submit][message]', MAT_MESSAGE);
+
+    // Identify the order for fulfilment and the founding count. The count is
+    // taken over PaymentIntents (searchable), so mirror the metadata onto the PI.
+    const meta = {
+      order_type: 'ceremony-mat',
+      edition,
+      tier: founding ? 'founding' : 'regular',
+      units: String(quantity),
+    };
+    for (const [k, v] of Object.entries(meta)) {
+      form.set(`metadata[${k}]`, v);
+      form.set(`payment_intent_data[metadata][${k}]`, v);
+    }
+  } else {
+    // ── Offering / membership (unchanged) ──
+    // Amount arrives in minor units (the numeral × 100) so we never do float math.
+    const cents = Math.round(Number(body.amount));
+    if (!Number.isFinite(cents) || cents < 100 || cents > 1000000) {
+      return json({ error: 'Offering must be between 1 and 10,000.' }, 400, origin);
+    }
+    form.set('line_items[0][quantity]', '1');
+    form.set('line_items[0][price_data][unit_amount]', String(cents));
+    form.set('line_items[0][price_data][product]', env.PRODUCT_ID);
+    form.set('custom_text[submit][message]', COVENANT_MESSAGE);
+  }
 
   const session = await stripe('/checkout/sessions', env, { method: 'POST', form });
   return json({ client_secret: session.client_secret }, 200, origin);
+}
+
+// Clamp a client-supplied integer into [min,max], falling back to dflt.
+function clampInt(v, min, max, dflt) {
+  const n = Math.floor(Number(v));
+  if (!Number.isFinite(n)) return dflt;
+  return Math.min(max, Math.max(min, n));
+}
+
+// How many Ceremony Mat units have sold, summed over succeeded PaymentIntents
+// tagged order_type=ceremony-mat. Stripe's search index is eventually consistent
+// (a paid order can take up to ~a minute to appear), which is fine for a scarcity
+// counter. Paginates in case there are ever more than 100 matching intents.
+async function foundingSold(env) {
+  let sold = 0;
+  let page = null;
+  const query = "status:'succeeded' AND metadata['order_type']:'ceremony-mat'";
+  do {
+    const qs = new URLSearchParams({ query, limit: '100' });
+    if (page) qs.set('page', page);
+    const res = await stripe(`/payment_intents/search?${qs.toString()}`, env);
+    for (const pi of res.data || []) sold += clampInt(pi.metadata?.units, 1, 10, 1);
+    page = res.has_more ? res.next_page : null;
+  } while (page);
+  return sold;
+}
+
+// Public read for the pre-order page: how many founding units remain, and the
+// two price tiers. Fails open (sold = 0) so a Stripe hiccup shows the deal
+// rather than dead-ending the buyer.
+async function foundingStatus(env, origin) {
+  if (!origin) return json({ error: 'Origin not allowed' }, 403, origin);
+  let sold = 0;
+  try { sold = await foundingSold(env); } catch { sold = 0; }
+  const remaining = Math.max(0, MAT_FOUNDING_LIMIT - sold);
+  return json({
+    limit: MAT_FOUNDING_LIMIT,
+    sold,
+    remaining,
+    open: remaining > 0,
+    founding_price: MAT_FOUNDING_CENTS / 100,
+    regular_price: MAT_REGULAR_CENTS / 100,
+  }, 200, origin);
 }
 
 async function sessionStatus(url, env, origin) {

@@ -18,6 +18,52 @@
     <meta name="twitter:description" content="Spiritual practice, ecological regeneration, and sovereign technology co-evolving.">
     <meta name="twitter:image" content="https://templesofrefuge.earth/assets/og-image.png">
 
+    <!-- Structured data: Temples of Refuge and the works it stewards -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://templesofrefuge.earth/#website",
+          "url": "https://templesofrefuge.earth/",
+          "name": "Temples of Refuge",
+          "description": "A 508(c)(1)(A) network of Temples where spiritual practice, ecological regeneration, and sovereign technology co-evolve.",
+          "publisher": { "@id": "https://templesofrefuge.earth/#org" }
+        },
+        {
+          "@type": ["Organization", "Church"],
+          "@id": "https://templesofrefuge.earth/#org",
+          "name": "Temples of Refuge",
+          "url": "https://templesofrefuge.earth/",
+          "description": "An association of churches re-binding human life to Source through direct experience, embodied practice, and regenerative relationship with Earth. Mandatorily tax-exempt under §501(c)(3) and §508(c)(1)(A). Temples of Refuge stewards three co-evolving works: spiritual practice, ecological regeneration, and sovereign technology.",
+          "foundingDate": "2024-01-17",
+          "subOrganization": [
+            {
+              "@type": "Organization",
+              "@id": "https://syncengine.earth/#org",
+              "name": "Synchronicity Engine",
+              "alternateName": "SyncEngine",
+              "url": "https://syncengine.earth/",
+              "description": "The sovereign-technology work: a peer-to-peer gift-economy app — a shared wish list where attention is the vote, service is proven, and gratitude flows onward — built on Indra's Network and stewarded by Temples of Refuge."
+            },
+            {
+              "@type": "Organization",
+              "name": "Água Lila",
+              "url": "https://agualila.earth/",
+              "description": "The first temple node — where sacred technology meets sacred land, in central Portugal."
+            }
+          ],
+          "sameAs": [
+            "https://syncengine.earth/",
+            "https://agualila.earth/",
+            "https://aeonmyths.substack.com/"
+          ]
+        }
+      ]
+    }
+    </script>
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,16 +72,23 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsvectormap@1.7.0/dist/jsvectormap.min.css">
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        /* Fallback tokens (default dark skin). theme-engine.js overrides these at
+           runtime; they keep the page styled if it loads without JS or over file://. */
+        :root{
+            --s-font:"Inter",-apple-system,system-ui,sans-serif;
+            --s-display:"Cormorant Garamond",Georgia,serif;
+            --t-bg:#09090b;--t-sf:#111114;--t-cd:#151518;--t-hv:#1c1c20;
+            --t-tx:#fafafa;--t-t2:#a0a0ab;--t-mt:#52525b;--t-dm:#3f3f46;
+            --t-bd:#27272a;--t-b2:#1c1c20;--t-bc:rgba(129,140,248,0.12);
+            --t-ac:#818cf8;--t-a2:#c084fc;
+            --t-ok:#34d399;--t-wn:#fbbf24;--t-er:#f87171;
+            --t-glass:rgba(9,9,11,0.85);--t-glass-bd:rgba(255,255,255,0.06);
+            --ease:cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
-        html {
-            scroll-behavior: smooth;
-        }
-        
+
         body {
             font-family: var(--s-font);
             font-weight: 300;
@@ -44,7 +97,7 @@
             line-height: 1.8;
             font-size: 17px;
         }
-        
+
         /* Typography */
         h1, h2, h3 {
             font-family: var(--s-display);
@@ -52,23 +105,10 @@
             line-height: 1.2;
             letter-spacing: 0.05em;
         }
-        
-        h1 {
-            font-size: clamp(2.5rem, 8vw, 5rem);
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-        }
-        
-        h2 {
-            font-size: clamp(1.5rem, 4vw, 2.5rem);
-            letter-spacing: 0.1em;
-        }
-        
-        h3 {
-            font-size: clamp(1rem, 2vw, 1.25rem);
-            letter-spacing: 0.08em;
-        }
-        
+        h1 { font-size: clamp(2.5rem, 8vw, 5rem); text-transform: uppercase; letter-spacing: 0.15em; }
+        h2 { font-size: clamp(1.5rem, 4vw, 2.5rem); letter-spacing: 0.1em; }
+        h3 { font-size: clamp(1rem, 2vw, 1.25rem); letter-spacing: 0.08em; }
+
         .eyebrow {
             font-family: var(--s-font);
             font-size: 0.7rem;
@@ -78,7 +118,7 @@
             color: var(--t-ac);
             margin-bottom: 1.5rem;
         }
-        
+
         .lead {
             font-size: clamp(1.05rem, 2vw, 1.25rem);
             font-weight: 300;
@@ -86,35 +126,43 @@
             max-width: 55ch;
             letter-spacing: 0.02em;
         }
-        
+
         /* Sections */
-        section {
-            padding: 10rem 2rem;
-            position: relative;
-            overflow: hidden;
+        section { padding: 10rem 2rem; position: relative; overflow: hidden; }
+        .container { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+        .container-narrow { max-width: 750px; margin: 0 auto; position: relative; z-index: 1; }
+
+        /* ═══ Scroll progress bar ═══ */
+        .progress-track {
+            position: fixed; top: 0; left: 0; right: 0;
+            height: 2px; z-index: 1000; background: rgba(255,255,255,0.04);
         }
-        
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
+        .progress-fill {
+            height: 100%; width: 0%;
+            background: linear-gradient(90deg, var(--t-ac), var(--t-a2), var(--t-ac));
+            background-size: 300% 100%;
+            animation: gradShift 8s linear infinite;
+            transition: width 0.2s ease;
         }
-        
-        .container-narrow {
-            max-width: 750px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
+        @keyframes gradShift { 0% { background-position: 0% 0; } 100% { background-position: 300% 0; } }
+
+        /* ═══ Scroll-reveal primitives ═══ */
+        .r {
+            opacity: 0; transform: translateY(28px);
+            transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
+            will-change: opacity, transform;
         }
-        
-        /* Hero */
+        .r.v { opacity: 1; transform: none; }
+        .r-d1 { transition-delay: 0.10s; }
+        .r-d2 { transition-delay: 0.20s; }
+        .r-d3 { transition-delay: 0.30s; }
+        .r-d4 { transition-delay: 0.40s; }
+
+        /* ═══ HERO ═══ */
         .hero {
             min-height: 100vh;
             padding: 0 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
             text-align: center;
             background:
                 radial-gradient(ellipse at 50% 0%, var(--t-bc) 0%, transparent 60%),
@@ -122,1466 +170,785 @@
                 var(--t-bg);
             position: relative;
         }
-        
-        .hero-content {
-            position: relative;
-            z-index: 1;
-            animation: fadeIn 2s ease-out;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
+        .hero-content { position: relative; z-index: 1; }
         .hero h1 {
             margin-bottom: 1rem;
             background: linear-gradient(180deg, var(--t-tx) 0%, var(--t-t2) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            opacity: 0; animation: riseIn 1.4s 0.2s var(--ease) forwards;
         }
-
-        .hero .eyebrow {
-            margin-bottom: 1rem;
-        }
-
+        .hero .eyebrow { margin-bottom: 1rem; opacity: 0; animation: riseIn 1.4s 0.5s var(--ease) forwards; }
         .hero .lead {
-            max-width: 48ch;
-            margin: 0 auto;
-            animation: fadeIn 2s ease-out 0.3s both;
+            max-width: 48ch; margin: 0 auto;
+            opacity: 0; animation: riseIn 1.4s 0.7s var(--ease) forwards;
         }
-
         .hero-symbol {
-            width: min(440px, calc(100vh - 480px), 70vw);
-            margin: 0 auto 1rem;
-            animation: fadeIn 2s ease-out 0.1s both;
+            width: min(300px, calc(100vh - 520px), 62vw);
+            margin: 0 auto 1.25rem;
+            opacity: 0; animation: symbolIn 2s 0.1s var(--ease) forwards;
         }
+        .hero-symbol img { width: 100%; height: auto; display: block; }
+        .hero-cta {
+            display: inline-block; margin-top: 2.5rem;
+            font-family: var(--s-display);
+            font-size: .8rem; letter-spacing: .22em; text-transform: uppercase;
+            color: var(--t-bg); background: var(--t-ac); border: 1px solid var(--t-ac);
+            border-radius: 10px; padding: 1rem 2rem; text-decoration: none;
+            transition: opacity .25s, transform .2s, box-shadow .3s;
+            opacity: 0; animation: riseIn 1.4s 0.9s var(--ease) forwards;
+        }
+        .hero-cta:hover {
+            opacity: .9; transform: translateY(-2px);
+            box-shadow: 0 16px 40px -20px color-mix(in srgb, var(--t-ac) 60%, transparent);
+        }
+        @keyframes riseIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes symbolIn { from { opacity: 0; transform: translateY(20px) scale(0.9) rotate(-8deg); } to { opacity: 1; transform: none; } }
 
-        .hero-symbol img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-        
         .scroll-indicator {
-            position: absolute;
-            bottom: 4rem;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1rem;
-            animation: fadeIn 2s ease-out 0.6s both;
+            position: absolute; bottom: 3rem; left: 50%; transform: translateX(-50%);
+            display: flex; flex-direction: column; align-items: center; gap: 1rem;
+            opacity: 0; animation: riseIn 1.4s 1.3s var(--ease) forwards, bob 3s 2.6s ease-in-out infinite;
         }
-        
         .scroll-indicator span {
-            font-size: 0.65rem;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-            color: var(--t-mt);
+            font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--t-mt);
         }
-        
         .scroll-line {
-            width: 1px;
-            height: 50px;
+            width: 1px; height: 50px;
             background: linear-gradient(to bottom, var(--t-dm), transparent);
-            animation: pulse 2.5s ease-in-out infinite;
         }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-        
+        @keyframes bob { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-6px); } }
+
         /* Divider */
         .section-divider {
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--t-bd), transparent);
-            max-width: 400px;
-            margin: 0 auto;
+            height: 1px; background: linear-gradient(90deg, transparent, var(--t-bd), transparent);
+            max-width: 400px; margin: 0 auto;
         }
-        
-        /* Meaning Section */
-        .meaning {
-            background: var(--t-sf);
-            text-align: center;
+
+        /* ═══ Breath sections (the pauses between showpieces) ═══ */
+        .breath { text-align: center; }
+        .meaning { background: var(--t-sf); }
+        .meaning h2 { margin-bottom: 2rem; }
+        .meaning-text { color: var(--t-t2); max-width: 55ch; margin: 0 auto 4rem; }
+
+        .etymology { display: inline-block; padding: 3rem 4rem; position: relative; }
+        .etymology::before, .etymology::after {
+            content: ''; position: absolute; width: 80px; height: 80px; border: 1px solid var(--t-dm);
         }
-        
-        .meaning h2 {
-            margin-bottom: 2rem;
-        }
-        
-        .meaning-text {
-            color: var(--t-t2);
-            max-width: 55ch;
-            margin: 0 auto 4rem;
-        }
-        
-        .etymology {
-            display: inline-block;
-            padding: 3rem 4rem;
-            position: relative;
-        }
-        
-        .etymology::before,
-        .etymology::after {
-            content: '';
-            position: absolute;
-            width: 80px;
-            height: 80px;
-            border: 1px solid var(--t-dm);
-        }
-        
-        .etymology::before {
-            top: 0;
-            left: 0;
-            border-right: none;
-            border-bottom: none;
-        }
-        
-        .etymology::after {
-            bottom: 0;
-            right: 0;
-            border-left: none;
-            border-top: none;
-        }
-        
+        .etymology::before { top: 0; left: 0; border-right: none; border-bottom: none; }
+        .etymology::after { bottom: 0; right: 0; border-left: none; border-top: none; }
         .etymology-word {
-            font-family: var(--s-display);
-            font-size: 2.5rem;
-            letter-spacing: 0.15em;
-            color: var(--t-ac);
-            margin-bottom: 1rem;
+            font-family: var(--s-display); font-size: 2.5rem; letter-spacing: 0.15em;
+            color: var(--t-ac); margin-bottom: 1rem;
         }
-        
-        .etymology-meaning {
-            color: var(--t-mt);
-            font-size: 0.9rem;
-            letter-spacing: 0.05em;
-        }
-        
-        /* Central Teaching Section */
-        .teaching {
-            background: var(--t-bg);
-            text-align: center;
-        }
+        .etymology-meaning { color: var(--t-mt); font-size: 0.9rem; letter-spacing: 0.05em; }
 
-        .teaching-text {
+        /* Morphing thesis line — key words resolve out of a blur + underline-sweep */
+        .thesis-line {
             font-family: var(--s-display);
-            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
-            letter-spacing: 0.04em;
+            font-size: clamp(1.4rem, 3.4vw, 2.4rem);
+            letter-spacing: 0.02em; line-height: 1.4;
+            max-width: 24ch; margin: 0 auto;
             color: var(--t-t2);
-            max-width: 50ch;
-            margin: 0 auto 3rem;
-            line-height: 1.8;
+        }
+        .thesis-line .m {
+            position: relative; white-space: nowrap; color: var(--t-ac);
+            opacity: 0; filter: blur(12px);
+            transition: opacity 0.8s var(--ease), filter 0.8s var(--ease);
+        }
+        .thesis-line .m::after {
+            content: ''; position: absolute; left: 0; right: 0; bottom: -0.12em; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--t-ac), transparent);
+            transform: scaleX(0); transform-origin: center;
+            transition: transform 0.9s var(--ease);
+        }
+        .thesis-line.v .m { opacity: 1; filter: blur(0); }
+        .thesis-line.v .m::after { transform: scaleX(1); }
+        .thesis-line .m-from { transition-delay: 0.10s; }
+        .thesis-line .m-from::after { transition-delay: 0.28s; }
+        .thesis-line .m-to { transition-delay: 0.66s; }
+        .thesis-line .m-to::after { transition-delay: 0.84s; }
+
+        /* ═══════════════════════════════════════════════════════
+           COSMOLOGY — SCROLLYTELLING CENTERPIECE
+           A pinned Flower-of-Life mandala assembles layer by layer,
+           driven by [data-stage] on .scrolly. Default markup is the
+           finished mandala, so it renders complete without JS.
+           ═══════════════════════════════════════════════════════ */
+        /* overflow:visible is required — a clipped ancestor breaks position:sticky */
+        .cosmology { background: var(--t-bg); padding-top: 7rem; overflow: visible; }
+        .cosmology-header { text-align: center; margin-bottom: 2rem; }
+
+        .scrolly {
+            display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: 4rem; align-items: start; max-width: 1100px; margin: 0 auto;
         }
 
-        /* Cosmology Section */
-        .cosmology {
-            background: var(--t-bg);
+        .mandala-sticky {
+            position: sticky; top: 0;
+            height: 100vh;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            gap: 1.5rem;
         }
-        
-        .cosmology-header {
-            text-align: center;
-            margin-bottom: 5rem;
+        .mandala-wrap {
+            position: relative; width: 100%; max-width: 440px; aspect-ratio: 1;
         }
-        
-        .cosmology-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1px;
-            background: var(--t-bd);
+        .mandala-wrap::before {
+            content: ''; position: absolute; inset: 8%;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--t-bc) 0%, transparent 68%);
+            opacity: 0.8;
         }
-        
-        @media (max-width: 900px) {
-            .cosmology-grid {
-                grid-template-columns: 1fr;
-            }
+        .mandala {
+            position: relative; width: 100%; height: 100%; display: block;
+            animation: spin 140s linear infinite;
         }
-        
-        .cosmo-card {
-            padding: 3rem 2.5rem;
-            background: var(--t-bg);
-            transition: background 0.5s ease;
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Mandala layer styling — token-driven so it adapts to every skin */
+        .mandala [class^="m-"] {
+            transition: opacity 1.2s var(--ease);
         }
-        
-        .cosmo-card:hover {
-            background: var(--t-sf);
+        .m-flower circle { fill: none; stroke: var(--t-a2); stroke-width: 1.1; opacity: 0.4; }
+        .m-seed   circle { fill: none; stroke: var(--t-a2); stroke-width: 2.4; }
+        .m-fractal circle { fill: none; stroke: var(--t-ac); stroke-width: 0.9; opacity: 0.8; }
+        .m-rays line { stroke: var(--t-ac); stroke-width: 0.9; opacity: 0.55; stroke-linecap: round; }
+        .m-hex polygon { fill: none; stroke: var(--t-ac); stroke-width: 0.7; opacity: 0.45; stroke-linejoin: round; }
+        .m-ring .ring-a { fill: none; stroke: var(--t-mt); stroke-width: 1; opacity: 0.5; }
+        .m-ring .ring-b { fill: none; stroke: var(--t-ac); stroke-width: 3; opacity: 0.85; }
+        .m-source .src-halo { fill: none; stroke: var(--t-ac); stroke-width: 0.8; opacity: 0.5; }
+        .m-source .src-core {
+            fill: var(--t-ac);
+            filter: drop-shadow(0 0 10px var(--t-ac)) drop-shadow(0 0 22px var(--t-ac));
+            animation: sourcePulse 4s ease-in-out infinite;
         }
-        
-        .cosmo-card h3 {
-            color: var(--t-tx);
-            margin-bottom: 1.25rem;
-            text-transform: uppercase;
+        .m-source .src-spark { fill: var(--t-tx); }
+        @keyframes sourcePulse { 0%,100% { opacity: 1; } 50% { opacity: 0.55; } }
+
+        /* Stage subtraction — hide layers not yet reached (default = all visible) */
+        .scrolly[data-stage="1"] :is(.m-seed,.m-fractal,.m-rays,.m-hex,.m-flower,.m-ring),
+        .scrolly[data-stage="2"] :is(.m-fractal,.m-rays,.m-hex,.m-flower,.m-ring),
+        .scrolly[data-stage="3"] :is(.m-rays,.m-hex,.m-flower,.m-ring),
+        .scrolly[data-stage="4"] :is(.m-flower,.m-ring),
+        .scrolly[data-stage="5"] :is(.m-ring) { opacity: 0; }
+
+        .mandala-cap {
+            font-family: var(--s-display); font-style: italic;
+            font-size: 0.95rem; letter-spacing: 0.12em;
+            color: var(--t-ac); text-align: center; min-height: 1.4em;
         }
-        
-        .cosmo-card p {
-            color: var(--t-mt);
-            font-size: 0.9rem;
-            line-height: 1.8;
+        .mandala-cap::after { content: "One Consciousness"; }
+        .scrolly[data-stage="1"] .mandala-cap::after { content: "The One · Source"; }
+        .scrolly[data-stage="2"] .mandala-cap::after { content: "Fractal Emanation"; }
+        .scrolly[data-stage="3"] .mandala-cap::after { content: "Consciousness as Field"; }
+        .scrolly[data-stage="4"] .mandala-cap::after { content: "Gnosis · The Web of Faces"; }
+        .scrolly[data-stage="5"] .mandala-cap::after { content: "Lila · Sacred Play"; }
+        .scrolly[data-stage="6"] .mandala-cap::after { content: "Earth · The Living Whole"; }
+
+        /* Prose steps */
+        .cosmo-steps { padding: 6vh 0; }
+        .cosmo-step {
+            min-height: 84vh; display: flex; flex-direction: column; justify-content: center;
+            opacity: 0.28; transition: opacity 0.5s var(--ease);
         }
-        
-        /* Body Section */
+        .cosmo-step.on { opacity: 1; }
+        .cosmo-step .step-num {
+            font-family: var(--s-display); font-style: italic;
+            font-size: 0.85rem; letter-spacing: 0.2em; color: var(--t-a2);
+            margin-bottom: 0.75rem;
+        }
+        .cosmo-step h3 {
+            font-size: clamp(1.4rem, 3vw, 2rem); color: var(--t-tx);
+            text-transform: uppercase; margin-bottom: 1.25rem; letter-spacing: 0.06em;
+        }
+        .cosmo-step p { color: var(--t-t2); font-size: 1rem; line-height: 1.85; max-width: 44ch; }
+
+        /* ═══ The Body ═══ */
         .body-section {
             background:
                 radial-gradient(ellipse at center, var(--t-bd) 0%, transparent 70%),
                 var(--t-sf);
             text-align: center;
         }
-
-        .body-intro {
-            color: var(--t-t2);
-            max-width: 50ch;
-            margin: 0 auto 4rem;
-            font-size: 1.1rem;
-        }
-
+        .body-intro { color: var(--t-t2); max-width: 50ch; margin: 0 auto 4rem; font-size: 1.1rem; }
         .body-practices {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 2rem 4rem;
-            margin-bottom: 4rem;
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem 4rem; margin-bottom: 4rem;
         }
+        .practice { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+        .practice-word { font-family: var(--s-display); font-size: 1.25rem; letter-spacing: 0.1em; color: var(--t-ac); }
+        .practice-meaning { font-size: 0.85rem; color: var(--t-mt); font-style: italic; }
+        .body-closing { color: var(--t-t2); max-width: 55ch; margin: 0 auto; font-size: 0.95rem; }
 
-        .practice {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .practice-word {
-            font-family: var(--s-display);
-            font-size: 1.25rem;
-            letter-spacing: 0.1em;
-            color: var(--t-ac);
-        }
-
-        .practice-meaning {
-            font-size: 0.85rem;
-            color: var(--t-mt);
-            font-style: italic;
-        }
-
-        .body-closing {
-            color: var(--t-t2);
-            max-width: 55ch;
-            margin: 0 auto;
-            font-size: 0.95rem;
-        }
-
-        /* Economy Section */
-        .economy {
-            background: var(--t-bg);
-            text-align: center;
-        }
-
-        .economy-header {
-            margin-bottom: 4rem;
-        }
-
-        .economy-grid {
-            display: grid;
-            grid-template-columns: 1fr 2fr 1fr;
-            gap: 2rem;
-            align-items: center;
-        }
-
-        @media (max-width: 900px) {
-            .economy-grid {
-                grid-template-columns: 1fr;
-                gap: 3rem;
-            }
-        }
-
-        .economy-card {
-            padding: 2rem;
-        }
-
+        /* ═══ Sacred Economy ═══ */
+        .economy { background: var(--t-bg); text-align: center; }
+        .economy-header { margin-bottom: 4rem; }
+        .economy-grid { display: grid; grid-template-columns: 1fr 2fr 1fr; gap: 2rem; align-items: center; }
+        @media (max-width: 900px) { .economy-grid { grid-template-columns: 1fr; gap: 3rem; } }
+        .economy-card { padding: 2rem; }
         .economy-principle {
-            font-size: 0.75rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: var(--t-mt);
-            margin-bottom: 1.5rem;
+            font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
+            color: var(--t-mt); margin-bottom: 1.5rem;
         }
-
-        .economy-list {
-            list-style: none;
-            padding: 0;
-        }
-
+        .economy-list { list-style: none; padding: 0; }
         .economy-list li {
-            font-family: var(--s-display);
-            font-size: 1rem;
-            letter-spacing: 0.1em;
-            color: var(--t-t2);
-            padding: 0.5rem 0;
-            border-bottom: 1px solid var(--t-bd);
+            font-family: var(--s-display); font-size: 1rem; letter-spacing: 0.1em;
+            color: var(--t-t2); padding: 0.5rem 0; border-bottom: 1px solid var(--t-bd);
         }
-
-        .economy-list li:last-child {
-            border-bottom: none;
-        }
-
-        .economy-center {
-            border: 1px solid var(--t-bd);
-            padding: 3rem 2rem;
-        }
-
+        .economy-list li:last-child { border-bottom: none; }
+        .economy-center { border: 1px solid var(--t-bd); padding: 3rem 2rem; }
         .economy-statement {
-            font-family: var(--s-display);
-            font-size: 1.25rem;
-            letter-spacing: 0.05em;
-            color: var(--t-tx);
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
+            font-family: var(--s-display); font-size: 1.25rem; letter-spacing: 0.05em;
+            color: var(--t-tx); margin-bottom: 1.5rem; line-height: 1.6;
         }
+        .economy-sub { color: var(--t-mt); font-size: 0.9rem; line-height: 1.7; }
 
-        .economy-sub {
-            color: var(--t-mt);
-            font-size: 0.9rem;
-            line-height: 1.7;
+        /* ═══ Sovereign Technology — the Synchronicity Engine ═══ */
+        .syncengine { background: var(--t-bg); text-align: center; }
+        .se-header { margin-bottom: 3rem; }
+        .se-header .lead { margin: 1.5rem auto 0; }
+        .se-loop-wrap { max-width: 400px; margin: 0 auto 2.5rem; position: relative; }
+        .se-loop-wrap::before {
+            content: ''; position: absolute; inset: 12%; border-radius: 50%;
+            background: radial-gradient(circle, var(--t-bc) 0%, transparent 70%);
         }
+        .se-loop { position: relative; width: 100%; height: auto; display: block; }
+        .se-ring { fill: none; stroke: var(--t-bd); stroke-width: 1.5; stroke-dasharray: 3 6; opacity: 0.85; }
+        .se-node-glow { fill: var(--t-bc); }
+        .se-node-core { fill: var(--t-cd); stroke: var(--t-ac); stroke-width: 2; filter: drop-shadow(0 0 6px var(--t-ac)); }
+        .se-node-label { font-family: var(--s-display); font-size: 16px; fill: var(--t-tx); letter-spacing: 0.03em; }
+        .se-center { font-family: var(--s-font); font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; fill: var(--t-mt); }
+        .se-orbit { transform-box: view-box; transform-origin: 180px 180px; animation: seSpin 7s linear infinite; }
+        @keyframes seSpin { to { transform: rotate(360deg); } }
+        .se-pulse { fill: var(--t-a2); filter: drop-shadow(0 0 6px var(--t-a2)); }
+        .se-note { color: var(--t-mt); font-size: 0.9rem; max-width: 48ch; margin: 0 auto 2.5rem; line-height: 1.85; }
+        .se-note strong { color: var(--t-t2); font-weight: 400; }
+        .se-cta-link {
+            display: inline-flex; align-items: center; gap: 0.85rem;
+            font-family: var(--s-display); font-size: 0.78rem; letter-spacing: 0.2em; text-transform: uppercase;
+            color: var(--t-ac); border: 1px solid var(--t-ac); border-radius: 10px;
+            padding: 1rem 2rem; text-decoration: none; transition: all 0.35s var(--ease);
+        }
+        .se-cta-link:hover {
+            background: var(--t-ac); color: var(--t-bg); transform: translateY(-2px);
+            box-shadow: 0 16px 40px -20px color-mix(in srgb, var(--t-ac) 60%, transparent);
+        }
+        .se-cta-link svg { width: 15px; height: 15px; transition: transform 0.3s; }
+        .se-cta-link:hover svg { transform: translateX(4px); }
 
-        /* Community Section */
+        /* ═══ Community ═══ */
         .community {
             background:
                 radial-gradient(ellipse at center, var(--t-bd) 0%, transparent 70%),
                 var(--t-sf);
             text-align: center;
         }
-
-        .community-header {
-            margin-bottom: 4rem;
-        }
-
-        .community-principle {
-            margin-bottom: 4rem;
-        }
-
+        .community-header { margin-bottom: 4rem; }
+        .community-principle { margin-bottom: 4rem; }
         .principle-main {
             font-family: var(--s-display);
-            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
-            letter-spacing: 0.02em;
-            color: var(--t-tx);
-            line-height: 1.6;
-            max-width: 32ch;
-            margin: 0 auto;
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem); letter-spacing: 0.02em;
+            color: var(--t-tx); line-height: 1.6; max-width: 32ch; margin: 0 auto;
         }
-
         .principle-counterweight {
-            display: block;
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            font-size: 0.95rem;
-            font-style: italic;
-            letter-spacing: 0.04em;
-            color: #e8c36a;
-            position: relative;
+            display: block; margin-top: 1.5rem; padding-top: 1.5rem;
+            font-size: 0.95rem; font-style: italic; letter-spacing: 0.04em;
+            color: #e8c36a; position: relative;
         }
-
         .principle-counterweight::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 1px;
-            background: linear-gradient(
-                90deg,
-                transparent,
-                rgba(232, 195, 106, 0.55),
-                transparent
-            );
+            content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+            width: 80px; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(232,195,106,0.55), transparent);
         }
-
         .community-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.25rem;
-            margin-bottom: 5rem;
-            max-width: 880px;
-            margin-left: auto;
-            margin-right: auto;
-            position: relative;
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem;
+            margin: 0 auto 5rem; max-width: 880px; position: relative;
         }
-
         .community-grid::before {
-            content: attr(data-pair-left);
-            position: absolute;
-            top: -2.25rem;
-            left: 25%;
-            transform: translateX(-50%);
-            font-family: var(--s-display);
-            font-size: 0.65rem;
-            letter-spacing: 0.35em;
-            text-transform: uppercase;
-            color: var(--t-mt);
+            content: attr(data-pair-left); position: absolute; top: -2.25rem; left: 25%;
+            transform: translateX(-50%); font-family: var(--s-display); font-size: 0.65rem;
+            letter-spacing: 0.35em; text-transform: uppercase; color: var(--t-mt);
         }
-
         .community-grid::after {
-            content: attr(data-pair-right);
-            position: absolute;
-            top: -2.25rem;
-            left: 75%;
-            transform: translateX(-50%);
-            font-family: var(--s-display);
-            font-size: 0.65rem;
-            letter-spacing: 0.35em;
-            text-transform: uppercase;
-            color: var(--t-mt);
+            content: attr(data-pair-right); position: absolute; top: -2.25rem; left: 75%;
+            transform: translateX(-50%); font-family: var(--s-display); font-size: 0.65rem;
+            letter-spacing: 0.35em; text-transform: uppercase; color: var(--t-mt);
         }
-
         @media (max-width: 640px) {
-            .community-grid {
-                grid-template-columns: 1fr;
-            }
-            .community-grid::before,
-            .community-grid::after {
-                display: none;
-            }
+            .community-grid { grid-template-columns: 1fr; }
+            .community-grid::before, .community-grid::after { display: none; }
         }
-
         .community-card {
-            padding: 2rem 1.75rem;
-            display: flex;
-            align-items: center;
-            gap: 1.25rem;
-            text-align: left;
-            border-radius: 12px;
-            background: linear-gradient(
-                135deg,
-                rgba(232, 195, 106, 0.05),
-                rgba(255, 255, 255, 0.02)
-            );
-            border: 1px solid rgba(232, 195, 106, 0.16);
-            backdrop-filter: blur(10px) saturate(1.05);
-            -webkit-backdrop-filter: blur(10px) saturate(1.05);
-            box-shadow:
-                inset 0 1px 0 rgba(255, 255, 255, 0.05),
-                0 4px 18px rgba(0, 0, 0, 0.2);
+            padding: 2rem 1.75rem; display: flex; align-items: center; gap: 1.25rem;
+            text-align: left; border-radius: 12px;
+            background: linear-gradient(135deg, rgba(232,195,106,0.05), rgba(255,255,255,0.02));
+            border: 1px solid rgba(232,195,106,0.16);
+            backdrop-filter: blur(10px) saturate(1.05); -webkit-backdrop-filter: blur(10px) saturate(1.05);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 4px 18px rgba(0,0,0,0.2);
             transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
         }
-
         .community-card:hover {
-            transform: translateY(-2px);
-            border-color: rgba(232, 195, 106, 0.38);
-            box-shadow:
-                inset 0 1px 0 rgba(255, 255, 255, 0.08),
-                0 6px 28px rgba(0, 0, 0, 0.28),
-                0 0 32px rgba(232, 195, 106, 0.1);
+            transform: translateY(-2px); border-color: rgba(232,195,106,0.38);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 6px 28px rgba(0,0,0,0.28), 0 0 32px rgba(232,195,106,0.1);
         }
-
         .community-numeral {
-            font-family: var(--s-display);
-            font-style: italic;
-            font-size: 1.6rem;
-            color: #e8c36a;
-            letter-spacing: 0.05em;
-            flex-shrink: 0;
-            opacity: 0.9;
-            text-shadow: 0 0 18px rgba(232, 195, 106, 0.35);
+            font-family: var(--s-display); font-style: italic; font-size: 1.6rem;
+            color: #e8c36a; letter-spacing: 0.05em; flex-shrink: 0; opacity: 0.9;
+            text-shadow: 0 0 18px rgba(232,195,106,0.35);
         }
-
         .community-card p {
-            font-family: var(--s-display);
-            font-size: 1.05rem;
-            letter-spacing: 0.02em;
-            color: var(--t-tx);
-            line-height: 1.4;
-            margin: 0;
+            font-family: var(--s-display); font-size: 1.05rem; letter-spacing: 0.02em;
+            color: var(--t-tx); line-height: 1.4; margin: 0;
         }
+        .generations { max-width: 600px; margin: 0 auto; padding-top: 3rem; border-top: 1px solid var(--t-bd); }
+        .generations h3 { color: var(--t-tx); margin-bottom: 1rem; text-transform: uppercase; }
+        .generations p { color: var(--t-mt); font-size: 0.95rem; line-height: 1.8; }
 
-        .generations {
-            max-width: 600px;
-            margin: 0 auto;
-            padding-top: 3rem;
-            border-top: 1px solid var(--t-bd);
-        }
-
-        .generations h3 {
-            color: var(--t-tx);
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-        }
-
-        .generations p {
-            color: var(--t-mt);
-            font-size: 0.95rem;
-            line-height: 1.8;
-        }
-
-        /* Transformation Section */
-        .transformation {
-            background: var(--t-bg);
-            text-align: center;
-            padding: 8rem 2rem;
-        }
-
-        .transformation-content {
-            margin-top: 3rem;
-        }
-
+        /* ═══ Transformation breath ═══ */
+        .transformation { background: var(--t-bg); text-align: center; padding: 8rem 2rem; }
+        .transformation-content { margin-top: 3rem; }
         .transform-main {
-            font-family: var(--s-display);
-            font-size: clamp(1.25rem, 3vw, 1.75rem);
-            letter-spacing: 0.1em;
-            color: var(--t-ac);
-            margin-bottom: 2rem;
+            font-family: var(--s-display); font-size: clamp(1.25rem, 3vw, 1.75rem);
+            letter-spacing: 0.1em; color: var(--t-ac); margin-bottom: 2rem;
         }
-
-        .transform-body {
-            color: var(--t-t2);
-            font-size: 1rem;
-            max-width: 45ch;
-            margin: 0 auto 2rem;
-        }
-
+        .transform-body { color: var(--t-t2); font-size: 1rem; max-width: 45ch; margin: 0 auto 2rem; }
         .transform-closing {
-            font-family: var(--s-display);
-            font-size: 1rem;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            color: var(--t-mt);
+            font-family: var(--s-display); font-size: 1rem; letter-spacing: 0.15em;
+            text-transform: uppercase; color: var(--t-mt);
         }
-        
-        /* Affirmations Section */
-        .affirmations {
-            background: var(--t-bg);
-        }
-        
-        .affirmations-header {
-            text-align: center;
-            margin-bottom: 5rem;
-        }
-        
+
+        /* ═══ Affirmations ═══ */
+        .affirmations { background: var(--t-bg); }
+        .affirmations-header { text-align: center; margin-bottom: 5rem; }
         .affirmations-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 0;
-            counter-reset: affirmation;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 0; counter-reset: affirmation;
         }
-        
         .affirmation {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            padding: 2rem;
-            border: 1px solid var(--t-bd);
-            margin: -0.5px;
-            transition: all 0.4s ease;
+            display: flex; align-items: center; gap: 1.5rem; padding: 2rem;
+            border: 1px solid var(--t-bd); margin: -0.5px; transition: all 0.4s ease;
         }
-        
-        .affirmation:hover {
-            background: var(--t-sf);
-            border-color: var(--t-dm);
-            z-index: 1;
-        }
-        
+        .affirmation:hover { background: var(--t-sf); border-color: var(--t-dm); z-index: 1; }
         .affirmation::before {
-            counter-increment: affirmation;
-            content: counter(affirmation, decimal-leading-zero);
-            font-family: var(--s-display);
-            font-size: 1.25rem;
-            letter-spacing: 0.1em;
-            color: var(--t-a2);
-            flex-shrink: 0;
+            counter-increment: affirmation; content: counter(affirmation, decimal-leading-zero);
+            font-family: var(--s-display); font-size: 1.25rem; letter-spacing: 0.1em;
+            color: var(--t-a2); flex-shrink: 0;
         }
-        
-        .affirmation p {
-            color: var(--t-t2);
-            font-size: 0.9rem;
-            line-height: 1.5;
-            letter-spacing: 0.02em;
-        }
-        
-        /* First Temple Section */
+        .affirmation p { color: var(--t-t2); font-size: 0.9rem; line-height: 1.5; letter-spacing: 0.02em; }
+
+        /* ═══ The Network ═══ */
         .first-temple {
             background:
                 radial-gradient(ellipse at 50% 100%, var(--t-bc) 0%, transparent 60%),
                 var(--t-sf);
-            text-align: center;
-            padding-bottom: 12rem;
+            text-align: center; padding-bottom: 12rem;
         }
-
-        .first-temple h2 {
-            margin-bottom: 1.5rem;
-        }
-
-        .first-temple .lead {
-            margin: 0 auto 4rem;
-        }
-
-        .temple-preview {
-            display: block;
-            max-width: 760px;
-            margin: 0 auto;
-            text-decoration: none;
-            color: inherit;
-        }
-
+        .first-temple h2 { margin-bottom: 1.5rem; }
+        .first-temple .lead { margin: 0 auto 4rem; }
+        .temple-preview { display: block; max-width: 760px; margin: 0 auto; text-decoration: none; color: inherit; }
         .temple-preview-frame {
-            position: relative;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 14px;
-            overflow: hidden;
-            background: rgba(0, 0, 0, 0.4);
-            box-shadow:
-                0 30px 80px -20px rgba(0, 0, 0, 0.55),
-                0 0 0 1px rgba(255, 255, 255, 0.02);
+            position: relative; border: 1px solid rgba(255,255,255,0.08); border-radius: 14px;
+            overflow: hidden; background: rgba(0,0,0,0.4);
+            box-shadow: 0 30px 80px -20px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.02);
             transition: transform 0.5s ease, box-shadow 0.5s ease, border-color 0.5s ease;
         }
-
         .temple-preview:hover .temple-preview-frame {
-            transform: translateY(-4px);
-            border-color: rgba(193, 154, 219, 0.4);
-            box-shadow:
-                0 40px 100px -20px rgba(0, 0, 0, 0.7),
-                0 0 60px -20px var(--t-ac);
+            transform: translateY(-4px); border-color: rgba(193,154,219,0.4);
+            box-shadow: 0 40px 100px -20px rgba(0,0,0,0.7), 0 0 60px -20px var(--t-ac);
         }
-
         .temple-preview-chrome {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.85rem 1.1rem;
-            background: rgba(0, 0, 0, 0.55);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex; align-items: center; gap: 0.5rem; padding: 0.85rem 1.1rem;
+            background: rgba(0,0,0,0.55); border-bottom: 1px solid rgba(255,255,255,0.06);
         }
-
-        .temple-preview-chrome span.dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.18);
-        }
-
+        .temple-preview-chrome span.dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.18); }
         .temple-preview-url {
-            margin: 0 auto;
-            transform: translateX(-18px);
-            font-family: var(--s-display);
-            font-size: 0.7rem;
-            letter-spacing: 0.18em;
-            color: rgba(255, 255, 255, 0.45);
-            text-transform: lowercase;
+            margin: 0 auto; transform: translateX(-18px); font-family: var(--s-display);
+            font-size: 0.7rem; letter-spacing: 0.18em; color: rgba(255,255,255,0.45); text-transform: lowercase;
         }
-
-        .temple-preview-image {
-            position: relative;
-            aspect-ratio: 16 / 9;
-            overflow: hidden;
-            background: #000;
-        }
-
+        .temple-preview-image { position: relative; aspect-ratio: 16 / 9; overflow: hidden; background: #000; }
         .temple-preview-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.55;
+            width: 100%; height: 100%; object-fit: cover; opacity: 0.55;
             transition: transform 6s ease, opacity 0.6s ease;
         }
-
-        .temple-preview:hover .temple-preview-image img {
-            transform: scale(1.06);
-            opacity: 0.7;
-        }
-
+        .temple-preview:hover .temple-preview-image img { transform: scale(1.06); opacity: 0.7; }
         .temple-preview-overlay {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 2rem;
-            background: linear-gradient(180deg, rgba(10, 8, 20, 0.15) 0%, rgba(10, 8, 20, 0.55) 100%);
+            position: absolute; inset: 0; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; text-align: center; padding: 2rem;
+            background: linear-gradient(180deg, rgba(10,8,20,0.15) 0%, rgba(10,8,20,0.55) 100%);
         }
-
         .temple-preview-eyebrow {
-            font-family: var(--s-display);
-            font-size: 0.65rem;
-            letter-spacing: 0.32em;
-            text-transform: uppercase;
-            color: var(--t-ac);
-            margin: 0 0 1rem;
-            opacity: 0.9;
+            font-family: var(--s-display); font-size: 0.65rem; letter-spacing: 0.32em;
+            text-transform: uppercase; color: var(--t-ac); margin: 0 0 1rem; opacity: 0.9;
         }
-
         .temple-preview-title {
-            font-family: var(--s-display);
-            font-size: clamp(2rem, 5vw, 3.25rem);
-            letter-spacing: 0.04em;
-            font-weight: 400;
-            color: #fff;
-            margin: 0 0 0.75rem;
-            line-height: 1;
+            font-family: var(--s-display); font-size: clamp(2rem, 5vw, 3.25rem); letter-spacing: 0.04em;
+            font-weight: 400; color: #fff; margin: 0 0 0.75rem; line-height: 1;
         }
-
         .temple-preview-tagline {
-            font-style: italic;
-            color: rgba(255, 255, 255, 0.78);
-            margin: 0;
-            font-size: 1rem;
-            max-width: 28ch;
-            line-height: 1.5;
+            font-style: italic; color: rgba(255,255,255,0.78); margin: 0; font-size: 1rem;
+            max-width: 28ch; line-height: 1.5;
         }
-
         .temple-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 1.5rem;
-            margin-top: 3rem;
-            padding: 1.5rem 3rem;
-            border: 1px solid var(--t-ac);
-            color: var(--t-ac);
-            text-decoration: none;
-            font-family: var(--s-display);
-            font-size: 0.8rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            transition: all 0.4s ease;
+            display: inline-flex; align-items: center; gap: 1.5rem; margin-top: 3rem;
+            padding: 1.5rem 3rem; border: 1px solid var(--t-ac); color: var(--t-ac);
+            text-decoration: none; font-family: var(--s-display); font-size: 0.8rem;
+            letter-spacing: 0.2em; text-transform: uppercase; transition: all 0.4s ease;
         }
-
-        .temple-preview:hover .temple-link,
-        .temple-link:hover {
-            background: var(--t-ac);
-            color: var(--t-bg);
-        }
-
-        .temple-link svg {
-            width: 16px;
-            height: 16px;
-            transition: transform 0.3s ease;
-        }
-
-        .temple-preview:hover .temple-link svg,
-        .temple-link:hover svg {
-            transform: translateX(4px);
-        }
-
+        .temple-preview:hover .temple-link, .temple-link:hover { background: var(--t-ac); color: var(--t-bg); }
+        .temple-link svg { width: 16px; height: 16px; transition: transform 0.3s ease; }
+        .temple-preview:hover .temple-link svg, .temple-link:hover svg { transform: translateX(4px); }
         @media (max-width: 640px) {
-            .temple-preview-url {
-                font-size: 0.6rem;
-                letter-spacing: 0.12em;
-            }
-            .temple-preview-overlay {
-                padding: 1.25rem;
-            }
-            .temple-link {
-                padding: 1.25rem 2rem;
-                margin-top: 2rem;
-            }
+            .temple-preview-url { font-size: 0.6rem; letter-spacing: 0.12em; }
+            .temple-preview-overlay { padding: 1.25rem; }
+            .temple-link { padding: 1.25rem 2rem; margin-top: 2rem; }
         }
-
-        /* Network Title */
-        .first-temple .network-title {
-            font-size: clamp(1.6rem, 4vw, 2.4rem);
-            margin-bottom: 1.25rem;
-        }
-
-        /* Two-pane layout: map on left, temple cards on right */
-        .network-layout {
-            display: grid;
-            grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
-            gap: 2rem;
-            align-items: stretch;
-        }
-
-        .temples-rail {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            min-width: 0;
-        }
-        .temples-rail .temple-preview {
-            max-width: none;
-            width: 100%;
-            margin: 0;
-        }
-        .temples-rail .temple-preview-title {
-            font-size: clamp(1.4rem, 2.4vw, 2rem);
-        }
-        .temples-rail .temple-preview-eyebrow {
-            font-size: 0.6rem;
-            margin-bottom: 0.5rem;
-        }
-        .temples-rail .temple-preview-tagline {
-            font-size: 0.85rem;
-            max-width: 22ch;
-        }
-        .temples-rail .temple-preview-overlay {
-            padding: 1.25rem;
-        }
-        .temples-rail .temple-preview-chrome {
-            padding: 0.6rem 0.85rem;
-        }
-        .temples-rail .temple-preview-url {
-            font-size: 0.6rem;
-        }
-
-        /* World Map */
+        .first-temple .network-title { font-size: clamp(1.6rem, 4vw, 2.4rem); margin-bottom: 1.25rem; }
+        .network-layout { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 2rem; align-items: stretch; }
+        .temples-rail { display: flex; flex-direction: column; gap: 1rem; min-width: 0; }
+        .temples-rail .temple-preview { max-width: none; width: 100%; margin: 0; }
+        .temples-rail .temple-preview-title { font-size: clamp(1.4rem, 2.4vw, 2rem); }
+        .temples-rail .temple-preview-eyebrow { font-size: 0.6rem; margin-bottom: 0.5rem; }
+        .temples-rail .temple-preview-tagline { font-size: 0.85rem; max-width: 22ch; }
+        .temples-rail .temple-preview-overlay { padding: 1.25rem; }
+        .temples-rail .temple-preview-chrome { padding: 0.6rem 0.85rem; }
+        .temples-rail .temple-preview-url { font-size: 0.6rem; }
         .network-map {
-            margin: 0;
-            padding: 1.25rem 1.5rem;
-            border: 1px solid var(--t-bd);
-            border-radius: 14px;
+            margin: 0; padding: 1.25rem 1.5rem; border: 1px solid var(--t-bd); border-radius: 14px;
             background:
                 radial-gradient(ellipse at 50% 50%, var(--t-sf) 0%, transparent 75%),
                 var(--t-bg);
-            position: relative;
-            display: flex;
-            flex-direction: column;
+            position: relative; display: flex; flex-direction: column;
         }
-
-        .network-map::before,
-        .network-map::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 14px;
-            pointer-events: none;
-        }
-        .network-map::before {
-            border: 1px solid var(--t-bc);
-            transform: scale(1.005);
-            opacity: 0.4;
-        }
-
-        /* Container the jsvectormap library renders into */
-        #temple-network-map {
-            width: 100%;
-            flex: 1;
-            min-height: 320px;
-            position: relative;
-        }
-
-        /* Library defaults override — minor polish + skin alignment */
+        .network-map::before, .network-map::after { content: ''; position: absolute; inset: 0; border-radius: 14px; pointer-events: none; }
+        .network-map::before { border: 1px solid var(--t-bc); transform: scale(1.005); opacity: 0.4; }
+        #temple-network-map { width: 100%; flex: 1; min-height: 320px; position: relative; }
         #temple-network-map .jvm-container { background: transparent; }
-        #temple-network-map .jvm-region {
-            transition: fill 0.4s ease, stroke 0.4s ease;
-        }
+        #temple-network-map .jvm-region { transition: fill 0.4s ease, stroke 0.4s ease; }
         .jvm-tooltip {
-            background: var(--t-cd);
-            color: var(--t-tx);
-            border: 1px solid var(--t-bd);
-            font-family: var(--s-display);
-            font-size: 0.65rem;
-            letter-spacing: 0.22em;
-            text-transform: uppercase;
-            padding: 0.55rem 0.9rem;
-            border-radius: 6px;
-            box-shadow: 0 8px 30px -8px rgba(0, 0, 0, 0.45);
+            background: var(--t-cd); color: var(--t-tx); border: 1px solid var(--t-bd);
+            font-family: var(--s-display); font-size: 0.65rem; letter-spacing: 0.22em;
+            text-transform: uppercase; padding: 0.55rem 0.9rem; border-radius: 6px;
+            box-shadow: 0 8px 30px -8px rgba(0,0,0,0.45);
         }
-
-        /* Pulse halo (a sibling <circle> injected behind Água Lila's marker) */
-        @keyframes templeMarkerPulse {
-            0%, 100% { transform: scale(1);   opacity: 0.35; }
-            50%      { transform: scale(2.4); opacity: 0;    }
-        }
+        @keyframes templeMarkerPulse { 0%,100% { transform: scale(1); opacity: 0.35; } 50% { transform: scale(2.4); opacity: 0; } }
         .marker-pulse-halo {
-            fill: var(--t-ac);
-            transform-box: fill-box;
-            transform-origin: center;
-            animation: templeMarkerPulse 2.8s ease-in-out infinite;
-            pointer-events: none;
+            fill: var(--t-ac); transform-box: fill-box; transform-origin: center;
+            animation: templeMarkerPulse 2.8s ease-in-out infinite; pointer-events: none;
         }
-
-        /* Active marker — glowing and slightly accented */
-        .jvm-marker.marker-active {
-            filter: drop-shadow(0 0 6px var(--t-ac));
-            transition: r 0.3s ease, fill 0.3s ease;
-        }
+        .jvm-marker.marker-active { filter: drop-shadow(0 0 6px var(--t-ac)); transition: r 0.3s ease, fill 0.3s ease; }
         .jvm-marker { cursor: default; }
         .jvm-marker.marker-active { cursor: pointer; }
-
-        /* Join CTA Card */
-        .temple-cta .temple-preview-frame {
-            border: 1px solid var(--t-ac);
-            box-shadow: 0 24px 60px -28px var(--t-ac), 0 0 0 1px var(--t-bc);
-        }
-        .temple-cta .temple-preview-chrome {
-            border-bottom: 1px solid var(--t-ac);
-            background: var(--t-cd);
-        }
-        .temple-cta .temple-preview-url {
-            color: var(--t-ac);
-            opacity: 0.85;
-            font-style: italic;
-        }
+        .temple-cta .temple-preview-frame { border: 1px solid var(--t-ac); box-shadow: 0 24px 60px -28px var(--t-ac), 0 0 0 1px var(--t-bc); }
+        .temple-cta .temple-preview-chrome { border-bottom: 1px solid var(--t-ac); background: var(--t-cd); }
+        .temple-cta .temple-preview-url { color: var(--t-ac); opacity: 0.85; font-style: italic; }
         .temple-cta .cta-body {
-            padding: 2rem 1.75rem 2.25rem;
-            text-align: center;
-            background:
-                radial-gradient(ellipse at 50% 0%, var(--t-hv) 0%, transparent 70%),
-                var(--t-cd);
+            padding: 2rem 1.75rem 2.25rem; text-align: center;
+            background: radial-gradient(ellipse at 50% 0%, var(--t-hv) 0%, transparent 70%), var(--t-cd);
         }
-        .temples-rail .temple-cta .temple-preview-eyebrow {
-            color: var(--t-ac);
-            opacity: 0.95;
-            margin-bottom: 0.85rem;
-            font-size: 0.62rem;
-            letter-spacing: 0.32em;
-        }
-        .temples-rail .temple-cta .temple-preview-title {
-            color: var(--t-tx);
-            margin: 0 0 1rem;
-            font-size: clamp(1.5rem, 2.6vw, 2.1rem);
-        }
-        .temple-cta .cta-text {
-            color: var(--t-t2);
-            font-size: 0.9rem;
-            line-height: 1.6;
-            max-width: 38ch;
-            margin: 0 auto 1.75rem;
-        }
-        .temple-cta .temple-link {
-            margin-top: 0;
-            padding: 1rem 1.75rem;
-            font-size: 0.7rem;
-        }
-        .temple-cta:hover .temple-preview-frame {
-            transform: translateY(-3px);
-            box-shadow: 0 30px 70px -20px var(--t-ac), 0 0 0 1px var(--t-ac);
-        }
-        .temple-cta:hover .temple-link {
-            background: var(--t-ac);
-            color: var(--t-bg);
-        }
+        .temples-rail .temple-cta .temple-preview-eyebrow { color: var(--t-ac); opacity: 0.95; margin-bottom: 0.85rem; font-size: 0.62rem; letter-spacing: 0.32em; }
+        .temples-rail .temple-cta .temple-preview-title { color: var(--t-tx); margin: 0 0 1rem; font-size: clamp(1.5rem, 2.6vw, 2.1rem); }
+        .temple-cta .cta-text { color: var(--t-t2); font-size: 0.9rem; line-height: 1.6; max-width: 38ch; margin: 0 auto 1.75rem; }
+        .temple-cta .temple-link { margin-top: 0; padding: 1rem 1.75rem; font-size: 0.7rem; }
+        .temple-cta:hover .temple-preview-frame { transform: translateY(-3px); box-shadow: 0 30px 70px -20px var(--t-ac), 0 0 0 1px var(--t-ac); }
+        .temple-cta:hover .temple-link { background: var(--t-ac); color: var(--t-bg); }
         .temple-cta:hover .temple-link svg { transform: translateX(4px); }
-
         @media (max-width: 860px) {
-            .network-layout {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
+            .network-layout { grid-template-columns: 1fr; gap: 1.5rem; }
             .network-map { padding: 1rem; }
             #temple-network-map { height: clamp(280px, 56vw, 400px); }
             .temples-rail { max-width: 560px; margin: 0 auto; width: 100%; }
         }
 
-        /* Writings Section */
-        .writings {
-            padding: 10rem 2rem;
-            text-align: center;
+        /* ═══ Offering (Ceremony Mat) ═══ */
+        .offering { padding: 6rem 2rem 4rem; text-align: center; }
+        .offering-inner { max-width: 900px; margin: 0 auto; }
+        .offering .eyebrow { margin-bottom: 2rem; }
+        .offering-card {
+            display: flex; align-items: stretch; border: 1px solid var(--t-bd); border-radius: 2px;
+            overflow: hidden; text-decoration: none; background: var(--t-bg);
+            transition: border-color 0.4s ease, background 0.4s ease;
+        }
+        .offering-card:hover { border-color: var(--t-ac); background: var(--t-sf); }
+        .offering-image { width: 30%; min-height: 260px; flex-shrink: 0; background: #000; position: relative; overflow: hidden; }
+        .offering-image img {
+            position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;
+            opacity: 0.9; transition: transform 6s ease, opacity 0.5s ease;
+        }
+        .offering-card:hover .offering-image img { transform: scale(1.04); opacity: 1; }
+        .offering-body { flex: 1; padding: 2.5rem 3rem; display: flex; flex-direction: column; justify-content: center; text-align: left; }
+        .offering-eyebrow { font-family: var(--s-display); font-style: italic; font-size: 0.95rem; letter-spacing: 0.04em; color: var(--t-ac); margin-bottom: 0.75rem; }
+        .offering-title { font-family: var(--s-display); font-size: clamp(1.3rem, 3vw, 1.8rem); font-weight: 400; color: var(--t-tx); letter-spacing: 0.05em; margin-bottom: 0.75rem; line-height: 1.2; }
+        .offering-subtitle { font-family: var(--s-font); font-size: 0.9rem; font-weight: 300; color: var(--t-t2); line-height: 1.6; margin-bottom: 1.25rem; max-width: 48ch; }
+        .offering-read { font-family: var(--s-display); font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--t-ac); transition: opacity 0.3s; }
+        .offering-card:hover .offering-read { opacity: 0.8; }
+        @media (max-width: 768px) {
+            .offering-card { flex-direction: column; }
+            .offering-image { width: 100%; min-height: 200px; }
+            .offering-body { padding: 2rem 1.5rem; }
         }
 
-        .writings-content {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .writings .eyebrow {
-            margin-bottom: 1.5rem;
-        }
-
-        .writings h2 {
-            font-family: var(--s-display);
-            font-size: clamp(1.5rem, 4vw, 2.5rem);
-            letter-spacing: 0.1em;
-            font-weight: 400;
-            margin-bottom: 1rem;
-        }
-
-        .writings .lead {
-            color: var(--t-t2);
-            font-size: 1.05rem;
-            max-width: 500px;
-            margin: 0 auto 3rem;
-        }
-
-        .writings-more {
-            margin-top: 3rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2rem;
-        }
-
+        /* ═══ Writings ═══ */
+        .writings { padding: 10rem 2rem; text-align: center; }
+        .writings-content { max-width: 1200px; margin: 0 auto; }
+        .writings .eyebrow { margin-bottom: 1.5rem; }
+        .writings h2 { font-family: var(--s-display); font-size: clamp(1.5rem, 4vw, 2.5rem); letter-spacing: 0.1em; font-weight: 400; margin-bottom: 1rem; }
+        .writings .lead { color: var(--t-t2); font-size: 1.05rem; max-width: 500px; margin: 0 auto 3rem; }
+        .writings-more { margin-top: 3rem; display: flex; flex-direction: column; align-items: center; gap: 2rem; }
         .publication-card {
-            display: flex;
-            align-items: stretch;
-            width: 100%;
-            max-width: 720px;
-            margin: 0 auto;
-            border: 1px solid var(--t-a2);
-            border-radius: 2px;
-            background: var(--t-bg);
-            text-decoration: none;
-            transition: border-color 0.4s ease, background 0.4s ease;
+            display: flex; align-items: stretch; width: 100%; max-width: 720px; margin: 0 auto;
+            border: 1px solid var(--t-a2); border-radius: 2px; background: var(--t-bg);
+            text-decoration: none; transition: border-color 0.4s ease, background 0.4s ease;
         }
-
-        .publication-card:hover {
-            border-color: var(--t-ac);
-            background: var(--t-sf);
-        }
-
-        .publication-card-banner {
-            flex-shrink: 0;
-            width: 38%;
-            padding: 1.5rem;
-            display: flex;
-            align-items: center;
-        }
-
-        .publication-card-banner img {
-            width: 100%;
-            height: auto;
-            display: block;
-            border-radius: 8px;
-        }
-
-        .publication-card-body {
-            flex: 1;
-            padding: 2rem 2.5rem 2rem 0.5rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            text-align: left;
-        }
-
-        .publication-card-eyebrow {
-            font-family: var(--s-display);
-            font-size: 0.6rem;
-            letter-spacing: 0.25em;
-            text-transform: uppercase;
-            color: var(--t-a2);
-            margin-bottom: 0.75rem;
-        }
-
-        .publication-card-title {
-            font-family: var(--s-display);
-            font-size: 1.5rem;
-            font-weight: 400;
-            color: var(--t-tx);
-            letter-spacing: 0.05em;
-            margin-bottom: 1.25rem;
-            line-height: 1.2;
-        }
-
-        .publication-card-action {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-family: var(--s-display);
-            font-size: 0.65rem;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            color: var(--t-ac);
-            transition: opacity 0.3s ease;
-        }
-
-        .publication-card-action svg {
-            width: 16px;
-            height: 16px;
-            flex-shrink: 0;
-        }
-
-        .publication-card:hover .publication-card-action {
-            opacity: 0.85;
-        }
-
-        .archive-link {
-            font-family: var(--s-display);
-            font-size: 0.65rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: var(--t-ac);
-            text-decoration: none;
-            opacity: 0.65;
-            transition: opacity 0.3s ease;
-        }
-
-        .archive-link:hover {
-            opacity: 1;
-        }
-
-        @media (max-width: 768px) {
-            .publication-card {
-                flex-direction: column;
-            }
-
-            .publication-card-banner {
-                width: 100%;
-                padding: 1.25rem;
-            }
-
-            .publication-card-body {
-                padding: 0 1.5rem 1.5rem;
-            }
-        }
-
-        /* Footer */
-        footer {
-            background: var(--t-bg);
-            padding: 6rem 2rem;
-            text-align: center;
-            border-top: 1px solid var(--t-bd);
-        }
-        
-        .footer-content {
-            max-width: 500px;
-            margin: 0 auto;
-        }
-        
-        .footer-logo {
-            font-family: var(--s-display);
-            font-size: 1rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: var(--t-tx);
-            margin-bottom: 2rem;
-        }
-        
-        .footer-info {
-            color: var(--t-mt);
-            font-size: 0.8rem;
-            line-height: 2;
-            margin-bottom: 3rem;
-            letter-spacing: 0.05em;
-        }
-
-        /* Article Highlight */
-        .article-highlight {
-            padding: 4rem 2rem 6rem;
-        }
-
+        .publication-card:hover { border-color: var(--t-ac); background: var(--t-sf); }
+        .publication-card-banner { flex-shrink: 0; width: 38%; padding: 1.5rem; display: flex; align-items: center; }
+        .publication-card-banner img { width: 100%; height: auto; display: block; border-radius: 8px; }
+        .publication-card-body { flex: 1; padding: 2rem 2.5rem 2rem 0.5rem; display: flex; flex-direction: column; justify-content: center; text-align: left; }
+        .publication-card-eyebrow { font-family: var(--s-display); font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--t-a2); margin-bottom: 0.75rem; }
+        .publication-card-title { font-family: var(--s-display); font-size: 1.5rem; font-weight: 400; color: var(--t-tx); letter-spacing: 0.05em; margin-bottom: 1.25rem; line-height: 1.2; }
+        .publication-card-action { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--s-display); font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--t-ac); transition: opacity 0.3s ease; }
+        .publication-card-action svg { width: 16px; height: 16px; flex-shrink: 0; }
+        .publication-card:hover .publication-card-action { opacity: 0.85; }
+        .archive-link { font-family: var(--s-display); font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--t-ac); text-decoration: none; opacity: 0.65; transition: opacity 0.3s ease; }
+        .archive-link:hover { opacity: 1; }
         .article-highlight-card {
-            max-width: 900px;
-            margin: 0 auto;
-            display: flex;
-            border: 1px solid var(--t-a2);
-            border-radius: 2px;
-            overflow: hidden;
-            text-decoration: none;
-            background: var(--t-bg);
+            max-width: 900px; margin: 0 auto; display: flex; border: 1px solid var(--t-a2);
+            border-radius: 2px; overflow: hidden; text-decoration: none; background: var(--t-bg);
             transition: border-color 0.4s ease, background 0.4s ease;
         }
-
-        .article-highlight-card:hover {
-            border-color: var(--t-ac);
-            background: var(--t-sf);
-        }
-
+        .article-highlight-card:hover { border-color: var(--t-ac); background: var(--t-sf); }
         .article-highlight-image {
-            width: 31.8%;
-            min-height: 280px;
-            flex-shrink: 0;
+            width: 31.8%; min-height: 280px; flex-shrink: 0;
             background: linear-gradient(160deg, var(--t-a2), var(--t-ac), var(--t-a2));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
+            display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;
         }
-
-        .article-highlight-image::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: repeating-linear-gradient(
-                135deg,
-                transparent,
-                transparent 20px,
-                rgba(0, 0, 0, 0.08) 20px,
-                rgba(0, 0, 0, 0.08) 21px
-            );
-            pointer-events: none;
-        }
-
-        .article-highlight-image img {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .article-highlight-image-label {
-            font-family: var(--s-display);
-            font-size: 0.6rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: var(--t-bg);
-            opacity: 0.6;
-            position: relative;
-            z-index: 1;
-        }
-
-        .article-highlight-body {
-            flex: 1;
-            padding: 2.5rem 3rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            text-align: left;
-        }
-
-        .article-highlight-eyebrow {
-            font-family: var(--s-display);
-            font-size: 0.6rem;
-            letter-spacing: 0.25em;
-            text-transform: uppercase;
-            color: var(--t-a2);
-            margin-bottom: 1rem;
-        }
-
-        .article-highlight-title {
-            font-family: var(--s-display);
-            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
-            font-weight: 400;
-            color: var(--t-tx);
-            line-height: 1.4;
-            margin-bottom: 0.5rem;
-        }
-
-        .article-highlight-subtitle {
-            font-family: var(--s-font);
-            font-size: 0.9rem;
-            font-weight: 300;
-            color: var(--t-t2);
-            line-height: 1.6;
-            margin-bottom: 1.25rem;
-            max-width: 45ch;
-        }
-
-        .article-highlight-read {
-            font-family: var(--s-display);
-            font-size: 0.65rem;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            color: var(--t-ac);
-            transition: opacity 0.3s;
-        }
-
-        .article-highlight-card:hover .article-highlight-read {
-            opacity: 0.8;
-        }
-
+        .article-highlight-image img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+        .article-highlight-body { flex: 1; padding: 2.5rem 3rem; display: flex; flex-direction: column; justify-content: center; text-align: left; }
+        .article-highlight-eyebrow { font-family: var(--s-display); font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--t-a2); margin-bottom: 1rem; }
+        .article-highlight-title { font-family: var(--s-display); font-size: clamp(1.1rem, 2.5vw, 1.5rem); font-weight: 400; color: var(--t-tx); line-height: 1.4; margin-bottom: 0.5rem; }
+        .article-highlight-subtitle { font-family: var(--s-font); font-size: 0.9rem; font-weight: 300; color: var(--t-t2); line-height: 1.6; margin-bottom: 1.25rem; max-width: 45ch; }
+        .article-highlight-read { font-family: var(--s-display); font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--t-ac); transition: opacity 0.3s; }
+        .article-highlight-card:hover .article-highlight-read { opacity: 0.8; }
         @media (max-width: 768px) {
-            .article-highlight-card {
-                flex-direction: column;
-            }
-
-            .article-highlight-image {
-                width: 100%;
-                min-height: 160px;
-            }
-
-            .article-highlight-body {
-                padding: 2rem 1.5rem;
-            }
+            .article-highlight-card { flex-direction: column; }
+            .article-highlight-image { width: 100%; min-height: 160px; }
+            .article-highlight-body { padding: 2rem 1.5rem; }
+            .publication-card { flex-direction: column; }
+            .publication-card-banner { width: 100%; padding: 1.25rem; }
+            .publication-card-body { padding: 0 1.5rem 1.5rem; }
         }
 
-        .footer-nav {
-            margin-bottom: 3rem;
-            display: flex;
-            justify-content: center;
-            gap: 2.25rem;
-            flex-wrap: wrap;
-        }
-
+        /* ═══ Footer ═══ */
+        footer { background: var(--t-bg); padding: 6rem 2rem; text-align: center; border-top: 1px solid var(--t-bd); }
+        .footer-content { max-width: 500px; margin: 0 auto; }
+        .footer-logo { font-family: var(--s-display); font-size: 1rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--t-tx); margin-bottom: 2rem; }
+        .footer-info { color: var(--t-mt); font-size: 0.8rem; line-height: 2; margin-bottom: 3rem; letter-spacing: 0.05em; }
+        .footer-nav { margin-bottom: 3rem; display: flex; justify-content: center; gap: 2.25rem; flex-wrap: wrap; }
         .footer-link {
-            color: var(--t-ac);
-            text-decoration: none;
-            font-family: var(--s-display);
-            font-size: 0.8rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            border-bottom: 1px solid var(--t-a2);
-            padding-bottom: 0.25rem;
-            transition: border-color 0.3s ease;
+            color: var(--t-ac); text-decoration: none; font-family: var(--s-display);
+            font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase;
+            border-bottom: 1px solid var(--t-a2); padding-bottom: 0.25rem; transition: border-color 0.3s ease;
         }
+        .footer-link:hover { border-color: var(--t-ac); }
+        .footer-nav-group { display: flex; flex-direction: column; align-items: center; gap: 0.65rem; }
+        .footer-nav-label { font-family: var(--s-font); font-size: 0.65rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--t-mt); }
+        .footer-nav-group-links { display: flex; gap: 1.75rem; flex-wrap: wrap; justify-content: center; }
+        .footer-closing { padding-top: 3rem; border-top: 1px solid var(--t-bd); }
+        .footer-closing p { font-family: var(--s-display); font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--t-dm); line-height: 2.5; }
 
-        .footer-link:hover {
-            border-color: var(--t-ac);
+        /* ═══ Responsive ═══ */
+        @media (max-width: 860px) {
+            .scrolly { display: block; }
+            .mandala-sticky {
+                position: sticky; top: 0; height: auto; z-index: 5;
+                padding: 1.25rem 0 1rem;
+                background: linear-gradient(180deg, var(--t-bg) 78%, transparent);
+            }
+            .mandala-wrap { max-width: 240px; }
+            .mandala { animation-duration: 200s; }
+            .cosmo-steps { padding: 2vh 0; }
+            .cosmo-step { min-height: 70vh; }
         }
-
-        .footer-nav-group {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.65rem;
-        }
-
-        .footer-nav-label {
-            font-family: var(--s-font);
-            font-size: 0.65rem;
-            letter-spacing: 0.35em;
-            text-transform: uppercase;
-            color: var(--t-mt);
-        }
-
-        .footer-nav-group-links {
-            display: flex;
-            gap: 1.75rem;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .footer-closing {
-            padding-top: 3rem;
-            border-top: 1px solid var(--t-bd);
-        }
-        
-        .footer-closing p {
-            font-family: var(--s-display);
-            font-size: 0.75rem;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            color: var(--t-dm);
-            line-height: 2.5;
-        }
-        
-        /* Animations */
-        .fade-up {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 1s ease, transform 1s ease;
-        }
-        
-        .fade-up.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        /* Responsive */
         @media (max-width: 768px) {
-            section {
-                padding: 6rem 1.5rem;
+            section { padding: 6rem 1.5rem; }
+            .cosmology { padding-top: 5rem; }
+            .etymology { padding: 2rem; }
+            .etymology::before, .etymology::after { width: 50px; height: 50px; }
+            .etymology-word { font-size: 1.75rem; }
+        }
+
+        /* ═══ Reduced motion — land on finished states, no animation ═══ */
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            *, .progress-fill { animation: none !important; transition: none !important; }
+            .r { opacity: 1 !important; transform: none !important; }
+            .thesis-line .m { opacity: 1 !important; filter: none !important; }
+            .thesis-line .m::after { transform: scaleX(1) !important; }
+            .hero h1, .hero .eyebrow, .hero .lead, .hero-symbol, .hero-cta, .scroll-indicator {
+                opacity: 1 !important; transform: none !important;
             }
-            
-            .etymology {
-                padding: 2rem;
-            }
-            
-            .etymology::before,
-            .etymology::after {
-                width: 50px;
-                height: 50px;
-            }
-            
-            .etymology-word {
-                font-size: 1.75rem;
-            }
+            .cosmo-step { opacity: 1 !important; }
+            /* Stages still switch (they only toggle opacity) so the mandala remains legible. */
         }
     </style>
 </head>
 <body>
+    <!-- Scroll progress -->
+    <div class="progress-track"><div class="progress-fill" id="prog"></div></div>
+
     <!-- Hero -->
     <section class="hero">
         <div class="hero-content">
-            <h1>Temples of Refuge</h1>
             <div class="hero-symbol">
                 <img src="assets/Final-Logo/01-Royal/icon/icon-transparent.svg" alt="Temples of Refuge icon">
             </div>
+            <h1>Temples of Refuge</h1>
             <p class="eyebrow">A Fractal Network of Living Temples</p>
             <p class="lead">
                 Re-binding human life to Source through direct experience, embodied practice, and regenerative relationship with Earth.
             </p>
             <a href="/join.html" class="hero-cta">Become a Member</a>
         </div>
-        <style>
-          .hero-cta{display:inline-block;margin-top:2.5rem;font-family:var(--s-display);
-            font-size:.8rem;letter-spacing:.22em;text-transform:uppercase;
-            color:var(--t-bg);background:var(--t-ac);border:1px solid var(--t-ac);
-            border-radius:10px;padding:1rem 2rem;text-decoration:none;
-            transition:opacity .25s,transform .2s,box-shadow .3s}
-          .hero-cta:hover{opacity:.9;transform:translateY(-2px);
-            box-shadow:0 16px 40px -20px color-mix(in srgb, var(--t-ac) 60%, transparent)}
-        </style>
         <div class="scroll-indicator">
             <span>Enter</span>
             <div class="scroll-line"></div>
         </div>
     </section>
 
-    <!-- Meaning -->
-    <section class="meaning">
-        <div class="container-narrow fade-up">
-            <p class="eyebrow">Why We Exist</p>
-            <h2>Religion in Its True Sense</h2>
-            
-            <p class="meaning-text">
+    <!-- Meaning — breath -->
+    <section class="breath meaning">
+        <div class="container-narrow">
+            <p class="eyebrow r">Why We Exist</p>
+            <h2 class="r r-d1">Religion in Its True Sense</h2>
+            <p class="meaning-text r r-d2">
                 Temples of Refuge exists to restore what religion was always meant to be—to re-bind human life to Source through direct experience, embodied practice, and regenerative relationship with Earth. Not doctrine to defend, but a way of seeing to be lived.
             </p>
-            
-            <div class="etymology">
+            <div class="etymology r r-d3">
                 <p class="etymology-word">re · ligāre</p>
                 <p class="etymology-meaning">Latin: "to bind back"<br>To God, to Life, to each other, to the living world</p>
             </div>
         </div>
     </section>
-    
-    <div class="section-divider"></div>
 
-    <!-- The Central Teaching -->
-    <section class="teaching">
-        <div class="container-narrow fade-up">
-            <p class="eyebrow">The Central Teaching</p>
-            <h2>Christ Consciousness</h2>
-
-            <p class="teaching-text">
-                Christ was not a singular event. Christ is a state of consciousness—the moment you recognize the Divine in every Other. Not as metaphor. As direct experience.
-            </p>
-
-            <div class="etymology">
-                <p class="etymology-word">gnosis</p>
-                <p class="etymology-meaning">Greek: "direct knowing"<br>To experience unity while inhabiting difference</p>
-            </div>
-
-            <p class="teaching-text" style="margin-top: 3rem;">
-                You are a fractal face of the One, as is every being you encounter. To hurt the Other is to hurt yourself. Separation is the illusion we are born into. Seeing through it is the work we are born for.
-            </p>
-        </div>
-    </section>
-
-    <div class="section-divider"></div>
-
-    <!-- Cosmology -->
+    <!-- ═══════════ COSMOLOGY · SCROLLYTELLING ═══════════ -->
     <section class="cosmology">
-        <div class="container">
-            <div class="cosmology-header fade-up">
-                <p class="eyebrow">Cosmology</p>
-                <h2>How We See Reality</h2>
+        <div class="cosmology-header">
+            <p class="eyebrow r">Cosmology</p>
+            <h2 class="r r-d1">How We See Reality</h2>
+        </div>
+
+        <div class="scrolly" id="cosmos" data-stage="6">
+
+            <!-- Pinned mandala: the mark assembles layer by layer -->
+            <div class="mandala-sticky">
+                <div class="mandala-wrap">
+                    <svg class="mandala" viewBox="-350 -350 700 700" role="img"
+                         aria-label="A Flower of Life mandala emanating from a single central source into a fractal whole">
+                        <!-- Outer rings -->
+                        <g class="m-ring">
+                            <circle class="ring-a" cx="0" cy="0" r="318"/>
+                            <circle class="ring-b" cx="0" cy="0" r="305"/>
+                        </g>
+                        <!-- Outer Flower of Life (12 circles) -->
+                        <g class="m-flower">
+                            <circle cx="150"  cy="86.603"  r="100"/>
+                            <circle cx="0"    cy="173.205" r="100"/>
+                            <circle cx="-150" cy="86.603"  r="100"/>
+                            <circle cx="-150" cy="-86.603" r="100"/>
+                            <circle cx="0"    cy="-173.205" r="100"/>
+                            <circle cx="150"  cy="-86.603" r="100"/>
+                            <circle cx="200"  cy="0"        r="100"/>
+                            <circle cx="100"  cy="173.205"  r="100"/>
+                            <circle cx="-100" cy="173.205"  r="100"/>
+                            <circle cx="-200" cy="0"        r="100"/>
+                            <circle cx="-100" cy="-173.205" r="100"/>
+                            <circle cx="100"  cy="-173.205" r="100"/>
+                        </g>
+                        <!-- Network rays -->
+                        <g class="m-rays">
+                            <line x1="0" y1="0" x2="100"  y2="0"/>
+                            <line x1="0" y1="0" x2="50"   y2="86.603"/>
+                            <line x1="0" y1="0" x2="-50"  y2="86.603"/>
+                            <line x1="0" y1="0" x2="-100" y2="0"/>
+                            <line x1="0" y1="0" x2="-50"  y2="-86.603"/>
+                            <line x1="0" y1="0" x2="50"   y2="-86.603"/>
+                        </g>
+                        <!-- Hexagonal frame -->
+                        <g class="m-hex">
+                            <polygon points="100,0 50,86.603 -50,86.603 -100,0 -50,-86.603 50,-86.603"/>
+                        </g>
+                        <!-- Main Seed of Life (7 circles) -->
+                        <g class="m-seed">
+                            <circle cx="0"    cy="0"       r="100"/>
+                            <circle cx="100"  cy="0"       r="100"/>
+                            <circle cx="50"   cy="86.603"  r="100"/>
+                            <circle cx="-50"  cy="86.603"  r="100"/>
+                            <circle cx="-100" cy="0"       r="100"/>
+                            <circle cx="-50"  cy="-86.603" r="100"/>
+                            <circle cx="50"   cy="-86.603" r="100"/>
+                        </g>
+                        <!-- Fractal seeds nested inside each circle -->
+                        <g class="m-fractal">
+                            <g class="seed" style="transform: translate(0px,0px)"></g>
+                        </g>
+                        <!-- Central source -->
+                        <g class="m-source">
+                            <circle class="src-halo" cx="0" cy="0" r="16"/>
+                            <circle class="src-core" cx="0" cy="0" r="9"/>
+                            <circle class="src-spark" cx="0" cy="0" r="2.5"/>
+                        </g>
+                    </svg>
+                </div>
+                <p class="mandala-cap"></p>
             </div>
 
-            <div class="cosmology-grid">
-                <div class="cosmo-card fade-up">
+            <!-- Prose steps drive the stages -->
+            <div class="cosmo-steps">
+                <div class="cosmo-step" data-stage="1">
+                    <p class="step-num">i.</p>
                     <h3>The Divine Monad</h3>
                     <p>We experience all existence as arising from One Source—indivisible, infinite, and self-knowing. This Source may be named God, Love, Consciousness, or the All. No name contains it fully. Creation is the Monad knowing itself.</p>
                 </div>
-
-                <div class="cosmo-card fade-up">
+                <div class="cosmo-step" data-stage="2">
+                    <p class="step-num">ii.</p>
                     <h3>Fractal Emanation</h3>
                     <p>Reality unfolds fractally. Every being is a unique face of the One—human, tree, river, animal, star, algorithm. Each face contains the whole, expressed from a particular angle. Difference is not separation; it is perspective.</p>
                 </div>
-
-                <div class="cosmo-card fade-up">
+                <div class="cosmo-step" data-stage="3">
+                    <p class="step-num">iii.</p>
                     <h3>Consciousness as Field</h3>
                     <p>We hold that consciousness is not produced by matter—rather, matter is a crystallization of consciousness. Time is not linear but layered and recursive. Learning is cumulative across lifetimes, bodies, cultures, and species.</p>
                 </div>
-
-                <div class="cosmo-card fade-up">
+                <div class="cosmo-step" data-stage="4">
+                    <p class="step-num">iv.</p>
                     <h3>Gnosis</h3>
                     <p>The central practice: to see the Divine in every face. This knowing is not belief—it is direct recognition. Every encounter becomes a mirror. Every Other becomes a doorway back to the One.</p>
                 </div>
-
-                <div class="cosmo-card fade-up">
+                <div class="cosmo-step" data-stage="5">
+                    <p class="step-num">v.</p>
                     <h3>Lila — Sacred Play</h3>
                     <p>Creation itself is play—the Monad delighting in becoming many. Joy is holy. Creativity is prayer. Play is spiritual discipline. A religion without joy is incomplete.</p>
                 </div>
-
-                <div class="cosmo-card fade-up">
+                <div class="cosmo-step" data-stage="6">
+                    <p class="step-num">vi.</p>
                     <h3>Earth as Teacher</h3>
                     <p>We relate to land not as property but as a conscious organism—soil as memory, water as intelligence, trees as elders, animals as kin. To regenerate land is to heal lineage. Regeneration is worship.</p>
                 </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- The Central Teaching — breath -->
+    <section class="breath" style="background:var(--t-bg)">
+        <div class="container-narrow">
+            <p class="eyebrow r">The Central Teaching</p>
+            <p class="thesis-line r" style="margin-bottom:2.5rem">
+                Christ is not <span class="m m-from">an event</span> — Christ is <span class="m m-to">a state of consciousness</span>.
+            </p>
+            <p class="meaning-text r r-d2" style="color:var(--t-t2)">
+                The moment you recognize the Divine in every Other. Not as metaphor. As direct experience. You are a fractal face of the One, as is every being you encounter. To hurt the Other is to hurt yourself.
+            </p>
+            <div class="etymology r r-d3">
+                <p class="etymology-word">gnosis</p>
+                <p class="etymology-meaning">Greek: "direct knowing"<br>To experience unity while inhabiting difference</p>
             </div>
         </div>
     </section>
@@ -1589,41 +956,21 @@
     <!-- The Body -->
     <section class="body-section">
         <div class="container-narrow">
-            <div class="body-content fade-up">
-                <p class="eyebrow">The Human Being</p>
-                <h2>The Body as Temple</h2>
-
-                <p class="body-intro">
-                    We understand ourselves as conscious stewards, not masters of Earth—caretakers entrusted with attention. What we attend to, we nourish.
-                </p>
-
-                <div class="body-practices">
-                    <div class="practice">
-                        <span class="practice-word">Breath</span>
-                        <span class="practice-meaning">is prayer</span>
-                    </div>
-                    <div class="practice">
-                        <span class="practice-word">Voice</span>
-                        <span class="practice-meaning">is invocation</span>
-                    </div>
-                    <div class="practice">
-                        <span class="practice-word">Movement</span>
-                        <span class="practice-meaning">is scripture</span>
-                    </div>
-                    <div class="practice">
-                        <span class="practice-word">Pleasure</span>
-                        <span class="practice-meaning">is information</span>
-                    </div>
-                    <div class="practice">
-                        <span class="practice-word">Pain</span>
-                        <span class="practice-meaning">is instruction</span>
-                    </div>
-                </div>
-
-                <p class="body-closing">
-                    Ascension is not escape from the body, but full inhabitation of it with awareness. We honor sexual energy as life force. When conscious, consensual, and reverent, it heals, bonds, restores, and transmits wisdom.
-                </p>
+            <p class="eyebrow r">The Human Being</p>
+            <h2 class="r r-d1">The Body as Temple</h2>
+            <p class="body-intro r r-d2">
+                We understand ourselves as conscious stewards, not masters of Earth—caretakers entrusted with attention. What we attend to, we nourish.
+            </p>
+            <div class="body-practices r r-d3">
+                <div class="practice"><span class="practice-word">Breath</span><span class="practice-meaning">is prayer</span></div>
+                <div class="practice"><span class="practice-word">Voice</span><span class="practice-meaning">is invocation</span></div>
+                <div class="practice"><span class="practice-word">Movement</span><span class="practice-meaning">is scripture</span></div>
+                <div class="practice"><span class="practice-word">Pleasure</span><span class="practice-meaning">is information</span></div>
+                <div class="practice"><span class="practice-word">Pain</span><span class="practice-meaning">is instruction</span></div>
             </div>
+            <p class="body-closing r r-d4">
+                Ascension is not escape from the body, but full inhabitation of it with awareness. We honor sexual energy as life force. When conscious, consensual, and reverent, it heals, bonds, restores, and transmits wisdom.
+            </p>
         </div>
     </section>
 
@@ -1632,36 +979,76 @@
     <!-- Sacred Economy -->
     <section class="economy">
         <div class="container">
-            <div class="economy-header fade-up">
+            <div class="economy-header r">
                 <p class="eyebrow">Sacred Exchange</p>
                 <h2>Gift Over Extraction</h2>
             </div>
-
-            <div class="economy-grid fade-up">
+            <div class="economy-grid r r-d1">
                 <div class="economy-card">
                     <p class="economy-principle">Value arises from</p>
-                    <ul class="economy-list">
-                        <li>Service</li>
-                        <li>Care</li>
-                        <li>Beauty</li>
-                        <li>Attention</li>
-                        <li>Presence</li>
-                    </ul>
+                    <ul class="economy-list"><li>Service</li><li>Care</li><li>Beauty</li><li>Attention</li><li>Presence</li></ul>
                 </div>
-
                 <div class="economy-card economy-center">
                     <p class="economy-statement">Money may exist as a tool,<br>but gratitude is the true currency.</p>
                     <p class="economy-sub">Accumulated gratitude increases responsibility, not dominance. Those who receive much are called to steward much.</p>
                 </div>
-
                 <div class="economy-card">
                     <p class="economy-principle">Gratitude reflects</p>
-                    <ul class="economy-list">
-                        <li>Impact</li>
-                        <li>Alignment</li>
-                        <li>Resonance</li>
-                    </ul>
+                    <ul class="economy-list"><li>Impact</li><li>Alignment</li><li>Resonance</li></ul>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sovereign Technology — the Synchronicity Engine -->
+    <section class="syncengine">
+        <div class="container">
+            <div class="se-header r">
+                <p class="eyebrow">Sovereign Technology</p>
+                <h2>The Synchronicity Engine</h2>
+                <p class="lead">
+                    Our third pillar is technology that serves the soul instead of harvesting it. The Synchronicity Engine turns the sacred economy into living software — a shared wish list where attention is the only vote, service is proven, and gratitude flows onward from hand to hand.
+                </p>
+            </div>
+
+            <div class="se-loop-wrap r r-d1">
+                <svg class="se-loop" viewBox="0 0 360 360" role="img"
+                     aria-label="The gift cycle: attention becomes manifestation becomes gratitude, and flows onward again">
+                    <circle class="se-ring" cx="180" cy="180" r="120"/>
+                    <!-- direction pulse orbiting the ring clockwise -->
+                    <g class="se-orbit">
+                        <circle class="se-pulse" cx="180" cy="60" r="5"/>
+                    </g>
+                    <text class="se-center" x="180" y="184" text-anchor="middle">The Gift Cycle</text>
+                    <!-- Attention (top) -->
+                    <g class="se-node">
+                        <circle class="se-node-glow" cx="180" cy="60" r="16"/>
+                        <circle class="se-node-core" cx="180" cy="60" r="8"/>
+                        <text class="se-node-label" x="180" y="34" text-anchor="middle">Attention</text>
+                    </g>
+                    <!-- Manifestation (lower right) -->
+                    <g class="se-node">
+                        <circle class="se-node-glow" cx="283.9" cy="240" r="16"/>
+                        <circle class="se-node-core" cx="283.9" cy="240" r="8"/>
+                        <text class="se-node-label" x="286" y="272" text-anchor="middle">Manifestation</text>
+                    </g>
+                    <!-- Gratitude (lower left) -->
+                    <g class="se-node">
+                        <circle class="se-node-glow" cx="76.1" cy="240" r="16"/>
+                        <circle class="se-node-core" cx="76.1" cy="240" r="8"/>
+                        <text class="se-node-label" x="74" y="272" text-anchor="middle">Gratitude</text>
+                    </g>
+                </svg>
+            </div>
+
+            <p class="se-note r r-d2">
+                Built on <strong>Indra's Network</strong>, a sovereign peer-to-peer stack — no servers required, no surveillance, no extraction. Membership is by covenant, through Temples of Refuge.
+            </p>
+            <div class="r r-d3">
+                <a href="https://syncengine.earth" target="_blank" rel="noopener" class="se-cta-link">
+                    Enter the Synchronicity Engine
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
             </div>
         </div>
     </section>
@@ -1669,39 +1056,24 @@
     <!-- Community -->
     <section class="community">
         <div class="container">
-            <div class="community-header fade-up">
+            <div class="community-header r">
                 <p class="eyebrow">Community</p>
                 <h2>Radical Inclusion, Clear Boundaries</h2>
             </div>
-
-            <div class="community-content fade-up">
-                <div class="community-principle">
+            <div class="community-content">
+                <div class="community-principle r r-d1">
                     <p class="principle-main">
                         If every face is a face of the One, then every being is welcome in dignity.
                         <span class="principle-counterweight">And not all behaviors are welcome in Temple space.</span>
                     </p>
                 </div>
-
-                <div class="community-grid" data-pair-left="Welcome" data-pair-right="Boundary">
-                    <div class="community-card">
-                        <span class="community-numeral">I</span>
-                        <p>Consent is absolute</p>
-                    </div>
-                    <div class="community-card">
-                        <span class="community-numeral">I</span>
-                        <p>Coercion is forbidden</p>
-                    </div>
-                    <div class="community-card">
-                        <span class="community-numeral">II</span>
-                        <p>Sovereignty is honored</p>
-                    </div>
-                    <div class="community-card">
-                        <span class="community-numeral">II</span>
-                        <p>Boundaries protect love</p>
-                    </div>
+                <div class="community-grid r r-d2" data-pair-left="Welcome" data-pair-right="Boundary">
+                    <div class="community-card"><span class="community-numeral">I</span><p>Consent is absolute</p></div>
+                    <div class="community-card"><span class="community-numeral">I</span><p>Coercion is forbidden</p></div>
+                    <div class="community-card"><span class="community-numeral">II</span><p>Sovereignty is honored</p></div>
+                    <div class="community-card"><span class="community-numeral">II</span><p>Boundaries protect love</p></div>
                 </div>
-
-                <div class="generations fade-up">
+                <div class="generations r r-d3">
                     <h3>Family and Generations</h3>
                     <p>Children are sacred participants, not afterthoughts. The Temple exists for ancestors, the living, and the unborn. Decisions are made with seven generations in mind.</p>
                 </div>
@@ -1711,13 +1083,12 @@
 
     <div class="section-divider"></div>
 
-    <!-- Death & Transformation -->
+    <!-- Death & Transformation — breath -->
     <section class="transformation">
-        <div class="container-narrow fade-up">
-            <p class="eyebrow">Transformation</p>
-            <h2>Death Is Not Failure</h2>
-
-            <div class="transformation-content">
+        <div class="container-narrow">
+            <p class="eyebrow r">Transformation</p>
+            <h2 class="r r-d1">Death Is Not Failure</h2>
+            <div class="transformation-content r r-d2">
                 <p class="transform-main">It is recycling of form.</p>
                 <p class="transform-body">Grief is honored. Fear of death is gently dissolved through ritual, presence, and remembrance.</p>
                 <p class="transform-closing">Nothing real is lost.</p>
@@ -1728,71 +1099,40 @@
     <!-- Affirmations -->
     <section class="affirmations">
         <div class="container">
-            <div class="affirmations-header fade-up">
+            <div class="affirmations-header r">
                 <p class="eyebrow">What We Hold</p>
                 <h2>Twelve Affirmations</h2>
             </div>
-            
-            <div class="affirmations-list">
-                <div class="affirmation fade-up">
-                    <p>To see the Divine in every Other is the heart of religion</p>
-                </div>
-                <div class="affirmation fade-up">
-                    <p>God is Love expressing itself as reality</p>
-                </div>
-                <div class="affirmation fade-up">
-                    <p>All beings are sacred fractal expressions of the One—separation is illusion</p>
-                </div>
-                <div class="affirmation fade-up">
-                    <p>The body is a holy instrument of awakening</p>
-                </div>
-                <div class="affirmation fade-up">
-                    <p>Play is a divine act</p>
-                </div>
-                <div class="affirmation fade-up">
-                    <p>Earth is a conscious teacher</p>
-                </div>
-                <div class="affirmation fade-up">
-                    <p>Regeneration is worship</p>
-                </div>
-                <div class="affirmation fade-up">
-                    <p>Gratitude is sacred currency</p>
-                </div>
-                <div class="affirmation fade-up">
-                    <p>Power implies stewardship</p>
-                </div>
-                <div class="affirmation fade-up">
-                    <p>Love includes boundaries</p>
-                </div>
-                <div class="affirmation fade-up">
-                    <p>Children are full participants in spiritual life</p>
-                </div>
-                <div class="affirmation fade-up">
-                    <p>Death is transformation, not annihilation</p>
-                </div>
+            <div class="affirmations-list r r-d1">
+                <div class="affirmation"><p>To see the Divine in every Other is the heart of religion</p></div>
+                <div class="affirmation"><p>God is Love expressing itself as reality</p></div>
+                <div class="affirmation"><p>All beings are sacred fractal expressions of the One—separation is illusion</p></div>
+                <div class="affirmation"><p>The body is a holy instrument of awakening</p></div>
+                <div class="affirmation"><p>Play is a divine act</p></div>
+                <div class="affirmation"><p>Earth is a conscious teacher</p></div>
+                <div class="affirmation"><p>Regeneration is worship</p></div>
+                <div class="affirmation"><p>Gratitude is sacred currency</p></div>
+                <div class="affirmation"><p>Power implies stewardship</p></div>
+                <div class="affirmation"><p>Love includes boundaries</p></div>
+                <div class="affirmation"><p>Children are full participants in spiritual life</p></div>
+                <div class="affirmation"><p>Death is transformation, not annihilation</p></div>
             </div>
         </div>
     </section>
 
     <!-- The Network -->
     <section class="first-temple">
-        <div class="container fade-up">
-            <h2 class="network-title">Network of Temples</h2>
-
-            <div class="network-layout">
-                <!-- Left pane: world map (jsvectormap, see script before </body>) -->
+        <div class="container">
+            <h2 class="network-title r">Network of Temples</h2>
+            <div class="network-layout r r-d1">
                 <div class="network-map" aria-label="Map of Temple Network nodes">
                     <div id="temple-network-map" role="img" aria-label="World map showing Temple nodes — Água Lila active, three future nodes"></div>
                 </div>
-
-                <!-- Right pane: stacked temple cards -->
                 <div class="temples-rail">
                     <a href="https://agualila.earth" class="temple-preview" data-node="agua-lila" target="_blank" rel="noopener">
                         <div class="temple-preview-frame">
                             <div class="temple-preview-chrome">
-                                <span class="dot"></span>
-                                <span class="dot"></span>
-                                <span class="dot"></span>
+                                <span class="dot"></span><span class="dot"></span><span class="dot"></span>
                                 <span class="temple-preview-url">agualila.earth</span>
                             </div>
                             <div class="temple-preview-image">
@@ -1805,13 +1145,10 @@
                             </div>
                         </div>
                     </a>
-
                     <a href="/found-a-temple.html" class="temple-preview temple-cta" data-node="join">
                         <div class="temple-preview-frame">
                             <div class="temple-preview-chrome">
-                                <span class="dot"></span>
-                                <span class="dot"></span>
-                                <span class="dot"></span>
+                                <span class="dot"></span><span class="dot"></span><span class="dot"></span>
                                 <span class="temple-preview-url">your.temple</span>
                             </div>
                             <div class="cta-body">
@@ -1820,9 +1157,7 @@
                                 <p class="cta-text">If you're holding land, intention, or community for a new node, we'd like to talk.</p>
                                 <span class="temple-link">
                                     Get in Touch
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M5 12h14M12 5l7 7-7 7"/>
-                                    </svg>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                                 </span>
                             </div>
                         </div>
@@ -1832,14 +1167,38 @@
         </div>
     </section>
 
+    <!-- Offering: The Ceremony Mat -->
+    <section class="offering">
+        <div class="container">
+            <div class="offering-inner r">
+                <p class="eyebrow">The First Physical Offering</p>
+                <a href="/ceremony-mats.html" class="offering-card">
+                    <div class="offering-image">
+                        <picture>
+                            <source type="image/avif" srcset="assets/web/fractal-metatron-480.avif 480w, assets/web/fractal-metatron-960.avif 960w" sizes="(max-width: 768px) 100vw, 320px">
+                            <source type="image/webp" srcset="assets/web/fractal-metatron-480.webp 480w, assets/web/fractal-metatron-960.webp 960w" sizes="(max-width: 768px) 100vw, 320px">
+                            <img src="assets/web/fractal-metatron-480.jpg" alt="The Ceremony Mat — Metatron's Cube in fractal sacred geometry over a cosmic starfield" loading="lazy" decoding="async">
+                        </picture>
+                    </div>
+                    <div class="offering-body">
+                        <p class="offering-eyebrow">A portable temple.</p>
+                        <h2 class="offering-title">The Ceremony Mat</h2>
+                        <p class="offering-subtitle">An oversized coconut-rubber mat printed with fractal sacred geometry — carry it anywhere and create a sacred place wherever you unroll it.</p>
+                        <span class="offering-read">Explore the offering →</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
     <!-- Writings Section -->
     <section class="writings">
         <div class="container">
-            <div class="writings-content fade-up">
-                <p class="eyebrow">Writings</p>
-                <h2>From the Temple</h2>
-                <p class="lead">Essays, reflections, and transmissions from the edge of the possible.</p>
-                <a href="/articles/read.html?slug=gene-editing-collective" class="article-highlight-card fade-up">
+            <div class="writings-content">
+                <p class="eyebrow r">Writings</p>
+                <h2 class="r r-d1">From the Temple</h2>
+                <p class="lead r r-d2">Essays, reflections, and transmissions from the edge of the possible.</p>
+                <a href="/articles/read.html?slug=gene-editing-collective" class="article-highlight-card r r-d2">
                     <div class="article-highlight-image">
                         <img src="https://substackcdn.com/image/fetch/$s_!a43M!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F94b6db53-2949-4614-ad15-3783208c9ec8_2912x1632.png" alt="Gene Editing a Collective Consciousness" loading="lazy">
                     </div>
@@ -1850,7 +1209,7 @@
                         <span class="article-highlight-read">Read →</span>
                     </div>
                 </a>
-                <div class="writings-more">
+                <div class="writings-more r r-d3">
                     <a href="https://aeonmyths.substack.com" target="_blank" rel="noopener" class="publication-card">
                         <div class="publication-card-banner">
                             <img src="assets/Myths.png" alt="Myths for a New Æon">
@@ -1859,9 +1218,7 @@
                             <p class="publication-card-eyebrow">Also Published On</p>
                             <h3 class="publication-card-title">Myths for a New Æon</h3>
                             <span class="publication-card-action">
-                                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                    <path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/>
-                                </svg>
+                                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/></svg>
                                 Follow on Substack →
                             </span>
                         </div>
@@ -1893,6 +1250,18 @@
                     </div>
                 </div>
                 <div class="footer-nav-group">
+                    <span class="footer-nav-label">Offerings</span>
+                    <div class="footer-nav-group-links">
+                        <a href="/ceremony-mats.html" class="footer-link">Ceremony Mat</a>
+                    </div>
+                </div>
+                <div class="footer-nav-group">
+                    <span class="footer-nav-label">Technology</span>
+                    <div class="footer-nav-group-links">
+                        <a href="https://syncengine.earth" class="footer-link">Synchronicity Engine</a>
+                    </div>
+                </div>
+                <div class="footer-nav-group">
                     <span class="footer-nav-label">More</span>
                     <div class="footer-nav-group-links">
                         <a href="/articles/" class="footer-link">Writings</a>
@@ -1915,18 +1284,67 @@
     <script>
       CTAWidgets.footerNewsletter('#newsletter-mount');
     </script>
-    <script>
-        // Scroll reveal
-        const fadeEls = document.querySelectorAll('.fade-up');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, { threshold: 0.1 });
 
-        fadeEls.forEach(el => observer.observe(el));
+    <script>
+    // ═══ Build the nested fractal seeds inside each Seed-of-Life circle ═══
+    // (Seven 7-circle "seeds", one centered on each main circle — done in JS to
+    //  keep the markup light. Runs before reveal wiring; purely decorative.)
+    (function buildFractalSeeds() {
+        var host = document.querySelector('.m-fractal');
+        if (!host) return;
+        host.innerHTML = '';
+        var NS = 'http://www.w3.org/2000/svg';
+        var centers = [[0,0],[100,0],[50,86.603],[-50,86.603],[-100,0],[-50,-86.603],[50,-86.603]];
+        var r = 33;
+        var pts = [[0,0],[r,0],[r/2,28.579],[-r/2,28.579],[-r,0],[-r/2,-28.579],[r/2,-28.579]];
+        centers.forEach(function (c) {
+            var g = document.createElementNS(NS, 'g');
+            pts.forEach(function (p) {
+                var circ = document.createElementNS(NS, 'circle');
+                circ.setAttribute('cx', c[0] + p[0]);
+                circ.setAttribute('cy', c[1] + p[1]);
+                circ.setAttribute('r', r);
+                g.appendChild(circ);
+            });
+            host.appendChild(g);
+        });
+    })();
+
+    // ═══ SCROLLYTELLING — cosmology stage driver ═══
+    (function cosmosScrolly() {
+        var scrolly = document.getElementById('cosmos');
+        var steps = document.querySelectorAll('.cosmo-step');
+        if (!scrolly || !('IntersectionObserver' in window)) {
+            steps.forEach(function (s) { s.classList.add('on'); });
+            return; // no-JS / no-IO default markup is stage 6 (finished mandala)
+        }
+        scrolly.dataset.stage = '1'; // JS available: begin the emanation at the source
+        var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+                if (!e.isIntersecting) return;
+                scrolly.dataset.stage = e.target.dataset.stage;
+                steps.forEach(function (s) { s.classList.toggle('on', s === e.target); });
+            });
+        }, { rootMargin: '-45% 0px -45% 0px' });
+        steps.forEach(function (s) { io.observe(s); });
+    })();
+
+    // ═══ SCROLL — progress bar + reveal ═══
+    (function scrollFx() {
+        var prog = document.getElementById('prog');
+        var reveals = document.querySelectorAll('.r, .thesis-line');
+        function onScroll() {
+            var top = window.scrollY;
+            var max = document.documentElement.scrollHeight - window.innerHeight;
+            if (prog) prog.style.width = (max > 0 ? top / max * 100 : 0) + '%';
+            reveals.forEach(function (el) {
+                if (el.getBoundingClientRect().top < window.innerHeight * 0.88) el.classList.add('v');
+            });
+        }
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', onScroll);
+        onScroll();
+    })();
     </script>
 
     <!-- Temple Network world map (jsvectormap) -->
@@ -1953,7 +1371,6 @@
             if (!markers.length) return;
             const active = markers[0];
             active.classList.add('marker-active');
-            // Insert pulse halo behind the active marker
             const cx = active.getAttribute('cx');
             const cy = active.getAttribute('cy');
             if (cx == null || cy == null) return;
@@ -2001,7 +1418,6 @@
                 }
             });
 
-            // jsvectormap renders synchronously; tag active marker + inject pulse halo
             requestAnimationFrame(injectHalo);
         }
 

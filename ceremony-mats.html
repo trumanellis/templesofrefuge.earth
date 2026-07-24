@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="en" data-skin="technical">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Ceremony Mat — Temples of Refuge</title>
+    <meta name="description" content="A portable temple. The Ceremony Mat is an oversized 140 × 210 cm coconut-rubber mat with a printed surface of fractal sacred geometry, designed to create a sacred place anywhere. The first physical offering from Temples of Refuge — now in pre-order.">
+
+    <!-- Open Graph / social previews -->
+    <meta property="og:type" content="product">
+    <meta property="og:site_name" content="Temples of Refuge">
+    <meta property="og:title" content="The Ceremony Mat — A Portable Temple">
+    <meta property="og:description" content="An oversized 140 × 210 cm coconut-rubber mat with a printed surface of fractal sacred geometry — a portable temple you can bring to create a sacred place anywhere. Now in pre-order.">
+    <meta property="og:url" content="https://templesofrefuge.earth/ceremony-mats.html">
+    <meta property="og:image" content="https://templesofrefuge.earth/assets/web/fractal-metatron-1600.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="The Ceremony Mat — A Portable Temple">
+    <meta name="twitter:description" content="Fractal sacred geometry on oversized coconut rubber. The first physical offering from Temples of Refuge.">
+    <meta name="twitter:image" content="https://templesofrefuge.earth/assets/web/fractal-metatron-1600.jpg">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&family=Playfair+Display:wght@700;900&family=Raleway:ital,wght@0,200;0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        /* Fallback tokens (default dark skin). theme-engine.js overrides these at
+           runtime; they keep the page styled if it loads without JS or over file://. */
+        :root{
+            --s-font:"Inter",-apple-system,system-ui,sans-serif;
+            --s-display:"Cormorant Garamond",Georgia,serif;
+            --t-bg:#09090b;--t-sf:#111114;--t-cd:#151518;--t-hv:#1c1c20;
+            --t-tx:#fafafa;--t-t2:#a0a0ab;--t-mt:#52525b;--t-dm:#3f3f46;
+            --t-bd:#27272a;--t-b2:#1c1c20;--t-bc:rgba(129,140,248,0.12);
+            --t-ac:#818cf8;--t-a2:#c084fc;
+            --t-ok:#34d399;--t-wn:#fbbf24;--t-er:#f87171;
+            --t-glass:rgba(9,9,11,0.85);--t-glass-bd:rgba(255,255,255,0.06);
+        }
+
+        body {
+            padding-top: 48px; /* clears the fixed ThemeEngine control bar */
+            font-family: var(--s-font);
+            font-weight: 300;
+            background: var(--t-bg);
+            color: var(--t-tx);
+            line-height: 1.8;
+            font-size: 17px;
+        }
+
+        h1, h2, h3 {
+            font-family: var(--s-display);
+            font-weight: 400;
+            line-height: 1.2;
+            letter-spacing: 0.05em;
+        }
+        h1 { font-size: clamp(2.2rem, 6vw, 3.6rem); text-transform: uppercase; letter-spacing: 0.14em; }
+        h2 { font-size: clamp(1.5rem, 4vw, 2.5rem); letter-spacing: 0.1em; }
+        h3 { font-size: clamp(1rem, 2vw, 1.25rem); letter-spacing: 0.08em; }
+
+        .eyebrow {
+            font-family: var(--s-font);
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--t-ac);
+            margin-bottom: 1.5rem;
+        }
+
+        .lead {
+            font-size: clamp(1.05rem, 2vw, 1.25rem);
+            font-weight: 300;
+            color: var(--t-t2);
+            letter-spacing: 0.02em;
+        }
+
+        section { padding: clamp(4rem, 7vw, 5.5rem) 2rem; position: relative; overflow: hidden; }
+        .container { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+        .container-narrow { max-width: 750px; margin: 0 auto; position: relative; z-index: 1; }
+
+        /* ---- Site header ---- */
+        .site-header {
+            position: absolute;
+            top: 48px; left: 0; right: 0;
+            z-index: 3;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.75rem 2rem 0;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .back-link {
+            display: inline-flex; align-items: center; gap: 0.4em;
+            color: var(--t-mt); text-decoration: none;
+            font-family: var(--s-display);
+            font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+            transition: color 0.25s ease;
+        }
+        .back-link:hover { color: var(--t-ac); }
+
+        /* ---- Hero ---- */
+        .hero {
+            min-height: calc(100vh - 48px);
+            padding: clamp(2.75rem, 5vh, 4rem) 2rem clamp(2rem, 4vh, 3rem);
+            display: flex;
+            align-items: center;
+            background:
+                radial-gradient(ellipse at 75% 30%, var(--t-bc) 0%, transparent 55%),
+                radial-gradient(ellipse at 10% 90%, var(--t-glass-bd) 0%, transparent 50%),
+                var(--t-bg);
+        }
+        .hero-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 0.92fr);
+            gap: clamp(2rem, 5vw, 5rem);
+            align-items: center;
+            width: 100%;
+        }
+        .hero-copy { animation: fadeIn 1.6s ease-out both; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .preorder-badge {
+            display: inline-flex; align-items: center; gap: 0.6rem;
+            font-family: var(--s-display);
+            font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase;
+            color: var(--t-ac);
+            border: 1px solid color-mix(in srgb, var(--t-ac) 45%, transparent);
+            border-radius: 999px;
+            padding: 0.5rem 1.1rem;
+            margin-bottom: 1.1rem;
+        }
+        .preorder-badge::before {
+            content: ''; width: 6px; height: 6px; border-radius: 50%;
+            background: var(--t-ac);
+            box-shadow: 0 0 10px var(--t-ac);
+            animation: pulse 2.5s ease-in-out infinite;
+        }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+        .hero h1 {
+            margin-bottom: 0.85rem;
+            background: linear-gradient(180deg, var(--t-tx) 0%, var(--t-t2) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero-tagline {
+            font-family: var(--s-display);
+            font-style: italic;
+            font-size: clamp(1.2rem, 2.6vw, 1.6rem);
+            letter-spacing: 0.04em;
+            color: var(--t-ac);
+            margin-bottom: 1rem;
+        }
+        .hero .eyebrow { margin-bottom: 0.85rem; }
+        .hero .lead { max-width: 44ch; margin-bottom: 1.4rem; }
+
+        .hero-actions { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; }
+        .btn-primary {
+            display: inline-block;
+            font-family: var(--s-display);
+            font-size: 0.78rem; letter-spacing: 0.22em; text-transform: uppercase;
+            color: var(--t-bg); background: var(--t-ac);
+            border: 1px solid var(--t-ac); border-radius: 10px;
+            padding: 1rem 2rem; text-decoration: none;
+            transition: opacity 0.25s, transform 0.2s, box-shadow 0.3s;
+        }
+        .btn-primary:hover {
+            opacity: 0.92; transform: translateY(-2px);
+            box-shadow: 0 16px 40px -20px color-mix(in srgb, var(--t-ac) 60%, transparent);
+        }
+        .btn-ghost {
+            display: inline-flex; align-items: center; gap: 0.6rem;
+            font-family: var(--s-display);
+            font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+            color: var(--t-t2); text-decoration: none;
+            transition: color 0.25s;
+        }
+        .btn-ghost:hover { color: var(--t-ac); }
+
+        /* ---- Mat frame (portrait showcase) ---- */
+        .mat-frame {
+            position: relative;
+            border-radius: 18px;
+            overflow: hidden;
+            background: #000;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow:
+                0 40px 100px -30px rgba(0, 0, 0, 0.75),
+                0 0 0 1px rgba(255, 255, 255, 0.02),
+                inset 0 1px 0 rgba(255, 255, 255, 0.06);
+            animation: fadeIn 1.8s ease-out 0.2s both;
+        }
+        .mat-frame img { width: 100%; height: auto; display: block; }
+        /* Two prints, fanned and overlapping. Height-capped so the pair never
+           overflows the fold. */
+        .hero-mats {
+            position: relative;
+            width: 100%;
+            max-width: 470px;
+            height: min(62vh, 540px);
+            margin-left: auto;
+        }
+        .hero-mats .mat-frame {
+            position: absolute;
+            top: 6%;
+            height: 88%;
+            width: auto;
+            animation: none;
+            transition: transform 0.55s ease;
+        }
+        .hero-mats .mat-frame img { height: 100%; width: auto; max-width: none; display: block; }
+        .hero-mats .back  { left: 0;  transform: rotate(-5deg); z-index: 1; }
+        .hero-mats .front { right: 0; transform: rotate(3deg);  z-index: 2; }
+        .hero-mats:hover .back  { transform: rotate(-7deg) translate(-4%, -2%); }
+        .hero-mats:hover .front { transform: rotate(4deg) translate(4%, 0); }
+
+        /* ---- Section shells ---- */
+        .divider { height: 1px; background: linear-gradient(90deg, transparent, var(--t-bd), transparent); max-width: 400px; margin: 0 auto; }
+        .surface { background: var(--t-sf); }
+        .center { text-align: center; }
+        .section-head { text-align: center; margin-bottom: 2.75rem; }
+        .section-head .lead { max-width: 52ch; margin: 1.5rem auto 0; }
+
+        /* ---- Intro / specs ---- */
+        .intro-statement {
+            font-family: var(--s-display);
+            font-size: clamp(1.3rem, 3vw, 1.9rem);
+            line-height: 1.5; letter-spacing: 0.03em;
+            color: var(--t-t2);
+            max-width: 30ch;
+            margin: 0 auto 2.5rem;
+        }
+        .intro-statement strong { color: var(--t-tx); font-weight: 400; }
+
+        .specs {
+            display: flex; flex-wrap: wrap; justify-content: center;
+            gap: 1px; background: var(--t-bd);
+            border: 1px solid var(--t-bd); border-radius: 14px; overflow: hidden;
+            max-width: 820px; margin: 0 auto;
+        }
+        .spec {
+            flex: 1 1 200px;
+            padding: 2rem 1.5rem;
+            background: var(--t-bg);
+            text-align: center;
+        }
+        .spec-value {
+            font-family: var(--s-display);
+            font-size: 1.35rem; letter-spacing: 0.04em;
+            color: var(--t-ac); margin-bottom: 0.5rem;
+        }
+        .spec-label {
+            font-size: 0.68rem; letter-spacing: 0.25em; text-transform: uppercase;
+            color: var(--t-mt);
+        }
+
+        /* ---- Two editions showcase ---- */
+        .editions-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2.5rem;
+        }
+        .edition { display: flex; flex-direction: column; }
+        .edition .mat-frame { animation: none; }
+        .edition-caption { padding: 1.75rem 0.25rem 0; }
+        .edition-name {
+            font-family: var(--s-display);
+            font-size: 1.35rem; letter-spacing: 0.08em;
+            color: var(--t-tx); margin-bottom: 0.5rem;
+        }
+        .edition-sub {
+            font-size: 0.68rem; letter-spacing: 0.25em; text-transform: uppercase;
+            color: var(--t-ac); margin-bottom: 0.9rem;
+        }
+        .edition-desc { color: var(--t-mt); font-size: 0.92rem; line-height: 1.7; }
+
+        /* ---- Meaning / pattern ---- */
+        .meaning-text {
+            color: var(--t-t2); max-width: 60ch;
+            margin: 0 auto 2.5rem; text-align: center;
+        }
+        .meaning-text:last-child { margin-bottom: 0; }
+        .glyph-line {
+            font-family: var(--s-display);
+            font-style: italic;
+            color: var(--t-ac);
+            text-align: center;
+            font-size: clamp(1.1rem, 2.4vw, 1.4rem);
+            letter-spacing: 0.03em;
+            margin: 0 auto 2.5rem;
+            max-width: 44ch;
+        }
+        .lineage {
+            display: flex; flex-wrap: wrap; justify-content: center;
+            gap: 0.75rem 1rem;
+            max-width: 720px; margin: 3rem auto 0;
+        }
+        .lineage span {
+            font-family: var(--s-display);
+            font-size: 0.66rem; letter-spacing: 0.22em; text-transform: uppercase;
+            color: var(--t-mt);
+            border: 1px solid var(--t-bd); border-radius: 999px;
+            padding: 0.5rem 1.1rem;
+        }
+
+        /* ---- Ways to practice ---- */
+        .practice-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px; background: var(--t-bd);
+        }
+        .practice-card {
+            padding: 3rem 2.25rem;
+            background: var(--t-bg);
+            transition: background 0.5s ease;
+        }
+        .practice-card:hover { background: var(--t-sf); }
+        .practice-num {
+            font-family: var(--s-display); font-style: italic;
+            font-size: 1.4rem; color: var(--t-a2);
+            margin-bottom: 1.25rem; display: block;
+        }
+        .practice-card h3 { color: var(--t-tx); text-transform: uppercase; margin-bottom: 1rem; }
+        .practice-card p { color: var(--t-mt); font-size: 0.92rem; line-height: 1.75; }
+        .practice-card .node-count {
+            display: block; margin-top: 1rem;
+            font-family: var(--s-display); font-size: 0.7rem;
+            letter-spacing: 0.2em; text-transform: uppercase; color: var(--t-ac);
+        }
+
+        /* ---- Material ---- */
+        .material-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 0;
+        }
+        .material {
+            display: flex; align-items: center; gap: 1.25rem;
+            padding: 2rem;
+            border: 1px solid var(--t-bd); margin: -0.5px;
+            transition: background 0.4s ease, border-color 0.4s ease;
+        }
+        .material:hover { background: var(--t-sf); border-color: var(--t-dm); }
+        .material svg { width: 26px; height: 26px; flex-shrink: 0; stroke: var(--t-ac); }
+        .material p { color: var(--t-t2); font-size: 0.9rem; line-height: 1.5; }
+
+        /* ---- Connect poem ---- */
+        .connect {
+            background:
+                radial-gradient(ellipse at center, var(--t-bd) 0%, transparent 70%),
+                var(--t-sf);
+            text-align: center;
+        }
+        .connect-poem {
+            font-family: var(--s-display);
+            font-size: clamp(1.3rem, 3.2vw, 2rem);
+            line-height: 1.9; letter-spacing: 0.06em;
+            color: var(--t-t2);
+        }
+        .connect-poem .lead-line { color: var(--t-tx); display: block; margin-bottom: 0.5rem; }
+        .connect-poem span.to { color: var(--t-ac); }
+        .connect-portal {
+            margin-top: 3rem;
+            font-family: var(--s-display); font-style: italic;
+            font-size: clamp(1.1rem, 2.4vw, 1.5rem);
+            letter-spacing: 0.08em; color: var(--t-ac);
+        }
+
+        /* ---- Pre-order CTA ---- */
+        .preorder {
+            background:
+                radial-gradient(ellipse at 50% 0%, var(--t-bc) 0%, transparent 60%),
+                var(--t-bg);
+            text-align: center;
+        }
+        .preorder .eyebrow { margin-bottom: 1rem; }
+        .preorder h2 { margin-bottom: 1.25rem; }
+        .preorder-note {
+            color: var(--t-t2); max-width: 46ch; margin: 0 auto 3rem;
+        }
+        .preorder-note strong { color: var(--t-tx); font-weight: 400; }
+
+        /* ---- Price ---- */
+        .hero-price {
+            font-family: var(--s-display);
+            font-size: 1rem; letter-spacing: 0.05em;
+            color: var(--t-t2); margin-bottom: 1.4rem;
+        }
+        .hero-price strong { color: var(--t-tx); font-weight: 500; }
+        .hero-price .ship {
+            color: var(--t-mt); font-size: 0.82rem; letter-spacing: 0.1em;
+        }
+        .price-block {
+            display: inline-flex; flex-direction: column; align-items: center; gap: 0.65rem;
+            border: 1px solid color-mix(in srgb, var(--t-ac) 35%, transparent);
+            border-radius: 16px;
+            padding: 1.75rem 2.75rem;
+            margin: 0 auto 3rem;
+            background:
+                radial-gradient(ellipse at 50% 0%, var(--t-bc) 0%, transparent 78%),
+                var(--t-cd);
+        }
+        .price-edition {
+            font-family: var(--s-display);
+            font-size: 0.62rem; letter-spacing: 0.32em; text-transform: uppercase;
+            color: var(--t-ac);
+        }
+        .price-figures {
+            font-family: var(--s-display);
+            font-size: clamp(1.6rem, 4.5vw, 2.4rem); letter-spacing: 0.04em;
+            color: var(--t-tx);
+        }
+        .price-figures .sep { color: var(--t-dm); margin: 0 0.55rem; }
+        .price-ship {
+            font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+            color: var(--t-mt);
+        }
+
+        /* ---- Footer ---- */
+        footer {
+            background: var(--t-bg);
+            padding: 5rem 2rem;
+            text-align: center;
+            border-top: 1px solid var(--t-bd);
+        }
+        .footer-logo {
+            font-family: var(--s-display);
+            font-size: 1rem; letter-spacing: 0.2em; text-transform: uppercase;
+            color: var(--t-tx); margin-bottom: 2rem;
+        }
+        .footer-nav {
+            display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;
+            margin-bottom: 2.5rem;
+        }
+        .footer-nav a {
+            color: var(--t-mt); text-decoration: none;
+            font-family: var(--s-display);
+            font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+            transition: color 0.25s ease;
+        }
+        .footer-nav a:hover { color: var(--t-ac); }
+        .footer-info { color: var(--t-mt); font-size: 0.78rem; line-height: 2; letter-spacing: 0.05em; }
+
+        /* ---- Reveal ---- */
+        .fade-up { opacity: 0; transform: translateY(30px); transition: opacity 1s ease, transform 1s ease; }
+        .fade-up.visible { opacity: 1; transform: translateY(0); }
+        @media (prefers-reduced-motion: reduce) {
+            .fade-up { opacity: 1; transform: none; transition: none; }
+            .hero-copy, .mat-frame { animation: none; }
+        }
+
+        /* ---- Responsive ---- */
+        @media (max-width: 900px) {
+            .hero-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+            .hero { text-align: center; min-height: auto; padding-top: 2.5rem; }
+            .hero-copy { order: 2; }
+            .hero-mats { margin: 0 auto; order: 1; max-width: 380px; }
+            .hero .lead { margin-left: auto; margin-right: auto; }
+            .hero-actions { justify-content: center; }
+            .preorder-badge { margin-left: auto; margin-right: auto; }
+            .practice-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 780px) {
+            .editions-grid { grid-template-columns: 1fr; gap: 3rem; max-width: 440px; margin: 0 auto; }
+        }
+        @media (max-width: 768px) {
+            section { padding: 3.75rem 1.5rem; }
+        }
+
+        /* Short desktop viewports: compress the hero so the whole thing —
+           badge through buttons — stays within the fold under the theme bar. */
+        @media (min-width: 901px) and (max-height: 820px) {
+            .hero h1 { font-size: clamp(2rem, 4.4vw, 3rem); margin-bottom: 0.7rem; }
+            .preorder-badge { margin-bottom: 0.8rem; }
+            .hero .eyebrow { margin-bottom: 0.6rem; }
+            .hero-tagline { margin-bottom: 0.75rem; }
+            .hero .lead { margin-bottom: 1rem; }
+            .hero-price { margin-bottom: 1rem; }
+            .hero-mats { height: min(58vh, 500px); }
+        }
+        @media (min-width: 901px) and (max-height: 720px) {
+            .hero h1 { font-size: clamp(1.9rem, 3.8vw, 2.6rem); }
+            .hero-tagline { font-size: 1.2rem; margin-bottom: 0.6rem; }
+            .hero .lead { font-size: 1rem; margin-bottom: 0.85rem; }
+            .hero-price { margin-bottom: 0.85rem; }
+            .hero-mats { height: min(52vh, 440px); }
+            .hero { padding-top: 2.25rem; padding-bottom: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="site-header">
+        <a href="/" class="back-link">← Temples of Refuge</a>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-grid">
+            <div class="hero-copy">
+                <span class="preorder-badge">Founding Pre-Order</span>
+                <p class="eyebrow">The First Physical Offering</p>
+                <h1>The Ceremony Mat</h1>
+                <p class="hero-tagline">A portable temple.</p>
+                <p class="lead">
+                    An oversized coconut-rubber mat, its printed surface patterned with
+                    fractal sacred geometry — carry it anywhere and create a sacred place
+                    wherever you unroll it.
+                </p>
+                <p class="hero-price"><span class="hp-was">$333</span> <strong>$247</strong> <span class="ship">— founding price, shipping included</span></p>
+                <div class="hero-actions">
+                    <a href="#preorder" class="btn-primary">Reserve Yours</a>
+                    <a href="#editions" class="btn-ghost">
+                        See the two prints
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="hero-mats" role="img" aria-label="The Ceremony Mat in two prints — Cosmic and Heaven on Earth">
+                <div class="mat-frame back">
+                    <picture>
+                        <source type="image/avif" srcset="assets/web/heaven-on-earth-480.avif 480w, assets/web/heaven-on-earth-960.avif 960w, assets/web/heaven-on-earth-1600.avif 1600w" sizes="(max-width: 900px) 50vw, 320px">
+                        <source type="image/webp" srcset="assets/web/heaven-on-earth-480.webp 480w, assets/web/heaven-on-earth-960.webp 960w, assets/web/heaven-on-earth-1600.webp 1600w" sizes="(max-width: 900px) 50vw, 320px">
+                        <img src="assets/web/heaven-on-earth-960.jpg" width="2400" height="3429"
+                             alt="Heaven on Earth print — Metatron's Cube over a soft iridescent dawn" decoding="async">
+                    </picture>
+                </div>
+                <div class="mat-frame front">
+                    <picture>
+                        <source type="image/avif" srcset="assets/web/fractal-metatron-480.avif 480w, assets/web/fractal-metatron-960.avif 960w, assets/web/fractal-metatron-1600.avif 1600w" sizes="(max-width: 900px) 50vw, 320px">
+                        <source type="image/webp" srcset="assets/web/fractal-metatron-480.webp 480w, assets/web/fractal-metatron-960.webp 960w, assets/web/fractal-metatron-1600.webp 1600w" sizes="(max-width: 900px) 50vw, 320px">
+                        <img src="assets/web/fractal-metatron-960.jpg" width="2400" height="3429"
+                             alt="Cosmic print — Metatron's Cube over a deep-space starfield" decoding="async">
+                    </picture>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Intro / specs -->
+    <section class="surface center">
+        <div class="container">
+            <div class="fade-up">
+                <p class="eyebrow">What It Is</p>
+                <p class="intro-statement">
+                    A print made to support <strong>deep inner journeying</strong> —
+                    a still point you can carry into any room, landscape, or gathering.
+                </p>
+            </div>
+
+            <div class="specs fade-up">
+                <div class="spec">
+                    <div class="spec-value">140 × 210 cm</div>
+                    <div class="spec-label">Oversized</div>
+                </div>
+                <div class="spec">
+                    <div class="spec-value">Coconut Rubber</div>
+                    <div class="spec-label">Base Material</div>
+                </div>
+                <div class="spec">
+                    <div class="spec-value">Wet or Dry</div>
+                    <div class="spec-label">Easy to Clean</div>
+                </div>
+                <div class="spec">
+                    <div class="spec-value">Movement · Stillness</div>
+                    <div class="spec-label">For Any Practice</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Two editions -->
+    <section id="editions">
+        <div class="container">
+            <div class="section-head fade-up">
+                <p class="eyebrow">Two Prints</p>
+                <h2>One Pattern, Two Skies</h2>
+                <p class="lead">
+                    The same living geometry rendered in two atmospheres — choose the one
+                    that calls you, or hold space for both.
+                </p>
+            </div>
+
+            <div class="editions-grid fade-up">
+                <div class="edition">
+                    <div class="mat-frame">
+                        <picture>
+                            <source type="image/avif" srcset="assets/web/fractal-metatron-480.avif 480w, assets/web/fractal-metatron-960.avif 960w, assets/web/fractal-metatron-1600.avif 1600w" sizes="(max-width: 780px) 90vw, 480px">
+                            <source type="image/webp" srcset="assets/web/fractal-metatron-480.webp 480w, assets/web/fractal-metatron-960.webp 960w, assets/web/fractal-metatron-1600.webp 1600w" sizes="(max-width: 780px) 90vw, 480px">
+                            <img src="assets/web/fractal-metatron-960.jpg" width="2400" height="3429"
+                                 alt="Cosmic edition — Metatron's Cube over a deep-space starfield in indigo, gold and green"
+                                 loading="lazy" decoding="async">
+                        </picture>
+                    </div>
+                    <div class="edition-caption">
+                        <p class="edition-sub">Edition I</p>
+                        <h3 class="edition-name">Cosmic</h3>
+                        <p class="edition-desc">
+                            Metatron's Cube in a deep-space field — the celestial scribe's
+                            geometry drawn across the night.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="edition">
+                    <div class="mat-frame">
+                        <picture>
+                            <source type="image/avif" srcset="assets/web/heaven-on-earth-480.avif 480w, assets/web/heaven-on-earth-960.avif 960w, assets/web/heaven-on-earth-1600.avif 1600w" sizes="(max-width: 780px) 90vw, 480px">
+                            <source type="image/webp" srcset="assets/web/heaven-on-earth-480.webp 480w, assets/web/heaven-on-earth-960.webp 960w, assets/web/heaven-on-earth-1600.webp 1600w" sizes="(max-width: 780px) 90vw, 480px">
+                            <img src="assets/web/heaven-on-earth-960.jpg" width="2400" height="3429"
+                                 alt="Heaven on Earth edition — Metatron's Cube over a soft iridescent watercolor sky with butterflies"
+                                 loading="lazy" decoding="async">
+                        </picture>
+                    </div>
+                    <div class="edition-caption">
+                        <p class="edition-sub">Edition II</p>
+                        <h3 class="edition-name">Heaven on Earth</h3>
+                        <p class="edition-desc">
+                            The same geometry over a soft iridescent dawn — luminous, gentle,
+                            alive with butterflies.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Meaning / the pattern -->
+    <section class="surface">
+        <div class="container-narrow">
+            <div class="section-head fade-up">
+                <p class="eyebrow">The Pattern</p>
+                <h2>The Geometry of Creation</h2>
+            </div>
+
+            <div class="fade-up">
+                <p class="glyph-line">
+                    According to esoteric traditions, the archangel Metatron acts as
+                    celestial scribe of creation.
+                </p>
+                <p class="meaning-text">
+                    The pattern itself is old. Overlapping-circle hexagonal motifs appear in
+                    Assyrian thresholds, Roman mosaics, and Islamic art, and were incised on
+                    granite at the Osirion temple in Abydos, Egypt. Leonardo da Vinci doodled
+                    extensively with the pattern in the Codex Atlanticus.
+                </p>
+                <div class="lineage">
+                    <span>Assyrian Thresholds</span>
+                    <span>Roman Mosaics</span>
+                    <span>Islamic Art</span>
+                    <span>Osirion · Abydos</span>
+                    <span>Da Vinci · Codex Atlanticus</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ways to practice -->
+    <section>
+        <div class="container">
+            <div class="section-head fade-up">
+                <p class="eyebrow">How to Use It</p>
+                <h2>Ways to Practice</h2>
+                <p class="lead">
+                    Suitable for movement or stillness — alone, in pairs, or as a family.
+                </p>
+            </div>
+
+            <div class="practice-grid fade-up">
+                <div class="practice-card">
+                    <span class="practice-num">i.</span>
+                    <h3>Solo</h3>
+                    <p>
+                        Solo practice can be amplified by sitting at the center and entering
+                        a period of spiritual practice — meditation, breath, prayer, or
+                        simple presence at the heart of the pattern.
+                    </p>
+                </div>
+                <div class="practice-card">
+                    <span class="practice-num">ii.</span>
+                    <h3>Partner</h3>
+                    <p>
+                        Partner practice can be energized by creating a central altar with
+                        special objects and sitting apart from each other — at opposite
+                        corners, back-to-back, or facing forward side-by-side.
+                    </p>
+                </div>
+                <div class="practice-card">
+                    <span class="practice-num">iii.</span>
+                    <h3>Family</h3>
+                    <p>
+                        Family practice is enhanced by the pattern's activation nodes —
+                        distinct points around the geometry where each person can take
+                        their place.
+                    </p>
+                    <span class="node-count">Up to 6 activation nodes</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Connect poem -->
+    <section class="connect">
+        <div class="container-narrow fade-up">
+            <p class="eyebrow" style="margin-bottom:2.5rem;">A Place to Connect</p>
+            <p class="connect-poem">
+                <span class="lead-line">A place for you to connect.</span>
+                <span class="to">To yourself.</span><br>
+                <span class="to">To the Universe.</span><br>
+                <span class="to">To your friend or partner.</span><br>
+                <span class="to">To your family.</span>
+            </p>
+            <p class="connect-portal">A portable portal.</p>
+        </div>
+    </section>
+
+    <!-- Pre-order (Stripe embedded checkout) -->
+    <style>
+        .hero-price .hp-was{color:var(--t-mt);text-decoration:line-through;
+            text-decoration-thickness:1px;margin-right:.35rem}
+        .deal{max-width:520px;margin:0 auto 2.5rem;text-align:center;
+            border:1px solid color-mix(in srgb,var(--t-ac) 35%,transparent);border-radius:18px;
+            padding:2rem 2.25rem;
+            background:radial-gradient(ellipse at 50% 0%,var(--t-bc) 0%,transparent 78%),var(--t-cd)}
+        .deal-edition{display:block;font-family:var(--s-display);font-size:.62rem;
+            letter-spacing:.3em;text-transform:uppercase;color:var(--t-ac);margin-bottom:1.1rem}
+        .deal-price{display:flex;align-items:baseline;justify-content:center;gap:1rem}
+        .deal-was{font-family:var(--s-display);font-size:1.5rem;color:var(--t-mt);
+            text-decoration:line-through;text-decoration-thickness:1px}
+        .deal-now{font-family:var(--s-display);font-size:clamp(2.4rem,7vw,3.4rem);
+            letter-spacing:.02em;color:var(--t-tx);line-height:1}
+        .deal-ship{display:block;margin-top:.7rem;font-size:.68rem;letter-spacing:.2em;
+            text-transform:uppercase;color:var(--t-ac)}
+        .deal-meter{margin-top:1.6rem}
+        .deal-meter-bar{height:5px;border-radius:99px;background:var(--t-b2);
+            border:1px solid var(--t-bd);overflow:hidden}
+        .deal-meter-bar span{display:block;height:100%;width:0;border-radius:99px;
+            background:linear-gradient(90deg,var(--t-ac),var(--t-a2));transition:width .8s ease}
+        .deal-meter-label{display:block;margin-top:.65rem;font-size:.66rem;letter-spacing:.16em;
+            text-transform:uppercase;color:var(--t-mt)}
+        .order{max-width:520px;margin:0 auto}
+        .order-row{display:flex;align-items:center;justify-content:space-between;gap:1rem;
+            padding:1rem 0;border-bottom:1px solid var(--t-bd)}
+        .order-label{font-family:var(--s-display);font-size:.68rem;letter-spacing:.22em;
+            text-transform:uppercase;color:var(--t-mt)}
+        .chips{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:flex-end}
+        .chip{font-family:var(--s-display);font-size:.72rem;letter-spacing:.08em;
+            color:var(--t-t2);background:var(--t-b2);border:1px solid var(--t-bd);
+            border-radius:999px;padding:.5rem .9rem;cursor:pointer;transition:border-color .2s,color .2s,background .2s}
+        .chip:hover{border-color:var(--t-ac);color:var(--t-tx)}
+        .chip[aria-pressed="true"]{border-color:var(--t-ac);color:var(--t-tx);
+            background:color-mix(in srgb,var(--t-ac) 12%,transparent)}
+        .qty{display:flex;align-items:center;gap:1rem}
+        .qty-btn{width:2rem;height:2rem;border-radius:50%;border:1px solid var(--t-bd);
+            background:var(--t-b2);color:var(--t-tx);font-size:1.1rem;line-height:1;cursor:pointer;
+            transition:border-color .2s}
+        .qty-btn:hover{border-color:var(--t-ac)}
+        .qty-val{font-family:var(--s-display);font-size:1.1rem;color:var(--t-tx);
+            min-width:1.5ch;text-align:center}
+        .order-total{text-align:center;margin:1.75rem 0 1.25rem;color:var(--t-t2);
+            font-family:var(--s-display);letter-spacing:.04em}
+        .order-total strong{color:var(--t-tx);font-weight:500}
+        .order-btn{display:block;width:100%;text-align:center;border:none;cursor:pointer}
+        .order-fineprint{text-align:center;margin-top:1rem;font-size:.68rem;
+            letter-spacing:.1em;color:var(--t-mt)}
+        #checkout{margin:1.5rem auto 0;max-width:560px}
+    </style>
+    <section class="preorder" id="preorder">
+        <div class="container-narrow">
+            <div class="fade-up">
+                <p class="eyebrow">Founding Pre-Order</p>
+                <h2>Reserve Your Ceremony Mat</h2>
+                <p class="preorder-note">
+                    The <strong>first physical offering from Temples of Refuge</strong>.
+                    The first 100 mats are offered at the founding price — then it rises to 333.
+                </p>
+            </div>
+
+            <div class="deal fade-up" id="deal">
+                <span class="deal-edition" id="deal-edition">Founding Edition · First 100 Units</span>
+                <div class="deal-price">
+                    <span class="deal-was" id="deal-was">$333</span>
+                    <span class="deal-now" id="deal-now">$247</span>
+                </div>
+                <span class="deal-ship" id="deal-ship">Save $86 · shipping included</span>
+                <div class="deal-meter" id="deal-meter" hidden>
+                    <div class="deal-meter-bar"><span id="deal-meter-fill"></span></div>
+                    <span class="deal-meter-label" id="deal-meter-label"></span>
+                </div>
+            </div>
+
+            <div class="order fade-up" id="order-step">
+                <div class="order-row">
+                    <span class="order-label">Currency</span>
+                    <div class="chips" id="currency-row">
+                        <button type="button" class="chip" data-cur="usd" data-sym="$" aria-pressed="true">USD $</button>
+                        <button type="button" class="chip" data-cur="eur" data-sym="€" aria-pressed="false">EUR €</button>
+                        <button type="button" class="chip" data-cur="gbp" data-sym="£" aria-pressed="false">GBP £</button>
+                    </div>
+                </div>
+                <div class="order-row">
+                    <span class="order-label">Print</span>
+                    <div class="chips" id="edition-row">
+                        <button type="button" class="chip" data-ed="cosmic" aria-pressed="true">Cosmic</button>
+                        <button type="button" class="chip" data-ed="heaven-on-earth" aria-pressed="false">Heaven on Earth</button>
+                    </div>
+                </div>
+                <div class="order-row">
+                    <span class="order-label">Quantity</span>
+                    <div class="qty">
+                        <button type="button" class="qty-btn" id="qty-dec" aria-label="Decrease quantity">−</button>
+                        <span class="qty-val" id="qty-val">1</span>
+                        <button type="button" class="qty-btn" id="qty-inc" aria-label="Increase quantity">+</button>
+                    </div>
+                </div>
+                <p class="order-total" id="order-total">Total <strong>$247</strong> · shipping included</p>
+                <p class="cta-form-error" id="order-error" hidden></p>
+                <button type="button" class="btn-primary order-btn" id="order-btn">Reserve at $247 →</button>
+                <p class="order-fineprint">Secure checkout by Stripe · no account needed</p>
+            </div>
+
+            <!-- Stripe embedded checkout mounts here -->
+            <div id="checkout"></div>
+
+            <div class="cta-form-success" id="order-success" hidden>
+                <div class="ok-mark">✦</div>
+                <h3>Your Ceremony Mat is reserved</h3>
+                <p id="order-success-text">Thank you. We'll email your shipping details as the founding run is prepared.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p class="footer-logo">Temples of Refuge</p>
+        <nav class="footer-nav" aria-label="Site">
+            <a href="/">Home</a>
+            <a href="/cosmology.html">Cosmology</a>
+            <a href="/covenant.html">Covenant</a>
+            <a href="/join.html">Become a Member</a>
+        </nav>
+        <p class="footer-info">
+            The first physical offering · Now in pre-order<br>
+            An Association of Churches · §501(c)(3) &amp; §508(c)(1)(A)
+        </p>
+    </footer>
+
+    <script src="/shared/theme-engine.js"></script>
+    <script>
+    ThemeEngine.init({
+      defaultSkin: 'technical',
+      storageKey: 'tor-skin',
+      position: 'top-right'
+    });
+    </script>
+    <script src="/shared/cta-widgets.js"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+    // Pre-order checkout — Stripe embedded, priced server-side (founding vs regular).
+    (function preOrder() {
+        var cfg = window.CTAConfig || {};
+        var FOUNDING = 247, REGULAR = 333;
+        var SYM = { usd: '$', eur: '€', gbp: '£' };
+        var apiUrl = (window.CTAWidgets && CTAWidgets.isConfigured(cfg.CHECKOUT_API_URL))
+            ? cfg.CHECKOUT_API_URL : null;
+
+        var $ = function (id) { return document.getElementById(id); };
+        var deal = $('deal'), dealNow = $('deal-now'), dealWas = $('deal-was'),
+            dealShip = $('deal-ship'), dealEdition = $('deal-edition'),
+            meter = $('deal-meter'), meterFill = $('deal-meter-fill'), meterLabel = $('deal-meter-label'),
+            orderStep = $('order-step'), orderTotal = $('order-total'), orderBtn = $('order-btn'),
+            orderErr = $('order-error'), success = $('order-success'), successText = $('order-success-text');
+
+        var state = { currency: 'usd', edition: 'cosmic', qty: 1, price: FOUNDING, open: true };
+        function sym() { return SYM[state.currency] || '$'; }
+
+        function render() {
+            var s = sym(), total = state.price * state.qty;
+            dealNow.textContent = s + state.price;
+            if (state.open) {
+                dealWas.hidden = false; dealWas.textContent = s + REGULAR;
+                dealShip.textContent = 'Save ' + s + (REGULAR - FOUNDING) + ' · shipping included';
+                dealEdition.textContent = 'Founding Edition · First 100 Units';
+            } else {
+                dealWas.hidden = true;
+                dealShip.textContent = 'Shipping included';
+                dealEdition.textContent = 'The Ceremony Mat';
+            }
+            orderTotal.innerHTML = 'Total <strong>' + s + total + '</strong> · shipping included';
+            orderBtn.textContent = 'Reserve at ' + s + total + ' →';
+        }
+
+        // ── 1. Return from a completed checkout (?session_id=) ──
+        var sessionId = new URLSearchParams(location.search).get('session_id');
+        if (sessionId && apiUrl) {
+            deal.hidden = true; orderStep.hidden = true; success.hidden = false;
+            var head = success.querySelector('h3'), doneHead = head ? head.textContent : '';
+            if (head) head.textContent = 'Confirming your order…';
+            var tries = 0;
+            (function confirm() {
+                tries++;
+                fetch(apiUrl + '/session-status?session_id=' + encodeURIComponent(sessionId))
+                    .then(function (r) { return r.json(); })
+                    .then(function (sx) {
+                        if (sx.status === 'complete') {
+                            if (head) head.textContent = doneHead;
+                            if (sx.customer_name) successText.textContent =
+                                'Thank you, ' + sx.customer_name + '. Your Ceremony Mat is reserved — ' +
+                                'we’ll email your shipping details as the founding run is prepared.';
+                        } else if (tries < 6) { setTimeout(confirm, 1500); }
+                        else { success.hidden = true; deal.hidden = false; orderStep.hidden = false; }
+                    })
+                    .catch(function () {
+                        if (tries < 6) { setTimeout(confirm, 1500); }
+                        else { success.hidden = true; deal.hidden = false; orderStep.hidden = false; }
+                    });
+            })();
+            return;
+        }
+
+        // ── 2. Live founding count (best-effort; the deal still shows if it fails) ──
+        if (apiUrl) {
+            fetch(apiUrl + '/founding-status')
+                .then(function (r) { return r.json(); })
+                .then(function (st) {
+                    if (typeof st.remaining !== 'number') return;
+                    state.open = !!st.open;
+                    state.price = state.open ? (st.founding_price || FOUNDING) : (st.regular_price || REGULAR);
+                    if (st.open && st.limit) {
+                        meterFill.style.width = Math.min(100, Math.round((st.sold / st.limit) * 100)) + '%';
+                        meterLabel.textContent = st.remaining + ' of ' + st.limit + ' founding mats left';
+                        meter.hidden = false;
+                    }
+                    render();
+                })
+                .catch(function () { /* keep founding default */ });
+        }
+
+        // ── 3. Controls ──
+        $('currency-row').addEventListener('click', function (e) {
+            var b = e.target.closest('.chip'); if (!b) return;
+            Array.prototype.forEach.call(this.children, function (c) {
+                c.setAttribute('aria-pressed', c === b ? 'true' : 'false');
+            });
+            state.currency = b.getAttribute('data-cur'); render();
+        });
+        $('edition-row').addEventListener('click', function (e) {
+            var b = e.target.closest('.chip'); if (!b) return;
+            Array.prototype.forEach.call(this.children, function (c) {
+                c.setAttribute('aria-pressed', c === b ? 'true' : 'false');
+            });
+            state.edition = b.getAttribute('data-ed');
+        });
+        $('qty-inc').addEventListener('click', function () {
+            state.qty = Math.min(10, state.qty + 1); $('qty-val').textContent = state.qty; render();
+        });
+        $('qty-dec').addEventListener('click', function () {
+            state.qty = Math.max(1, state.qty - 1); $('qty-val').textContent = state.qty; render();
+        });
+        render();
+
+        // ── 4. Checkout (or graceful email fallback) ──
+        var hasStripe = apiUrl && window.CTAWidgets &&
+            CTAWidgets.isConfigured(cfg.STRIPE_PUBLISHABLE_KEY) && typeof Stripe !== 'undefined';
+
+        if (!hasStripe) {
+            orderBtn.textContent = 'Reserve by email →';
+            orderBtn.addEventListener('click', function () {
+                var to = cfg.CONTACT_EMAIL || 'hello@templesofrefuge.earth';
+                location.href = 'mailto:' + to +
+                    '?subject=' + encodeURIComponent('Ceremony Mat pre-order') +
+                    '&body=' + encodeURIComponent('I would like to reserve ' + state.qty +
+                        ' Ceremony Mat(s), ' + state.edition + ' print, at ' + sym() + state.price + ' each.');
+            });
+            return;
+        }
+
+        var stripe = Stripe(cfg.STRIPE_PUBLISHABLE_KEY);
+        orderBtn.addEventListener('click', function () {
+            orderErr.hidden = true;
+            orderBtn.textContent = 'Preparing…'; orderBtn.style.pointerEvents = 'none';
+            stripe.initEmbeddedCheckout({
+                fetchClientSecret: function () {
+                    return fetch(apiUrl + '/create-session', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            order_type: 'ceremony-mat',
+                            currency: state.currency,
+                            edition: state.edition,
+                            quantity: state.qty,
+                            return_path: '/ceremony-mats.html'
+                        })
+                    }).then(function (r) {
+                        return r.json().then(function (d) {
+                            if (!r.ok) throw new Error(d.error || 'Could not start checkout.');
+                            return d.client_secret;
+                        });
+                    });
+                }
+            }).then(function (checkout) {
+                deal.hidden = true; orderStep.hidden = true;
+                checkout.mount('#checkout');
+                document.getElementById('checkout').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }).catch(function (err) {
+                orderBtn.style.pointerEvents = ''; render();
+                orderErr.textContent = err.message || 'Something went wrong. Please try again.';
+                orderErr.hidden = false;
+            });
+        });
+    })();
+    </script>
+    <script>
+        // Scroll reveal
+        const fadeEls = document.querySelectorAll('.fade-up');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.1 });
+        fadeEls.forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
