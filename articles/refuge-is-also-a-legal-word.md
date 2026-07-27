@@ -12,10 +12,7 @@ There is a legal sense of the word too, and we have grown forgetful of it. For c
 
 This essay is about what happens to that older meaning of refuge when a Temple joins a network of Temples.
 
-> **🎨 Header image:**
-> ```
-> a small temple of pale stone glowing softly at the center of a vast dark plain, around it concentric rings of luminous threads connect to other distant temples whose light is faintly visible at the horizon, the central temple sits inside a protective halo that does not contain it but emanates from it, warm gold against deep indigo, sense of belonging without enclosure, sacred and architectural simultaneously --ar 16:9 --s 320 --no text
-> ```
+![A temple of pale stone glowing at the center of a vast dark plain, concentric rings of luminous threads connecting it to distant temples on the horizon — belonging without enclosure.](/assets/web/temple-network-1600.webp)
 
 ---
 
