@@ -127,9 +127,8 @@ A Temple joining this network is, in part, an act of receiving that inheritance.
 
 ### The refuge is real. Walk in.
 
-> **📌 SUBSTACK INSERT: Share post w/ caption**
-> *Place here using Button → Share post w/ caption*
-> Caption: **"If you know a community that should be sitting inside this architecture, send this their way."**
+> **📌 Share**
+> **If you know a community that should be sitting inside this architecture, send this their way.**
 
 ---
 

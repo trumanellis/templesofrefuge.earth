@@ -282,6 +282,19 @@
             opacity: 0.7;
         }
 
+        .substack-cta-btn {
+            display: inline-block;
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .substack-cta-btn:hover {
+            opacity: 1;
+        }
+
         /* Fade-up animation */
         .fade-up {
             opacity: 0;
@@ -463,6 +476,33 @@
                             const mount = document.createElement('div');
                             bq.replaceWith(mount);
                             CTAWidgets.footerNewsletter(mount, caption ? { text: caption } : {});
+                            return;
+                        }
+
+                        // Share → a real share action on this article's own URL
+                        // (native share sheet, with copy-to-clipboard fallback).
+                        if (ctaLabel === 'Share') {
+                            const div = document.createElement('div');
+                            div.className = 'substack-cta';
+                            div.innerHTML = `
+                                <div class="substack-cta-caption">${caption}</div>
+                                <button type="button" class="substack-cta-label substack-cta-btn">Share this →</button>
+                            `;
+                            const btn = div.querySelector('button');
+                            btn.addEventListener('click', async () => {
+                                const url = location.href;
+                                try {
+                                    if (navigator.share) { await navigator.share({ title: document.title, url }); return; }
+                                } catch (e) { return; /* user dismissed the share sheet */ }
+                                try {
+                                    await navigator.clipboard.writeText(url);
+                                    btn.textContent = 'Link copied ✓';
+                                    setTimeout(() => { btn.textContent = 'Share this →'; }, 2000);
+                                } catch (e) {
+                                    btn.textContent = 'Copy the page URL';
+                                }
+                            });
+                            bq.replaceWith(div);
                             return;
                         }
 
