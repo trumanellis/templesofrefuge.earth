@@ -217,7 +217,7 @@
       var mount = resolve(target);
       if (!mount) return null;
       opts = opts || {};
-      var card = el('a', { 'class': 'cta-member', href: opts.href || '/join.html' },
+      var card = el('a', { 'class': 'cta-member', href: opts.href || '/join' },
         '<span class="cta-member-eyebrow">' + (opts.eyebrow || 'Membership') + '</span>' +
         '<span class="cta-member-title">' + (opts.title || 'Become a Member') + '</span>' +
         '<span class="cta-member-text">' + (opts.text ||

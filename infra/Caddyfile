@@ -22,11 +22,35 @@ templesofrefuge.earth, www.templesofrefuge.earth {
 		reverse_proxy 127.0.0.1:9000
 	}
 	# Short link for the Ceremony Mat pre-order (printed on the QR / posters).
-	# Internal rewrite → the pretty /mats URL stays in the address bar.
-	rewrite /mats /ceremony-mats.html
+	# Internal rewrite → the pretty /mats URL stays in the address bar. It has to
+	# target the extensionless path: rewriting to /ceremony-mats.html would hand
+	# the .html redirect below a path it bounces to /ceremony-mats, dragging
+	# everyone who scans a printed QR off the /mats URL it was printed for.
+	rewrite /mats /ceremony-mats
 	handle {
 		root * /var/www/templesofrefuge
-		file_server
+		route {
+			# /index.html -> /  and  /articles/index.html -> /articles/
+			@indexhtml path_regexp idx ^(.*/)?index\.html$
+			redir @indexhtml {re.idx.1} 301
+
+			# /join.html -> /join (two matchers so a query-less URL
+			# does not pick up a trailing "?")
+			@htmlq {
+				path_regexp oldhtml ^/(.*)\.html$
+				expression {query} != ""
+			}
+			redir @htmlq /{re.oldhtml.1}?{query} 301
+			@htmlnq {
+				path_regexp oldhtml2 ^/(.*)\.html$
+				expression {query} == ""
+			}
+			redir @htmlnq /{re.oldhtml2.1} 301
+
+			# /join -> join.html on disk
+			try_files {path} {path}.html {path}/index.html
+			file_server
+		}
 	}
 }
 
