@@ -48,9 +48,8 @@ Internationally, Article 18 of the International Covenant on Civil and Political
 
 This is the floor. Every Temple stands on it.
 
-> **📌 SUBSTACK INSERT: Subscribe w/ caption**
-> *Place here using Button → Subscribe w/ caption*
-> Caption: **"I'm writing about what it means to build a sanctuary on purpose. Follow along."**
+> **📌 Subscribe**
+> **A sanctuary is not stumbled into — it is built, on purpose, by people who decide to hold a space the storm cannot reach. This is the ongoing record of how it's done: essays and transmissions from the edge of the possible, sent as they're written.**
 
 ---
 

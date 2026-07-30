@@ -340,6 +340,7 @@
     });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/marked@15/marked.min.js"></script>
+    <script src="/shared/cta-widgets.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
             const params = new URLSearchParams(window.location.search);
@@ -391,7 +392,7 @@
                 }
 
                 // Apply fade-up animations to h2s and special blocks
-                articleBody.querySelectorAll('h2, .image-prompt, .substack-cta').forEach(el => {
+                articleBody.querySelectorAll('h2, .image-prompt, .substack-cta, .cta-newsletter').forEach(el => {
                     el.classList.add('fade-up');
                 });
 
@@ -440,29 +441,32 @@
                     }
                     // 📌 Substack CTA blocks
                     else if (text.includes('📌')) {
-                        const strong = bq.querySelector('strong');
+                        const lowerText = text.toLowerCase();
                         // Detect CTA type from content
                         let ctaLabel = 'Continue Reading';
-                        const lowerText = text.toLowerCase();
                         if (lowerText.includes('subscribe')) ctaLabel = 'Subscribe';
                         else if (lowerText.includes('share')) ctaLabel = 'Share';
                         else if (lowerText.includes('comment')) ctaLabel = 'Leave a Comment';
 
-                        // Find caption text - look for the last strong/bold text as caption
+                        // Caption = the last bold that isn't the "SUBSTACK…" authoring label.
                         const allStrongs = bq.querySelectorAll('strong');
                         let caption = '';
-                        if (allStrongs.length > 0) {
-                            const lastStrong = allStrongs[allStrongs.length - 1];
-                            // Skip the one that starts with 📌
-                            caption = lastStrong.textContent.replace(/^📌\s*/, '');
-                            if (caption.startsWith('SUBSTACK')) {
-                                // This is the label strong, get the caption from a different strong
-                                caption = allStrongs.length > 1 ? allStrongs[allStrongs.length - 1].textContent : '';
-                            }
+                        for (let i = allStrongs.length - 1; i >= 0; i--) {
+                            const t = allStrongs[i].textContent.replace(/^📌\s*/, '').trim();
+                            if (!/^SUBSTACK/i.test(t) && !/^subscribe$/i.test(t)) { caption = t; break; }
                         }
-                        // Clean up caption - remove surrounding quotes
-                        caption = caption.replace(/^[""]|[""]$/g, '');
+                        caption = caption.replace(/^["“”'\s]+|["“”'\s]+$/g, '');
 
+                        // Subscribe → mount the site's real newsletter widget (live Substack
+                        // embed + working "Read on Substack →"), using the article's caption.
+                        if (ctaLabel === 'Subscribe' && window.CTAWidgets && CTAWidgets.footerNewsletter) {
+                            const mount = document.createElement('div');
+                            bq.replaceWith(mount);
+                            CTAWidgets.footerNewsletter(mount, caption ? { text: caption } : {});
+                            return;
+                        }
+
+                        // Fallback / other CTA types → inline card
                         const div = document.createElement('div');
                         div.className = 'substack-cta';
                         div.innerHTML = `
