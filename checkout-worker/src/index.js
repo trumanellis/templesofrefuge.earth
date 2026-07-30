@@ -56,13 +56,19 @@ const RETURN_PATHS = new Set([
 // Where to send the buyer when the client doesn't name a page. These origins
 // 301 /join.html -> /join, so defaulting them to the .html form would cost a
 // returning donor an extra redirect hop at the moment they come back from
-// Stripe. agualila.earth and the localhost dev servers still serve files
-// straight off disk, so they keep .html.
+// Stripe. The localhost dev servers serve files straight off disk with no such
+// rewrite, so they stay on .html.
+//
+// agualila.earth is listed for consistency with its server config, not because
+// it needs it — it has no checkout page at all today, so nothing reaches this
+// line from that origin. If it ever grows one, the default is already right.
 const EXTENSIONLESS_ORIGINS = new Set([
   'https://syncengine.earth',
   'https://www.syncengine.earth',
   'https://templesofrefuge.earth',
   'https://www.templesofrefuge.earth',
+  'https://agualila.earth',
+  'https://www.agualila.earth',
 ]);
 
 // Countries the mat ships to: US, UK, EU-27, plus EFTA neighbours.

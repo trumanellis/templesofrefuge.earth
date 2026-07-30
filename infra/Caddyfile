@@ -111,7 +111,29 @@ agualila.earth, www.agualila.earth {
 	}
 	handle {
 		root * /var/www/agualila
-		file_server
+		route {
+			# Same extensionless scheme as the sibling sites. Agua Lila is a
+			# single page today, so this earns exactly one thing right now:
+			# /index.html stops serving a duplicate of / and 301s to it. The
+			# try_files line is dormant until there is a second page, at which
+			# point it gets clean URLs without anyone rediscovering this.
+			@indexhtml path_regexp idx ^(.*/)?index\.html$
+			redir @indexhtml {re.idx.1} 301
+
+			@htmlq {
+				path_regexp oldhtml ^/(.*)\.html$
+				expression {query} != ""
+			}
+			redir @htmlq /{re.oldhtml.1}?{query} 301
+			@htmlnq {
+				path_regexp oldhtml2 ^/(.*)\.html$
+				expression {query} == ""
+			}
+			redir @htmlnq /{re.oldhtml2.1} 301
+
+			try_files {path} {path}.html {path}/index.html
+			file_server
+		}
 	}
 }
 
