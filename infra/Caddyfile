@@ -51,7 +51,28 @@ syncengine.earth, www.syncengine.earth {
 
 	handle {
 		root * /var/www/syncengine
-		file_server
+		route {
+			# /index.html -> /  and  /articles/index.html -> /articles/
+			@indexhtml path_regexp idx ^(.*/)?index\.html$
+			redir @indexhtml {re.idx.1} 301
+
+			# /join.html -> /join (two matchers so a query-less URL
+			# does not pick up a trailing "?")
+			@htmlq {
+				path_regexp oldhtml ^/(.*)\.html$
+				expression {query} != ""
+			}
+			redir @htmlq /{re.oldhtml.1}?{query} 301
+			@htmlnq {
+				path_regexp oldhtml2 ^/(.*)\.html$
+				expression {query} == ""
+			}
+			redir @htmlnq /{re.oldhtml2.1} 301
+
+			# /join -> join.html on disk
+			try_files {path} {path}.html {path}/index.html
+			file_server
+		}
 	}
 }
 

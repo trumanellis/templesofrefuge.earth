@@ -45,7 +45,20 @@ const MAT_MESSAGE =
   'is prepared.';
 
 // return_url is allow-listed to our own pages so it can never be an open redirect.
-const RETURN_PATHS = new Set(['/join.html', '/ceremony-mats.html']);
+// Both spellings of the join page are allowed because the sites that share this
+// Worker don't agree: syncengine.earth serves extensionless URLs, the others
+// still serve .html.
+const RETURN_PATHS = new Set(['/join', '/join.html', '/ceremony-mats.html']);
+
+// Where to send the buyer when the client doesn't name a page. syncengine.earth
+// 301s /join.html -> /join, so defaulting it to the .html form would cost a
+// returning donor an extra redirect hop at the moment they come back from
+// Stripe. Every other origin — templesofrefuge.earth, agualila.earth, and the
+// localhost dev servers that serve files straight off disk — still wants .html.
+const EXTENSIONLESS_ORIGINS = new Set([
+  'https://syncengine.earth',
+  'https://www.syncengine.earth',
+]);
 
 // Countries the mat ships to: US, UK, EU-27, plus EFTA neighbours.
 const SHIP_COUNTRIES = [
@@ -135,7 +148,9 @@ async function createSession(request, env, origin) {
   }
 
   // Send the buyer back to the page that launched checkout (allow-listed).
-  const returnPath = RETURN_PATHS.has(body.return_path) ? body.return_path : '/join.html';
+  const returnPath = RETURN_PATHS.has(body.return_path)
+    ? body.return_path
+    : (EXTENSIONLESS_ORIGINS.has(origin) ? '/join' : '/join.html');
   const returnUrl = `${origin}${returnPath}?session_id={CHECKOUT_SESSION_ID}`;
 
   const form = new URLSearchParams();
