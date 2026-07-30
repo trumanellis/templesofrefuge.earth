@@ -45,19 +45,24 @@ const MAT_MESSAGE =
   'is prepared.';
 
 // return_url is allow-listed to our own pages so it can never be an open redirect.
-// Both spellings of the join page are allowed because the sites that share this
-// Worker don't agree: syncengine.earth serves extensionless URLs, the others
-// still serve .html.
-const RETURN_PATHS = new Set(['/join', '/join.html', '/ceremony-mats.html']);
+// Both spellings of each page are allowed because the sites sharing this Worker
+// don't all agree yet: the .html forms still arrive from pages that haven't been
+// swept, and they 301 to the clean form rather than breaking.
+const RETURN_PATHS = new Set([
+  '/join', '/join.html',
+  '/ceremony-mats', '/ceremony-mats.html',
+]);
 
-// Where to send the buyer when the client doesn't name a page. syncengine.earth
-// 301s /join.html -> /join, so defaulting it to the .html form would cost a
+// Where to send the buyer when the client doesn't name a page. These origins
+// 301 /join.html -> /join, so defaulting them to the .html form would cost a
 // returning donor an extra redirect hop at the moment they come back from
-// Stripe. Every other origin — templesofrefuge.earth, agualila.earth, and the
-// localhost dev servers that serve files straight off disk — still wants .html.
+// Stripe. agualila.earth and the localhost dev servers still serve files
+// straight off disk, so they keep .html.
 const EXTENSIONLESS_ORIGINS = new Set([
   'https://syncengine.earth',
   'https://www.syncengine.earth',
+  'https://templesofrefuge.earth',
+  'https://www.templesofrefuge.earth',
 ]);
 
 // Countries the mat ships to: US, UK, EU-27, plus EFTA neighbours.
