@@ -1,0 +1,14 @@
+# /etc/systemd/system/tor-post-deploy.path
+# Watches for a post-deploy request dropped by the webhook's unprivileged hook
+# (deploy/post-deploy.sh) and triggers tor-post-deploy.service (root) to apply it.
+# Install: sudo cp infra/tor-post-deploy.path /etc/systemd/system/ &&
+#          sudo systemctl daemon-reload && sudo systemctl enable --now tor-post-deploy.path
+[Unit]
+Description=Watch for templesofrefuge post-deploy requests
+
+[Path]
+PathExists=/var/www/templesofrefuge/.deploy-request
+Unit=tor-post-deploy.service
+
+[Install]
+WantedBy=multi-user.target

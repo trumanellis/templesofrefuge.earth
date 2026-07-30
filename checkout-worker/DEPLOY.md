@@ -89,8 +89,14 @@ small real offering, confirm the "Welcome, Member" return state.
 
 ## Updating later
 
-Push + `git pull` on the box, then `sudo systemctl restart tor-checkout`
-(only needed if `src/` changed; the site files serve fresh immediately).
+**Just `git push`.** The GitHub push webhook auto-pulls the box, and the repo's
+`deploy/post-deploy.sh` restarts `tor-checkout` automatically whenever
+`checkout-worker/src/` changed (the Node process loads `index.js` into memory
+once at startup, so it must be restarted to pick up new code — the pull alone
+isn't enough). See `site-deploy-procedure` and `syncengine.earth/deploy/README.md`.
+
+Manual fallback if the webhook is down:
+`ssh truman@89.167.41.185 'git -C /var/www/templesofrefuge pull --ff-only && sudo systemctl restart tor-checkout'`
 
 ---
 

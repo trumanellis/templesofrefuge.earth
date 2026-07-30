@@ -1,0 +1,13 @@
+# /etc/systemd/system/tor-post-deploy.service
+# Oneshot, runs as ROOT (no User=), triggered by tor-post-deploy.path. Executes
+# the FIXED helper at /usr/local/bin/tor-post-deploy — installed out of band, not
+# from the repo — which consumes /var/www/templesofrefuge/.deploy-request and
+# performs only its two hardcoded actions. Output shows in `journalctl -u tor-post-deploy`.
+# Install: sudo install -m 755 infra/tor-post-deploy.sh /usr/local/bin/tor-post-deploy &&
+#          sudo cp infra/tor-post-deploy.service /etc/systemd/system/ && sudo systemctl daemon-reload
+[Unit]
+Description=Apply privileged templesofrefuge post-deploy actions
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/tor-post-deploy

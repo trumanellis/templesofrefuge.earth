@@ -2,3 +2,6 @@
 node_modules/
 *.log
 .gstack/
+# Spool file the deploy webhook drops for the root post-deploy path-unit (VPS only)
+.deploy-request
+.deploy-request.tmp

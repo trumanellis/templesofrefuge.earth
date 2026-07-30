@@ -21,6 +21,9 @@ templesofrefuge.earth, www.templesofrefuge.earth {
 	handle /_deploy {
 		reverse_proxy 127.0.0.1:9000
 	}
+	# Short link for the Ceremony Mat pre-order (printed on the QR / posters).
+	# Internal rewrite → the pretty /mats URL stays in the address bar.
+	rewrite /mats /ceremony-mats.html
 	handle {
 		root * /var/www/templesofrefuge
 		file_server

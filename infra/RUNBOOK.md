@@ -82,20 +82,40 @@ sudo sed -i 's/^# owner_player_id.*/owner_player_id = "<HEX>"/' /etc/indras-rela
 sudo systemctl restart indras-relay
 ```
 
-## Ongoing site releases (post-migration)
+## Ongoing site releases (post-migration) — push-to-deploy
 
 Both sites are served by Caddy straight out of git clones — no build step, no CDN;
-changes are live the moment the clone is pulled.
+changes are live the moment the clone is pulled. **As of 2026-07-30 the pull is
+automatic:** a GitHub push webhook hits `https://<site>/_deploy`, which Caddy
+reverse-proxies to the loopback `webhook-deploy` service
+(`/var/www/syncengine/deploy/webhook.py`, runs as `truman`). It HMAC-verifies the
+site's secret (`/etc/webhook-deploy/sites.json`) and runs `git pull --ff-only`.
 
-1. **Commit to `main` and push to GitHub.** To release a single file while a
-   feature branch is dirty: `git worktree add <scratch> origin/main`, copy the
-   file in, commit, `git push origin HEAD:main`, remove the worktree.
-2. **Pull on the box:**
+1. **Commit to `main` and push to GitHub.** That's the deploy. (Dirty feature
+   branch? `git worktree add <scratch> origin/main`, copy the file in, commit,
+   `git push origin HEAD:main`, remove the worktree.)
+2. **Post-pull steps run themselves — privilege-separated.** `webhook.py` diffs
+   old→new HEAD and runs the repo's `deploy/post-deploy.sh` with the changed
+   files on stdin. That hook runs UNPRIVILEGED (the webhook-deploy unit is
+   `NoNewPrivileges=true` — no sudo). So it only *enqueues*: it writes a
+   fixed-token `.deploy-request` (`restart-tor-checkout` / `reload-caddy`) when
+   `checkout-worker/src/` or `infra/Caddyfile` changed. A root path-unit
+   (`tor-post-deploy.path`) watches that file and triggers `tor-post-deploy.service`
+   → the fixed `/usr/local/bin/tor-post-deploy` helper, which restarts
+   `tor-checkout` and/or `caddy validate`s + syncs `/etc/caddy/Caddyfile` +
+   reloads Caddy. The helper is installed out of band (not from the repo), so a
+   repo compromise can trigger only those two actions, never arbitrary root code.
+   **One-time install** (after the first pull that lands `infra/tor-post-deploy.*`):
    ```
-   ssh truman@BOX_IP 'git -C /var/www/templesofrefuge pull --ff-only'
-   ssh truman@BOX_IP 'git -C /var/www/syncengine pull --ff-only'
+   sudo install -m 755 /var/www/templesofrefuge/infra/tor-post-deploy.sh /usr/local/bin/tor-post-deploy
+   sudo cp /var/www/templesofrefuge/infra/tor-post-deploy.{path,service} /etc/systemd/system/
+   sudo systemctl daemon-reload && sudo systemctl enable --now tor-post-deploy.path
    ```
-3. **Verify live:** curl the changed file and grep for the new text.
+   **Changing `webhook.py` itself needs a one-time `sudo systemctl restart
+   webhook-deploy`** (it loads its code once at startup); changing the helper is a
+   deliberate manual `sudo install` reinstall.
+3. **Verify live:** curl the changed file and grep for the new text. Pull log:
+   `journalctl -u webhook-deploy`; privileged-step log: `journalctl -u tor-post-deploy`.
 
 Notes:
 - The clones must stay owned by the deploy user (`truman:truman`), or git
@@ -103,8 +123,10 @@ Notes:
   reprovision.
 - Document pages (e.g. bylaws.html) render their markdown source client-side,
   so content edits ship without touching HTML.
-- Claude Code allow rules for the two exact pull commands live in
-  `.claude/settings.local.json` (untracked), enabling agent-run deploys.
+- Manual fallback if the webhook is ever down (allow-ruled in
+  `.claude/settings.local.json`, untracked):
+  `ssh truman@BOX_IP 'git -C /var/www/templesofrefuge pull --ff-only'`
+  (same for `/var/www/syncengine`).
 
 ## Notes / decisions already resolved
 - **No inbound UDP firewall rule needed.** The relay uses an ephemeral UDP port +
