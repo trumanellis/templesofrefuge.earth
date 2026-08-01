@@ -367,6 +367,17 @@
                 return;
             }
 
+            // Every article renders through this one page, so the canonical URL
+            // has to carry the slug — a static tag in <head> would fold the whole
+            // archive into a single URL. Extensionless form because the server
+            // 301s /articles/read.html?slug=… to it, and on templesof.earth so
+            // articles consolidate onto the same domain as the rest of the site
+            // while templesofrefuge.earth still serves them.
+            const canonical = document.createElement('link');
+            canonical.rel = 'canonical';
+            canonical.href = `https://templesof.earth/articles/read?slug=${encodeURIComponent(slug)}`;
+            document.head.appendChild(canonical);
+
             try {
                 const url = `https://raw.githubusercontent.com/trumanellis/templesofrefuge.earth/main/articles/${encodeURIComponent(slug)}.md`;
                 const response = await fetch(url);

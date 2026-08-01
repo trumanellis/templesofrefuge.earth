@@ -52,16 +52,20 @@
 
     // Checkout backend base URL (no trailing slash). LOCAL: the Node dev server ·
     // LIVE: the self-hosted service on the Hetzner box behind Caddy.
+    // On the templesof.earth aliases (the domain the site is migrating to);
+    // both names hit the same service. This is cross-origin either way, so the
+    // only thing the choice buys is the hostname a donor sees — never move
+    // these two lines ahead of the new DNS + cert being live.
     CHECKOUT_API_URL: isLocal
       ? 'http://localhost:8787'
-      : 'https://checkout.templesofrefuge.earth',
+      : 'https://checkout.templesof.earth',
 
     // Donation gateway base URL — /claim turns a paid Stripe session into the
     // one-time founding-gift code the SyncEngine app redeems at first launch.
     // Shown on the post-donation screen (same as syncengine.earth/join).
     GATEWAY_API_URL: isLocal
       ? 'http://localhost:8788'
-      : 'https://api.templesofrefuge.earth',
+      : 'https://api.templesof.earth',
 
     // Optional / future: opencollective.com collective URL. When set, the join
     // page can prefer this transparency-aligned option over Stripe.
@@ -272,7 +276,7 @@
       form.dataset.ctaWired = '1';
       opts = opts || {};
 
-      var subject = form.getAttribute('data-cta-subject') || 'Message via templesofrefuge.earth';
+      var subject = form.getAttribute('data-cta-subject') || 'Message via templesof.earth';
       var errEl = form.querySelector('.cta-form-error');
       var btn = form.querySelector('[type="submit"]');
       var successEl = opts.successSelector

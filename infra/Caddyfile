@@ -12,7 +12,18 @@
 # IMPORTANT: keep the /_deploy handlers when editing — removing them silently
 # breaks push-to-deploy for that site.
 
-templesofrefuge.earth, www.templesofrefuge.earth {
+# Temples of Refuge is mid-migration from templesofrefuge.earth to the shorter
+# templesof.earth. Both names are listed on ONE site block on purpose: they are
+# the same checkout on disk, so the two domains cannot drift apart and there is
+# no second deploy target to keep in sync. Caddy issues a single cert covering
+# all four names.
+#
+# The pages declare templesof.earth canonical (see <link rel="canonical">), so
+# search engines consolidate onto the new domain while every old URL keeps
+# answering 200. When the transition is done, cut templesofrefuge.earth out of
+# this list and give it its own block that 301s to templesof.earth — do NOT do
+# that until the new domain has been indexed, or you strand the existing links.
+templesofrefuge.earth, www.templesofrefuge.earth, templesof.earth, www.templesof.earth {
 	encode zstd gzip
 	header {
 		?Cache-Control "public, max-age=3600"
@@ -146,7 +157,11 @@ work.agualila.earth {
 # Temples of Refuge — Stripe checkout backend (Node/self-hosted). Bound to
 # localhost:8787 by the tor-checkout systemd service; Caddy terminates TLS and
 # proxies. Serves every origin in the service's ALLOWED_ORIGINS.
-checkout.templesofrefuge.earth {
+# checkout.templesof.earth is the new-domain alias; both names hit the same
+# service. Every origin the pages are served from must ALSO be listed in the
+# service's ALLOWED_ORIGINS (/etc/tor-checkout/env) or the browser's CORS
+# preflight fails and the page silently falls back to the hosted Stripe link.
+checkout.templesofrefuge.earth, checkout.templesof.earth {
 	reverse_proxy 127.0.0.1:8787
 }
 
@@ -154,7 +169,7 @@ checkout.templesofrefuge.earth {
 # agent1 repo). Turns a paid Stripe session into a one-shot founding-gift code
 # the app redeems at first launch. Bound to localhost:8788 by its systemd
 # service; claims ledger persists in /var/lib/indras-donation-gateway.
-api.templesofrefuge.earth {
+api.templesofrefuge.earth, api.templesof.earth {
 	reverse_proxy 127.0.0.1:8788
 }
 

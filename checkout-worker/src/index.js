@@ -67,6 +67,8 @@ const EXTENSIONLESS_ORIGINS = new Set([
   'https://www.syncengine.earth',
   'https://templesofrefuge.earth',
   'https://www.templesofrefuge.earth',
+  'https://templesof.earth',
+  'https://www.templesof.earth',
   'https://agualila.earth',
   'https://www.agualila.earth',
 ]);
@@ -316,7 +318,7 @@ async function substackPosts(env, origin) {
   const res = await fetch(SUBSTACK_API, {
     headers: {
       Accept: 'application/json',
-      'User-Agent': 'IndrasNetwork-SubstackFeed/1.0 (+https://templesofrefuge.earth)',
+      'User-Agent': 'IndrasNetwork-SubstackFeed/1.0 (+https://templesof.earth)',
     },
     cf: { cacheTtl: 1800, cacheEverything: true },
   });

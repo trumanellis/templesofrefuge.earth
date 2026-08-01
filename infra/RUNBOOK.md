@@ -128,6 +128,62 @@ Notes:
   `ssh truman@BOX_IP 'git -C /var/www/templesofrefuge pull --ff-only'`
   (same for `/var/www/syncengine`).
 
+## Domain migration: templesofrefuge.earth → templesof.earth
+
+Both domains serve the **same** `/var/www/templesofrefuge` checkout off one Caddy
+site block, so there is nothing to keep in sync and no second deploy target. The
+pages declare `templesof.earth` canonical, so search engines consolidate onto the
+new name while every old URL keeps returning 200.
+
+**Order matters — do these before pushing the repo changes**, because
+`shared/cta-widgets.js` and `syncengine.earth/join.html` now point the donor path
+at `checkout.templesof.earth` / `api.templesof.earth`, and `agualila.earth` loads
+`substack-feed.js` from `templesof.earth`.
+
+1. **DNS at the registrar** — four A records to `BOX_IP`:
+   ```
+   templesof.earth   A  @         BOX_IP
+   templesof.earth   A  www       BOX_IP
+   templesof.earth   A  checkout  BOX_IP
+   templesof.earth   A  api       BOX_IP
+   ```
+   Leave every `templesofrefuge.earth` record exactly as it is — the old domain
+   stays live for the whole migration.
+
+2. **Widen the checkout service's origin allowlist.** This lives on the box, NOT
+   in the repo, so a deploy will not do it for you. Miss this and the browser's
+   CORS preflight fails for anyone on the new domain and the join page silently
+   drops back to the hosted Stripe link:
+   ```
+   sudo nano /etc/tor-checkout/env     # add https://templesof.earth,https://www.templesof.earth
+   sudo systemctl restart tor-checkout
+   ```
+   `checkout-worker/deploy/env.example` shows the full intended value.
+
+3. **Push.** The `infra/Caddyfile` change enqueues `reload-caddy`; Caddy then
+   requests certs for the four new names. First request can take ~30s.
+
+4. **Verify before trusting the donor path:**
+   ```
+   curl -sI https://templesof.earth/join
+   curl -sI https://checkout.templesof.earth/       # must be valid TLS, not a cert error
+   curl -sI https://api.templesof.earth/
+   ```
+   Then load `https://templesof.earth/join` in a browser and confirm the inline
+   Stripe checkout renders (not the hosted-link fallback).
+
+**Do NOT 301 the old domain yet.** templesofrefuge.earth must keep answering 200
+until `templesof.earth` is indexed — otherwise existing links and the printed
+`/mats` QR bounce through a redirect to a domain search engines have not yet
+credited. When the new domain has settled, cut `templesofrefuge.earth` out of the
+shared site block in `Caddyfile` and give it its own block that 301s everything to
+`templesof.earth`.
+
+Still on the old domain on purpose: the `hello@` / `ola@` mailboxes (no email is
+provisioned on templesof.earth), and every `trumanellis/templesofrefuge.earth`
+GitHub URL — that is the **repo** name, not the domain. Renaming the repo would
+break the client-side article and document loaders.
+
 ## Notes / decisions already resolved
 - **No inbound UDP firewall rule needed.** The relay uses an ephemeral UDP port +
   n0 public relays (`presets::N0`) for hole-punching. (Pinning a fixed port =
