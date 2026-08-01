@@ -1,0 +1,202 @@
+/*
+ * brand.css — the Temples of Earth brand system.
+ * See BRAND.md for the rationale and rules.
+ *
+ * One canonical identity (no skin switcher): Ubuntu type, warm-earth
+ * solarpunk palette. Dark ("temple at dusk") is the default; light
+ * ("garden at dawn") responds to prefers-color-scheme and the toggle
+ * (data-theme on <html>, set by shared/brand.js before paint).
+ *
+ * Token names are kept from the old theme-engine (--t-*, --s-*) so
+ * per-page styles keep working. Pages link this file INSTEAD of loading
+ * /shared/theme-engine.js.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400&family=Ubuntu+Mono:wght@400;700&display=swap');
+
+/* ================================================================
+   TOKENS — dark (default): temple at dusk
+   ================================================================ */
+:root {
+  /* type */
+  --font-display: "Ubuntu", -apple-system, system-ui, sans-serif;
+  --font-body: "Ubuntu", -apple-system, system-ui, sans-serif;
+  --font-mono: "Ubuntu Mono", ui-monospace, Menlo, Consolas, monospace;
+  --mono: var(--font-mono);
+  --s-font: var(--font-body);
+  --s-display: var(--font-display);
+
+  /* surfaces */
+  --t-bg: #141210;  --t-sf: #1c1915;  --t-cd: #221e18;  --t-hv: #2c2720;
+  /* text */
+  --t-tx: #f2ede2;  --t-t2: #b3a992;  --t-mt: #7d745f;  --t-dm: #4c4536;
+  /* borders */
+  --t-bd: #352e22;  --t-b2: #262117;  --t-bc: rgba(127, 176, 105, 0.14);
+  /* accents: living green + solar gold */
+  --t-ac: #7fb069;  --t-a2: #e9c46a;
+  /* status */
+  --t-ok: #7fb069;  --t-wn: #e9c46a;  --t-er: #d16a5a;
+  /* glass */
+  --t-glass: rgba(20, 18, 16, 0.88);
+  --t-glass-bd: rgba(240, 220, 180, 0.08);
+
+  /* --s-* aliases (older markup) */
+  --s-bg: var(--t-bg);  --s-bg2: var(--t-sf);  --s-card: var(--t-cd);
+  --s-hover: var(--t-hv);
+  --s-tx: var(--t-tx);  --s-t2: var(--t-t2);  --s-mt: var(--t-mt);
+  --s-gh: var(--t-dm);
+  --s-bd: var(--t-bd);  --s-b2: var(--t-b2);  --s-ac: var(--t-ac);
+  --s-radius: 14px;
+
+  /* signature gradient: soil-green → living green → solar gold */
+  --signature: linear-gradient(135deg, #4a7c59 0%, #7fb069 45%, #e9c46a 100%);
+
+  /* shared constants (formerly injected by theme-engine) */
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
+  --space-5: 24px; --space-6: 32px; --space-8: 48px;
+  --radius-sm: 4px; --radius-md: 8px; --radius-lg: 12px;
+  --radius-xl: 16px; --radius-pill: 100px;
+  --transition-fast: 100ms ease; --transition-base: 150ms ease;
+  --transition-slow: 200ms ease;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 4px 24px rgba(0, 0, 0, 0.3);
+
+  color-scheme: dark;
+}
+
+/* ================================================================
+   TOKENS — light: garden at dawn
+   Applied by explicit choice (data-theme) or, absent JS, by system
+   preference.
+   ================================================================ */
+:root[data-theme="light"] {
+  --t-bg: #f7f4ec;  --t-sf: #efeadd;  --t-cd: #fffdf6;  --t-hv: #e6dfcc;
+  --t-tx: #26301f;  --t-t2: #5b6b4f;  --t-mt: #8f957f;  --t-dm: #b9bfa8;
+  --t-bd: #ddd5bd;  --t-b2: #e9e3d1;  --t-bc: rgba(45, 122, 78, 0.10);
+  --t-ac: #2d7a4e;  --t-a2: #b08427;
+  --t-ok: #2d7a4e;  --t-wn: #b08427;  --t-er: #b35a4a;
+  --t-glass: rgba(247, 244, 236, 0.9);
+  --t-glass-bd: rgba(38, 48, 31, 0.08);
+  --shadow-lg: 0 4px 24px rgba(60, 50, 30, 0.12);
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    --t-bg: #f7f4ec;  --t-sf: #efeadd;  --t-cd: #fffdf6;  --t-hv: #e6dfcc;
+    --t-tx: #26301f;  --t-t2: #5b6b4f;  --t-mt: #8f957f;  --t-dm: #b9bfa8;
+    --t-bd: #ddd5bd;  --t-b2: #e9e3d1;  --t-bc: rgba(45, 122, 78, 0.10);
+    --t-ac: #2d7a4e;  --t-a2: #b08427;
+    --t-ok: #2d7a4e;  --t-wn: #b08427;  --t-er: #b35a4a;
+    --t-glass: rgba(247, 244, 236, 0.9);
+    --t-glass-bd: rgba(38, 48, 31, 0.08);
+    --shadow-lg: 0 4px 24px rgba(60, 50, 30, 0.12);
+    color-scheme: light;
+  }
+}
+
+/* ================================================================
+   BASE VOICE — replaces the old [data-skin="technical"] engine rules
+   (pages may refine; these are the brand defaults)
+   ================================================================ */
+body { line-height: 1.7; }
+strong { color: var(--t-tx); font-weight: 500; }
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+}
+
+.hero-cta {
+  background: var(--signature);
+  border: none;
+  color: #10130c;
+  font-family: var(--s-font);
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 500;
+  font-size: 0.95rem;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(127, 176, 105, 0.25);
+}
+.hero-cta:hover {
+  opacity: 1;
+  filter: brightness(1.08);
+  box-shadow: 0 0 28px rgba(127, 176, 105, 0.4);
+}
+
+/* ================================================================
+   BRAND BAR — fixed 48px chrome injected by shared/brand.js
+   (same slot the old ThemeEngine skin bar occupied, so existing
+   padding-top: 48px layouts hold)
+   ================================================================ */
+.toe-bar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  background: var(--t-glass);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  backdrop-filter: blur(16px) saturate(160%);
+  border-bottom: 1px solid var(--t-b2);
+}
+
+.toe-lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--t-tx);
+}
+.toe-lockup img {
+  width: 26px;
+  height: 26px;
+  display: block;
+}
+.toe-lockup span {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: color 0.25s ease;
+}
+.toe-lockup:hover span { color: var(--t-ac); }
+
+.toe-theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--t-bd);
+  border-radius: 100px;
+  background: transparent;
+  color: var(--t-t2);
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+.toe-theme-toggle:hover { color: var(--t-ac); border-color: var(--t-ac); }
+.toe-theme-toggle svg { width: 15px; height: 15px; display: block; }
+
+@media (max-width: 640px) {
+  .toe-bar { padding: 0 12px; }
+  .toe-lockup span { font-size: 10.5px; letter-spacing: 0.14em; }
+}
+
+/* ================================================================
+   FOOTER LEGAL LINE
+   ================================================================ */
+.toe-legal {
+  font-size: 0.78rem;
+  color: var(--t-mt);
+  line-height: 1.6;
+}

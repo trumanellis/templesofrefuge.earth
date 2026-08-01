@@ -1,16 +1,13 @@
 /*
- * document.css — unified long-form document styling for Temples of Refuge.
+ * document.css — unified long-form document styling for Temples of Earth.
  *
  * ONE design language for the canonical documents (Cosmology, Covenant,
  * Bylaws) and the doc-shaped pages (Join, Found a Temple): a minimal
- * "Apple editorial" reading experience.
+ * editorial reading experience in the brand's Ubuntu type (see BRAND.md).
  *
- * Skin-aware by design. Colours come from the active skin's --t-* tokens
- * (set by /shared/theme-engine.js) so the site-wide skin switcher recolours
- * every page. TYPOGRAPHY is fixed — New York serif for display, San
- * Francisco / system sans for body — and does NOT change between skins
- * (theme-engine locks --s-display/--s-font to the same Apple stack). Any
- * page using this stylesheet must load theme-engine.js.
+ * Colours come from the --t-* tokens in /shared/brand.css (dark "dusk"
+ * default, light "dawn" via the toggle) — any page using this stylesheet
+ * must link brand.css first and load /shared/brand.js.
  *
  * Pages whose markdown repeats the subtitle as an `### ...` immediately
  * after the title (Covenant, Bylaws) should set <body class="doc-has-subtitle">
@@ -18,8 +15,6 @@
  */
 
 :root {
-  --font-display: "New York", ui-serif, Georgia, "Times New Roman", serif;
-  --font-body: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
   --measure: 40rem;
   --title-size: clamp(2.6rem, 7vw, 4rem);
 }

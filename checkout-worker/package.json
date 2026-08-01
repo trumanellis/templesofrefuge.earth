@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Temples of Refuge — Stripe embedded-checkout backend (self-hosted Node service behind Caddy).",
+  "description": "Temples of Earth — Stripe embedded-checkout backend (self-hosted Node service behind Caddy).",
   "scripts": {
     "start": "node src/node-server.js",
     "dev:worker": "wrangler dev",

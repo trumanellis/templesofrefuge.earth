@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" data-skin="technical">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
-    <title>Reading... — Temples of Refuge</title>
+    <title>Reading... — Temples of Earth</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&family=Playfair+Display:wght@700;900&family=Raleway:ital,wght@0,200;0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/shared/brand.css">
     <style>
         *, *::before, *::after {
             box-sizing: border-box;
@@ -33,7 +33,7 @@
         .back-link {
             color: var(--t-ac);
             text-decoration: none;
-            font-family: var(--s-display);
+            font-family: var(--font-mono);
             font-size: 0.75rem;
             letter-spacing: 0.15em;
             text-transform: uppercase;
@@ -58,7 +58,7 @@
         }
 
         .footer-site-name {
-            font-family: var(--s-display);
+            font-family: var(--font-mono);
             font-size: 0.75rem;
             letter-spacing: 0.2em;
             text-transform: uppercase;
@@ -242,7 +242,7 @@
         }
 
         .image-prompt-label {
-            font-family: var(--s-display);
+            font-family: var(--font-mono);
             font-size: 0.7rem;
             letter-spacing: 0.15em;
             text-transform: uppercase;
@@ -274,7 +274,7 @@
         }
 
         .substack-cta-label {
-            font-family: var(--s-display);
+            font-family: var(--font-mono);
             font-size: 0.75rem;
             letter-spacing: 0.15em;
             text-transform: uppercase;
@@ -341,17 +341,11 @@
 
     <footer class="site-footer">
         <a href="/articles/" class="back-link">← All Writings</a>
-        <p class="footer-site-name">Temples of Refuge</p>
+        <p class="footer-site-name">Temples of Earth</p>
+        <p class="toe-legal">Temples of Earth is the public name of Temples of Refuge, an association of churches mandatorily tax-exempt under §501(c)(3) and §508(c)(1)(A).</p>
     </footer>
 
-    <script src="/shared/theme-engine.js"></script>
-    <script>
-    ThemeEngine.init({
-      defaultSkin: 'technical',
-      storageKey: 'tor-skin',
-      position: 'top-right'
-    });
-    </script>
+    <script src="/shared/brand.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/marked@15/marked.min.js"></script>
     <script src="/shared/cta-widgets.js"></script>
     <script>
@@ -405,7 +399,7 @@
                 // Update page title from h1
                 const h1 = articleBody.querySelector('h1');
                 if (h1) {
-                    document.title = h1.textContent + ' — Temples of Refuge';
+                    document.title = h1.textContent + ' — Temples of Earth';
                 }
 
                 // Update meta description from first paragraph

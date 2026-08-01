@@ -2,6 +2,14 @@
 
 This folder contains every version of the official Temples of Refuge mark.
 
+> **⚠ Rebrand note (2026-08):** The public brand is now **Temples of Earth**
+> (see `/BRAND.md`). The **icon** files remain the current mark and are used
+> across the web (favicons, brand-bar lockup, og-image). The **seal** files
+> below arc the legacy legal name "TEMPLES OF REFUGE" and are retired from web
+> chrome — still valid for print/ceremonial use until "TEMPLES OF EARTH" seals
+> are regenerated. The web wordmark is HTML text set in Ubuntu, not baked into
+> an SVG.
+
 **Final design:** Fractal Flower-of-Life icon with "TEMPLES OF REFUGE" set in
 URW Palladio Bold, all caps with generous tracking, arcing across the top of the seal.
 

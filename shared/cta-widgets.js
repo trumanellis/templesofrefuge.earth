@@ -1,5 +1,5 @@
 /**
- * cta-widgets.js — the shared call-to-action layer for Temples of Refuge.
+ * cta-widgets.js — the shared call-to-action layer for Temples of Earth.
  *
  * This is a sibling to theme-engine.js. It owns the *repeating* CTA chrome so
  * it lives in one place instead of being hand-copied into every page:
@@ -203,7 +203,7 @@
 
   function buildMailto(subject, body) {
     return 'mailto:' + CTAConfig.CONTACT_EMAIL +
-      '?subject=' + encodeURIComponent(subject || 'Hello, Temples of Refuge') +
+      '?subject=' + encodeURIComponent(subject || 'Hello, Temples of Earth') +
       '&body=' + encodeURIComponent(body || '');
   }
 
@@ -336,7 +336,7 @@
         var data = new FormData(form);
         data.set('access_key', CTAConfig.WEB3FORMS_ACCESS_KEY);
         data.set('subject', subject);
-        data.set('from_name', 'Temples of Refuge website');
+        data.set('from_name', 'Temples of Earth website');
 
         var payload = {};
         data.forEach(function (v, k) { payload[k] = v; });

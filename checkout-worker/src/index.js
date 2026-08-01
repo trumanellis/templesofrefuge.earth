@@ -1,4 +1,4 @@
-// Temples of Refuge — checkout backend (Cloudflare Worker).
+// Temples of Earth (legal name Temples of Refuge) — checkout backend (Cloudflare Worker).
 //
 // The join page is a static site (GitHub Pages) with no server of its own.
 // Stripe's embedded Checkout needs a Checkout Session minted with the SECRET
@@ -41,8 +41,8 @@ const MAT_REGULAR_CENTS  = 33300; // regular: 333
 const MAT_FOUNDING_LIMIT = 100;   // units at the founding price
 const MAT_MESSAGE =
   'Thank you for reserving a Ceremony Mat — the first physical offering of ' +
-  'Temples of Refuge. We will email you shipping details as the founding run ' +
-  'is prepared.';
+  'Temples of Earth. We will email you shipping details as the founding run ' +
+  'is prepared. Your receipt will show our legal name, Temples of Refuge.';
 
 // return_url is allow-listed to our own pages so it can never be an open redirect.
 // Both spellings of each page are allowed because the sites sharing this Worker

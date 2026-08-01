@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" data-skin="technical">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Temples of Refuge — A Fractal Network of Living Temples</title>
+    <title>Temples of Earth — A Fractal Network of Living Temples</title>
     <meta name="description" content="A 508(c)(1)(A) network of Temples where spiritual practice, ecological regeneration, and sovereign technology co-evolve. Re-binding human life to Source through direct experience.">
 
     <!-- Canonical domain is templesof.earth; templesofrefuge.earth serves
@@ -12,17 +12,17 @@
 
     <!-- Open Graph / social previews -->
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="Temples of Refuge">
-    <meta property="og:title" content="Temples of Refuge — A Fractal Network of Living Temples">
+    <meta property="og:site_name" content="Temples of Earth">
+    <meta property="og:title" content="Temples of Earth — A Fractal Network of Living Temples">
     <meta property="og:description" content="A 508(c)(1)(A) network of Temples where spiritual practice, ecological regeneration, and sovereign technology co-evolve. Re-binding human life to Source through direct experience.">
     <meta property="og:url" content="https://templesof.earth/">
     <meta property="og:image" content="https://templesof.earth/assets/og-image.png">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Temples of Refuge — A Fractal Network of Living Temples">
+    <meta name="twitter:title" content="Temples of Earth — A Fractal Network of Living Temples">
     <meta name="twitter:description" content="Spiritual practice, ecological regeneration, and sovereign technology co-evolving.">
     <meta name="twitter:image" content="https://templesof.earth/assets/og-image.png">
 
-    <!-- Structured data: Temples of Refuge and the works it stewards -->
+    <!-- Structured data: Temples of Earth (legal name Temples of Refuge) and the works it stewards -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -31,16 +31,17 @@
           "@type": "WebSite",
           "@id": "https://templesof.earth/#website",
           "url": "https://templesof.earth/",
-          "name": "Temples of Refuge",
+          "name": "Temples of Earth",
           "description": "A 508(c)(1)(A) network of Temples where spiritual practice, ecological regeneration, and sovereign technology co-evolve.",
           "publisher": { "@id": "https://templesof.earth/#org" }
         },
         {
           "@type": ["Organization", "Church"],
           "@id": "https://templesof.earth/#org",
-          "name": "Temples of Refuge",
+          "name": "Temples of Earth",
+          "legalName": "Temples of Refuge",
           "url": "https://templesof.earth/",
-          "description": "An association of churches re-binding human life to Source through direct experience, embodied practice, and regenerative relationship with Earth. Mandatorily tax-exempt under §501(c)(3) and §508(c)(1)(A). Temples of Refuge stewards three co-evolving works: spiritual practice, ecological regeneration, and sovereign technology.",
+          "description": "An association of churches re-binding human life to Source through direct experience, embodied practice, and regenerative relationship with Earth. Mandatorily tax-exempt under §501(c)(3) and §508(c)(1)(A). Temples of Earth stewards three co-evolving works: spiritual practice, ecological regeneration, and sovereign technology.",
           "foundingDate": "2024-01-17",
           "subOrganization": [
             {
@@ -49,7 +50,7 @@
               "name": "Synchronicity Engine",
               "alternateName": "SyncEngine",
               "url": "https://syncengine.earth/",
-              "description": "The sovereign-technology work: a peer-to-peer gift-economy app — a shared wish list where attention is the vote, service is proven, and gratitude flows onward — built on Indra's Network and stewarded by Temples of Refuge."
+              "description": "The sovereign-technology work: a peer-to-peer gift-economy app — a shared wish list where attention is the vote, service is proven, and gratitude flows onward — built on Indra's Network and stewarded by Temples of Earth."
             },
             {
               "@type": "Organization",
@@ -71,7 +72,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&family=Playfair+Display:wght@700;900&family=Raleway:ital,wght@0,200;0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/shared/brand.css">
 
     <!-- Favicons (reduced Seed-of-Life mark, optimized for small sizes) -->
     <link rel="icon" href="/favicon.ico" sizes="any">
@@ -86,19 +87,6 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
 
-        /* Fallback tokens (default dark skin). theme-engine.js overrides these at
-           runtime; they keep the page styled if it loads without JS or over file://. */
-        :root{
-            --s-font:"Inter",-apple-system,system-ui,sans-serif;
-            --s-display:"Cormorant Garamond",Georgia,serif;
-            --t-bg:#09090b;--t-sf:#111114;--t-cd:#151518;--t-hv:#1c1c20;
-            --t-tx:#fafafa;--t-t2:#a0a0ab;--t-mt:#52525b;--t-dm:#3f3f46;
-            --t-bd:#27272a;--t-b2:#1c1c20;--t-bc:rgba(129,140,248,0.12);
-            --t-ac:#818cf8;--t-a2:#c084fc;
-            --t-ok:#34d399;--t-wn:#fbbf24;--t-er:#f87171;
-            --t-glass:rgba(9,9,11,0.85);--t-glass-bd:rgba(255,255,255,0.06);
-            --ease:cubic-bezier(0.4, 0, 0.2, 1);
-        }
 
         body {
             font-family: var(--s-font);
@@ -112,19 +100,19 @@
         /* Typography */
         h1, h2, h3 {
             font-family: var(--s-display);
-            font-weight: 400;
+            font-weight: 500;
             line-height: 1.2;
-            letter-spacing: 0.05em;
+            letter-spacing: -0.005em;
         }
-        h1 { font-size: clamp(2.5rem, 8vw, 5rem); text-transform: uppercase; letter-spacing: 0.15em; }
-        h2 { font-size: clamp(1.5rem, 4vw, 2.5rem); letter-spacing: 0.1em; }
-        h3 { font-size: clamp(1rem, 2vw, 1.25rem); letter-spacing: 0.08em; }
+        h1 { font-size: clamp(40px, 7.5vw, 84px); font-weight: 700; line-height: 1.02; letter-spacing: -0.01em; }
+        h2 { font-size: clamp(32px, 5.5vw, 60px); line-height: 1.12; }
+        h3 { font-size: clamp(1rem, 2vw, 1.25rem); }
 
         .eyebrow {
-            font-family: var(--s-font);
+            font-family: var(--font-mono);
             font-size: 0.7rem;
             font-weight: 500;
-            letter-spacing: 0.4em;
+            letter-spacing: 0.2em;
             text-transform: uppercase;
             color: var(--t-ac);
             margin-bottom: 1.5rem;
@@ -216,9 +204,9 @@
         @keyframes symbolIn { from { opacity: 0; transform: translateY(20px) scale(0.9) rotate(-8deg); } to { opacity: 1; transform: none; } }
 
         .scroll-indicator {
-            position: absolute; bottom: 3rem; left: 50%; transform: translateX(-50%);
-            display: flex; flex-direction: column; align-items: center; gap: 1rem;
-            opacity: 0; animation: riseIn 1.4s 1.3s var(--ease) forwards, bob 3s 2.6s ease-in-out infinite;
+            /* Hidden in the brand design (was hidden by the old engine skin);
+               it collides with the hero CTA at short viewport heights. */
+            display: none;
         }
         .scroll-indicator span {
             font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--t-mt);
@@ -808,9 +796,9 @@
     <section class="hero">
         <div class="hero-content">
             <div class="hero-symbol">
-                <img src="assets/Final-Logo/01-Royal/icon/icon-transparent.svg" alt="Temples of Refuge icon">
+                <img src="assets/Final-Logo/01-Royal/icon/icon-transparent.svg" alt="Temples of Earth icon">
             </div>
-            <h1>Temples of Refuge</h1>
+            <h1>Temples of Earth</h1>
             <p class="eyebrow">A Fractal Network of Living Temples</p>
             <p class="lead">
                 Re-binding human life to Source through direct experience, embodied practice, and regenerative relationship with Earth.
@@ -829,7 +817,7 @@
             <p class="eyebrow r">Why We Exist</p>
             <h2 class="r r-d1">Religion in Its True Sense</h2>
             <p class="meaning-text r r-d2">
-                Temples of Refuge exists to restore what religion was always meant to be—to re-bind human life to Source through direct experience, embodied practice, and regenerative relationship with Earth. Not doctrine to defend, but a way of seeing to be lived.
+                Temples of Earth exists to restore what religion was always meant to be—to re-bind human life to Source through direct experience, embodied practice, and regenerative relationship with Earth. Not doctrine to defend, but a way of seeing to be lived.
             </p>
             <div class="etymology r r-d3">
                 <p class="etymology-word">re · ligāre</p>
@@ -1053,7 +1041,7 @@
             </div>
 
             <p class="se-note r r-d2">
-                Built on <strong>Indra's Network</strong>, a sovereign peer-to-peer stack — no servers required, no surveillance, no extraction. Membership is by covenant, through Temples of Refuge.
+                Built on <strong>Indra's Network</strong>, a sovereign peer-to-peer stack — no servers required, no surveillance, no extraction. Membership is by covenant, through Temples of Earth.
             </p>
             <div class="r r-d3">
                 <a href="https://syncengine.earth" target="_blank" rel="noopener" class="se-cta-link">
@@ -1244,9 +1232,9 @@
     <!-- Footer -->
     <footer>
         <div class="footer-content">
-            <p class="footer-logo">Temples of Refuge</p>
+            <p class="footer-logo">Temples of Earth</p>
             <p class="footer-info">
-                An Association of Churches<br>
+                The public name of Temples of Refuge, an Association of Churches<br>
                 Mandatorily tax-exempt under §501(c)(3) and §508(c)(1)(A)<br>
                 Established January 17, 2024 · Reconstituted 2026<br>
                 Ogden, Utah
@@ -1283,14 +1271,7 @@
         </div>
     </footer>
 
-    <script src="/shared/theme-engine.js"></script>
-    <script>
-    ThemeEngine.init({
-      defaultSkin: 'technical',
-      storageKey: 'tor-skin',
-      position: 'top-right'
-    });
-    </script>
+    <script src="/shared/brand.js" defer></script>
     <script src="/shared/cta-widgets.js"></script>
     <script>
       CTAWidgets.footerNewsletter('#newsletter-mount');

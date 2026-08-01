@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" data-skin="technical">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Ceremony Mat — Temples of Refuge</title>
-    <meta name="description" content="A portable temple. The Ceremony Mat is an oversized 140 × 210 cm coconut-rubber mat with a printed surface of fractal sacred geometry, designed to create a sacred place anywhere. The first physical offering from Temples of Refuge — now in pre-order.">
+    <title>The Ceremony Mat — Temples of Earth</title>
+    <meta name="description" content="A portable temple. The Ceremony Mat is an oversized 140 × 210 cm coconut-rubber mat with a printed surface of fractal sacred geometry, designed to create a sacred place anywhere. The first physical offering from Temples of Earth — now in pre-order.">
 
     <!-- Canonical domain is templesof.earth; templesofrefuge.earth serves
          these same files and folds into it. Extensionless form — Caddy 301s
@@ -13,40 +13,28 @@
 
     <!-- Open Graph / social previews -->
     <meta property="og:type" content="product">
-    <meta property="og:site_name" content="Temples of Refuge">
+    <meta property="og:site_name" content="Temples of Earth">
     <meta property="og:title" content="The Ceremony Mat — A Portable Temple">
     <meta property="og:description" content="An oversized 140 × 210 cm coconut-rubber mat with a printed surface of fractal sacred geometry — a portable temple you can bring to create a sacred place anywhere. Now in pre-order.">
     <meta property="og:url" content="https://templesof.earth/ceremony-mats">
     <meta property="og:image" content="https://templesof.earth/assets/web/fractal-metatron-1600.jpg">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="The Ceremony Mat — A Portable Temple">
-    <meta name="twitter:description" content="Fractal sacred geometry on oversized coconut rubber. The first physical offering from Temples of Refuge.">
+    <meta name="twitter:description" content="Fractal sacred geometry on oversized coconut rubber. The first physical offering from Temples of Earth.">
     <meta name="twitter:image" content="https://templesof.earth/assets/web/fractal-metatron-1600.jpg">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&family=Playfair+Display:wght@700;900&family=Raleway:ital,wght@0,200;0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/shared/brand.css">
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
 
-        /* Fallback tokens (default dark skin). theme-engine.js overrides these at
-           runtime; they keep the page styled if it loads without JS or over file://. */
-        :root{
-            --s-font:"Inter",-apple-system,system-ui,sans-serif;
-            --s-display:"Cormorant Garamond",Georgia,serif;
-            --t-bg:#09090b;--t-sf:#111114;--t-cd:#151518;--t-hv:#1c1c20;
-            --t-tx:#fafafa;--t-t2:#a0a0ab;--t-mt:#52525b;--t-dm:#3f3f46;
-            --t-bd:#27272a;--t-b2:#1c1c20;--t-bc:rgba(129,140,248,0.12);
-            --t-ac:#818cf8;--t-a2:#c084fc;
-            --t-ok:#34d399;--t-wn:#fbbf24;--t-er:#f87171;
-            --t-glass:rgba(9,9,11,0.85);--t-glass-bd:rgba(255,255,255,0.06);
-        }
 
         body {
-            padding-top: 48px; /* clears the fixed ThemeEngine control bar */
+            padding-top: 48px; /* clears the fixed brand bar */
             font-family: var(--s-font);
             font-weight: 300;
             background: var(--t-bg);
@@ -637,7 +625,7 @@
 <body>
 
     <header class="site-header">
-        <a href="/" class="back-link">← Temples of Refuge</a>
+        <a href="/" class="back-link">← Temples of Earth</a>
     </header>
 
     <!-- Hero -->
@@ -821,32 +809,33 @@
                 <div class="stage-veil"></div>
                 <svg class="stage-overlay" viewBox="0 0 142.8 100"
                      preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-                    <!-- Node coordinates measured against the rotated mat's
-                         Metatron hexagram: 6 outer vertices + golden center. -->
+                    <!-- Node coords derived by measuring the SOURCE portrait mat and
+                         mapping through the 90deg rotation: x = 142.8*(1-v), y = 100*u.
+                         They land on the Metatron hexagram's 6 vertices + golden heart. -->
                     <!-- Solo: one presence at the heart -->
                     <g class="cfg cfg-solo">
-                        <circle class="ripple"    cx="71.5" cy="50" r="6"></circle>
-                        <circle class="ripple r2" cx="71.5" cy="50" r="6"></circle>
-                        <circle class="person"    cx="71.5" cy="50" r="4.6"></circle>
+                        <circle class="ripple"    cx="72.5" cy="50" r="6"></circle>
+                        <circle class="ripple r2" cx="72.5" cy="50" r="6"></circle>
+                        <circle class="person"    cx="72.5" cy="50" r="4.6"></circle>
                     </g>
                     <!-- Partner: two facing each other across the mat, altar between -->
                     <g class="cfg cfg-partner">
-                        <line class="link" style="--len:90" x1="27" y1="50" x2="117" y2="50"></line>
-                        <circle class="altar"  cx="71.5" cy="50" r="1.9"></circle>
-                        <circle class="person" cx="27"   cy="50" r="4.8"></circle>
-                        <circle class="person" cx="117"  cy="50" r="4.8"></circle>
+                        <line class="link" style="--len:97" x1="24" y1="50" x2="121" y2="50"></line>
+                        <circle class="altar"  cx="72.5" cy="50" r="1.9"></circle>
+                        <circle class="person" cx="24"   cy="50" r="4.8"></circle>
+                        <circle class="person" cx="121"  cy="50" r="4.8"></circle>
                     </g>
                     <!-- Family: up to six around the geometry -->
                     <g class="cfg cfg-family">
-                        <polygon class="link" style="--len:281"
-                                 points="117,50 96,9 47,9 27,50 47,91 96,91"></polygon>
-                        <circle class="altar"  cx="71.5" cy="50" r="1.6"></circle>
-                        <circle class="person" cx="117"  cy="50" r="4.4"></circle>
-                        <circle class="person" cx="96"   cy="9"  r="4.4"></circle>
-                        <circle class="person" cx="47"   cy="9"  r="4.4"></circle>
-                        <circle class="person" cx="27"   cy="50" r="4.4"></circle>
-                        <circle class="person" cx="47"   cy="91" r="4.4"></circle>
-                        <circle class="person" cx="96"   cy="91" r="4.4"></circle>
+                        <polygon class="link" style="--len:283"
+                                 points="121,50 95.3,10.5 46.6,10.5 24,50 46.6,89.5 95.3,89.5"></polygon>
+                        <circle class="altar"  cx="72.5" cy="50"   r="1.6"></circle>
+                        <circle class="person" cx="121"  cy="50"   r="4.4"></circle>
+                        <circle class="person" cx="95.3" cy="10.5" r="4.4"></circle>
+                        <circle class="person" cx="46.6" cy="10.5" r="4.4"></circle>
+                        <circle class="person" cx="24"   cy="50"   r="4.4"></circle>
+                        <circle class="person" cx="46.6" cy="89.5" r="4.4"></circle>
+                        <circle class="person" cx="95.3" cy="89.5" r="4.4"></circle>
                     </g>
                 </svg>
                 <div class="stage-caption">
@@ -971,7 +960,7 @@
                 <p class="eyebrow">Founding Pre-Order</p>
                 <h2>Reserve Your Ceremony Mat</h2>
                 <p class="preorder-note">
-                    The <strong>first physical offering from Temples of Refuge</strong>.
+                    The <strong>first physical offering from Temples of Earth</strong>.
                     The first 100 mats are offered at the founding price — then it rises to 333.
                 </p>
             </div>
@@ -1039,7 +1028,7 @@
 
     <!-- Footer -->
     <footer>
-        <p class="footer-logo">Temples of Refuge</p>
+        <p class="footer-logo">Temples of Earth</p>
         <nav class="footer-nav" aria-label="Site">
             <a href="/">Home</a>
             <a href="/cosmology.html">Cosmology</a>
@@ -1048,18 +1037,12 @@
         </nav>
         <p class="footer-info">
             The first physical offering · Now in pre-order<br>
-            An Association of Churches · §501(c)(3) &amp; §508(c)(1)(A)
+            Temples of Earth is the public name of Temples of Refuge,<br>
+            an Association of Churches · §501(c)(3) &amp; §508(c)(1)(A)
         </p>
     </footer>
 
-    <script src="/shared/theme-engine.js"></script>
-    <script>
-    ThemeEngine.init({
-      defaultSkin: 'technical',
-      storageKey: 'tor-skin',
-      position: 'top-right'
-    });
-    </script>
+    <script src="/shared/brand.js" defer></script>
     <script src="/shared/cta-widgets.js"></script>
     <script src="https://js.stripe.com/v3/"></script>
     <script>

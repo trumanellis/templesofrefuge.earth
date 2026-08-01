@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="en" data-skin="technical">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Writings — Temples of Refuge</title>
-    <meta name="description" content="Essays and reflections from the Temples of Refuge community.">
+    <title>Writings — Temples of Earth</title>
+    <meta name="description" content="Essays and reflections from the Temples of Earth community.">
     <!-- Canonical domain is templesof.earth; templesofrefuge.earth serves
          these same files and folds into it. -->
     <link rel="canonical" href="https://templesof.earth/articles/">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&family=Playfair+Display:wght@700;900&family=Raleway:ital,wght@0,200;0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/shared/brand.css">
     <style>
         *, *::before, *::after {
             box-sizing: border-box;
@@ -25,7 +25,7 @@
             font-size: 17px;
             line-height: 1.8;
             color: var(--t-tx);
-            padding-top: 48px; /* room for the ThemeEngine control bar */
+            padding-top: 48px; /* room for the fixed brand bar */
         }
 
         .site-header {
@@ -36,7 +36,7 @@
         .back-link {
             color: var(--t-ac);
             text-decoration: none;
-            font-family: var(--s-display);
+            font-family: var(--font-mono);
             font-size: 0.75rem;
             letter-spacing: 0.15em;
             text-transform: uppercase;
@@ -55,7 +55,7 @@
         }
 
         .hero-eyebrow {
-            font-family: var(--s-display);
+            font-family: var(--font-mono);
             font-size: 0.7rem;
             letter-spacing: 0.25em;
             text-transform: uppercase;
@@ -81,7 +81,7 @@
         }
 
         .section-label {
-            font-family: var(--s-display);
+            font-family: var(--font-mono);
             font-size: 0.7rem;
             letter-spacing: 0.25em;
             text-transform: uppercase;
@@ -130,7 +130,7 @@
         }
 
         .article-card-eyebrow {
-            font-family: var(--s-display);
+            font-family: var(--font-mono);
             font-size: 0.65rem;
             letter-spacing: 0.2em;
             text-transform: uppercase;
@@ -165,7 +165,7 @@
         }
 
         .article-card-read {
-            font-family: var(--s-display);
+            font-family: var(--font-mono);
             font-size: 0.7rem;
             letter-spacing: 0.15em;
             text-transform: uppercase;
@@ -203,7 +203,7 @@
         }
 
         .footer-site-name {
-            font-family: var(--s-display);
+            font-family: var(--font-mono);
             font-size: 0.75rem;
             letter-spacing: 0.2em;
             text-transform: uppercase;
@@ -246,7 +246,7 @@
 <body>
 
     <header class="site-header">
-        <a href="/" class="back-link">← Temples of Refuge</a>
+        <a href="/" class="back-link">← Temples of Earth</a>
     </header>
 
     <section class="hero">
@@ -274,18 +274,14 @@
     </main>
 
     <footer class="site-footer">
-        <p class="footer-site-name">Temples of Refuge</p>
+        <p class="footer-site-name">Temples of Earth</p>
         <p class="footer-tagline">Those who walk this path do so freely</p>
+        <p class="toe-legal">Temples of Earth is the public name of Temples of Refuge, an association of churches mandatorily tax-exempt under §501(c)(3) and §508(c)(1)(A).</p>
     </footer>
 
-    <script src="/shared/theme-engine.js"></script>
+    <script src="/shared/brand.js" defer></script>
     <script src="/shared/substack-feed.js"></script>
     <script>
-    ThemeEngine.init({
-      defaultSkin: 'technical',
-      storageKey: 'tor-skin',
-      position: 'top-right'
-    });
     SubstackFeed.init({
       container: '#substack-articles',
       tag: 'TemplesOfRefuge',

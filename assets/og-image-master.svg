@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300&amp;family=Ubuntu+Mono:wght@400;700&amp;display=swap');
+    .eyebrow { font-family: 'Ubuntu Mono', monospace; font-size: 17px; letter-spacing: 8px; fill: #7fb069; }
+    .word    { font-family: 'Ubuntu', sans-serif; font-size: 88px; font-weight: 700; letter-spacing: 5px; }
+    .tag     { font-family: 'Ubuntu', sans-serif; font-size: 29px; font-weight: 300; font-style: italic; fill: #b3a992; }
+    .foot    { font-family: 'Ubuntu Mono', monospace; font-size: 15px; letter-spacing: 5px; fill: #7d745f; }
+  </style>
+  <defs>
+    <radialGradient id="glowTop" cx="50%" cy="0%" r="75%">
+      <stop offset="0%" stop-color="#7fb069" stop-opacity="0.14"/>
+      <stop offset="55%" stop-color="#4a7c59" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#141210" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowBottom" cx="50%" cy="100%" r="70%">
+      <stop offset="0%" stop-color="#e9c46a" stop-opacity="0.10"/>
+      <stop offset="60%" stop-color="#b8862e" stop-opacity="0.03"/>
+      <stop offset="100%" stop-color="#141210" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="earthGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#7fb069"/>
+      <stop offset="55%" stop-color="#a8c66c"/>
+      <stop offset="100%" stop-color="#e9c46a"/>
+    </linearGradient>
+    <linearGradient id="dividerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#e9c46a" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#e9c46a" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#e9c46a" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- warm humus canvas -->
+  <rect width="1200" height="630" fill="#141210"/>
+  <rect width="1200" height="630" fill="url(#glowTop)"/>
+  <rect width="1200" height="630" fill="url(#glowBottom)"/>
+
+  <!-- faint concentric growth rings -->
+  <g fill="none" stroke="#7fb069" stroke-width="1">
+    <circle cx="600" cy="315" r="150" stroke-opacity="0.10"/>
+    <circle cx="600" cy="315" r="255" stroke-opacity="0.07"/>
+    <circle cx="600" cy="315" r="370" stroke-opacity="0.05"/>
+    <circle cx="600" cy="315" r="500" stroke-opacity="0.03"/>
+  </g>
+
+  <!-- fractal flower-of-life mark -->
+  <image href="Final-Logo/02-Aurum/icon/icon-transparent.svg" x="536" y="52" width="128" height="128"/>
+
+  <!-- eyebrow -->
+  <text class="eyebrow" x="604" y="238" text-anchor="middle">A 508(C)(1)(A) SANCTUARY NETWORK</text>
+
+  <!-- wordmark -->
+  <text class="word" x="603" y="352" text-anchor="middle">
+    <tspan fill="#f2ede2">TEMPLES</tspan><tspan fill="url(#earthGrad)"> OF EARTH</tspan>
+  </text>
+
+  <!-- divider -->
+  <rect x="560" y="396" width="80" height="1.5" fill="url(#dividerGrad)"/>
+
+  <!-- tagline -->
+  <text class="tag" x="600" y="458" text-anchor="middle">A fractal network of living temples — re-binding human life</text>
+  <text class="tag" x="600" y="500" text-anchor="middle">to Source through direct experience.</text>
+
+  <!-- footer -->
+  <text class="foot" x="602" y="584" text-anchor="middle">TEMPLESOF.EARTH   ·   SPIRIT   ·   REGENERATION   ·   SOVEREIGNTY</text>
+</svg>
