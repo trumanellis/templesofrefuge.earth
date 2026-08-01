@@ -48,8 +48,13 @@ const MAT_MESSAGE =
 // Both spellings of each page are allowed because the sites sharing this Worker
 // don't all agree yet: the .html forms still arrive from pages that haven't been
 // swept, and they 301 to the clean form rather than breaking.
+// The mat page moved from /ceremony-mats to /mats; both spellings of the old
+// path stay listed so a checkout started from a cached copy of the old page
+// still returns the buyer to a mat page (Caddy 301s it to /mats) instead of
+// silently falling back to /join.
 const RETURN_PATHS = new Set([
   '/join', '/join.html',
+  '/mats', '/mats.html',
   '/ceremony-mats', '/ceremony-mats.html',
 ]);
 
