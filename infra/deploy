@@ -1,0 +1,302 @@
+#!/usr/bin/env bash
+# deploy — one operator interface for everything running on the Hetzner box.
+#
+# The box has always had two deployment mechanisms and no single front door:
+#
+#   pull-based, automatic   the static sites + tor-checkout + the Caddyfile,
+#                           via a GitHub push webhook and a root path-unit
+#   push-based, manual      the Rust binaries (donation gateway, availability
+#                           node), which live in the PRIVATE IndrasNetwork repo
+#                           and are installed out of band
+#
+# This wraps both behind the same verbs, with the same preflight and the same
+# post-deploy verification. It deliberately does NOT make everything automatic:
+# the donation gateway holds the production issuer secret that signs membership
+# attestations for the whole network, so shipping it stays an explicit act with
+# a human confirming it. Restarting a static-site process and redeploying a
+# signing authority do not deserve the same trust.
+#
+# Nothing here changes the box's trust model. The root helper
+# (/usr/local/bin/tor-post-deploy) and its two-token vocabulary are untouched;
+# this only drives the mechanisms that already exist.
+#
+# See infra/RUNBOOK.md for the box's full layout.
+set -euo pipefail
+
+HOST="${DEPLOY_HOST:-truman@89.167.41.185}"
+SSH=(ssh -o ConnectTimeout=10 "$HOST")
+SITE_CLONE=/var/www/templesofrefuge
+INDRAS_REPO="${INDRAS_REPO:-$HOME/Code/IndrasNetwork/agent3}"
+ASSUME_YES=0
+
+# component            crate/service                 health probe
+#                                                    (empty ⇒ systemd only)
+GATEWAY_SVC=indras-donation-gateway
+GATEWAY_BIN=/usr/local/bin/indras-donation-gateway
+GATEWAY_HEALTH='curl -sf -o /dev/null -w %{http_code} localhost:8788/healthz'
+GATEWAY_OK=200
+
+AVAIL_SVC=indras-availability-node
+AVAIL_BIN=/usr/local/bin/indras-availability-node
+
+c_red=$'\033[31m'; c_grn=$'\033[32m'; c_yel=$'\033[33m'; c_dim=$'\033[2m'; c_off=$'\033[0m'
+say()  { printf '%s\n' "$*"; }
+ok()   { printf '%s✓%s %s\n' "$c_grn" "$c_off" "$*"; }
+warn() { printf '%s!%s %s\n' "$c_yel" "$c_off" "$*"; }
+die()  { printf '%s✗%s %s\n' "$c_red" "$c_off" "$*" >&2; exit 1; }
+step() { printf '\n%s──%s %s\n' "$c_dim" "$c_off" "$*"; }
+
+confirm() {
+  [ "$ASSUME_YES" = 1 ] && return 0
+  printf '%s\n' "$1"
+  read -r -p "Type 'yes' to continue: " reply
+  [ "$reply" = "yes" ] || die "aborted"
+}
+
+usage() {
+  cat <<'EOF'
+Usage: infra/deploy <command> [options]
+
+  status                  what is running on the box, and what is behind
+  health                  health probes only; non-zero exit if anything fails
+
+  site                    push this repo and wait for the box to converge
+                          (this also ships tor-checkout and the Caddyfile)
+
+  gateway                 build + install + restart the donation gateway
+  availability-node       build + install + restart the availability node
+      --binary PATH       ship an already-built linux/x86_64 binary
+      --repo PATH         IndrasNetwork checkout to build from
+                          (default: $INDRAS_REPO)
+
+  rollback <component>    restore the previous binary and restart
+
+Options:  -y, --yes       skip the confirmation prompt
+
+Deploying a Rust binary is deliberate by design — see the header comment.
+EOF
+}
+
+# ── read-only reporting ─────────────────────────────────────────────────────
+
+cmd_status() {
+  step "services"
+  "${SSH[@]}" '
+    for s in caddy webhook-deploy tor-checkout indras-donation-gateway \
+             indras-availability-node work-agualila; do
+      printf "  %-28s %s\n" "$s" "$(systemctl is-active $s 2>&1)"
+    done'
+
+  step "site clone vs local"
+  local remote_head local_head
+  remote_head=$("${SSH[@]}" "git -C $SITE_CLONE rev-parse --short HEAD")
+  local_head=$(git rev-parse --short HEAD)
+  printf '  %-28s %s\n' "box  $SITE_CLONE" "$remote_head"
+  printf '  %-28s %s\n' "local HEAD" "$local_head"
+  if [ "$remote_head" = "$local_head" ]; then
+    ok "site is in sync"
+  else
+    local ahead
+    ahead=$(git rev-list --count "$remote_head..HEAD" 2>/dev/null || echo '?')
+    warn "box is $ahead commit(s) behind local HEAD — 'infra/deploy site' to ship"
+  fi
+
+  step "binaries (not updated by any git pull)"
+  "${SSH[@]}" "
+    for b in $GATEWAY_BIN $AVAIL_BIN; do
+      printf '  %-42s %s\n' \"\$b\" \"\$(stat -c %y \"\$b\" 2>/dev/null | cut -d. -f1 || echo missing)\"
+    done"
+
+  step "health"
+  cmd_health || true
+}
+
+cmd_health() {
+  local rc=0
+  local code
+  code=$("${SSH[@]}" "$GATEWAY_HEALTH" 2>/dev/null || echo 000)
+  if [ "$code" = "$GATEWAY_OK" ]; then ok "gateway /healthz $code"
+  else printf '%s✗%s gateway /healthz %s\n' "$c_red" "$c_off" "$code"; rc=1; fi
+
+  # tor-checkout answers 403 without an Origin header — that IS the healthy
+  # response; its CORS allowlist is doing its job.
+  code=$("${SSH[@]}" 'curl -s -o /dev/null -w %{http_code} localhost:8787/session-status' 2>/dev/null || echo 000)
+  if [ "$code" = "403" ]; then ok "checkout /session-status $code (origin-gated, correct)"
+  else printf '%s✗%s checkout /session-status %s (expected 403)\n' "$c_red" "$c_off" "$code"; rc=1; fi
+
+  local avail
+  avail=$("${SSH[@]}" "systemctl is-active $AVAIL_SVC" 2>&1 || true)
+  if [ "$avail" = "active" ]; then ok "availability-node active (no health endpoint)"
+  else printf '%s✗%s availability-node %s\n' "$c_red" "$c_off" "$avail"; rc=1; fi
+
+  # From outside: these confirm DNS + valid TLS + Caddy routing. The API roots
+  # have no route at '/', so 404 is the expected healthy answer — what matters
+  # is that a code came back at all rather than a cert or connection error.
+  ok "$(printf 'reachable from outside (TLS + routing):')"
+  for host in https://templesof.earth/join https://checkout.templesof.earth/ https://api.templesof.earth/; do
+    code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 10 "$host" || echo 000)
+    if [ "$code" = 000 ]; then
+      printf '  %s✗%s %-40s unreachable / TLS error\n' "$c_red" "$c_off" "$host"; rc=1
+    else
+      printf '  %s✓%s %-40s %s\n' "$c_grn" "$c_off" "$host" "$code"
+    fi
+  done
+  return $rc
+}
+
+# ── the pull-based half ─────────────────────────────────────────────────────
+
+cmd_site() {
+  [ -z "$(git status --porcelain --untracked-files=no)" ] \
+    || die "working tree is dirty — commit or stash first"
+
+  local branch; branch=$(git rev-parse --abbrev-ref HEAD)
+  [ "$branch" = main ] || warn "on '$branch', not main — the webhook only deploys main"
+
+  local unpushed; unpushed=$(git rev-list --count "@{upstream}..HEAD" 2>/dev/null || echo 0)
+  if [ "$unpushed" -gt 0 ]; then
+    git --no-pager log --oneline "@{upstream}..HEAD"
+    confirm "
+Pushing IS the deploy: the webhook pulls $SITE_CLONE immediately, and
+tor-checkout restarts if checkout-worker/src/ changed. The $unpushed commit(s)
+above go live."
+    step "pushing"
+    git push
+  else
+    say "nothing unpushed; waiting for the box to converge on $(git rev-parse --short HEAD)"
+  fi
+
+  step "waiting for the box"
+  local want; want=$(git rev-parse HEAD)
+  for i in $(seq 1 30); do
+    local got; got=$("${SSH[@]}" "git -C $SITE_CLONE rev-parse HEAD" 2>/dev/null || echo none)
+    if [ "$got" = "$want" ]; then ok "box at $(git rev-parse --short HEAD)"; break; fi
+    [ "$i" = 30 ] && die "box did not converge after 60s — check 'journalctl -u webhook-deploy', or pull manually (see RUNBOOK)"
+    sleep 2
+  done
+
+  step "verifying"
+  cmd_health
+}
+
+# ── the push-based half ─────────────────────────────────────────────────────
+
+# Build a linux/x86_64 binary for $1. Prefers `cross`, else a rust docker image,
+# because this laptop is arm64 macOS with no linux-gnu target installed and the
+# box has 3GB of RAM and no business compiling Rust.
+build_binary() {
+  local crate="$1" out
+  [ -d "$INDRAS_REPO" ] || die "IndrasNetwork checkout not found at $INDRAS_REPO (pass --repo)"
+  out="$INDRAS_REPO/target/x86_64-unknown-linux-gnu/release/$crate"
+
+  if command -v cross >/dev/null 2>&1; then
+    step "building $crate with cross"
+    (cd "$INDRAS_REPO" && cross build --release -p "$crate" --target x86_64-unknown-linux-gnu)
+  elif command -v docker >/dev/null 2>&1; then
+    step "building $crate in a rust container"
+    docker run --rm --platform linux/amd64 \
+      -v "$INDRAS_REPO":/w -w /w \
+      -v "$INDRAS_REPO/target/docker-cargo":/usr/local/cargo/registry \
+      rust:slim bash -lc "cargo build --release -p $crate --target x86_64-unknown-linux-gnu"
+  else
+    die "no cross and no docker — build elsewhere and pass --binary PATH"
+  fi
+  [ -f "$out" ] || die "expected binary not found at $out"
+  printf '%s' "$out"
+}
+
+deploy_binary() {
+  local svc="$1" dest="$2" crate="$3" src="${4:-}"
+  [ -n "$src" ] || src=$(build_binary "$crate")
+  [ -f "$src" ] || die "binary not found: $src"
+
+  file "$src" | grep -q 'ELF 64-bit.*x86-64' \
+    || die "$src is not a linux/x86_64 ELF — wrong build target"
+
+  local size; size=$(du -h "$src" | cut -f1)
+  confirm "
+About to replace $dest on $HOST ($size) and restart $svc.
+
+This service is NOT auto-deployed on purpose. The donation gateway holds the
+production issuer key that signs membership attestations network-wide.
+The current binary is kept as ${dest}.prev and restored automatically if the
+health check fails."
+
+  step "uploading"
+  scp -q "$src" "$HOST:/tmp/$crate.new"
+
+  step "installing (previous kept as ${dest}.prev)"
+  "${SSH[@]}" "
+    set -e
+    [ -f '$dest' ] && sudo cp -a '$dest' '${dest}.prev'
+    sudo install -m 755 /tmp/$crate.new '$dest'
+    rm -f /tmp/$crate.new
+    sudo systemctl restart '$svc'"
+
+  step "verifying"
+  sleep 2
+  local healthy=1
+  if [ "$svc" = "$GATEWAY_SVC" ]; then
+    for i in 1 2 3 4 5; do
+      [ "$("${SSH[@]}" "$GATEWAY_HEALTH" 2>/dev/null || echo 000)" = "$GATEWAY_OK" ] && { healthy=0; break; }
+      sleep 2
+    done
+  else
+    [ "$("${SSH[@]}" "systemctl is-active $svc" 2>&1)" = active ] && healthy=0
+  fi
+
+  if [ $healthy -ne 0 ]; then
+    warn "health check FAILED — rolling back"
+    "${SSH[@]}" "
+      set -e
+      [ -f '${dest}.prev' ] && sudo install -m 755 '${dest}.prev' '$dest'
+      sudo systemctl restart '$svc'"
+    "${SSH[@]}" "sudo journalctl -u $svc -n 20 --no-pager" || true
+    die "rolled back to the previous binary; $svc restarted"
+  fi
+  ok "$svc healthy on the new binary"
+}
+
+cmd_rollback() {
+  local svc dest
+  case "${1:-}" in
+    gateway)            svc=$GATEWAY_SVC; dest=$GATEWAY_BIN ;;
+    availability-node)  svc=$AVAIL_SVC;   dest=$AVAIL_BIN ;;
+    *) die "rollback needs: gateway | availability-node" ;;
+  esac
+  "${SSH[@]}" "[ -f '${dest}.prev' ]" || die "no ${dest}.prev on the box"
+  confirm "Restore ${dest}.prev over $dest and restart $svc?"
+  "${SSH[@]}" "set -e; sudo install -m 755 '${dest}.prev' '$dest'; sudo systemctl restart '$svc'"
+  ok "rolled back $svc"
+  cmd_health || true
+}
+
+# ── entry ───────────────────────────────────────────────────────────────────
+
+cmd="${1:-}"; shift || true
+# A bare second positional is the target for `rollback <component>`; anything
+# starting with '-' is an option and belongs to the loop below.
+TARGET=""
+if [ $# -gt 0 ] && [ "${1#-}" = "$1" ]; then TARGET="$1"; shift; fi
+BINARY=""
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -y|--yes) ASSUME_YES=1 ;;
+    --binary) BINARY="${2:?--binary needs a path}"; shift ;;
+    --repo)   INDRAS_REPO="${2:?--repo needs a path}"; shift ;;
+    -h|--help) usage; exit 0 ;;
+    *) die "unknown option: $1" ;;
+  esac
+  shift
+done
+
+case "$cmd" in
+  status)             cmd_status ;;
+  health)             cmd_health ;;
+  site|checkout)      cmd_site ;;
+  gateway)            deploy_binary "$GATEWAY_SVC" "$GATEWAY_BIN" indras-donation-gateway "$BINARY" ;;
+  availability-node)  deploy_binary "$AVAIL_SVC" "$AVAIL_BIN" indras-availability-node "$BINARY" ;;
+  rollback)           cmd_rollback "$TARGET" ;;
+  ""|-h|--help)       usage ;;
+  *)                  die "unknown command: $cmd (try --help)" ;;
+esac

@@ -49,9 +49,28 @@ Both `templesof.earth` and `templesofrefuge.earth` serve the **same**
 
 ---
 
-## Deploying: two different mechanisms
+## Deploying: `infra/deploy`
 
-This is the thing most likely to catch you out.
+One front door over both mechanisms below:
+
+```bash
+infra/deploy status              # what's running, what's behind, health
+infra/deploy health              # probes only; non-zero exit if anything fails
+infra/deploy site                # push + wait for the box to converge + verify
+infra/deploy gateway             # build, install, restart, health-check, auto-rollback
+infra/deploy availability-node   # same
+infra/deploy rollback gateway    # restore the previous binary
+```
+
+It drives the existing mechanisms rather than replacing them — the root helper
+and its two-token vocabulary are untouched. The Rust binaries stay a deliberate,
+confirmed action rather than becoming automatic: the gateway holds the production
+issuer secret that signs membership attestations network-wide, and that does not
+deserve the same trust as restarting a static-site process. Each binary deploy
+keeps the previous one as `<path>.prev` and restores it automatically if the
+post-restart health check fails.
+
+The two mechanisms it wraps, which is the thing most likely to catch you out:
 
 ### The sites and `tor-checkout` — push to deploy
 
