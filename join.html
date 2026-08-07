@@ -48,9 +48,13 @@
       .join-close{color:var(--t-t2);line-height:1.75;font-size:.98rem;margin:0;max-width:44ch}
       .join-close strong{color:var(--t-tx);font-weight:500}
 
-      /* Right column — the offering panel */
-      .offering-panel{border:1px solid var(--t-bd);border-radius:20px;
-        background:var(--t-b2);padding:2rem 1.75rem}
+	      /* Right column — the offering panel */
+	      .offering-side{display:flex;flex-direction:column;gap:1rem}
+	      .join-threshold-image{margin:0;border:1px solid var(--t-bd);border-radius:20px;
+	        overflow:hidden;background:var(--t-bg);aspect-ratio:16/9}
+	      .join-threshold-image img{width:100%;height:100%;display:block;object-fit:cover}
+	      .offering-panel{border:1px solid var(--t-bd);border-radius:20px;
+	        background:var(--t-b2);padding:2rem 1.75rem}
       .offering-panel-label{font-family:var(--s-font);font-size:.66rem;font-weight:500;
         letter-spacing:.28em;text-transform:uppercase;color:var(--t-ac);
         text-align:center;margin:0 0 1.35rem}
@@ -167,10 +171,6 @@
 </head>
 <body>
 
-    <header class="site-header">
-        <a href="/" class="back-link">← Temples of Earth</a>
-    </header>
-
     <main>
         <div class="join-shell">
             <section class="offering-hero" id="offering-hero" aria-label="Become a Member">
@@ -201,8 +201,13 @@
                     </div>
                 </div>
 
-                <div class="offering-panel">
-                    <p class="offering-panel-label">Your Offering</p>
+	                <div class="offering-side">
+	                    <figure class="join-threshold-image">
+	                        <img src="/assets/web/join-threshold-gate-1600.webp" alt="An open garden gate of woven living branches at dusk, with a gold-lit path toward a distant temple and a potted sapling beside the threshold">
+	                    </figure>
+
+	                    <div class="offering-panel">
+	                        <p class="offering-panel-label">Your Offering</p>
 
                     <div id="amount-step">
                         <div class="currency-row" id="currency-row" role="group" aria-label="Choose a currency">
@@ -241,11 +246,12 @@
 
                     <div id="checkout"><!-- Stripe Embedded Checkout mounts here --></div>
 
-                    <p class="offering-fineprint">Your name and email travel with the offering — that is
-                        your signature, recorded. <strong>No one aligned with the Commandment is turned
-                        away for lack of funds.</strong></p>
-                </div>
-            </section>
+	                        <p class="offering-fineprint">Your name and email travel with the offering — that is
+	                            your signature, recorded. <strong>No one aligned with the Commandment is turned
+	                            away for lack of funds.</strong></p>
+	                    </div>
+	                </div>
+	            </section>
 
             <section class="member-welcome" id="member-welcome" hidden>
                 <div class="ok-mark">✦</div>
@@ -268,11 +274,6 @@
     </main>
 
     <footer class="site-footer">
-        <nav class="footer-related" aria-label="Foundations">
-            <a href="/cosmology">Cosmology</a>
-            <a href="/covenant">Covenant</a>
-            <a href="/bylaws">Bylaws</a>
-        </nav>
         <p class="footer-site-name">Temples of Earth</p>
         <p class="toe-legal">Temples of Earth is the public name of Temples of Refuge, an association of churches mandatorily tax-exempt under §501(c)(3) and §508(c)(1)(A).</p>
     </footer>
@@ -302,6 +303,23 @@
         var welcome = document.getElementById('member-welcome');
         var apiUrl = CTAWidgets.isConfigured(cfg.CHECKOUT_API_URL) ? cfg.CHECKOUT_API_URL : null;
 
+        // The local Member record. There is no membership API and no login;
+        // this is simply the browser remembering that a Covenant was signed
+        // here, so Members' doors elsewhere on the site (found-a-temple)
+        // can recognize them. It is a courtesy, not a credential — anything
+        // relying on it must say so rather than imply verification.
+        var MEMBER_KEY = 'toe-member';
+        function rememberMember(patch) {
+          try {
+            var cur = {};
+            try { cur = JSON.parse(localStorage.getItem(MEMBER_KEY)) || {}; } catch (e) {}
+            Object.keys(patch).forEach(function (k) {
+              if (patch[k]) cur[k] = patch[k];
+            });
+            localStorage.setItem(MEMBER_KEY, JSON.stringify(cur));
+          } catch (e) { /* private mode / storage disabled — nothing to do */ }
+        }
+
         // ── 1. Returning from a completed checkout ──
         var sessionId = new URLSearchParams(window.location.search).get('session_id');
         if (sessionId && apiUrl) {
@@ -329,6 +347,13 @@
                       'Your offering is your signature, ' + s.customer_name +
                       '. You are a Member for life — an affiliation of the heart.';
                   }
+                  rememberMember({
+                    name: s.customer_name || '',
+                    session_id: sessionId,
+                    source: 'checkout',
+                    verified: 'session',
+                    joined_at: new Date().toISOString()
+                  });
                   fetchFoundingCode();
                 } else if (attempts < maxAttempts) {
                   setTimeout(confirmMembership, 1500); // still settling — retry
@@ -367,6 +392,7 @@
               })
               .then(function (c) {
                 document.getElementById('member-code-value').textContent = c.nonce;
+                rememberMember({ founding_code: c.nonce });
                 var get = document.getElementById('member-code-get');
                 if (c.download_url) { get.href = c.download_url; get.hidden = false; }
                 document.getElementById('member-code').hidden = false;
