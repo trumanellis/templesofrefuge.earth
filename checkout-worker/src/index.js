@@ -177,7 +177,18 @@ async function createSession(request, env, origin) {
   // 'embedded' to 'embedded_page'; the client still drives it via initEmbeddedCheckout.
   form.set('ui_mode', 'embedded_page');
   form.set('return_url', returnUrl);
-  form.set('payment_method_types[0]', 'card');
+  // NOTE: payment_method_types is deliberately NOT set. Sending it (we sent
+  // ['card']) pins Checkout to cards and disables Stripe's dynamic payment
+  // methods — no Link, no Apple/Google Pay, and none of the European methods
+  // our donors actually reach for. Which methods appear is controlled from the
+  // Stripe Dashboard, not here. Do not re-add this parameter.
+  //
+  // CAUTION before enabling a delayed-notification method (SEPA debit, bank
+  // transfer, boleto…) in the Dashboard: `checkout.session.completed` fires for
+  // those while payment_status is still 'unpaid', and the donation gateway
+  // currently mints a founding-gift nonce on that event without checking
+  // payment_status — so an unsettled payment would yield a redeemable code.
+  // Fix the gateway first (it also needs to handle async_payment_failed).
   // Disable Adaptive Pricing so Stripe never FX-converts the numeral into a
   // local currency — the sacred numeral must stay exact (no $247 → €231).
   form.set('adaptive_pricing[enabled]', 'false');
