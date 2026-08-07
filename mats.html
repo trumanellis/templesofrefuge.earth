@@ -35,7 +35,7 @@
 
 
         body {
-            padding-top: 48px; /* clears the fixed brand bar */
+            padding-top: var(--toe-bar-h); /* clears the fixed brand bar; 0 once it is a rail */
             font-family: var(--s-font);
             font-weight: 300;
             background: var(--t-bg);
@@ -75,30 +75,9 @@
         .container { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
         .container-narrow { max-width: 750px; margin: 0 auto; position: relative; z-index: 1; }
 
-        /* ---- Site header ---- */
-        .site-header {
-            position: absolute;
-            top: 48px; left: 0; right: 0;
-            z-index: 3;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.75rem 2rem 0;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        .back-link {
-            display: inline-flex; align-items: center; gap: 0.4em;
-            color: var(--t-mt); text-decoration: none;
-            font-family: var(--s-display);
-            font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
-            transition: color 0.25s ease;
-        }
-        .back-link:hover { color: var(--t-ac); }
-
         /* ---- Hero ---- */
         .hero {
-            min-height: calc(100vh - 48px);
+            min-height: calc(100dvh - var(--toe-bar-h));
             padding: clamp(2.75rem, 5vh, 4rem) 2rem clamp(2rem, 4vh, 3rem);
             display: flex;
             align-items: center;
@@ -563,17 +542,7 @@
             font-size: 1rem; letter-spacing: 0.2em; text-transform: uppercase;
             color: var(--t-tx); margin-bottom: 2rem;
         }
-        .footer-nav {
-            display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;
-            margin-bottom: 2.5rem;
-        }
-        .footer-nav a {
-            color: var(--t-mt); text-decoration: none;
-            font-family: var(--s-display);
-            font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
-            transition: color 0.25s ease;
-        }
-        .footer-nav a:hover { color: var(--t-ac); }
+        /* Site links live in the brand rail / top bar (shared/brand.js). */
         .footer-info { color: var(--t-mt); font-size: 0.78rem; line-height: 2; letter-spacing: 0.05em; }
 
         /* ---- Reveal ---- */
@@ -624,10 +593,6 @@
     </style>
 </head>
 <body>
-
-    <header class="site-header">
-        <a href="/" class="back-link">← Temples of Earth</a>
-    </header>
 
     <!-- Hero -->
     <section class="hero">
@@ -1030,12 +995,6 @@
     <!-- Footer -->
     <footer>
         <p class="footer-logo">Temples of Earth</p>
-        <nav class="footer-nav" aria-label="Site">
-            <a href="/">Home</a>
-            <a href="/cosmology.html">Cosmology</a>
-            <a href="/covenant.html">Covenant</a>
-            <a href="/join.html">Become a Member</a>
-        </nav>
         <p class="footer-info">
             The first physical offering · Now in pre-order<br>
             Temples of Earth is the public name of Temples of Refuge,<br>

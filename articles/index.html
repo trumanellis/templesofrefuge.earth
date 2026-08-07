@@ -25,26 +25,7 @@
             font-size: 17px;
             line-height: 1.8;
             color: var(--t-tx);
-            padding-top: 48px; /* room for the fixed brand bar */
-        }
-
-        .site-header {
-            padding: 2rem;
-            text-align: center;
-        }
-
-        .back-link {
-            color: var(--t-ac);
-            text-decoration: none;
-            font-family: var(--font-mono);
-            font-size: 0.75rem;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            transition: opacity 0.3s;
-        }
-
-        .back-link:hover {
-            opacity: 0.7;
+            padding-top: var(--toe-bar-h); /* room for the brand bar; 0 once it is a rail */
         }
 
         .hero {
@@ -244,10 +225,6 @@
     </style>
 </head>
 <body>
-
-    <header class="site-header">
-        <a href="/" class="back-link">← Temples of Earth</a>
-    </header>
 
     <section class="hero">
         <p class="hero-eyebrow">From the Temple</p>

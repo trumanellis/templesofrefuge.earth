@@ -51,6 +51,13 @@
   /* signature gradient: soil-green → living green → solar gold */
   --signature: linear-gradient(135deg, #4a7c59 0%, #7fb069 45%, #e9c46a 100%);
 
+  /* site chrome geometry — see the BRAND BAR / RAIL section below.
+     Mobile & tablet: a 48px bar across the top, no rail.
+     Desktop: no top bar, a fixed rail down the left.
+     Pages read these instead of hard-coding 48px so both modes hold. */
+  --toe-bar-h: 48px;
+  --toe-rail-w: 0px;
+
   /* shared constants (formerly injected by theme-engine) */
   --ease: cubic-bezier(0.4, 0, 0.2, 1);
   --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
@@ -129,9 +136,13 @@ strong { color: var(--t-tx); font-weight: 500; }
 }
 
 /* ================================================================
-   BRAND BAR — fixed 48px chrome injected by shared/brand.js
-   (same slot the old ThemeEngine skin bar occupied, so existing
-   padding-top: 48px layouts hold)
+   SITE CHROME — one component, two shapes, injected by brand.js.
+
+   Below 1100px it is the familiar fixed 48px top bar; the site nav
+   lives in a panel that drops from it behind a menu button.
+   At 1100px and up the same element becomes a fixed rail down the
+   left edge with the nav always open, and pages shift right by
+   --toe-rail-w instead of down by --toe-bar-h.
    ================================================================ */
 .toe-bar {
   position: fixed;
@@ -171,7 +182,14 @@ strong { color: var(--t-tx); font-weight: 500; }
 }
 .toe-lockup:hover span { color: var(--t-ac); }
 
-.toe-theme-toggle {
+.toe-bar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toe-theme-toggle,
+.toe-menu-toggle {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -184,12 +202,185 @@ strong { color: var(--t-tx); font-weight: 500; }
   cursor: pointer;
   transition: color 0.2s ease, border-color 0.2s ease;
 }
-.toe-theme-toggle:hover { color: var(--t-ac); border-color: var(--t-ac); }
-.toe-theme-toggle svg { width: 15px; height: 15px; display: block; }
+.toe-theme-toggle:hover,
+.toe-menu-toggle:hover { color: var(--t-ac); border-color: var(--t-ac); }
+.toe-theme-toggle svg,
+.toe-menu-toggle svg { width: 15px; height: 15px; display: block; }
+.toe-bar[data-open="true"] .toe-menu-toggle {
+  color: var(--t-ac);
+  border-color: var(--t-ac);
+}
+
+/* ---- Nav: dropdown panel on the bar, column on the rail ---- */
+
+.toe-nav {
+  position: fixed;
+  top: var(--toe-bar-h); left: 0; right: 0;
+  max-height: calc(100dvh - var(--toe-bar-h));
+  overflow-y: auto;
+  padding: 1.5rem 20px 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1.75rem 2rem;
+  align-content: start;
+  /* Opaque, not glass: .toe-bar's own backdrop-filter makes it the
+     containing block for this fixed child, so a nested blur would have
+     nothing but the bar behind it to sample. */
+  background: var(--t-bg);
+  border-bottom: 1px solid var(--t-b2);
+  box-shadow: 0 26px 44px -28px rgba(0, 0, 0, 0.55);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: opacity 0.22s var(--ease), transform 0.22s var(--ease),
+              visibility 0.22s;
+}
+.toe-bar[data-open="true"] .toe-nav {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+
+.toe-scrim {
+  position: fixed;
+  inset: var(--toe-bar-h) 0 0;
+  z-index: 999;
+  background: rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.22s var(--ease), visibility 0.22s;
+}
+.toe-scrim[data-open="true"] { opacity: 1; visibility: visible; }
+
+.toe-nav-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+.toe-nav-label {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--t-mt);
+}
+
+.toe-nav-link {
+  position: relative;
+  display: block;
+  color: var(--t-t2);
+  text-decoration: none;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  transition: color 0.2s ease;
+}
+.toe-nav-link:hover { color: var(--t-ac); }
+.toe-nav-link[aria-current="page"] { color: var(--t-tx); }
+.toe-nav-link[aria-current="page"]::before {
+  content: "";
+  position: absolute;
+  left: -0.85rem;
+  top: 0.52em;
+  width: 4px;
+  height: 4px;
+  border-radius: 100px;
+  background: var(--t-ac);
+}
+.toe-nav-link .toe-ext {
+  margin-left: 0.35em;
+  font-size: 0.72em;
+  color: var(--t-dm);
+}
+
+.toe-nav-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 1.1rem;
+  border-radius: 8px;
+  background: var(--signature);
+  color: #10130c;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: filter 0.2s ease;
+}
+.toe-nav-cta:hover { filter: brightness(1.08); }
 
 @media (max-width: 640px) {
   .toe-bar { padding: 0 12px; }
   .toe-lockup span { font-size: 10.5px; letter-spacing: 0.14em; }
+  .toe-nav { padding: 1.35rem 12px 1.75rem; }
+}
+
+/* ---- Desktop: the bar becomes a rail ---- */
+
+@media (min-width: 1100px) {
+  :root {
+    --toe-bar-h: 0px;
+    --toe-rail-w: 236px;
+  }
+
+  /* `html body` so this beats every page's own `body { padding-top }`
+     regardless of stylesheet order. */
+  html body {
+    padding-top: 0;
+    padding-left: var(--toe-rail-w);
+  }
+
+  .toe-bar {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    top: 0; left: 0; right: auto; bottom: 0;
+    width: var(--toe-rail-w);
+    height: auto;
+    overflow-y: auto;
+    padding: 1.6rem 1.5rem 1.5rem;
+    gap: 2rem;
+    border-bottom: none;
+    border-right: 1px solid var(--t-b2);
+  }
+
+  .toe-lockup {
+    align-items: flex-start;
+    gap: 12px;
+    flex-direction: column;
+  }
+  .toe-lockup img { width: 32px; height: 32px; }
+  .toe-lockup span {
+    font-size: 11.5px;
+    letter-spacing: 0.2em;
+    white-space: normal;
+  }
+
+  .toe-nav {
+    position: static;
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+    flex: 1;
+    max-height: none;
+    overflow: visible;
+    padding: 0;
+    background: none;
+    border: none;
+    box-shadow: none;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition: none;
+  }
+
+  .toe-nav-cta { margin-top: auto; }
+
+  .toe-menu-toggle,
+  .toe-scrim { display: none; }
+
+  .toe-bar-actions { justify-content: flex-start; }
 }
 
 /* ================================================================

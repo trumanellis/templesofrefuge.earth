@@ -31,7 +31,7 @@ body {
   font-size: 19px;
   line-height: 1.7;
   letter-spacing: -0.005em;
-  padding-top: 48px; /* room for the ThemeEngine control bar */
+  padding-top: var(--toe-bar-h); /* room for the brand bar; 0 once it is a rail */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -84,8 +84,9 @@ main {
      inner content (eyebrow, subtitle at 36ch, divider) stays centered.
      On narrow viewports this collapses to the column width (100vw - 3rem
      respects main's 1.5rem side padding), a no-op — the title shrinks via
-     the 7vw clamp there and needs no extra room. */
-  width: min(52rem, calc(100vw - 3rem));
+     the 7vw clamp there and needs no extra room. --toe-rail-w is 0 until
+     the desktop rail appears and takes that much off the viewport. */
+  width: min(52rem, calc(100vw - var(--toe-rail-w) - 3rem));
   margin-left: 50%;
   transform: translateX(-50%);
 }
@@ -303,23 +304,7 @@ main {
   border-top: 1px solid var(--t-bd);
 }
 
-.footer-related {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  flex-wrap: wrap;
-  margin-bottom: 2.5rem;
-}
-.footer-related a {
-  color: var(--t-mt);
-  text-decoration: none;
-  font-size: 0.78rem;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  transition: color 0.25s ease;
-}
-.footer-related a:hover { color: var(--t-ac); }
-.footer-related a.current { color: var(--t-tx); pointer-events: none; }
+/* Site links live in the brand rail / top bar (shared/brand.js). */
 
 .footer-site-name {
   font-family: var(--font-display);

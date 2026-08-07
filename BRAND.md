@@ -85,6 +85,28 @@ Warm humus, never zinc/blue-black.
 - The old arc-text seals ("TEMPLES OF REFUGE", URW Palladio) are retired from
   the web; they remain valid for print/ceremonial use until regenerated.
 
+## Image Direction
+
+Use this style for every generated, commissioned, or selected brand image:
+
+> Ancient-future solarpunk. A world where living temples, gardens, and gentle
+> technology have grown together. Warm earthen palette only: deep humus browns
+> and warm charcoal shadows (`#141210`, `#221e18`), cream parchment light
+> (`#f2ede2`), living green (`#7fb069`) as the primary accent, sparing solar gold
+> (`#e9c46a`) as points of light. Absolutely no blue, indigo, teal, or cool gray
+> tones. Golden-hour / dusk lighting, soft volumetric haze,
+> painterly-photographic blend, quiet and reverent mood, no text, no people's
+> faces in close-up, wide cinematic composition with generous negative space.
+> Landscape 16:9.
+
+Rules:
+- Images must read clearly on the warm-dark "temple at dusk" background
+  (`#141210`).
+- Avoid deep-space, blue-black, zinc, indigo, purple, pink, teal, cyan, or cool
+  gray casts; these belong to Syncengine, not Temples of Earth.
+- Living green is the image accent. Solar gold appears only as small points of
+  sun, ritual light, or gentle technology.
+
 ## Chrome
 
 - `shared/brand.js` injects a fixed 48px top **brand bar** (lockup left,
