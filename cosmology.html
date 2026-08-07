@@ -21,12 +21,25 @@
 
     <link rel="stylesheet" href="/shared/brand.css">
     <link rel="stylesheet" href="/shared/document.css">
+    <style>
+      .cosmology-hero-image {
+        width: min(100%, 940px);
+        margin: 2.5rem auto 0;
+        aspect-ratio: 16 / 9;
+        overflow: hidden;
+        border: 1px solid var(--t-bd);
+        border-radius: 14px;
+        background: var(--t-bg);
+      }
+      .cosmology-hero-image img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+      }
+    </style>
 </head>
 <body>
-
-    <header class="site-header">
-        <a href="/" class="back-link">← Temples of Earth</a>
-    </header>
 
     <main>
         <div class="container-narrow">
@@ -35,6 +48,9 @@
                 <h1 class="document-title">The Cosmology</h1>
                 <p class="document-subtitle">The metaphysical ground beneath the Covenant and the Bylaws</p>
                 <div class="document-divider"></div>
+                <figure class="cosmology-hero-image">
+                    <img src="/assets/web/cosmology-spiral-garden-1600.webp" alt="A golden-ratio spiral garden seen from above at dusk, with faint gold star-chart lines drawn across living earth">
+                </figure>
             </section>
 
             <article id="document-body">
@@ -54,12 +70,6 @@
     </div>
 
     <footer class="site-footer">
-        <nav class="footer-related" aria-label="Foundations">
-            <a href="/cosmology" class="current">Cosmology</a>
-            <a href="/covenant">Covenant</a>
-            <a href="/bylaws">Bylaws</a>
-            <a href="/join">Become a Member</a>
-        </nav>
         <div id="newsletter-mount" style="margin:0 auto 3rem"></div>
         <p class="footer-site-name">Temples of Earth</p>
         <p class="toe-legal">Temples of Earth is the public name of Temples of Refuge, an association of churches mandatorily tax-exempt under §501(c)(3) and §508(c)(1)(A).</p>

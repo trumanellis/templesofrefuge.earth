@@ -133,7 +133,7 @@
 
         /* ═══ Scroll progress bar ═══ */
         .progress-track {
-            position: fixed; top: 0; left: 0; right: 0;
+            position: fixed; top: 0; left: var(--toe-rail-w); right: 0;
             height: 2px; z-index: 1000; background: rgba(255,255,255,0.04);
         }
         .progress-fill {
@@ -168,6 +168,24 @@
                 radial-gradient(ellipse at 50% 100%, var(--t-glass-bd) 0%, transparent 50%),
                 var(--t-bg);
             position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: url("assets/web/temple-dusk-hero-1600.webp");
+            background-size: cover;
+            background-position: center;
+            opacity: 0.82;
+        }
+        .hero::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 50% 46%, rgba(20,18,16,0.34) 0%, rgba(20,18,16,0.68) 62%, rgba(20,18,16,0.88) 100%),
+                linear-gradient(180deg, rgba(20,18,16,0.38) 0%, rgba(20,18,16,0.1) 45%, var(--t-bg) 100%);
         }
         .hero-content { position: relative; z-index: 1; }
         .hero h1 {
@@ -216,6 +234,27 @@
             background: linear-gradient(to bottom, var(--t-dm), transparent);
         }
         @keyframes bob { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-6px); } }
+
+        /* ═══ Atmosphere layers — scene art melted into section backgrounds ═══
+           Low opacity + masked top/bottom edges so each image reads as light
+           and air behind the prose, never as a framed picture. */
+        .atmo::before {
+            content: "";
+            position: absolute; inset: 0;
+            background: var(--atmo) center / cover no-repeat;
+            opacity: var(--atmo-op, 0.2);
+            -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 22%, #000 78%, transparent 100%);
+            mask-image: linear-gradient(180deg, transparent 0%, #000 22%, #000 78%, transparent 100%);
+            pointer-events: none;
+        }
+        :root[data-theme="light"] .atmo::before { opacity: calc(var(--atmo-op, 0.2) * 0.5); }
+        .meaning          { --atmo: url("assets/web/religion-true-sense-1600.webp"); }
+        .central-teaching { --atmo: url("assets/web/fractal-cosmos-soil-1600.webp"); background: var(--t-bg); }
+        .body-section     { --atmo: url("assets/web/body-as-temple-1600.webp"); }
+        .economy          { --atmo: url("assets/web/gift-over-extraction-1600.webp"); --atmo-op: 0.16; }
+        .syncengine       { --atmo: url("assets/web/digital-garden.webp"); --atmo-op: 0.16; }
+        .community        { --atmo: url("assets/web/radical-inclusion-hearth-1600.webp"); --atmo-op: 0.16; }
+        .transformation   { --atmo: url("assets/web/death-composting-dawn-1600.webp"); }
 
         /* Divider */
         .section-divider {
@@ -660,28 +699,59 @@
         .offering { padding: 6rem 2rem 4rem; text-align: center; }
         .offering-inner { max-width: 900px; margin: 0 auto; }
         .offering .eyebrow { margin-bottom: 2rem; }
-        .offering-card {
-            display: flex; align-items: stretch; border: 1px solid var(--t-bd); border-radius: 2px;
-            overflow: hidden; text-decoration: none; background: var(--t-bg);
-            transition: border-color 0.4s ease, background 0.4s ease;
+        .offering-duo {
+            display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr) minmax(0, 1fr);
+            border: 1px solid var(--t-bd); border-radius: 14px;
+            overflow: hidden; text-decoration: none; background: var(--t-cd);
+            box-shadow: 0 30px 80px -48px rgba(0,0,0,0.55);
+            transition: border-color 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease;
         }
-        .offering-card:hover { border-color: var(--t-ac); background: var(--t-sf); }
-        .offering-image { width: 30%; min-height: 260px; flex-shrink: 0; background: #000; position: relative; overflow: hidden; }
-        .offering-image img {
+        .offering-duo:hover {
+            border-color: var(--t-ac); transform: translateY(-3px);
+            box-shadow: 0 40px 90px -44px rgba(0,0,0,0.6), 0 0 60px -24px var(--t-ac);
+        }
+        .duo-panel { margin: 0; position: relative; min-height: 400px; overflow: hidden; background: var(--t-bg); }
+        .duo-panel img {
             position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;
-            opacity: 0.9; transition: transform 6s ease, opacity 0.5s ease;
+            transition: transform 6s ease;
         }
-        .offering-card:hover .offering-image img { transform: scale(1.04); opacity: 1; }
-        .offering-body { flex: 1; padding: 2.5rem 3rem; display: flex; flex-direction: column; justify-content: center; text-align: left; }
+        .offering-duo:hover .duo-panel img { transform: scale(1.05); }
+        /* Blend each mat into the copy column on its inner edge */
+        .duo-cosmic::before, .duo-dawn::before {
+            content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+        }
+        .duo-cosmic::before { background: linear-gradient(90deg, transparent 78%, var(--t-cd) 100%); }
+        .duo-dawn::before { background: linear-gradient(270deg, transparent 78%, var(--t-cd) 100%); }
+        .duo-panel figcaption {
+            position: absolute; left: 0; right: 0; bottom: 0; z-index: 2;
+            display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
+            padding: 2.25rem 1rem 1.1rem;
+            background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.62) 100%);
+        }
+        .duo-name {
+            font-family: var(--font-mono); font-size: 0.62rem; font-weight: 500;
+            letter-spacing: 0.28em; text-transform: uppercase; color: #f2ede2;
+        }
+        .duo-sky { font-family: var(--s-display); font-style: italic; font-size: 0.85rem; color: rgba(242,237,226,0.72); }
+        .duo-body {
+            padding: 3rem 2.25rem; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center;
+        }
+        .duo-tagline {
+            font-family: var(--s-display); font-style: italic;
+            font-size: 1.05rem; color: var(--t-a2); margin-bottom: 1rem;
+        }
+        .duo-body .offering-subtitle { margin-left: auto; margin-right: auto; }
         .offering-eyebrow { font-family: var(--s-display); font-style: italic; font-size: 0.95rem; letter-spacing: 0.04em; color: var(--t-ac); margin-bottom: 0.75rem; }
         .offering-title { font-family: var(--s-display); font-size: clamp(1.3rem, 3vw, 1.8rem); font-weight: 400; color: var(--t-tx); letter-spacing: 0.05em; margin-bottom: 0.75rem; line-height: 1.2; }
         .offering-subtitle { font-family: var(--s-font); font-size: 0.9rem; font-weight: 300; color: var(--t-t2); line-height: 1.6; margin-bottom: 1.25rem; max-width: 48ch; }
         .offering-read { font-family: var(--s-display); font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--t-ac); transition: opacity 0.3s; }
-        .offering-card:hover .offering-read { opacity: 0.8; }
-        @media (max-width: 768px) {
-            .offering-card { flex-direction: column; }
-            .offering-image { width: 100%; min-height: 200px; }
-            .offering-body { padding: 2rem 1.5rem; }
+        .offering-duo:hover .offering-read { opacity: 0.8; }
+        @media (max-width: 900px) {
+            .offering-duo { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+            .duo-panel { min-height: 300px; }
+            .duo-cosmic::before, .duo-dawn::before { background: linear-gradient(180deg, transparent 78%, var(--t-cd) 100%); }
+            .duo-body { grid-column: 1 / -1; order: 2; padding: 2.25rem 1.5rem; }
         }
 
         /* ═══ Writings ═══ */
@@ -690,65 +760,61 @@
         .writings .eyebrow { margin-bottom: 1.5rem; }
         .writings h2 { font-family: var(--s-display); font-size: clamp(1.5rem, 4vw, 2.5rem); letter-spacing: 0.1em; font-weight: 400; margin-bottom: 1rem; }
         .writings .lead { color: var(--t-t2); font-size: 1.05rem; max-width: 500px; margin: 0 auto 3rem; }
-        .writings-more { margin-top: 3rem; display: flex; flex-direction: column; align-items: center; gap: 2rem; }
-        .publication-card {
-            display: flex; align-items: stretch; width: 100%; max-width: 720px; margin: 0 auto;
-            border: 1px solid var(--t-a2); border-radius: 2px; background: var(--t-bg);
-            text-decoration: none; transition: border-color 0.4s ease, background 0.4s ease;
+        /* One combined card: uncropped essay hero melting into the copy,
+           with the publication row as the card's footer. */
+        .temple-writings-card {
+            max-width: 900px; margin: 0 auto;
+            border: 1px solid var(--t-bd); border-radius: 14px; overflow: hidden;
+            background: var(--t-cd);
+            box-shadow: 0 30px 80px -48px rgba(0,0,0,0.55);
+            transition: border-color 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease;
         }
-        .publication-card:hover { border-color: var(--t-ac); background: var(--t-sf); }
-        .publication-card-banner { flex-shrink: 0; width: 38%; padding: 1.5rem; display: flex; align-items: center; }
-        .publication-card-banner img { width: 100%; height: auto; display: block; border-radius: 8px; }
-        .publication-card-body { flex: 1; padding: 2rem 2.5rem 2rem 0.5rem; display: flex; flex-direction: column; justify-content: center; text-align: left; }
-        .publication-card-eyebrow { font-family: var(--s-display); font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--t-a2); margin-bottom: 0.75rem; }
-        .publication-card-title { font-family: var(--s-display); font-size: 1.5rem; font-weight: 400; color: var(--t-tx); letter-spacing: 0.05em; margin-bottom: 1.25rem; line-height: 1.2; }
-        .publication-card-action { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--s-display); font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--t-ac); transition: opacity 0.3s ease; }
-        .publication-card-action svg { width: 16px; height: 16px; flex-shrink: 0; }
-        .publication-card:hover .publication-card-action { opacity: 0.85; }
-        .archive-link { font-family: var(--s-display); font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--t-ac); text-decoration: none; opacity: 0.65; transition: opacity 0.3s ease; }
-        .archive-link:hover { opacity: 1; }
-        .article-highlight-card {
-            max-width: 900px; margin: 0 auto; display: flex; border: 1px solid var(--t-a2);
-            border-radius: 2px; overflow: hidden; text-decoration: none; background: var(--t-bg);
-            transition: border-color 0.4s ease, background 0.4s ease;
+        .temple-writings-card:hover {
+            border-color: var(--t-ac); transform: translateY(-3px);
+            box-shadow: 0 40px 90px -44px rgba(0,0,0,0.6), 0 0 60px -24px var(--t-ac);
         }
-        .article-highlight-card:hover { border-color: var(--t-ac); background: var(--t-sf); }
-        .article-highlight-image {
-            width: 31.8%; min-height: 280px; flex-shrink: 0;
-            background: linear-gradient(160deg, var(--t-a2), var(--t-ac), var(--t-a2));
-            display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;
+        .tw-feature { display: block; text-decoration: none; color: inherit; }
+        .tw-image { position: relative; }
+        .tw-image img { width: 100%; height: auto; display: block; }
+        .tw-image::after {
+            content: ''; position: absolute; inset: 0; pointer-events: none;
+            background: linear-gradient(180deg, transparent 62%, var(--t-cd) 100%);
         }
-        .article-highlight-image img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
-        .article-highlight-body { flex: 1; padding: 2.5rem 3rem; display: flex; flex-direction: column; justify-content: center; text-align: left; }
-        .article-highlight-eyebrow { font-family: var(--s-display); font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--t-a2); margin-bottom: 1rem; }
-        .article-highlight-title { font-family: var(--s-display); font-size: clamp(1.1rem, 2.5vw, 1.5rem); font-weight: 400; color: var(--t-tx); line-height: 1.4; margin-bottom: 0.5rem; }
-        .article-highlight-subtitle { font-family: var(--s-font); font-size: 0.9rem; font-weight: 300; color: var(--t-t2); line-height: 1.6; margin-bottom: 1.25rem; max-width: 45ch; }
-        .article-highlight-read { font-family: var(--s-display); font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--t-ac); transition: opacity 0.3s; }
-        .article-highlight-card:hover .article-highlight-read { opacity: 0.8; }
+        .tw-body { padding: 0 2.5rem 2.5rem; margin-top: -0.5rem; position: relative; }
+        .tw-eyebrow { font-family: var(--s-display); font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--t-a2); margin-bottom: 1rem; }
+        .tw-title { font-family: var(--s-display); font-size: clamp(1.2rem, 2.8vw, 1.7rem); font-weight: 400; color: var(--t-tx); line-height: 1.35; margin-bottom: 0.6rem; }
+        .tw-subtitle { font-family: var(--s-font); font-size: 0.9rem; font-weight: 300; color: var(--t-t2); line-height: 1.6; margin: 0 auto 1.25rem; max-width: 48ch; }
+        .tw-read { font-family: var(--s-display); font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--t-ac); transition: opacity 0.3s; }
+        .temple-writings-card:hover .tw-read { opacity: 0.8; }
+        .tw-footer {
+            display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap;
+            padding: 1.4rem 2rem; border-top: 1px solid var(--t-b2);
+            background: var(--t-sf); text-align: left;
+        }
+        .tw-pub-mark { width: 54px; height: 54px; object-fit: contain; flex-shrink: 0; }
+        .tw-pub-text { flex: 1; min-width: 170px; }
+        .tw-pub-eyebrow { font-family: var(--s-display); font-size: 0.58rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--t-a2); margin-bottom: 0.25rem; }
+        .tw-pub-name { font-family: var(--s-display); font-size: 1.05rem; color: var(--t-tx); letter-spacing: 0.04em; margin: 0; }
+        .tw-pub-links { display: flex; align-items: center; gap: 1.75rem; flex-wrap: wrap; }
+        .tw-pub-links a {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            font-family: var(--s-display); font-size: 0.65rem; letter-spacing: 0.15em;
+            text-transform: uppercase; color: var(--t-ac); text-decoration: none;
+            transition: opacity 0.3s ease;
+        }
+        .tw-pub-links a:hover { opacity: 0.75; }
+        .tw-pub-links svg { width: 15px; height: 15px; flex-shrink: 0; }
         @media (max-width: 768px) {
-            .article-highlight-card { flex-direction: column; }
-            .article-highlight-image { width: 100%; min-height: 160px; }
-            .article-highlight-body { padding: 2rem 1.5rem; }
-            .publication-card { flex-direction: column; }
-            .publication-card-banner { width: 100%; padding: 1.25rem; }
-            .publication-card-body { padding: 0 1.5rem 1.5rem; }
+            .tw-body { padding: 0 1.5rem 2rem; }
+            .tw-footer { padding: 1.25rem 1.5rem; }
         }
 
         /* ═══ Footer ═══ */
         footer { background: var(--t-bg); padding: 6rem 2rem; text-align: center; border-top: 1px solid var(--t-bd); }
         .footer-content { max-width: 500px; margin: 0 auto; }
         .footer-logo { font-family: var(--s-display); font-size: 1rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--t-tx); margin-bottom: 2rem; }
-        .footer-info { color: var(--t-mt); font-size: 0.8rem; line-height: 2; margin-bottom: 3rem; letter-spacing: 0.05em; }
-        .footer-nav { margin-bottom: 3rem; display: flex; justify-content: center; gap: 2.25rem; flex-wrap: wrap; }
-        .footer-link {
-            color: var(--t-ac); text-decoration: none; font-family: var(--s-display);
-            font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase;
-            border-bottom: 1px solid var(--t-a2); padding-bottom: 0.25rem; transition: border-color 0.3s ease;
-        }
-        .footer-link:hover { border-color: var(--t-ac); }
-        .footer-nav-group { display: flex; flex-direction: column; align-items: center; gap: 0.65rem; }
-        .footer-nav-label { font-family: var(--s-font); font-size: 0.65rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--t-mt); }
-        .footer-nav-group-links { display: flex; gap: 1.75rem; flex-wrap: wrap; justify-content: center; }
+        .footer-info { color: var(--t-mt); font-size: 0.8rem; line-height: 2; letter-spacing: 0.05em; }
+        /* Site links live in the brand rail / top bar (shared/brand.js). */
         .footer-closing { padding-top: 3rem; border-top: 1px solid var(--t-bd); }
         .footer-closing p { font-family: var(--s-display); font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--t-dm); line-height: 2.5; }
 
@@ -812,7 +878,7 @@
     </section>
 
     <!-- Meaning — breath -->
-    <section class="breath meaning">
+    <section class="breath meaning atmo">
         <div class="container-narrow">
             <p class="eyebrow r">Why We Exist</p>
             <h2 class="r r-d1">Religion in Its True Sense</h2>
@@ -936,7 +1002,7 @@
     </section>
 
     <!-- The Central Teaching — breath -->
-    <section class="breath" style="background:var(--t-bg)">
+    <section class="breath central-teaching atmo">
         <div class="container-narrow">
             <p class="eyebrow r">The Central Teaching</p>
             <p class="thesis-line r" style="margin-bottom:2.5rem">
@@ -953,7 +1019,7 @@
     </section>
 
     <!-- The Body -->
-    <section class="body-section">
+    <section class="body-section atmo">
         <div class="container-narrow">
             <p class="eyebrow r">The Human Being</p>
             <h2 class="r r-d1">The Body as Temple</h2>
@@ -976,7 +1042,7 @@
     <div class="section-divider"></div>
 
     <!-- Sacred Economy -->
-    <section class="economy">
+    <section class="economy atmo">
         <div class="container">
             <div class="economy-header r">
                 <p class="eyebrow">Sacred Exchange</p>
@@ -1000,7 +1066,7 @@
     </section>
 
     <!-- Sovereign Technology — the Synchronicity Engine -->
-    <section class="syncengine">
+    <section class="syncengine atmo">
         <div class="container">
             <div class="se-header r">
                 <p class="eyebrow">Sovereign Technology</p>
@@ -1053,7 +1119,7 @@
     </section>
 
     <!-- Community -->
-    <section class="community">
+    <section class="community atmo">
         <div class="container">
             <div class="community-header r">
                 <p class="eyebrow">Community</p>
@@ -1083,7 +1149,7 @@
     <div class="section-divider"></div>
 
     <!-- Death & Transformation — breath -->
-    <section class="transformation">
+    <section class="transformation atmo">
         <div class="container-narrow">
             <p class="eyebrow r">Transformation</p>
             <h2 class="r r-d1">Death Is Not Failure</h2>
@@ -1171,20 +1237,36 @@
         <div class="container">
             <div class="offering-inner r">
                 <p class="eyebrow">The First Physical Offering</p>
-                <a href="/mats" class="offering-card">
-                    <div class="offering-image">
+                <a href="/mats" class="offering-duo" aria-label="The Ceremony Mat — explore both designs">
+                    <figure class="duo-panel duo-cosmic">
                         <picture>
-                            <source type="image/avif" srcset="assets/web/fractal-metatron-480.avif 480w, assets/web/fractal-metatron-960.avif 960w" sizes="(max-width: 768px) 100vw, 320px">
-                            <source type="image/webp" srcset="assets/web/fractal-metatron-480.webp 480w, assets/web/fractal-metatron-960.webp 960w" sizes="(max-width: 768px) 100vw, 320px">
-                            <img src="assets/web/fractal-metatron-480.jpg" alt="The Ceremony Mat — Metatron's Cube in fractal sacred geometry over a cosmic starfield" loading="lazy" decoding="async">
+                            <source type="image/avif" srcset="assets/web/fractal-metatron-480.avif 480w, assets/web/fractal-metatron-960.avif 960w" sizes="(max-width: 900px) 50vw, 340px">
+                            <source type="image/webp" srcset="assets/web/fractal-metatron-480.webp 480w, assets/web/fractal-metatron-960.webp 960w" sizes="(max-width: 900px) 50vw, 340px">
+                            <img src="assets/web/fractal-metatron-480.jpg" alt="Fractal Metatron ceremony mat — Metatron's Cube in sacred geometry over a cosmic starfield" loading="lazy" decoding="async">
                         </picture>
-                    </div>
-                    <div class="offering-body">
+                        <figcaption>
+                            <span class="duo-name">Fractal Metatron</span>
+                            <span class="duo-sky">Cosmic Sky</span>
+                        </figcaption>
+                    </figure>
+                    <div class="duo-body">
                         <p class="offering-eyebrow">A portable temple.</p>
                         <h2 class="offering-title">The Ceremony Mat</h2>
+                        <p class="duo-tagline">One pattern — two skies.</p>
                         <p class="offering-subtitle">An oversized coconut-rubber mat printed with fractal sacred geometry — carry it anywhere and create a sacred place wherever you unroll it.</p>
-                        <span class="offering-read">Explore the offering →</span>
+                        <span class="offering-read">Explore both designs →</span>
                     </div>
+                    <figure class="duo-panel duo-dawn">
+                        <picture>
+                            <source type="image/avif" srcset="assets/web/heaven-on-earth-480.avif 480w, assets/web/heaven-on-earth-960.avif 960w" sizes="(max-width: 900px) 50vw, 340px">
+                            <source type="image/webp" srcset="assets/web/heaven-on-earth-480.webp 480w, assets/web/heaven-on-earth-960.webp 960w" sizes="(max-width: 900px) 50vw, 340px">
+                            <img src="assets/web/heaven-on-earth-480.jpg" alt="Heaven on Earth ceremony mat — fractal sacred geometry over a dawn sky" loading="lazy" decoding="async">
+                        </picture>
+                        <figcaption>
+                            <span class="duo-name">Heaven on Earth</span>
+                            <span class="duo-sky">Dawn Sky</span>
+                        </figcaption>
+                    </figure>
                 </a>
             </div>
         </div>
@@ -1197,32 +1279,32 @@
                 <p class="eyebrow r">Writings</p>
                 <h2 class="r r-d1">From the Temple</h2>
                 <p class="lead r r-d2">Essays, reflections, and transmissions from the edge of the possible.</p>
-                <a href="/articles/read?slug=gene-editing-collective" class="article-highlight-card r r-d2">
-                    <div class="article-highlight-image">
-                        <img src="https://substackcdn.com/image/fetch/$s_!a43M!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F94b6db53-2949-4614-ad15-3783208c9ec8_2912x1632.png" alt="Gene Editing a Collective Consciousness" loading="lazy">
-                    </div>
-                    <div class="article-highlight-body">
-                        <p class="article-highlight-eyebrow">Featured Essay</p>
-                        <h2 class="article-highlight-title">Gene Editing a Collective Consciousness</h2>
-                        <p class="article-highlight-subtitle">Every organization is alive. The question is what kind of creature you're building.</p>
-                        <span class="article-highlight-read">Read →</span>
-                    </div>
-                </a>
-                <div class="writings-more r r-d3">
-                    <a href="https://aeonmyths.substack.com" target="_blank" rel="noopener" class="publication-card">
-                        <div class="publication-card-banner">
-                            <img src="assets/Myths.png" alt="Myths for a New Æon">
+                <div class="temple-writings-card r r-d2">
+                    <a href="/articles/read?slug=gene-editing-collective" class="tw-feature">
+                        <div class="tw-image">
+                            <img src="https://substackcdn.com/image/fetch/$s_!a43M!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F94b6db53-2949-4614-ad15-3783208c9ec8_2912x1632.png" alt="Gene Editing a Collective Consciousness" loading="lazy">
                         </div>
-                        <div class="publication-card-body">
-                            <p class="publication-card-eyebrow">Also Published On</p>
-                            <h3 class="publication-card-title">Myths for a New Æon</h3>
-                            <span class="publication-card-action">
-                                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/></svg>
-                                Follow on Substack →
-                            </span>
+                        <div class="tw-body">
+                            <p class="tw-eyebrow">Featured Essay</p>
+                            <h2 class="tw-title">Gene Editing a Collective Consciousness</h2>
+                            <p class="tw-subtitle">Every organization is alive. The question is what kind of creature you're building.</p>
+                            <span class="tw-read">Read →</span>
                         </div>
                     </a>
-                    <a href="/articles/" class="archive-link">Browse the full archive →</a>
+                    <div class="tw-footer">
+                        <img src="assets/Myths.png" class="tw-pub-mark" alt="Myths for a New Æon">
+                        <div class="tw-pub-text">
+                            <p class="tw-pub-eyebrow">Also published on</p>
+                            <p class="tw-pub-name">Myths for a New Æon</p>
+                        </div>
+                        <div class="tw-pub-links">
+                            <a href="https://aeonmyths.substack.com" target="_blank" rel="noopener">
+                                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/></svg>
+                                Follow on Substack →
+                            </a>
+                            <a href="/articles/">Browse the full archive →</a>
+                        </div>
+                    </div>
                 </div>
                 <div id="newsletter-mount" style="margin-top:4rem"></div>
             </div>
@@ -1239,35 +1321,6 @@
                 Established January 17, 2024 · Reconstituted 2026<br>
                 Ogden, Utah
             </p>
-            <nav class="footer-nav" aria-label="Site">
-                <div class="footer-nav-group">
-                    <span class="footer-nav-label">Foundations</span>
-                    <div class="footer-nav-group-links">
-                        <a href="/cosmology" class="footer-link">Cosmology</a>
-                        <a href="/covenant" class="footer-link">Covenant</a>
-                        <a href="/bylaws" class="footer-link">Bylaws</a>
-                    </div>
-                </div>
-                <div class="footer-nav-group">
-                    <span class="footer-nav-label">Offerings</span>
-                    <div class="footer-nav-group-links">
-                        <a href="/mats" class="footer-link">Ceremony Mat</a>
-                    </div>
-                </div>
-                <div class="footer-nav-group">
-                    <span class="footer-nav-label">Technology</span>
-                    <div class="footer-nav-group-links">
-                        <a href="https://syncengine.earth" class="footer-link">Synchronicity Engine</a>
-                    </div>
-                </div>
-                <div class="footer-nav-group">
-                    <span class="footer-nav-label">More</span>
-                    <div class="footer-nav-group-links">
-                        <a href="/articles/" class="footer-link">Writings</a>
-                        <a href="https://agualila.earth" class="footer-link">Água Lila</a>
-                    </div>
-                </div>
-            </nav>
         </div>
     </footer>
 

@@ -21,12 +21,25 @@
 
     <link rel="stylesheet" href="/shared/brand.css">
     <link rel="stylesheet" href="/shared/document.css">
+    <style>
+      .covenant-hero-image {
+        width: min(100%, 940px);
+        margin: 2.5rem auto 0;
+        aspect-ratio: 16 / 9;
+        overflow: hidden;
+        border: 1px solid var(--t-bd);
+        border-radius: 14px;
+        background: var(--t-bg);
+      }
+      .covenant-hero-image img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+      }
+    </style>
 </head>
 <body class="doc-has-subtitle">
-
-    <header class="site-header">
-        <a href="/" class="back-link">← Temples of Earth</a>
-    </header>
 
     <main>
         <div class="container-narrow">
@@ -35,6 +48,9 @@
                 <h1 class="document-title">The Indra's Network<br>Membership Covenant</h1>
                 <p class="document-subtitle">A living agreement between Temples of Refuge and those who join it</p>
                 <div class="document-divider"></div>
+                <figure class="covenant-hero-image">
+                    <img src="/assets/web/covenant-woven-roots-1600.webp" alt="Two ancient trees woven into a living arch over a dusk footpath, with warm dewdrop jewels strung through the branches">
+                </figure>
             </section>
 
             <article id="document-body">
@@ -54,12 +70,6 @@
     </div>
 
     <footer class="site-footer">
-        <nav class="footer-related" aria-label="Foundations">
-            <a href="/cosmology">Cosmology</a>
-            <a href="/covenant" class="current">Covenant</a>
-            <a href="/bylaws">Bylaws</a>
-            <a href="/join">Become a Member</a>
-        </nav>
         <div id="newsletter-mount" style="margin:0 auto 3rem"></div>
         <p class="footer-site-name">Temples of Earth</p>
         <p class="toe-legal">Temples of Earth is the public name of Temples of Refuge, an association of churches mandatorily tax-exempt under §501(c)(3) and §508(c)(1)(A).</p>
