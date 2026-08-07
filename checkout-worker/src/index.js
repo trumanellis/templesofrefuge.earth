@@ -192,6 +192,22 @@ async function createSession(request, env, origin) {
   // Disable Adaptive Pricing so Stripe never FX-converts the numeral into a
   // local currency — the sacred numeral must stay exact (no $247 → €231).
   form.set('adaptive_pricing[enabled]', 'false');
+
+  // Attach every payment to a Customer, and mint an Invoice for it.
+  //
+  // NEITHER IS RETROACTIVE, which is the whole reason they are here early.
+  // Without customer_creation, payment-mode Checkout defaults to 'if_required'
+  // and most gifts land with no Customer at all — the donor's email survives
+  // only on the Session's customer_details. That makes "show me my giving"
+  // impossible to answer as a lookup, and a contribution statement impossible
+  // to build. Every day these stay off is a day of gifts that can never have
+  // one. See plans/DONOR-LOGIN.md.
+  //
+  // Caveat for whoever builds that page: Stripe does NOT dedupe Customers by
+  // email, so a donor who gives three times becomes three Customer objects.
+  // Email stays the merge key; the Customer is what carries the invoice.
+  form.set('customer_creation', 'always');
+  form.set('invoice_creation[enabled]', 'true');
   form.set('line_items[0][price_data][currency]', currency);
 
   if (body.order_type === 'ceremony-mat') {

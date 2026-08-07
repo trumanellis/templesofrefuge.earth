@@ -37,17 +37,25 @@ only on the Session's `customer_details` and the resulting charge.
 
 So "show me my giving" cannot be a customer lookup today. That splits the work:
 
-**Forward (do this first, it is two lines):**
+**Forward — DONE (committed, awaiting deploy):**
 
 ```js
-form.set('customer_creation', 'always');   // future gifts attach to a Customer
+form.set('customer_creation', 'always');        // future gifts attach to a Customer
 form.set('invoice_creation[enabled]', 'true');  // and produce a real invoice
 ```
 
 `invoice_creation` is what turns a payment into a document a donor can keep and a
-statement can be built from. **Neither is retroactive** — every month these stay
-off is another month of gifts that can never have one. Ship them before the login
-page, independently.
+statement can be built from. **Neither is retroactive**, which is why they shipped
+ahead of everything else here.
+
+Verified against the API reference before shipping: `customer_creation` accepts
+`always` / `if_required` and is valid in `payment` mode; `invoice_creation.enabled`
+is a boolean valid in `payment` mode; neither is documented as incompatible with
+`ui_mode: embedded_page`.
+
+Note for the history view: **Stripe does not dedupe Customers by email**, so a
+donor who gives three times becomes three Customer objects. Email remains the
+merge key; the Customer is what carries the invoice.
 
 **Backward:** existing gifts have to be found by searching charges on the billing
 email. Confirm Stripe's supported query fields for charge search before relying
@@ -134,8 +142,8 @@ the bar above a typical login:
 
 ## Sequence
 
-1. `customer_creation: 'always'` + `invoice_creation` — two lines, ship now,
-   independent of everything else. Every day of delay is unrecoverable.
+1. ~~`customer_creation: 'always'` + `invoice_creation`~~ — **done**, committed
+   ahead of the rest because neither is retroactive. Not yet deployed.
 2. Pick and wire a transactional email provider.
 3. Magic-link issue + verify, with the restricted key.
 4. `/member/giving` — the history view.
