@@ -1,196 +1,198 @@
-# Deploy runbook — two static sites + headless SyncEngine relay on one VPS
+# Hetzner runbook — the one deploy document
 
-This folder is turnkey. When you have a box + SSH, deployment is ~3 commands.
-Full rationale lives in the approved plan; this is the operator's checklist.
+Everything served from the box lives here: four domains, three app services, and
+the push-to-deploy path. This supersedes `infra/DEPLOY.md`,
+`checkout-worker/DEPLOY.md`, and the donation gateway's `DEPLOYMENT.md` in the
+IndrasNetwork repo.
 
-## What only YOU can do (needs your accounts)
-1. **Create the VPS.** Hetzner Cloud → CX22 (2 vCPU / 4GB / 40GB), **Ubuntu 24.04**,
-   add your SSH key at creation. Note the public IP.
-2. **First-login hardening** (or use Hetzner's cloud-init): create a non-root sudo
-   user, disable root SSH + password auth. (The script assumes you're already a
-   non-root sudo user.)
-3. **DNS at Namecheap** — do this *after* the box serves correctly (step 4 below).
-4. **Have the relay source reachable.** IndrasNetwork is a **private** repo, so the
-   box can't clone it. rsync it up (step 3 below).
+**State below was verified against the live box on 2026-08-07.** Where a fact is
+inherited rather than re-checked it says so.
 
-## Files here
-| File | Installs to | Purpose |
-|------|-------------|---------|
-| `setup-vps.sh` | — | one-shot provisioner (swap, ufw, Caddy, sites, build relay, service) |
-| `Caddyfile` | `/etc/caddy/Caddyfile` | serves both sites, auto-HTTPS |
-| `relay.toml` | `/etc/indras-relay/relay.toml` | relay config (token auto-generated) |
-| `indras-relay.service` | `/etc/systemd/system/` | systemd unit for the headless relay |
+---
 
-## Steps
+## The box
 
-### 1. Copy this folder to the box
-```
-scp -r deploy/ USER@BOX_IP:~/
-```
+| | |
+|---|---|
+| Host | Hetzner, **89.167.41.185**, Helsinki |
+| OS | **Ubuntu 26.04 LTS**, x86_64, 2 vCPU, **3 GB RAM**, 4 GB swap |
+| Access | `ssh truman@89.167.41.185` (`~/.ssh/id_ed25519`), passwordless sudo |
+| Hardening | root SSH off, password auth off, `fail2ban` active, `ufw` 22/80/443 tcp only |
 
-### 2. rsync the (private) relay source up
-```
-rsync -az --delete --exclude target --exclude .git \
-  /Users/truman/Code/IndrasNetwork/ USER@BOX_IP:~/src/indras-network/
-```
-(Excludes the 25-crate `target/` and git history — source only. The box rebuilds.)
+> Older docs said CX22 / Ubuntu 24.04 / 4 GB. The box reports 26.04 and 3 GB.
+> It matters: `cargo build` on the full workspace will thrash. Build one crate at
+> a time (`-p <crate>`), or better, build elsewhere and ship the binary.
 
-### 3. Run the provisioner
-```
-ssh USER@BOX_IP 'cd ~/deploy && ./setup-vps.sh'
-```
-This installs everything and starts `indras-relay`. The first Rust build takes a
-few minutes (swap covers the 4GB box). Sites are served immediately; TLS is
-issued once DNS points here.
+## What runs
 
-### 4. Verify BEFORE touching DNS (hit the box by IP / check the service)
-```
-ssh USER@BOX_IP '
-  systemctl status indras-relay --no-pager
-  journalctl -u indras-relay -n 40 --no-pager     # expect "Relay node starting", node_id, NO "change-me" warning
-  systemctl status caddy --no-pager
-  ss -tlnp | grep -E ":80|:443|9090"              # 80/443 public, 9090 localhost only
-  ufw status                                       # 22/80/443 only
-'
-```
+Caddy owns :80/:443 and reverse-proxies everything else on loopback.
 
-### 5. DNS cutover at Namecheap (one domain at a time)
-For **each** domain, set A records to `BOX_IP`:
-```
-templesofrefuge.earth   A  @    BOX_IP
-templesofrefuge.earth   A  www  BOX_IP
-syncengine.earth        A  @    BOX_IP
-syncengine.earth        A  www  BOX_IP
-```
-Remove the old GitHub Pages A records / the Pages CNAME. Wait for propagation,
-then verify HTTPS + certs:
-```
-curl -I https://templesofrefuge.earth
-curl -I https://syncengine.earth
-```
-In a browser confirm the two live external calls still work:
-- templesofrefuge → an article page loads its list (GitHub API, client-side).
-- syncengine → the early-access signup submits (SurrealDB Cloud, client-side).
+| Service | Bind | Public name | Comes from |
+|---|---|---|---|
+| `caddy` | :80/:443 | — | `/etc/caddy/Caddyfile` ← repo `infra/Caddyfile` |
+| static sites | 127.0.0.1:9000 | the four domains | git clones in `/var/www/` |
+| `tor-checkout` | 127.0.0.1:8787 | `checkout.templesof.earth` | **this repo** — `checkout-worker/src/node-server.js` |
+| `indras-donation-gateway` | 127.0.0.1:8788 | `api.templesof.earth` | **prebuilt binary** `/usr/local/bin/` |
+| `work-agualila` | 127.0.0.1:3200 | `work.agualila.earth` | `/var/www/work-agualila/server.js` |
+| `indras-availability-node` | — | — | `/usr/local/bin/`, config `/etc/indras-availability-node/availability.toml` |
+| `webhook-deploy` | loopback via Caddy `/_deploy` | — | `/var/www/syncengine/deploy/webhook.py` |
+| `tor-post-deploy.path` | — | — | root helper `/usr/local/bin/tor-post-deploy` |
 
-**Rollback:** revert that domain's A records to the GitHub Pages IPs. Keep Pages
-deploys live until both domains are verified.
+Clones: `/var/www/{templesofrefuge,syncengine,agualila,work-agualila,downloads}`.
+Both `templesof.earth` and `templesofrefuge.earth` serve the **same**
+`/var/www/templesofrefuge` checkout — one site block, nothing to keep in sync.
 
-### 6. (Optional, later) Make it *your* personal server
-Extract your PlayerId from your `./se` identity, then:
-```
-sudo sed -i 's/^# owner_player_id.*/owner_player_id = "<HEX>"/' /etc/indras-relay/relay.toml
-sudo systemctl restart indras-relay
+> **`indras-relay` is not installed** (`systemctl is-enabled` → not-found, nothing
+> on :9090). `infra/DEPLOY.md` was a briefing for deploying it and that never
+> happened; `indras-availability-node` occupies that role now. Don't follow the
+> old relay instructions.
+
+---
+
+## Deploying: two different mechanisms
+
+This is the thing most likely to catch you out.
+
+### The sites and `tor-checkout` — push to deploy
+
+Push to `main` on GitHub. A push webhook hits `https://<site>/_deploy`, Caddy
+proxies it to `webhook-deploy`, which HMAC-verifies against
+`/etc/webhook-deploy/sites.json` and runs `git pull --ff-only`. No build step —
+changes are live the moment the clone is pulled.
+
+Post-pull steps are **privilege-separated**. `webhook.py` diffs old→new HEAD and
+runs the repo's `deploy/post-deploy.sh` unprivileged (`NoNewPrivileges=true`), so
+that hook can only *enqueue*: it writes a fixed-token `.deploy-request`
+(`restart-tor-checkout` / `reload-caddy`) when `checkout-worker/src/` or
+`infra/Caddyfile` changed. A root path unit (`tor-post-deploy.path`) sees the
+file and runs `/usr/local/bin/tor-post-deploy`, which restarts `tor-checkout`
+and/or validates + syncs the Caddyfile and reloads Caddy.
+
+That helper is installed **out of band**, not executed from the repo, and honours
+only that fixed token vocabulary — so a repo compromise can trigger those two
+actions and nothing else. Changing it is a deliberate manual reinstall:
+
+```bash
+sudo install -m 755 /var/www/templesofrefuge/infra/tor-post-deploy.sh /usr/local/bin/tor-post-deploy
+sudo cp /var/www/templesofrefuge/infra/tor-post-deploy.{path,service} /etc/systemd/system/
+sudo systemctl daemon-reload && sudo systemctl enable --now tor-post-deploy.path
 ```
 
-## Ongoing site releases (post-migration) — push-to-deploy
+Changing `webhook.py` itself needs a one-time `sudo systemctl restart
+webhook-deploy` — it loads its code once at startup.
 
-Both sites are served by Caddy straight out of git clones — no build step, no CDN;
-changes are live the moment the clone is pulled. **As of 2026-07-30 the pull is
-automatic:** a GitHub push webhook hits `https://<site>/_deploy`, which Caddy
-reverse-proxies to the loopback `webhook-deploy` service
-(`/var/www/syncengine/deploy/webhook.py`, runs as `truman`). It HMAC-verifies the
-site's secret (`/etc/webhook-deploy/sites.json`) and runs `git pull --ff-only`.
+Manual fallback if the webhook is down:
+`ssh truman@89.167.41.185 'git -C /var/www/templesofrefuge pull --ff-only'`.
 
-1. **Commit to `main` and push to GitHub.** That's the deploy. (Dirty feature
-   branch? `git worktree add <scratch> origin/main`, copy the file in, commit,
-   `git push origin HEAD:main`, remove the worktree.)
-2. **Post-pull steps run themselves — privilege-separated.** `webhook.py` diffs
-   old→new HEAD and runs the repo's `deploy/post-deploy.sh` with the changed
-   files on stdin. That hook runs UNPRIVILEGED (the webhook-deploy unit is
-   `NoNewPrivileges=true` — no sudo). So it only *enqueues*: it writes a
-   fixed-token `.deploy-request` (`restart-tor-checkout` / `reload-caddy`) when
-   `checkout-worker/src/` or `infra/Caddyfile` changed. A root path-unit
-   (`tor-post-deploy.path`) watches that file and triggers `tor-post-deploy.service`
-   → the fixed `/usr/local/bin/tor-post-deploy` helper, which restarts
-   `tor-checkout` and/or `caddy validate`s + syncs `/etc/caddy/Caddyfile` +
-   reloads Caddy. The helper is installed out of band (not from the repo), so a
-   repo compromise can trigger only those two actions, never arbitrary root code.
-   **One-time install** (after the first pull that lands `infra/tor-post-deploy.*`):
-   ```
-   sudo install -m 755 /var/www/templesofrefuge/infra/tor-post-deploy.sh /usr/local/bin/tor-post-deploy
-   sudo cp /var/www/templesofrefuge/infra/tor-post-deploy.{path,service} /etc/systemd/system/
-   sudo systemctl daemon-reload && sudo systemctl enable --now tor-post-deploy.path
-   ```
-   **Changing `webhook.py` itself needs a one-time `sudo systemctl restart
-   webhook-deploy`** (it loads its code once at startup); changing the helper is a
-   deliberate manual `sudo install` reinstall.
-3. **Verify live:** curl the changed file and grep for the new text. Pull log:
-   `journalctl -u webhook-deploy`; privileged-step log: `journalctl -u tor-post-deploy`.
+### The donation gateway — a binary, by hand
 
-Notes:
-- The clones must stay owned by the deploy user (`truman:truman`), or git
-  refuses with "dubious ownership". Chowned 2026-07-14; re-chown after any
-  reprovision.
-- Document pages (e.g. bylaws.html) render their markdown source client-side,
-  so content edits ship without touching HTML.
-- Manual fallback if the webhook is ever down (allow-ruled in
-  `.claude/settings.local.json`, untracked):
-  `ssh truman@BOX_IP 'git -C /var/www/templesofrefuge pull --ff-only'`
-  (same for `/var/www/syncengine`).
+**`git pull` will never update it.** `indras-donation-gateway` is a prebuilt
+binary at `/usr/local/bin/`, and its source lives in the **IndrasNetwork** repo
+(`crates/indras-donation-gateway`), not this one. Shipping a change means:
+
+```bash
+# build for linux/x86_64 (not on the box — 3 GB won't enjoy it)
+cargo build --release -p indras-donation-gateway --target x86_64-unknown-linux-gnu
+scp target/x86_64-unknown-linux-gnu/release/indras-donation-gateway truman@89.167.41.185:/tmp/
+ssh truman@89.167.41.185 '
+  sudo install -m 755 /tmp/indras-donation-gateway /usr/local/bin/indras-donation-gateway
+  sudo systemctl restart indras-donation-gateway
+  curl -s localhost:8788/healthz'
+```
+
+The installed binary dates from **2026-07-20**. Anything committed to that crate
+since is not live.
+
+---
+
+## Secrets and config on the box (never in the repo)
+
+| File | Owner | Holds |
+|---|---|---|
+| `/etc/tor-checkout/env` | root 0600 | `STRIPE_SECRET_KEY`, `ALLOWED_ORIGINS`, `PRODUCT_ID` |
+| `/etc/indras-donation-gateway/env` | root 0600 | `STRIPE_WEBHOOK_SECRET`, `ADMIN_TOKEN`, `PUBLIC_BASE_URL`, `DOWNLOAD_ARTIFACT_URL` |
+| `/etc/indras-donation-gateway/issuer_keypair.tor.bin` | root 0600 | the **production** Temples of Refuge issuer secret |
+| `/etc/webhook-deploy/sites.json` | truman 0600 | per-site webhook HMAC secrets |
+
+`ISSUER_KEYPAIR_PATH` is set by an `Environment=` line in the **unit file**, not
+in the env file — look there before concluding it's unset.
+
+Two failure modes that are silent rather than loud, both currently **fine**:
+
+- `STRIPE_WEBHOOK_SECRET` unset ⇒ the gateway logs a warning and **accepts
+  unsigned webhooks**, i.e. anyone can mint donation claims. Currently set.
+- `ISSUER_KEYPAIR_PATH` unset ⇒ falls back to the **embedded dev key**, and seeds
+  won't verify in a production app build. Currently set; the live issuer is
+  `cdd226ea…`, not the dev `6ccc8b26…`.
+
+Verify the issuer key without reading any secret:
+
+```bash
+curl -s https://api.templesof.earth/issuer | grep -o '"root_id":"[^"]*"'
+# must NOT be 6ccc8b267071be866c145bc4695523d7e8c7673f2b13e9dd87b4033df7e99aef
+```
+
+**`ALLOWED_ORIGINS` lives on the box, not in the repo.** A deploy will not update
+it. Miss a domain and the browser's CORS preflight fails, and `/join` silently
+falls back to the hosted Stripe link. `checkout-worker/deploy/env.example` shows
+the intended value.
+
+---
+
+## Health checks
+
+```bash
+ssh truman@89.167.41.185 '
+  systemctl is-active caddy tor-checkout indras-donation-gateway webhook-deploy
+  curl -s -o /dev/null -w "gateway  %{http_code}\n" localhost:8788/healthz          # 200
+  curl -s -o /dev/null -w "checkout %{http_code}\n" localhost:8787/session-status   # 403 without Origin = correct
+  git -C /var/www/templesofrefuge log -1 --oneline'
+```
+
+From outside:
+
+```bash
+curl -sI https://templesof.earth/join
+curl -sI https://checkout.templesof.earth/     # valid TLS, not a cert error
+curl -sI https://api.templesof.earth/
+```
+
+Then load `https://templesof.earth/join` and confirm the **inline** Stripe
+checkout renders rather than the hosted-link fallback.
+
+Logs: `journalctl -u webhook-deploy` (pulls), `-u tor-post-deploy` (privileged
+steps), `-u indras-donation-gateway`. Note journals need `sudo` — an unprivileged
+`journalctl` returns almost nothing, which reads as "no errors" and isn't.
+
+---
 
 ## Domain migration: templesofrefuge.earth → templesof.earth
 
-Both domains serve the **same** `/var/www/templesofrefuge` checkout off one Caddy
-site block, so there is nothing to keep in sync and no second deploy target. The
-pages declare `templesof.earth` canonical, so search engines consolidate onto the
-new name while every old URL keeps returning 200.
+Both names serve one checkout off one site block; pages declare `templesof.earth`
+canonical, so search engines consolidate while every old URL keeps returning 200.
 
-**Order matters — do these before pushing the repo changes**, because
-`shared/cta-widgets.js` and `syncengine.earth/join.html` now point the donor path
-at `checkout.templesof.earth` / `api.templesof.earth`, and `agualila.earth` loads
-`substack-feed.js` from `templesof.earth`.
+DNS at the registrar — four A records to the box: `@`, `www`, `checkout`, `api`.
+Leave every `templesofrefuge.earth` record exactly as it is.
 
-1. **DNS at the registrar** — four A records to `BOX_IP`:
-   ```
-   templesof.earth   A  @         BOX_IP
-   templesof.earth   A  www       BOX_IP
-   templesof.earth   A  checkout  BOX_IP
-   templesof.earth   A  api       BOX_IP
-   ```
-   Leave every `templesofrefuge.earth` record exactly as it is — the old domain
-   stays live for the whole migration.
+**Do NOT 301 the old domain yet.** It must keep answering 200 until
+`templesof.earth` is indexed, or existing links and the printed `/mats` QR bounce
+through a redirect to a domain search engines haven't credited. When the new name
+has settled, cut `templesofrefuge.earth` out of the shared block and give it its
+own block that 301s everything across.
 
-2. **Widen the checkout service's origin allowlist.** This lives on the box, NOT
-   in the repo, so a deploy will not do it for you. Miss this and the browser's
-   CORS preflight fails for anyone on the new domain and the join page silently
-   drops back to the hosted Stripe link:
-   ```
-   sudo nano /etc/tor-checkout/env     # add https://templesof.earth,https://www.templesof.earth
-   sudo systemctl restart tor-checkout
-   ```
-   `checkout-worker/deploy/env.example` shows the full intended value.
-
-3. **Push.** The `infra/Caddyfile` change enqueues `reload-caddy`; Caddy then
-   requests certs for the four new names. First request can take ~30s.
-
-4. **Verify before trusting the donor path:**
-   ```
-   curl -sI https://templesof.earth/join
-   curl -sI https://checkout.templesof.earth/       # must be valid TLS, not a cert error
-   curl -sI https://api.templesof.earth/
-   ```
-   Then load `https://templesof.earth/join` in a browser and confirm the inline
-   Stripe checkout renders (not the hosted-link fallback).
-
-**Do NOT 301 the old domain yet.** templesofrefuge.earth must keep answering 200
-until `templesof.earth` is indexed — otherwise existing links and the printed
-`/mats` QR bounce through a redirect to a domain search engines have not yet
-credited. When the new domain has settled, cut `templesofrefuge.earth` out of the
-shared site block in `Caddyfile` and give it its own block that 301s everything to
-`templesof.earth`.
-
-Still on the old domain on purpose: the `hello@` / `ola@` mailboxes (no email is
+Deliberately still on the old domain: the `hello@` / `ola@` mailboxes (no email is
 provisioned on templesof.earth), and every `trumanellis/templesofrefuge.earth`
 GitHub URL — that is the **repo** name, not the domain. Renaming the repo would
 break the client-side article and document loaders.
 
-## Notes / decisions already resolved
-- **No inbound UDP firewall rule needed.** The relay uses an ephemeral UDP port +
-  n0 public relays (`presets::N0`) for hole-punching. (Pinning a fixed port =
-  code change, out of scope.)
-- **Relay identity auto-persists** at `/var/lib/indras-relay/secret.key` on first run.
-- **Admin API stays on localhost** (`127.0.0.1:9090`). Don't expose it without TLS +
-  the generated bearer token (see the commented block in `Caddyfile`).
-- **Durable build path (later):** build the Linux x86_64 `indras-relay` binary in CI
-  and ship just the artifact, so the tiny box never compiles Rust and no private
-  source lives on it.
+---
+
+## Gotchas
+
+- Clones must stay owned by `truman:truman` or git refuses with "dubious
+  ownership". Re-chown after any reprovision.
+- Document pages render their markdown client-side, so content edits ship without
+  touching HTML.
+- No inbound UDP rule is needed or wanted; keep `ufw` at 22/80/443.
+- Don't run `setup-vps.sh` as-is — it re-clones the sites. Reference only.
+- Ubuntu 26.04 + edition-2024 Rust: use rustup stable, not distro `rustc`.
