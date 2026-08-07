@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Found a Temple — Temples of Earth</title>
-    <meta name="description" content="If you are holding land, intention, or community for a new node in the Network of Temples, begin the conversation here.">
+    <meta name="description" content="Every Temple in the network names what is sacred to it. A Temple of Refuge, a Temple of Sacred Play, a Temple of ___. Name yours and begin the conversation.">
 
     <!-- Canonical domain is templesof.earth; templesofrefuge.earth serves
          these same files and folds into it. -->
@@ -13,93 +13,1027 @@
     <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Temples of Earth">
-    <meta property="og:title" content="Found a Temple — Temples of Earth">
-    <meta property="og:description" content="Holding land, intention, or community for a new node? We'd like to talk.">
+    <meta property="og:title" content="A Temple of ___ — Temples of Earth">
+    <meta property="og:description" content="Every Temple names what is sacred to it. Name yours, and we'll build the rest together.">
     <meta property="og:url" content="https://templesof.earth/found-a-temple">
     <meta property="og:image" content="https://templesof.earth/assets/og-image.png">
     <meta name="twitter:card" content="summary_large_image">
 
     <link rel="stylesheet" href="/shared/brand.css">
     <link rel="stylesheet" href="/shared/document.css">
+
+    <!-- Reveal-on-scroll is opt-in: without JS nothing is ever left invisible. -->
+    <script>document.documentElement.className += ' has-js';</script>
+
+    <style>
+      /* The [hidden] attribute must win over the display rules below —
+         otherwise a flex/grid panel can't be hidden by the gate. */
+      [hidden] { display: none !important; }
+
+      /* ================================================================
+         The descent.
+
+         The page is read top to bottom as a single movement: name what is
+         sacred, learn what the network already holds for you, cross the
+         threshold, and only then write the declaration. Each movement is
+         a beat; the application assembles itself behind you as you go.
+         ================================================================ */
+
+      /* Scroll progress — the depth of the descent. */
+      .progress-track {
+        position: fixed;
+        top: var(--toe-bar-h); left: var(--toe-rail-w); right: 0;
+        height: 2px; z-index: 900;
+        background: color-mix(in srgb, var(--t-tx) 5%, transparent);
+      }
+      .progress-fill {
+        height: 100%; width: 0%;
+        background: linear-gradient(90deg, var(--t-ac), var(--t-a2), var(--t-ac));
+        transition: width 0.2s ease;
+      }
+
+      /* Reveal primitive. Scoped to .has-js so a scriptless visitor gets a
+         plain, fully readable page instead of a wall of invisible text. */
+      .has-js .r {
+        opacity: 0;
+        transform: translateY(22px);
+        transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+      }
+      .has-js .r.v { opacity: 1; transform: none; }
+      /* Keyboard traversal must never land on something invisible. */
+      .has-js .r:focus-within { opacity: 1; transform: none; }
+      .r-d1 { transition-delay: 0.08s; }
+      .r-d2 { transition-delay: 0.16s; }
+      .r-d3 { transition-delay: 0.24s; }
+      .r-d4 { transition-delay: 0.32s; }
+
+      /* The thread between movements: a root reaching further down. */
+      .descent {
+        display: block;
+        width: 1px;
+        height: clamp(3.5rem, 9vw, 6rem);
+        margin: clamp(3rem, 7vw, 5rem) auto;
+        background: linear-gradient(180deg, transparent, var(--t-bd) 30%, var(--t-dm));
+        position: relative;
+        transform-origin: top;
+      }
+      .has-js .descent {
+        transform: scaleY(0);
+        transition: transform 1s var(--ease);
+      }
+      .has-js .descent.v { transform: scaleY(1); }
+      .descent::after {
+        content: "✦";
+        position: absolute;
+        left: 50%; bottom: -0.75em;
+        transform: translateX(-50%);
+        font-size: 0.7rem;
+        line-height: 1;
+        color: var(--t-ac);
+        background: var(--t-bg);
+        padding: 0.2em 0.4em;
+      }
+
+      /* ================================================================
+         The blank — the interactive centre of this page.
+
+         Every node of the network completes the same sentence: "a Temple
+         of ___". The blank is a real input, so the page's first gesture is
+         the visitor naming what is sacred to them, before they are asked
+         for anything at all. The second blank (the Temple's name) resolves
+         live into the address it will be given at templesof.earth/<name>.
+         ================================================================ */
+
+      .composer,
+      .composer-step {
+        max-width: 34rem;
+        margin: 0 auto;
+        text-align: center;
+      }
+      .composer-step { margin-top: clamp(2.5rem, 5vw, 3.5rem); }
+
+      .composer-label {
+        display: block;
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        font-weight: 500;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: var(--t-mt);
+        margin-bottom: 0.9rem;
+      }
+
+      .blank {
+        display: block;
+        width: 100%;
+        text-align: center;
+        font-family: var(--font-display);
+        font-weight: 500;
+        font-size: clamp(2.1rem, 6.5vw, 3.4rem);
+        line-height: 1.15;
+        letter-spacing: -0.02em;
+        color: var(--t-tx);
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid var(--t-dm);
+        border-radius: 0;
+        padding: 0.15em 0.25em 0.12em;
+        caret-color: var(--t-ac);
+        transition: border-color 0.3s ease;
+      }
+      .blank::placeholder { color: var(--t-dm); }
+      .blank:focus { outline: none; border-bottom-color: var(--t-ac); }
+
+      /* Sparks — clickable words that suggest the *kind* of answer wanted
+         without prescribing one. */
+      .sparks {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem 0.55rem;
+        margin-top: 1.6rem;
+      }
+      .spark {
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
+        letter-spacing: 0.05em;
+        color: var(--t-mt);
+        background: transparent;
+        border: 1px solid var(--t-b2);
+        border-radius: 100px;
+        padding: 0.34rem 0.8rem;
+        cursor: pointer;
+        transition: color 0.2s ease, border-color 0.2s ease;
+      }
+      .spark:hover { color: var(--t-ac); border-color: var(--t-ac); }
+      .spark:focus-visible { outline: 2px solid var(--t-ac); outline-offset: 2px; }
+
+      .address {
+        font-family: var(--font-mono);
+        font-size: 0.85rem;
+        letter-spacing: 0.03em;
+        color: var(--t-mt);
+        margin-top: 1rem;
+        min-height: 1.4em;
+      }
+      .address b { color: var(--t-ac); font-weight: 400; }
+
+      .hero-note {
+        text-align: center;
+        color: var(--t-t2);
+        line-height: 1.8;
+        max-width: 46ch;
+        margin: clamp(2rem, 4vw, 2.75rem) auto 0;
+      }
+
+      .found-temple-hero-image {
+        width: min(100%, 940px);
+        margin: clamp(3rem, 6vw, 4rem) auto 0;
+        aspect-ratio: 16 / 9;
+        overflow: hidden;
+        border: 1px solid var(--t-bd);
+        border-radius: 14px;
+        background: var(--t-bg);
+      }
+      .found-temple-hero-image img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+      }
+
+      /* ================================================================
+         Movements — the beats of the descent.
+         ================================================================ */
+
+      .movement { margin-top: clamp(1rem, 2vw, 1.5rem); }
+
+      .movement-mark {
+        display: block;
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: var(--t-dm);
+        text-align: center;
+        margin-bottom: 1rem;
+      }
+      .movement-eyebrow {
+        font-family: var(--font-mono);
+        font-size: 0.68rem;
+        font-weight: 500;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        color: var(--t-ac);
+        text-align: center;
+      }
+      .movement-title {
+        font-family: var(--font-display);
+        font-weight: 500;
+        font-size: clamp(1.7rem, 4vw, 2.2rem);
+        line-height: 1.15;
+        letter-spacing: -0.015em;
+        color: var(--t-tx);
+        text-align: center;
+        margin-top: 0.9rem;
+      }
+      .movement-lede {
+        color: var(--t-t2);
+        line-height: 1.8;
+        max-width: 46ch;
+        margin: 1.25rem auto 0;
+        text-align: center;
+      }
+
+      /* ================================================================
+         What the network holds — the sections of a Temple's charter that
+         are inherited rather than written. Showing them already filled in
+         makes the form double as the offer: here is the shelter you are
+         handed, here is the part only you can write.
+         ================================================================ */
+
+      .given-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 1rem;
+        margin-top: 2.5rem;
+      }
+      .given-card {
+        border: 1px solid var(--t-b2);
+        border-radius: 14px;
+        background: var(--t-sf);
+        padding: 1.5rem 1.4rem;
+      }
+      .given-card h3 {
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--t-a2);
+        display: flex;
+        align-items: baseline;
+        gap: 0.55em;
+      }
+      .given-card h3::before { content: "✦"; letter-spacing: 0; }
+      .given-card p {
+        color: var(--t-t2);
+        font-size: 0.95rem;
+        line-height: 1.7;
+        margin-top: 0.8rem;
+      }
+
+      /* ================================================================
+         The threshold — the Members' door.
+
+         Founding a Temple begins with one person's own signature on the
+         Covenant. This is a threshold, not a lock: what a browser can
+         actually verify is verified, and everything else is accepted and
+         confirmed by hand. It never pretends otherwise.
+         ================================================================ */
+
+      /* Pending: the seam has been asked and has not answered. Both branches
+         stand down so a slow check can never flash the wrong one. */
+      .gate-checking {
+        display: none;
+        text-align: center;
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--t-mt);
+        padding: clamp(2.5rem, 6vw, 4rem) 0;
+        animation: gatePulse 2s ease-in-out infinite;
+      }
+      @keyframes gatePulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+      #ft-gate[data-state="checking"] .gate-checking { display: block; }
+      #ft-gate[data-state="checking"] > #ft-threshold,
+      #ft-gate[data-state="checking"] > #ft-welcome { display: none; }
+
+      .gate-panel {
+        border: 1px solid var(--t-bd);
+        border-radius: 18px;
+        background: var(--t-cd);
+        padding: clamp(1.75rem, 4vw, 2.5rem);
+        margin-top: 2.5rem;
+        text-align: center;
+      }
+      .gate-panel .movement-lede { margin-top: 1.1rem; }
+
+      .gate-action {
+        display: inline-block;
+        margin-top: 1.9rem;
+        background: var(--signature);
+        color: #10130c;
+        font-family: var(--font-body);
+        font-size: 0.95rem;
+        font-weight: 500;
+        text-decoration: none;
+        border-radius: 8px;
+        padding: 0.95rem 1.75rem;
+        transition: filter 0.2s ease, transform 0.2s ease;
+      }
+      .gate-action:hover { filter: brightness(1.08); transform: translateY(-1px); }
+
+      /* What awaits behind the door — shown plainly, so the threshold is an
+         invitation rather than a tease. */
+      .gate-preview {
+        margin-top: 2.25rem;
+        padding-top: 1.75rem;
+        border-top: 1px solid var(--t-bd);
+        text-align: left;
+      }
+      .gate-preview-title {
+        font-family: var(--font-mono);
+        font-size: 0.66rem;
+        font-weight: 500;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        color: var(--t-mt);
+        text-align: center;
+      }
+      .gate-preview ol {
+        list-style: none;
+        counter-reset: ask;
+        max-width: 30rem;
+        margin: 1.4rem auto 0;
+      }
+      .gate-preview li {
+        counter-increment: ask;
+        position: relative;
+        padding-left: 2.4rem;
+        margin-bottom: 0.55rem;
+        color: var(--t-t2);
+        font-size: 0.95rem;
+        line-height: 1.6;
+      }
+      .gate-preview li::before {
+        content: counter(ask, lower-roman) ".";
+        position: absolute;
+        left: 0; top: 0;
+        width: 1.7rem;
+        text-align: right;
+        font-family: var(--font-mono);
+        font-size: 0.8rem;
+        color: var(--t-dm);
+      }
+
+      /* "I'm already a Member" recovery */
+      .gate-recover {
+        margin-top: 1.75rem;
+        text-align: left;
+      }
+      .gate-recover > summary {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5em;
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--t-mt);
+        cursor: pointer;
+        list-style: none;
+        transition: color 0.2s ease;
+      }
+      .gate-recover > summary::-webkit-details-marker { display: none; }
+      .gate-recover > summary::before { content: "◦"; color: var(--t-ac); }
+      .gate-recover > summary:hover { color: var(--t-ac); }
+      .gate-recover[open] > summary { color: var(--t-t2); }
+      .recover-body {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-top: 1.35rem;
+        padding-left: 1.1rem;
+        border-left: 1px solid var(--t-bd);
+      }
+      .recover-note {
+        font-size: 0.86rem;
+        line-height: 1.65;
+        color: var(--t-mt);
+      }
+      .recover-error { color: var(--t-er); font-size: 0.88rem; min-height: 1.2em; }
+      .recover-btn {
+        align-self: flex-start;
+        font-family: var(--font-body);
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--t-ac);
+        background: transparent;
+        border: 1px solid var(--t-ac);
+        border-radius: 8px;
+        padding: 0.7rem 1.3rem;
+        cursor: pointer;
+        transition: background 0.2s ease, color 0.2s ease;
+      }
+      .recover-btn:hover { background: var(--t-ac); color: var(--t-bg); }
+      .recover-btn[disabled] { opacity: 0.5; cursor: progress; }
+
+      .gate-skip {
+        display: block;
+        margin-top: 1.75rem;
+        font-size: 0.85rem;
+        line-height: 1.7;
+        color: var(--t-mt);
+      }
+      .gate-skip a { color: var(--t-ac); }
+
+      /* Recognised Member banner */
+      .gate-welcome {
+        border: 1px solid var(--t-bd);
+        border-left: 2px solid var(--t-ac);
+        border-radius: 14px;
+        background: var(--t-b2);
+        padding: 1.4rem 1.5rem;
+        margin-top: 2.5rem;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 0.4rem 1rem;
+      }
+      .gate-welcome-mark { color: var(--t-ac); }
+      .gate-welcome-text { color: var(--t-t2); font-size: 0.95rem; line-height: 1.7; flex: 1 1 16rem; }
+      .gate-welcome-text strong { color: var(--t-tx); font-weight: 500; }
+      .gate-forget {
+        font-family: var(--font-mono);
+        font-size: 0.68rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--t-mt);
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        text-decoration: underline;
+      }
+      .gate-forget:hover { color: var(--t-ac); }
+
+      /* Named-first nudge: a Member who reached the declaration without
+         filling the blanks at the top. */
+      .name-first {
+        border: 1px dashed var(--t-bd);
+        border-radius: 14px;
+        padding: 1.75rem 1.5rem;
+        margin-top: 2.5rem;
+        text-align: center;
+        color: var(--t-t2);
+        line-height: 1.75;
+      }
+      .name-first button {
+        margin-top: 1.1rem;
+        font-family: var(--font-body);
+        font-size: 0.9rem;
+        color: var(--t-ac);
+        background: transparent;
+        border: 1px solid var(--t-ac);
+        border-radius: 8px;
+        padding: 0.6rem 1.2rem;
+        cursor: pointer;
+      }
+      .name-first button:hover { background: var(--t-ac); color: var(--t-bg); }
+
+      /* ================================================================
+         The declaration — Água Lila's charter turned into questions.
+         ================================================================ */
+
+      /* The charter assembling itself: what has been named so far, and how
+         much of the declaration stands. Sticks under the brand bar while the
+         questions are being answered. */
+      .charter-strip {
+        position: sticky;
+        top: calc(var(--toe-bar-h) + 0.5rem);
+        z-index: 5;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: baseline;
+        gap: 0.2rem 1rem;
+        margin: 2.5rem 0 0;
+        padding: 0.65rem 1rem;
+        background: var(--t-glass);
+        -webkit-backdrop-filter: blur(12px) saturate(150%);
+        backdrop-filter: blur(12px) saturate(150%);
+        border: 1px solid var(--t-b2);
+        border-radius: 100px;
+        text-align: center;
+      }
+      .charter-name {
+        font-family: var(--font-body);
+        font-size: 0.85rem;
+        color: var(--t-t2);
+      }
+      .charter-name b { color: var(--t-tx); font-weight: 500; }
+      .charter-count {
+        font-family: var(--font-mono);
+        font-size: 0.68rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--t-mt);
+      }
+
+      .fields {
+        display: flex;
+        flex-direction: column;
+        gap: 2.25rem;
+        max-width: 560px;
+        margin: 2.75rem auto 0;
+        text-align: left;
+      }
+
+      .cta-field .hint {
+        font-family: var(--font-body);
+        font-size: 0.88rem;
+        line-height: 1.6;
+        color: var(--t-mt);
+        text-transform: none;
+        letter-spacing: normal;
+        margin-top: -0.15rem;
+      }
+
+      /* Água Lila's own answer, one disclosure per question. Kept as real
+         text rather than placeholder copy so it survives focus — people
+         need to read it *while* they write. */
+      .example { margin-top: -0.1rem; }
+      .example summary {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5em;
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--t-mt);
+        cursor: pointer;
+        list-style: none;
+        transition: color 0.2s ease;
+      }
+      .example summary::-webkit-details-marker { display: none; }
+      .example summary::before { content: "◦"; color: var(--t-ac); }
+      .example summary:hover { color: var(--t-ac); }
+      .example[open] summary { color: var(--t-t2); }
+      .example p {
+        font-size: 0.93rem;
+        line-height: 1.75;
+        color: var(--t-t2);
+        border-left: 1px solid var(--t-bd);
+        padding: 0.15rem 0 0.15rem 1.1rem;
+        margin-top: 0.85rem;
+      }
+      .example em { color: var(--t-tx); font-style: italic; }
+
+      .reach {
+        border-top: 1px solid var(--t-bd);
+        padding-top: 2.5rem;
+        margin-top: 0.75rem;
+        display: flex;
+        flex-direction: column;
+        gap: 2.25rem;
+      }
+      .reach-title {
+        font-family: var(--font-mono);
+        font-size: 0.68rem;
+        font-weight: 500;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        color: var(--t-mt);
+      }
+
+      .submit-row {
+        max-width: 560px;
+        margin: 2.75rem auto 0;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+      }
+      .submit-row .cta-submit {
+        background: var(--signature);
+        border: none;
+        color: #10130c;
+        font-family: var(--font-body);
+        font-size: 0.95rem;
+        font-weight: 500;
+        letter-spacing: 0;
+        text-transform: none;
+        border-radius: 8px;
+      }
+      .submit-row .cta-submit:hover { opacity: 1; filter: brightness(1.08); }
+      .submit-note {
+        font-size: 0.85rem;
+        line-height: 1.7;
+        color: var(--t-mt);
+      }
+
+      #found-temple-success { margin-top: clamp(4rem, 8vw, 6rem); }
+
+      .page-noscript {
+        max-width: 560px;
+        margin: 3rem auto 0;
+        border: 1px solid var(--t-bd);
+        border-radius: 14px;
+        background: var(--t-sf);
+        padding: 1.5rem;
+        color: var(--t-t2);
+        line-height: 1.75;
+        font-size: 0.95rem;
+      }
+      .page-noscript a { color: var(--t-ac); }
+
+      @media (max-width: 600px) {
+        .given-card { padding: 1.3rem 1.2rem; }
+        .charter-strip { border-radius: 14px; }
+        .charter-name { font-size: 0.8rem; }
+      }
+
+      /* Motion off: everything lands on its finished state, nothing hides. */
+      @media (prefers-reduced-motion: reduce) {
+        .has-js .r,
+        .has-js .r.v { opacity: 1; transform: none; transition: none; }
+        .has-js .descent,
+        .has-js .descent.v { transform: none; transition: none; }
+        .progress-fill { transition: none; }
+        .gate-action:hover { transform: none; }
+        .gate-checking { animation: none; }
+      }
+    </style>
 </head>
 <body>
 
-    <header class="site-header">
-        <a href="/" class="back-link">← Temples of Earth</a>
-    </header>
+    <div class="progress-track" aria-hidden="true"><div class="progress-fill" id="ft-prog"></div></div>
 
     <main>
         <div class="container-narrow">
-            <section class="document-hero">
-                <p class="document-eyebrow">Network of Temples</p>
-                <h1 class="document-title">Found a Temple</h1>
-                <p class="document-subtitle">If you're holding land, intention, or community<br>for a new node, we'd like to talk</p>
-                <div class="document-divider"></div>
-            </section>
 
-            <p style="text-align:center;color:var(--t-t2);line-height:1.8;max-width:46ch;margin:0 auto 3rem;">
-                A Temple joins the network by adopting the Covenant and committing to the
-                Initiatory Practice. There is no application to win — only a relationship to begin.
-                Tell us what you are stewarding and we will reach back.
-            </p>
+            <form id="found-temple-form" data-cta-subject="A new Temple wishes to form">
 
-            <form class="cta-form" id="found-temple-form" data-cta-subject="Found a Temple — stewardship inquiry">
-                <div class="cta-field">
-                    <label for="ft-name">Your name <span class="req">*</span></label>
-                    <input type="text" id="ft-name" name="name" required autocomplete="name" placeholder="The name you go by">
-                </div>
+                <!-- ── Movement I · The blank ── -->
+                <section class="document-hero">
+                    <p class="document-eyebrow">Network of Temples</p>
 
-                <div class="cta-field">
-                    <label for="ft-email">Email <span class="req">*</span></label>
-                    <input type="email" id="ft-email" name="email" required autocomplete="email" placeholder="where we can reach you">
-                </div>
+                    <h1 class="composer">
+                        <span class="composer-label">A Temple of</span>
+                        <input type="text" id="ft-sacred" name="sacred" class="blank" required
+                               autocomplete="off" spellcheck="false" maxlength="40"
+                               aria-label="What is sacred to your Temple">
+                    </h1>
 
-                <div class="cta-field">
-                    <label for="ft-location">Where in the world</label>
-                    <input type="text" id="ft-location" name="location" placeholder="Region, country, or coordinates">
-                </div>
+                    <div class="sparks" id="ft-sparks" aria-label="Suggestions"></div>
 
-                <div class="cta-field">
-                    <label for="ft-steward">What you are holding</label>
-                    <select id="ft-steward" name="holding">
-                        <option value="">Choose what fits</option>
-                        <option value="Land">Land</option>
-                        <option value="Intention">Intention</option>
-                        <option value="Community">Community</option>
-                        <option value="Land &amp; community">Land &amp; community</option>
-                        <option value="All three">All three</option>
-                        <option value="Still discerning">Still discerning</option>
-                    </select>
-                </div>
+                    <!-- Revealed once the first blank is filled. -->
+                    <div class="composer-step fade-up" id="ft-step-name" hidden>
+                        <span class="composer-label">called</span>
+                        <input type="text" id="ft-temple" name="temple" class="blank" required
+                               autocomplete="off" spellcheck="false" maxlength="40"
+                               placeholder="its name" aria-label="What this Temple is called">
+                        <p class="address" id="ft-address" aria-live="polite"></p>
+                        <input type="hidden" name="proposed_address" id="ft-address-value">
+                    </div>
+                </section>
 
-                <div class="cta-field">
-                    <label for="ft-message">Tell us more <span class="req">*</span></label>
-                    <textarea id="ft-message" name="message" required placeholder="What are you stewarding, and what are you hoping to grow?"></textarea>
-                </div>
+                <p class="hero-note r">
+                    A Temple joins the network by adopting the Covenant and committing to the
+                    Initiatory Practice. There is no application to win — only a relationship
+                    to begin. What you write below becomes the first draft of your Temple's
+                    own page.
+                </p>
 
-                <!-- honeypot: bots fill this, humans never see it -->
-                <input type="checkbox" name="botcheck" class="cta-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+                <figure class="found-temple-hero-image r r-d1">
+                    <img src="/assets/web/found-a-temple-groundbreaking-1600.webp"
+                         alt="Freshly turned earth at dawn with stones, stakes, and twine marking a flower-of-life temple ground plan beside a spade and seedlings">
+                </figure>
 
-                <p class="cta-form-error" hidden></p>
-                <button type="submit" class="cta-submit">Begin the conversation</button>
+                <span class="descent" aria-hidden="true"></span>
+
+                <!-- ── Movement I · What is already yours ── -->
+                <section class="movement">
+                    <p class="movement-mark r">Movement I</p>
+                    <p class="movement-eyebrow r">Already written for you</p>
+                    <h2 class="movement-title r r-d1">What the network holds</h2>
+                    <p class="movement-lede r r-d2">
+                        Four of the load-bearing sections of a Temple's charter you do not
+                        have to invent. They come with the Covenant.
+                    </p>
+
+                    <div class="given-grid">
+                        <article class="given-card r">
+                            <h3>Legal shelter</h3>
+                            <p>A Temple node within Temples of Refuge, a 508(c)(1)(A) association of
+                               churches under U.S. First Amendment protections. Religious, not
+                               commercial. Tax-exempt by definition — no IRS determination letter
+                               required. Stewarded by ordained ministers. International nodes welcome.</p>
+                        </article>
+                        <article class="given-card r r-d1">
+                            <h3>The economy</h3>
+                            <p>Offerings are gifts. Support flows through gratitude and voluntary
+                               contribution. Regeneration, art, and care are the returns. Surplus
+                               recirculates into the network. There is no commercial model to build.</p>
+                        </article>
+                        <article class="given-card r r-d2">
+                            <h3>The technology</h3>
+                            <p>Every Temple is a node of the Synchronicity Engine — peer-to-peer,
+                               replacing extractive economics with attention, gratitude, and blessing.
+                               Ceremonies generate Blessings. Art and teaching feed the Digital Commons.</p>
+                        </article>
+                        <article class="given-card r r-d3">
+                            <h3>The threshold</h3>
+                            <p>Adopt the Covenant. Commit to the Initiatory Practice. That is the
+                               whole of it — no dues, no vetting committee, no franchise agreement,
+                               and no authority above you but the one you already answer to.</p>
+                        </article>
+                    </div>
+                </section>
+
+                <span class="descent" aria-hidden="true"></span>
+
+                <!-- ── Movement II · The threshold ──
+                     Fails closed: with no script and no Member record the door
+                     is shown, never the form. -->
+                <section class="movement" id="ft-gate">
+                    <p class="movement-mark r">Movement II</p>
+
+                    <!-- While we ask who is here, neither branch shows. Only JS
+                         ever sets data-state, so a scriptless visitor sees the
+                         threshold and this line stays away. -->
+                    <p class="gate-checking" role="status">Looking for your Covenant…</p>
+
+                    <div id="ft-threshold">
+                        <p class="movement-eyebrow r">The threshold</p>
+                        <h2 class="movement-title r r-d1">This is a Members' door</h2>
+                        <p class="movement-lede r r-d2">
+                            A Temple is founded by someone who has already crossed for themselves.
+                            Before a Temple can take its place in the network, its steward signs the
+                            Covenant — one person, one signature, for life. Become a Member first;
+                            then this page opens and you write your Temple into being.
+                        </p>
+
+                        <div class="gate-panel r r-d2">
+                            <a class="gate-action" href="/join">Become a Member →</a>
+
+                            <div class="gate-preview">
+                                <p class="gate-preview-title">What you will be asked</p>
+                                <ol>
+                                    <li>Essence and place — what this is, and where on Earth.</li>
+                                    <li>What the land asks of you.</li>
+                                    <li>What you are building.</li>
+                                    <li>The practice — what actually happens here.</li>
+                                    <li>Who is held here.</li>
+                                    <li>What this is not.</li>
+                                    <li>Your Temple, in one sentence.</li>
+                                </ol>
+                            </div>
+
+                            <details class="gate-recover">
+                                <summary>I'm already a Member</summary>
+                                <div class="recover-body">
+                                    <p class="recover-note">
+                                        If you joined on another device or cleared this browser, tell us who
+                                        you are and we'll open the declaration. We check what a browser can
+                                        actually check — a Stripe session reference verifies instantly.
+                                        A founding-gift code or the email you joined with we cannot verify
+                                        from here: we will accept it, record it with your declaration, and
+                                        confirm it by hand when we read it. This is a threshold, not a lock.
+                                    </p>
+                                    <div class="cta-field">
+                                        <label for="ft-recover-name">Your name</label>
+                                        <input type="text" id="ft-recover-name" autocomplete="name"
+                                               placeholder="The name you go by">
+                                    </div>
+                                    <div class="cta-field">
+                                        <label for="ft-recover-ref">Founding-gift code, session reference, or email</label>
+                                        <input type="text" id="ft-recover-ref" autocomplete="email"
+                                               placeholder="Any one of the three">
+                                    </div>
+                                    <p class="recover-error" id="ft-recover-error" role="alert"></p>
+                                    <button type="button" class="recover-btn" id="ft-recover-go">Open the declaration</button>
+                                </div>
+                            </details>
+
+                            <span class="gate-skip">
+                                Offering time or skill instead of funds? That's enough — no one aligned
+                                with the Commandment is turned away for lack of funds. Tell us how you'd
+                                like to serve at
+                                <a href="mailto:ola@templesofrefuge.earth?subject=My%20offering%20of%20time%20or%20skill">ola@templesofrefuge.earth</a>,
+                                and we'll open this door for you.
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Shown instead, once a Member record is found. -->
+                    <div id="ft-welcome" hidden>
+                        <p class="movement-eyebrow">The threshold</p>
+                        <h2 class="movement-title">You have already crossed</h2>
+                        <div class="gate-welcome">
+                            <span class="gate-welcome-mark" aria-hidden="true">✦</span>
+                            <p class="gate-welcome-text" id="ft-welcome-text">
+                                Recognized as a Member. The declaration below is yours to write.
+                            </p>
+                            <button type="button" class="gate-forget" id="ft-forget">Not you?</button>
+                        </div>
+                    </div>
+
+                    <!-- A Member who arrived here without naming their Temple. -->
+                    <div class="name-first" id="ft-name-first" hidden>
+                        <p>Your declaration begins with a name. Say what is sacred to this Temple,
+                           and what it is called, and the rest of the page opens.</p>
+                        <button type="button" id="ft-name-first-go">Name it →</button>
+                    </div>
+
+                    <!-- Member identity, carried into the submission so the human
+                         reading it knows who applied and how sure we are. -->
+                    <input type="hidden" name="member_name" id="ft-member-name">
+                    <input type="hidden" name="member_reference" id="ft-member-ref">
+                    <input type="hidden" name="member_status" id="ft-member-status" value="Not a recognized Member">
+                </section>
+
+                <!-- ── Movement III · Revealed to Members who have named their Temple ── -->
+                <section class="movement" id="ft-declaration" hidden>
+                    <span class="descent v" aria-hidden="true"></span>
+
+                    <p class="movement-mark">Movement III</p>
+                    <p class="movement-eyebrow">Only you can write this</p>
+                    <h2 class="movement-title">Your declaration</h2>
+                    <p class="movement-lede">
+                        Answer what you can. A half-written declaration is a fine place to
+                        start a conversation — Água Lila's took years to say plainly.
+                    </p>
+
+                    <div class="charter-strip" id="ft-charter" hidden>
+                        <span class="charter-name" id="ft-charter-name"></span>
+                        <span class="charter-count" id="ft-charter-count" aria-live="polite"></span>
+                    </div>
+
+                    <div class="fields">
+
+                        <div class="cta-field r">
+                            <label for="ft-essence">Essence and place <span class="req">*</span></label>
+                            <p class="hint">What is this, and where on Earth?</p>
+                            <textarea id="ft-essence" name="essence" required
+                                      placeholder="A few sentences."></textarea>
+                            <details class="example">
+                                <summary>How Água Lila answered</summary>
+                                <p>A land-based Temple and regenerative sanctuary in the mountains near
+                                   São Pedro do Sul, Portugal — temperate Atlantic–Mediterranean, seasonal
+                                   frost, abundant water, strong sun. The name holds water (<em>água</em>)
+                                   as life-force and lilac (<em>lila</em>) as sacred play. A living Temple
+                                   where spiritual practice, ecological regeneration, family life, and
+                                   sovereign technology co-evolve.</p>
+                            </details>
+                        </div>
+
+                        <div class="cta-field r">
+                            <label for="ft-land">What the land asks</label>
+                            <p class="hint">Its water, its soil, its trees — and what it is asking of you.</p>
+                            <textarea id="ft-land" name="land"
+                                      placeholder="Even if the land is not yours yet."></textarea>
+                            <details class="example">
+                                <summary>How Água Lila answered</summary>
+                                <p>Syntropic agroforestry replacing invasive eucalyptus with native and
+                                   useful species. Water intelligence: springs, slow streams, micro-swales,
+                                   gravity-fed flows. Sacred trees kept as living altars. Citrus terraces
+                                   and perennial polycultures to come. The land is not property — it is a
+                                   conscious participant, a co-teacher in ceremony and in daily life.</p>
+                            </details>
+                        </div>
+
+                        <div class="cta-field r">
+                            <label for="ft-building">What you are building</label>
+                            <p class="hint">Structures, shelters, systems — or the intention to.</p>
+                            <textarea id="ft-building" name="building"
+                                      placeholder="What will stand here."></textarea>
+                            <details class="example">
+                                <summary>How Água Lila answered</summary>
+                                <p>A low-energy, off-grid Temple habitat: passive-solar structures with
+                                   thermal mass, greenhouses and biodomes for food and ceremony, outdoor
+                                   Temple spaces in circular geometry, composting and vermifilter
+                                   sanitation, micro-hydro and solar energy stacks, and an interior Temple
+                                   room with ritual orientation and sound design. Built for ritual, family,
+                                   and long stays — not for tourism.</p>
+                            </details>
+                        </div>
+
+                        <div class="cta-field r">
+                            <label for="ft-practice">The practice</label>
+                            <p class="hint">What actually happens here, and how often. Not the belief — the practice.</p>
+                            <textarea id="ft-practice" name="practice"
+                                      placeholder="Daily, weekly, seasonal."></textarea>
+                            <details class="example">
+                                <summary>How Água Lila answered</summary>
+                                <p>Gnostic Christianity, indigenous earth-based wisdom, bhakti and toning,
+                                   and sacred play (<em>lila</em>) as a core religious act. Weekly and
+                                   seasonal ceremonies, deep meditation, chanting and sound journeys,
+                                   sacramental containers held with reverence, movement and dance, children
+                                   present as sacred participants. <em>Ceremony is not an event — it is the
+                                   operating system of the land.</em></p>
+                            </details>
+                        </div>
+
+                        <div class="cta-field r">
+                            <label for="ft-held">Who is held here</label>
+                            <p class="hint">Family, guests, elders, children, animals, the dead.</p>
+                            <textarea id="ft-held" name="held"
+                                      placeholder="Who this Temple is for."></textarea>
+                            <details class="example">
+                                <summary>How Água Lila answered</summary>
+                                <p>A family Temple, stewarded by Truman and Annabelle Ellis and their
+                                   children. We raise children inside a living spiritual ecology, model
+                                   post-scarcity and post-fear family life, preserve land wisdom for the
+                                   generations after us, and treat sacred work, play, and devotion as
+                                   ordinary daily life. Not a retreat centre — a home-Temple with permeable
+                                   boundaries.</p>
+                            </details>
+                        </div>
+
+                        <div class="cta-field r">
+                            <label for="ft-not">What this is not</label>
+                            <p class="hint">The fastest way to say what something is. Name what it refuses.</p>
+                            <textarea id="ft-not" name="not"
+                                      placeholder="Not a…"></textarea>
+                            <details class="example">
+                                <summary>How Água Lila answered</summary>
+                                <p>Not a retreat business. Not a commune with open membership. Not a
+                                   psychedelic tourism site. Not a conventional church. Not a personal
+                                   brand project. It is a sovereign Temple ecosystem.</p>
+                            </details>
+                        </div>
+
+                        <div class="cta-field r">
+                            <label for="ft-sentence">In one sentence</label>
+                            <p class="hint">Written last, when you finally know. It becomes your Temple's line in the network.</p>
+                            <textarea id="ft-sentence" name="one_sentence" rows="2"
+                                      style="min-height:5rem"
+                                      placeholder="One sentence."></textarea>
+                            <details class="example">
+                                <summary>How Água Lila answered</summary>
+                                <p>Água Lila is a living Temple — land, family, ceremony, and distributed
+                                   technology braided together to prototype a regenerative, post-scarcity
+                                   spiritual civilization.</p>
+                            </details>
+                        </div>
+
+                        <div class="reach">
+                            <p class="reach-title">Where we reach you</p>
+
+                            <div class="cta-field">
+                                <label for="ft-name">Your name <span class="req">*</span></label>
+                                <input type="text" id="ft-name" name="name" required
+                                       autocomplete="name" placeholder="The name you go by">
+                            </div>
+
+                            <div class="cta-field">
+                                <label for="ft-email">Email <span class="req">*</span></label>
+                                <input type="email" id="ft-email" name="email" required
+                                       autocomplete="email" placeholder="Where we can reach you">
+                            </div>
+
+                            <div class="cta-field">
+                                <label for="ft-steward">What you are holding today</label>
+                                <select id="ft-steward" name="holding">
+                                    <option value="">Choose what fits</option>
+                                    <option value="Land">Land</option>
+                                    <option value="Intention">Intention</option>
+                                    <option value="Community">Community</option>
+                                    <option value="Land &amp; community">Land &amp; community</option>
+                                    <option value="All three">All three</option>
+                                    <option value="Still discerning">Still discerning</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- honeypot: bots fill this, humans never see it -->
+                    <input type="checkbox" name="botcheck" class="cta-hp" tabindex="-1"
+                           autocomplete="off" aria-hidden="true">
+
+                    <div class="submit-row">
+                        <p class="cta-form-error" hidden></p>
+                        <button type="submit" class="cta-submit">Begin the conversation</button>
+                        <p class="submit-note">Read by hand, answered by a person. Nothing is decided in an inbox.</p>
+                    </div>
+                </section>
             </form>
+
+            <noscript>
+                <p class="page-noscript">
+                    This page assembles your Temple's declaration in the browser, so it needs
+                    JavaScript to send it. If you'd rather not run it, write to
+                    <a href="mailto:hello@templesofrefuge.earth?subject=A%20new%20Temple%20wishes%20to%20form">hello@templesofrefuge.earth</a>
+                    and tell us what is sacred to your Temple, what it is called, and as much of
+                    the rest as you can. Everything above is the whole of the ask.
+                </p>
+            </noscript>
 
             <div class="cta-form-success" id="found-temple-success" hidden>
                 <div class="ok-mark">✦</div>
-                <h3>Received with gratitude</h3>
-                <p>Your message is on its way to us. We read every inquiry by hand and will
-                   reach back to begin the conversation. Welcome to the edge of the possible.</p>
+                <h3 id="ft-success-title">Received with gratitude</h3>
+                <p>We read every declaration by hand, and we will reach back to begin the
+                   conversation. Nothing is decided in an inbox — this is the start of a
+                   relationship, not the end of an application.</p>
             </div>
         </div>
     </main>
 
     <footer class="site-footer">
-        <nav class="footer-related" aria-label="Foundations">
-            <a href="/cosmology">Cosmology</a>
-            <a href="/covenant">Covenant</a>
-            <a href="/bylaws">Bylaws</a>
-            <a href="/join">Become a Member</a>
-        </nav>
         <p class="footer-site-name">Temples of Earth</p>
         <p class="toe-legal">Temples of Earth is the public name of Temples of Refuge, an association of churches mandatorily tax-exempt under §501(c)(3) and §508(c)(1)(A).</p>
     </footer>
@@ -107,7 +1041,451 @@
     <script src="/shared/brand.js" defer></script>
     <script src="/shared/cta-widgets.js"></script>
     <script>
-      CTAWidgets.wireForm('#found-temple-form', { successSelector: '#found-temple-success' });
+    (function () {
+      'use strict';
+
+      var sacred   = document.getElementById('ft-sacred');
+      var temple   = document.getElementById('ft-temple');
+      var stepName = document.getElementById('ft-step-name');
+      var declare  = document.getElementById('ft-declaration');
+      var address  = document.getElementById('ft-address');
+      var addrVal  = document.getElementById('ft-address-value');
+      var sparksEl = document.getElementById('ft-sparks');
+
+      var gate      = document.getElementById('ft-gate');
+      // Stand both branches down immediately — before any paint — so a slow
+      // membership check can never flash the wrong door. Only JS ever sets
+      // this, so a scriptless visitor keeps the threshold.
+      gate.dataset.state = 'checking';
+      var threshold = document.getElementById('ft-threshold');
+      var welcome   = document.getElementById('ft-welcome');
+      var nameFirst = document.getElementById('ft-name-first');
+      var charter   = document.getElementById('ft-charter');
+
+      /* ================================================================
+         Membership — the ONE seam.
+
+         Everything the page knows about who is at the door comes through
+         this object, and nothing outside it reads or writes the record.
+         Every method is Promise-returning, so a network-backed check drops
+         in without restructuring anything downstream.
+
+           check()   → Promise<Member|null>   who is here, from cache
+           refresh() → Promise<Member|null>   re-confirm, may upgrade
+           claim(a)  → Promise<Member>        attestation at the threshold
+           forget()  → Promise<void>          this is not me
+
+           Member = { name, email, since, reference, verified }
+           verified: 'session'  we confirmed a completed payment just now
+                     'recorded' this browser claims a past confirmation,
+                                which is not the same thing as checking
+                     'none'     taken on trust at the threshold
+
+         PROVISIONAL IMPLEMENTATION. The body below is a localStorage
+         record written by join.html on a completed checkout, plus the one
+         thing a browser can genuinely re-check: a Stripe session id. This
+         is expected to be replaced by a real membership system (SyncEngine
+         peer identity linked to the donation record). When it is, only the
+         bodies of these four functions change.
+
+         Note that `verified` is load-bearing for honesty, not for access:
+         the door opens either way, and the submission says plainly which
+         one it was. Do not turn this into an access check — it is a
+         threshold, not an auth system.
+         ================================================================ */
+
+      var Membership = (function () {
+        var KEY = 'toe-member';                 // provisional storage
+        var SESSION_RE = /^cs_[A-Za-z0-9_\-]+$/; // what we can actually verify
+
+        function load() {
+          try {
+            var raw = localStorage.getItem(KEY);
+            if (!raw) return null;
+            var m = JSON.parse(raw);
+            return (m && typeof m === 'object') ? m : null;
+          } catch (e) { return null; }
+        }
+        function save(rec) {
+          try { localStorage.setItem(KEY, JSON.stringify(rec)); } catch (e) {}
+          return rec;
+        }
+
+        /* Storage shape → the shape the page consumes. Keeping these
+           separate is the point of the seam: join.html's record and any
+           future API response both land on the same Member.
+
+           `live` means WE just confirmed it, this page load. A stored
+           record saying it was verified once only earns 'recorded' —
+           localStorage is hand-editable, and the note that travels with a
+           declaration must not claim a check we did not perform. */
+        function toMember(raw, live) {
+          if (!raw) return null;
+          return {
+            name: raw.name || '',
+            email: raw.email || '',
+            since: raw.joined_at || raw.recorded_at || '',
+            reference: raw.session_id || raw.reference || '',
+            verified: live ? 'session'
+                    : (raw.verified === 'session' ? 'recorded' : 'none')
+          };
+        }
+
+        /* The only server-side confirmation available to a browser today. */
+        function confirmSession(id) {
+          var cfg = window.CTAConfig;
+          if (!cfg || !window.CTAWidgets ||
+              !CTAWidgets.isConfigured(cfg.CHECKOUT_API_URL)) return Promise.resolve(null);
+          return fetch(cfg.CHECKOUT_API_URL + '/session-status?session_id=' +
+                       encodeURIComponent(id))
+            .then(function (r) { return r.ok ? r.json() : null; })
+            .then(function (s) { return (s && s.status === 'complete') ? s : null; })
+            .catch(function () { return null; });
+        }
+
+        return {
+          check: function () {
+            return Promise.resolve(toMember(load()));
+          },
+
+          /* Quietly re-confirm a record that carries a session id. Success
+             upgrades `verified` to 'session'; failure or an unreachable
+             service leaves it at 'recorded' and changes nothing else — a
+             Member who has paid is never shut out because a backend is
+             down. */
+          refresh: function () {
+            var raw = load();
+            if (!raw || !raw.session_id) return Promise.resolve(toMember(raw));
+            return confirmSession(raw.session_id).then(function (s) {
+              if (!s) return toMember(raw);
+              raw.verified = 'session';
+              if (s.customer_name && !raw.name) raw.name = s.customer_name;
+              return toMember(save(raw), true);
+            });
+          },
+
+          /* Someone says they are already a Member. Verify what is
+             verifiable; accept the rest on trust and mark it as such, so
+             the human reading the declaration knows which it was. */
+          claim: function (attestation) {
+            var name = (attestation && attestation.name || '').trim();
+            var ref  = (attestation && attestation.reference || '').trim();
+            var now  = new Date().toISOString();
+
+            var trusted = {
+              name: name,
+              reference: ref,
+              email: /@/.test(ref) ? ref : '',
+              source: 'attested',
+              verified: 'none',
+              recorded_at: now
+            };
+
+            if (!SESSION_RE.test(ref)) return Promise.resolve(toMember(save(trusted)));
+
+            return confirmSession(ref).then(function (s) {
+              if (!s) return toMember(save(trusted));
+              return toMember(save({
+                name: name || s.customer_name || '',
+                session_id: ref,
+                reference: ref,
+                email: '',
+                source: 'checkout',
+                verified: 'session',
+                joined_at: now
+              }), true);
+            });
+          },
+
+          forget: function () {
+            try { localStorage.removeItem(KEY); } catch (e) {}
+            return Promise.resolve();
+          }
+        };
+      })();
+
+      /* The resolved Member, or null. The ONLY thing the rest of the page
+         reads. Never assigned from anywhere but a Membership result. */
+      var member = null;
+
+      /* ---- Sparks ---- */
+      var SPARKS = ['Refuge', 'Sacred Play', 'Water', 'Return', 'Seed', 'Silence',
+                    'Making', 'Song', 'Repair', 'Threshold', 'Compost', 'Listening'];
+
+      SPARKS.forEach(function (word) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'spark';
+        b.textContent = word;
+        b.addEventListener('click', function () {
+          sacred.value = word;
+          sacred.focus();
+          sync();
+        });
+        sparksEl.appendChild(b);
+      });
+
+      /* ---- Placeholder drift: proof the blank is real and already
+              answered by others, without filling it for them. ---- */
+      var drift = 0;
+      sacred.placeholder = SPARKS[0];
+      var driftTimer = setInterval(function () {
+        if (sacred.value || document.activeElement === sacred) return;
+        drift = (drift + 1) % SPARKS.length;
+        sacred.placeholder = SPARKS[drift];
+      }, 2600);
+      sacred.addEventListener('focus', function () {
+        if (!sacred.value) sacred.placeholder = '';
+      });
+      sacred.addEventListener('blur', function () {
+        if (!sacred.value) sacred.placeholder = SPARKS[drift];
+      });
+
+      /* ---- The address. Names are short and want to read as one word,
+              so punctuation and spaces are dropped rather than hyphenated
+              (Água Lila → agualila). Provisional until we confirm it
+              together, which the caption says out loud. ---- */
+      function slugify(s) {
+        return s.normalize('NFD')
+                .replace(/\p{M}/gu, '')   // strip diacritics: Água → Agua
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '')
+                .slice(0, 32);
+      }
+
+      function reveal(el) {
+        if (!el.hidden) return;
+        el.hidden = false;
+        requestAnimationFrame(function () {
+          el.classList.add('visible');
+          // A section that has just appeared may already be on screen —
+          // give its beats a chance to reveal without waiting for a scroll.
+          paintScroll();
+        });
+      }
+
+      /* ---- The charter, assembling itself ---- */
+      var ROMAN = ['', 'i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii'];
+      var DECL_FIELDS = ['ft-essence', 'ft-land', 'ft-building', 'ft-practice',
+                         'ft-held', 'ft-not', 'ft-sentence'];
+      var charterName  = document.getElementById('ft-charter-name');
+      var charterCount = document.getElementById('ft-charter-count');
+
+      function paintCharter() {
+        if (declare.hidden) { charter.hidden = true; return; }
+        charter.hidden = false;
+        var s = sacred.value.trim();
+        var t = temple.value.trim();
+        charterName.innerHTML = 'A Temple of <b></b>' + (t ? ' called <b></b>' : '');
+        var bolds = charterName.querySelectorAll('b');
+        if (bolds[0]) bolds[0].textContent = s || '—';
+        if (bolds[1]) bolds[1].textContent = t;
+        var done = 0;
+        DECL_FIELDS.forEach(function (id) {
+          var f = document.getElementById(id);
+          if (f && f.value.trim()) done++;
+        });
+        charterCount.textContent = done
+          ? ROMAN[done] + ' of vii declared'
+          : 'nothing declared yet';
+      }
+
+      function sync() {
+        var hasSacred = sacred.value.trim().length >= 2;
+        if (hasSacred) reveal(stepName);
+
+        var slug = slugify(temple.value.trim());
+        if (slug) {
+          address.innerHTML = 'templesof.earth/<b>' + slug + '</b>';
+          addrVal.value = 'templesof.earth/' + slug;
+        } else {
+          address.textContent = temple.value.trim()
+            ? 'templesof.earth/…'
+            : 'Your address in the network appears here';
+          addrVal.value = '';
+        }
+
+        if (member) {
+          if (hasSacred && slug) {
+            reveal(declare);
+            nameFirst.hidden = true;
+          } else if (declare.hidden) {
+            nameFirst.hidden = false;
+          }
+        }
+        paintCharter();
+      }
+
+      sacred.addEventListener('input', sync);
+      temple.addEventListener('input', sync);
+      DECL_FIELDS.forEach(function (id) {
+        var f = document.getElementById(id);
+        if (f) f.addEventListener('input', paintCharter);
+      });
+
+      /* ---- The gate ---- */
+      var memberNameField   = document.getElementById('ft-member-name');
+      var memberRefField    = document.getElementById('ft-member-ref');
+      var memberStatusField = document.getElementById('ft-member-status');
+      var reachName         = document.getElementById('ft-name');
+      var reachMail         = document.getElementById('ft-email');
+      var prefilled         = { name: '', email: '' }; // what WE put there
+
+      function statusLine(m) {
+        if (m.verified === 'session') {
+          return 'Member — completed offering confirmed just now against checkout session ' +
+                 (m.reference || '') + '.';
+        }
+        if (m.verified === 'recorded') {
+          return 'Member — this browser holds a record of a completed offering' +
+                 (m.reference ? ' (session ' + m.reference + ')' : '') +
+                 ', which we could not re-confirm. Worth a glance before replying.';
+        }
+        return 'Member — self-attested at the threshold' +
+               (m.reference ? ' as "' + m.reference + '"' : '') +
+               '. NOT verified by us; please confirm this by hand before replying.';
+      }
+
+      function paintGate() {
+        gate.dataset.state = member ? 'open' : 'closed';
+        if (member) {
+          threshold.hidden = true;
+          welcome.hidden = false;
+          var greet = member.name
+            ? 'Welcome back, ' + member.name + '. '
+            : '';
+          document.getElementById('ft-welcome-text').innerHTML =
+            '<strong>' + greet + '</strong>Recognized as a Member — the declaration below is ' +
+            'yours to write. Your name travels with it, so we know who is asking.';
+          memberNameField.value   = member.name || '';
+          memberRefField.value    = member.reference || '';
+          memberStatusField.value = statusLine(member);
+          // Prefill, never lock: people found Temples under names and
+          // addresses that differ from the one they donated with.
+          if (!reachName.value && member.name) reachName.value = prefilled.name = member.name;
+          if (!reachMail.value && member.email) reachMail.value = prefilled.email = member.email;
+        } else {
+          threshold.hidden = false;
+          welcome.hidden = true;
+          nameFirst.hidden = true;
+          memberNameField.value = '';
+          memberRefField.value = '';
+          memberStatusField.value = 'Not a recognized Member';
+          // "Not you?" on a shared device must not leave the last person's
+          // name sitting in the form — but never discard something typed.
+          if (reachName.value === prefilled.name) reachName.value = '';
+          if (reachMail.value === prefilled.email) reachMail.value = '';
+          prefilled.name = prefilled.email = '';
+        }
+        sync();
+      }
+
+      /* Every path that changes who is at the door goes through the seam
+         and repaints from whatever it resolves to. */
+      function adopt(resolved) {
+        member = resolved || null;
+        paintGate();
+        return member;
+      }
+
+      document.getElementById('ft-forget').addEventListener('click', function () {
+        Membership.forget().then(function () {
+          declare.hidden = true;
+          declare.classList.remove('visible');
+          adopt(null);
+          threshold.scrollIntoView({ block: 'start' });
+        });
+      });
+
+      document.getElementById('ft-name-first-go').addEventListener('click', function () {
+        sacred.focus();
+        sacred.scrollIntoView({ block: 'center' });
+      });
+
+      /* "I'm already a Member" — hand the attestation to the seam, which
+         decides what can be verified and what is taken on trust, and paint
+         whatever comes back. */
+      var recoverBtn = document.getElementById('ft-recover-go');
+      var recoverErr = document.getElementById('ft-recover-error');
+
+      recoverBtn.addEventListener('click', function () {
+        var nm  = document.getElementById('ft-recover-name').value.trim();
+        var ref = document.getElementById('ft-recover-ref').value.trim();
+        recoverErr.textContent = '';
+
+        if (!ref) {
+          recoverErr.textContent = 'Give us a founding-gift code, a session reference, or the email you joined with.';
+          return;
+        }
+
+        recoverBtn.disabled = true;
+        recoverBtn.textContent = 'Checking…';
+        Membership.claim({ name: nm, reference: ref })
+          .then(function (m) {
+            adopt(m);
+            welcome.scrollIntoView({ block: 'center' });
+          })
+          .then(null, function () {
+            recoverErr.textContent = 'We could not open the door just now. Please try again.';
+          })
+          .then(function () {
+            recoverBtn.disabled = false;
+            recoverBtn.textContent = 'Open the declaration';
+          });
+      });
+
+      /* Ask who is here. Until this resolves the gate sits in its pending
+         state (set above), so a slow or network-backed check never flashes
+         the application at someone who has not crossed. */
+      Membership.check()
+        .then(adopt)
+        .then(function () { return Membership.refresh(); })
+        .then(function (m) { if (m) adopt(m); })
+        .then(null, function () { /* the threshold stands */ });
+
+      /* ================================================================
+         SCROLL — progress of the descent + reveal of each beat.
+
+         Same idiom as index.html: a passive scroll handler rather than an
+         IntersectionObserver, because sections appear mid-session (the
+         declaration unhides) and because an observer with a bottom
+         rootMargin can strand the last beat of the page — at maximum
+         scroll there is no further scrolling to trigger it. The bottom
+         catch below guarantees nothing is ever left invisible.
+         ================================================================ */
+      var prog = document.getElementById('ft-prog');
+
+      function paintScroll() {
+        var doc = document.documentElement;
+        var max = doc.scrollHeight - window.innerHeight;
+        if (prog) prog.style.width = (max > 0 ? Math.min(100, window.scrollY / max * 100) : 0) + '%';
+
+        var atBottom = max <= 0 || (window.scrollY >= max - 4);
+        var line = window.innerHeight * 0.9;
+        document.querySelectorAll('.r:not(.v), .descent:not(.v)').forEach(function (el) {
+          if (atBottom || el.getBoundingClientRect().top < line) el.classList.add('v');
+        });
+      }
+      window.addEventListener('scroll', paintScroll, { passive: true });
+      window.addEventListener('resize', paintScroll);
+
+      /* Restore state on a bfcache back-navigation or a browser-restored form. */
+      sync();
+      paintScroll();
+
+      /* ---- Submit ---- */
+      CTAWidgets.wireForm('#found-temple-form', {
+        successSelector: '#found-temple-success',
+        onSuccess: function () {
+          clearInterval(driftTimer);
+          var word = sacred.value.trim();
+          if (word) {
+            document.getElementById('ft-success-title').textContent =
+              'A Temple of ' + word;
+          }
+        }
+      });
+    })();
     </script>
 
 </body>
