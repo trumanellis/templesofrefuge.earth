@@ -720,8 +720,8 @@
                             <h3>Legal shelter</h3>
                             <p>A Temple node within Temples of Refuge, a 508(c)(1)(A) association of
                                churches under U.S. First Amendment protections. Religious, not
-                               commercial. Tax-exempt by definition — no IRS determination letter
-                               required. Stewarded by ordained ministers. International nodes welcome.</p>
+                               commercial. Stewarded by ordained ministers. International nodes
+                               welcome.</p>
                         </article>
                         <article class="given-card r r-d1">
                             <h3>The economy</h3>
@@ -840,9 +840,14 @@
                     </div>
 
                     <!-- Member identity, carried into the submission so the human
-                         reading it knows who applied and how sure we are. -->
+                         reading it knows who applied and how sure we are.
+
+                         NO member_reference FIELD ON PURPOSE. A Stripe session id is a
+                         payment reference, and pairing one with seven free-text answers
+                         about religious belief is the pairing worth not creating. The
+                         verification LEVEL below tells the reader everything they can act
+                         on; the raw id told them nothing extra. -->
                     <input type="hidden" name="member_name" id="ft-member-name">
-                    <input type="hidden" name="member_reference" id="ft-member-ref">
                     <input type="hidden" name="member_status" id="ft-member-status" value="Not a recognized Member">
                 </section>
 
@@ -1035,7 +1040,7 @@
 
     <footer class="site-footer">
         <p class="footer-site-name">Temples of Earth</p>
-        <p class="toe-legal">Temples of Earth is the public name of Temples of Refuge, an association of churches mandatorily tax-exempt under §501(c)(3) and §508(c)(1)(A).</p>
+        <p class="toe-legal">Temples of Earth is the public name of Temples of Refuge, an association of churches. Temples of Refuge is a 501(c)(3) religious organization.</p>
     </footer>
 
     <script src="/shared/brand.js" defer></script>
@@ -1325,7 +1330,6 @@
 
       /* ---- The gate ---- */
       var memberNameField   = document.getElementById('ft-member-name');
-      var memberRefField    = document.getElementById('ft-member-ref');
       var memberStatusField = document.getElementById('ft-member-status');
       var reachName         = document.getElementById('ft-name');
       var reachMail         = document.getElementById('ft-email');
@@ -1333,13 +1337,11 @@
 
       function statusLine(m) {
         if (m.verified === 'session') {
-          return 'Member — completed offering confirmed just now against checkout session ' +
-                 (m.reference || '') + '.';
+          return 'Member — completed offering confirmed just now against a checkout session.';
         }
         if (m.verified === 'recorded') {
-          return 'Member — this browser holds a record of a completed offering' +
-                 (m.reference ? ' (session ' + m.reference + ')' : '') +
-                 ', which we could not re-confirm. Worth a glance before replying.';
+          return 'Member — this browser holds a record of a completed offering, which we ' +
+                 'could not re-confirm. Worth a glance before replying.';
         }
         return 'Member — self-attested at the threshold' +
                (m.reference ? ' as "' + m.reference + '"' : '') +
@@ -1358,7 +1360,6 @@
             '<strong>' + greet + '</strong>Recognized as a Member — the declaration below is ' +
             'yours to write. Your name travels with it, so we know who is asking.';
           memberNameField.value   = member.name || '';
-          memberRefField.value    = member.reference || '';
           memberStatusField.value = statusLine(member);
           // Prefill, never lock: people found Temples under names and
           // addresses that differ from the one they donated with.
@@ -1369,7 +1370,6 @@
           welcome.hidden = true;
           nameFirst.hidden = true;
           memberNameField.value = '';
-          memberRefField.value = '';
           memberStatusField.value = 'Not a recognized Member';
           // "Not you?" on a shared device must not leave the last person's
           // name sitting in the form — but never discard something typed.

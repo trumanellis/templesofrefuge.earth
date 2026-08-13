@@ -122,6 +122,12 @@
       .offering-fineprint{color:var(--t-mt);font-size:.85rem;line-height:1.65;
         text-align:center;margin:1.25rem 0 0}
       .offering-fineprint strong{color:var(--t-t2);font-weight:500}
+      /* What the offering supports, and who directs it. Sits above the amount
+         grid so it is read before an amount is chosen, not after. */
+      .offering-purpose{color:var(--t-t2);font-size:.88rem;line-height:1.7;
+        margin:0 0 1.25rem}
+      .offering-control{color:var(--t-mt);font-size:.8rem;line-height:1.6;
+        margin:.9rem 0 0;padding-top:.9rem;border-top:1px solid var(--t-bd)}
 
       /* Quiet secondary actions — beneath the message, left column */
       .join-aside{margin:2.25rem 0 0;text-align:left}
@@ -209,6 +215,11 @@
 	                    <div class="offering-panel">
 	                        <p class="offering-panel-label">Your Offering</p>
 
+	                        <p class="offering-purpose">Your gift supports the mission of Temples of
+	                            Refuge — the network of temples, the Synchronicity Engine, and the
+	                            stewardship of sacred lands. Temples of Refuge retains complete control
+	                            and discretion over the use of all donated funds.</p>
+
                     <div id="amount-step">
                         <div class="currency-row" id="currency-row" role="group" aria-label="Choose a currency">
                             <button type="button" class="currency-chip" data-cur="usd" data-sym="$" aria-pressed="true">USD</button>
@@ -249,6 +260,11 @@
 	                        <p class="offering-fineprint">Your name and email travel with the offering — that is
 	                            your signature, recorded. <strong>No one aligned with the Commandment is turned
 	                            away for lack of funds.</strong></p>
+
+	                        <p class="offering-control">This contribution is made with the understanding
+	                            that the donee organization has complete control and administration over
+	                            the use of the donated funds. Temples of Refuge is a 501(c)(3) religious
+	                            organization; donations are tax deductible to the extent permitted by law.</p>
 	                    </div>
 	                </div>
 	            </section>
@@ -275,11 +291,11 @@
 
     <footer class="site-footer">
         <p class="footer-site-name">Temples of Earth</p>
-        <p class="toe-legal">Temples of Earth is the public name of Temples of Refuge, an association of churches mandatorily tax-exempt under §501(c)(3) and §508(c)(1)(A).</p>
+        <p class="toe-legal">Temples of Earth is the public name of Temples of Refuge, an association of churches. Temples of Refuge is a 501(c)(3) religious organization.</p>
     </footer>
 
     <script src="/shared/brand.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked@15/marked.min.js"></script>
+    <script src="/shared/vendor/marked.min.js"></script>
     <script src="/shared/document-loader.js"></script>
     <script src="https://js.stripe.com/v3/"></script>
     <script src="/shared/cta-widgets.js"></script>

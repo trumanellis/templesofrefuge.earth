@@ -120,7 +120,7 @@ Rules:
 ## Footer legal line (every page)
 
 > Temples of Earth is the public name of Temples of Refuge, an association of
-> churches mandatorily tax-exempt under §501(c)(3) and §508(c)(1)(A).
+> churches. Temples of Refuge is a 501(c)(3) religious organization.
 
 ## Do / Don't
 
