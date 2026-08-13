@@ -10,7 +10,7 @@
  * A relative path is tried first as a fallback for non-GitHub deployments.
  *
  * Usage:
- *   <script src="https://cdn.jsdelivr.net/npm/marked@15/marked.min.js"></script>
+ *   <script src="/shared/vendor/marked.min.js"></script>
  *   <script src="/shared/document-loader.js"></script>
  *   <script>
  *     DocumentLoader.load({ path: 'COVENANT.md' });

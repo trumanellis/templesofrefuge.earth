@@ -6,8 +6,9 @@
  *
  *   • CTAWidgets.memberCTA(target)        — a "Become a Member" invitation card
  *   • CTAWidgets.footerNewsletter(target) — a jewel-framed Substack subscribe card
- *   • CTAWidgets.wireForm(form, opts)      — Web3Forms AJAX submit + mailto fallback
- *                                            (used by join.html & found-a-temple.html)
+ *   • CTAWidgets.wireForm(form, opts)      — posts to our own /inquiry endpoint,
+ *                                            with a mailto fallback
+ *                                            (used by found-a-temple.html)
  *
  * Styling reuses the jewels-skin tokens injected by theme-engine.js (--t-* /
  * --s-*), so anything rendered here matches the rest of the site automatically.
@@ -34,9 +35,15 @@
   var isLocal = /^(localhost|127\.0\.0\.1|\[::1\]|0\.0\.0\.0)$/.test(location.hostname);
 
   var CTAConfig = {
-    // web3forms.com → enter hello@templesofrefuge.earth → key is emailed to you.
-    // One key serves every form on the site. Public; only lets people email YOU.
-    WEB3FORMS_ACCESS_KEY: 'REPLACE_ME_WEB3FORMS_KEY',
+    // Forms post to /inquiry on our own checkout service (CHECKOUT_API_URL
+    // below), which relays to ola@ through Migadu.
+    //
+    // Web3Forms was removed and must not come back. The found-a-temple
+    // declaration carries seven free-text answers about religious practice and
+    // belief — GDPR Article 9 special-category data — and it was being posted
+    // to a US processor with no DPA and no Article 46 transfer mechanism.
+    // Routing it through our own service keeps that content in the EU and
+    // introduces no third-party processor.
 
     // Stripe Dashboard → Payment Links → "Customers choose what to pay".
     // Used as the graceful fallback (hosted page) until the inline checkout
@@ -176,6 +183,17 @@
   .cta-newsletter-embed{display:flex;justify-content:center}\
   .cta-newsletter-embed iframe{width:100%;max-width:480px;border:1px solid var(--t-bd);\
     border-radius:12px;background:transparent;color-scheme:light}\
+  /* Click-to-load stand-in for the Substack iframe (see footerNewsletter). */\
+  .cta-newsletter-load{width:100%;max-width:480px;min-height:150px;\
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6rem;\
+    border:1px dashed var(--t-bd);border-radius:12px;background:var(--t-b2);\
+    padding:1.25rem;cursor:pointer;transition:border-color .25s,background .25s}\
+  .cta-newsletter-load:hover{border-color:var(--t-ac);\
+    background:color-mix(in srgb, var(--t-ac) 8%, transparent)}\
+  .cta-newsletter-load .load-label{font-family:var(--s-display);font-size:.78rem;\
+    letter-spacing:.18em;text-transform:uppercase;color:var(--t-ac)}\
+  .cta-newsletter-load .load-note{font-family:var(--s-font);font-size:.78rem;\
+    line-height:1.55;color:var(--t-mt);max-width:36ch;text-align:center}\
   .cta-newsletter-link{display:inline-block;margin-top:1.25rem;\
     font-family:var(--s-display);font-size:.75rem;letter-spacing:.18em;\
     text-transform:uppercase;color:var(--t-ac);text-decoration:none;transition:opacity .3s}\
@@ -216,7 +234,16 @@
     config: CTAConfig,
     isConfigured: isConfigured,
 
-    /** Inject a "Become a Member" invitation card into `target`. */
+    /**
+     * Inject a "Become a Member" invitation card into `target`.
+     *
+     * This card is mounted at the foot of the Covenant and Bylaws pages, whose
+     * text names Templo da Água Lila and central Portugal. It must therefore
+     * say, on its own face, that a gift supports the mission of Temples of
+     * Refuge as a whole and that Temples of Refuge directs the funds — so no
+     * reader can take the juxtaposition as an invitation to fund a named place.
+     * Callers may override `text`, but any replacement carries the same duty.
+     */
     memberCTA: function (target, opts) {
       var mount = resolve(target);
       if (!mount) return null;
@@ -225,14 +252,26 @@
         '<span class="cta-member-eyebrow">' + (opts.eyebrow || 'Membership') + '</span>' +
         '<span class="cta-member-title">' + (opts.title || 'Become a Member') + '</span>' +
         '<span class="cta-member-text">' + (opts.text ||
-          'Affirm the One Commandment, sign the Covenant, and join the network as a Member.') + '</span>' +
+          'Affirm the One Commandment, sign the Covenant, and join the network as a Member. ' +
+          'Your gift supports the mission of Temples of Refuge — the network of temples, the ' +
+          'Synchronicity Engine, and the stewardship of sacred lands. Temples of Refuge retains ' +
+          'complete control and discretion over the use of all donated funds.') + '</span>' +
         '<span class="cta-member-action">' + (opts.action || 'Begin') +
         ' <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>');
       mount.appendChild(card);
       return card;
     },
 
-    /** Inject a jewel-framed Substack subscribe card into `target`. */
+    /**
+     * Inject a jewel-framed Substack subscribe card into `target`.
+     *
+     * The Substack iframe is loaded ON CLICK, never on page load. This card sits
+     * in the footer of most of the site, so an auto-loading embed would announce
+     * every visitor to a third party on every page of a church's website — which
+     * is browsing behaviour on a religious site, and not ours to hand over by
+     * default. The stand-in says plainly what loading it means; the subscribe
+     * flow itself is unchanged once the reader chooses it.
+     */
     footerNewsletter: function (target, opts) {
       var mount = resolve(target);
       if (!mount) return null;
@@ -243,18 +282,33 @@
         '<p class="cta-newsletter-text">' + (opts.text ||
           'Essays, reflections, and transmissions from the edge of the possible — delivered as they are written.') + '</p>' +
         '<div class="cta-newsletter-embed">' +
-          '<iframe src="' + CTAConfig.SUBSTACK_EMBED_URL +
-          '" height="150" frameborder="0" scrolling="no" loading="lazy" ' +
-          'title="Subscribe to Myths for a New Æon"></iframe>' +
+          '<button type="button" class="cta-newsletter-load">' +
+            '<span class="load-label">Subscribe by email</span>' +
+            '<span class="load-note">Opens Substack’s signup form. Substack will see ' +
+            'your visit once it loads.</span>' +
+          '</button>' +
         '</div>' +
         '<a class="cta-newsletter-link" href="' + CTAConfig.SUBSTACK_URL +
         '" target="_blank" rel="noopener">Read on Substack →</a>');
+
+      var loader = card.querySelector('.cta-newsletter-load');
+      loader.addEventListener('click', function () {
+        var frame = el('iframe', {
+          src: CTAConfig.SUBSTACK_EMBED_URL,
+          height: '150',
+          frameborder: '0',
+          scrolling: 'no',
+          title: 'Subscribe to Myths for a New Æon'
+        });
+        loader.replaceWith(frame);
+      });
+
       mount.appendChild(card);
       return card;
     },
 
     /**
-     * Wire a Web3Forms-backed form for AJAX submit with graceful fallback.
+     * Wire a form to POST /inquiry with a graceful mailto fallback.
      *
      * Expected markup (see join.html / found-a-temple.html):
      *   <form class="cta-form" data-cta-subject="...">
@@ -294,7 +348,7 @@
       function fallbackBody() {
         var lines = [];
         form.querySelectorAll('input, textarea, select').forEach(function (f) {
-          if (!f.name || f.name === 'botcheck' || f.name === 'access_key' ||
+          if (!f.name || f.name === 'botcheck' ||
               f.type === 'hidden' || f.type === 'submit') return;
           var v = (f.type === 'checkbox') ? (f.checked ? 'Yes' : 'No') : f.value;
           if (v) lines.push(f.name + ': ' + v);
@@ -327,31 +381,32 @@
         var hp = form.querySelector('[name="botcheck"]');
         if (hp && (hp.type === 'checkbox' ? hp.checked : !!hp.value)) return;
 
-        // No real key yet → don't pretend; route to email.
-        if (!isConfigured(CTAConfig.WEB3FORMS_ACCESS_KEY)) {
-          offerMailto('Our form is being connected.');
-          return;
-        }
-
         var data = new FormData(form);
-        data.set('access_key', CTAConfig.WEB3FORMS_ACCESS_KEY);
-        data.set('subject', subject);
-        data.set('from_name', 'Temples of Earth website');
-
-        var payload = {};
+        var payload = { subject: subject };
         data.forEach(function (v, k) { payload[k] = v; });
 
         if (btn) { btn.disabled = true; btn.dataset.label = btn.textContent; btn.textContent = 'Sending…'; }
 
-        fetch('https://api.web3forms.com/submit', {
+        // Same-org endpoint; the service allow-lists this origin and relays to
+        // ola@ without storing anything. A 503 means SMTP is not configured on
+        // the box yet — say so honestly and hand over the mailto rather than
+        // pretending the declaration was received.
+        fetch(CTAConfig.CHECKOUT_API_URL + '/inquiry', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
           body: JSON.stringify(payload)
         })
-          .then(function (r) { return r.json(); })
-          .then(function (res) {
-            if (res && res.success) { succeed(); }
-            else { offerMailto('Something went wrong sending that.'); }
+          .then(function (r) {
+            return r.json().then(function (res) { return { ok: r.ok, status: r.status, res: res }; });
+          })
+          .then(function (out) {
+            if (out.ok && out.res && out.res.ok) { succeed(); return; }
+            if (out.status === 503) { offerMailto('Our form is being connected.'); return; }
+            if (out.status === 429) {
+              setError('That is a lot of submissions in a short time. Please try again later.');
+              return;
+            }
+            offerMailto((out.res && out.res.error) || 'Something went wrong sending that.');
           })
           .catch(function () { offerMailto('We could not reach the form service.'); })
           .then(function () {
