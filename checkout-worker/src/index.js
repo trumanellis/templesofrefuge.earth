@@ -25,10 +25,28 @@ const STRIPE_API = 'https://api.stripe.com/v1';
 // preserved (11 → €11 / £11 / $11), never FX-converted.
 const ALLOWED_CURRENCIES = new Set(['usd', 'eur', 'gbp', 'cad', 'aud']);
 
+// Shown on the Stripe payment form above the submit button, and the last thing a
+// donor reads before paying. The second paragraph is the Rev. Rul. 63-252 control
+// acknowledgment: a US donor's deduction survives only if Temples of Refuge keeps
+// complete control and discretion over the funds, so the offering is never
+// solicited for — and never described as reaching — any named place or project.
+// Do not add a destination to this string.
 const COVENANT_MESSAGE =
   'By making this offering you sign the Covenant and affirm the One Commandment — ' +
   'to recognize the divine in every Other and treat them as an extension of yourself. ' +
-  'Membership is for life.';
+  'Membership is for life. Your gift supports the mission of Temples of Refuge — the ' +
+  'network of temples, the Synchronicity Engine, and the stewardship of sacred lands. ' +
+  'This contribution is made with the understanding that the donee organization has ' +
+  'complete control and administration over the use of the donated funds.';
+
+// Printed on the invoice Stripe issues for an offering — the document a donor
+// keeps and a contribution statement is later built from. Same substance as the
+// page and the payment form; naming no destination, by design.
+const INVOICE_FOOTER =
+  'Your gift supports the mission of Temples of Refuge — the network of temples, ' +
+  'the Synchronicity Engine, and the stewardship of sacred lands. This contribution ' +
+  'is made with the understanding that the donee organization has complete control ' +
+  'and administration over the use of the donated funds.';
 
 // ── The Ceremony Mat — first physical offering ──────────────────────────────
 // A fixed-catalog product, so its price is SERVER-authoritative: the client
@@ -64,9 +82,13 @@ const RETURN_PATHS = new Set([
 // Stripe. The localhost dev servers serve files straight off disk with no such
 // rewrite, so they stay on .html.
 //
-// agualila.earth is listed for consistency with its server config, not because
-// it needs it — it has no checkout page at all today, so nothing reaches this
-// line from that origin. If it ever grows one, the default is already right.
+// agualila.earth was removed from this list on purpose. It is not an oversight
+// and it must not be "fixed" for consistency with the server config: that site
+// has no checkout page and must never grow one. Soliciting a donation from a
+// Portuguese-branded domain into the US charity's Stripe account is the conduit
+// appearance Rev. Rul. 63-252 punishes, which costs donors the deduction and
+// puts the exemption itself at risk. It is absent from ALLOWED_ORIGINS for the
+// same reason, so nothing from that origin reaches this line anyway.
 const EXTENSIONLESS_ORIGINS = new Set([
   'https://syncengine.earth',
   'https://www.syncengine.earth',
@@ -74,8 +96,6 @@ const EXTENSIONLESS_ORIGINS = new Set([
   'https://www.templesofrefuge.earth',
   'https://templesof.earth',
   'https://www.templesof.earth',
-  'https://agualila.earth',
-  'https://www.agualila.earth',
 ]);
 
 // Countries the mat ships to: US, UK, EU-27, plus EFTA neighbours.
@@ -109,6 +129,9 @@ export default {
       }
       if (request.method === 'GET' && url.pathname === '/substack-posts') {
         return await substackPosts(env, okOrigin);
+      }
+      if (request.method === 'POST' && url.pathname === '/inquiry') {
+        return await inquiry(request, env, okOrigin);
       }
       return json({ error: 'Not found' }, 404, okOrigin);
     } catch (err) {
@@ -263,6 +286,12 @@ async function createSession(request, env, origin) {
     form.set('line_items[0][price_data][unit_amount]', String(cents));
     form.set('line_items[0][price_data][product]', env.PRODUCT_ID);
     form.set('custom_text[submit][message]', COVENANT_MESSAGE);
+
+    // The invoice is the donor's kept record, so the control acknowledgment has
+    // to travel on it and not only on the page they paid from. Offerings only —
+    // a Ceremony Mat is a purchase, not a contribution, and must not carry
+    // contribution language.
+    form.set('invoice_creation[invoice_data][footer]', INVOICE_FOOTER);
   }
 
   const session = await stripe('/checkout/sessions', env, { method: 'POST', form });
@@ -322,16 +351,145 @@ async function sessionStatus(url, env, origin) {
     `/checkout/sessions/${encodeURIComponent(id)}`,
     env
   );
+  // Return the minimum the callers actually render. `session_id` travels in the
+  // return URL, so anything emitted here is readable by whoever holds that URL —
+  // a forwarded link, a shared screen, a browser history. join.html and mats.html
+  // use only customer_name, so the email is not returned: a member's affiliation
+  // with a church joined to their address is exactly the pairing worth not
+  // handing out. Do not widen this shape without a reason to.
   return json(
     {
       status: session.status, // open | complete | expired
       payment_status: session.payment_status, // paid | unpaid | no_payment_required
-      customer_email: session.customer_details?.email || null,
       customer_name: session.customer_details?.name || null,
     },
     200,
     origin
   );
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   /inquiry — the site's form intake
+   ══════════════════════════════════════════════════════════════════════════
+
+   Replaces Web3Forms. The found-a-temple declaration asks seven free-text
+   questions about religious practice and belief; under GDPR that is Article 9
+   special-category data, and it was being posted to a US processor with no DPA
+   and no Article 46 transfer mechanism. It now goes to our own service and out
+   through Migadu (Swiss, EU infrastructure) to ola@.
+
+   FORWARD, DO NOT STORE. Nothing is written to disk here. Forwarding does not
+   make the data vanish — it lands in the ola@ mailbox and lives there — but one
+   copy in a mailbox we already manage beats a second copy in a database that
+   would need encryption at rest, a retention period, and a working erasure
+   path. An erasure request is answered by deleting an email.
+
+   NEVER LOG FIELD CONTENT. Not in errors, not in debug lines. The only thing
+   this route may say out loud is whether a send succeeded.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+// Allowlisted fields, each with a max length. An allowlist rather than
+// "forward whatever arrived" so a bot cannot post an arbitrary payload and have
+// us mail it onward, and so a new field on a page cannot silently start
+// travelling before someone has thought about what it contains.
+const INQUIRY_FIELDS = {
+  name:             { label: 'Name',                 max: 200 },
+  email:            { label: 'Email',                max: 320 },
+  holding:          { label: 'Holding today',        max: 100 },
+  sacred:           { label: 'What is sacred',       max: 200 },
+  temple:           { label: 'Temple name',          max: 200 },
+  proposed_address: { label: 'Proposed address',     max: 300 },
+  essence:          { label: 'Essence and place',    max: 5000 },
+  land:             { label: 'What the land asks',   max: 5000 },
+  building:         { label: 'What is being built',  max: 5000 },
+  practice:         { label: 'The practice',         max: 5000 },
+  held:             { label: 'Who is held here',     max: 5000 },
+  not:              { label: 'What this is not',     max: 5000 },
+  one_sentence:     { label: 'In one sentence',      max: 1000 },
+  member_name:      { label: 'Member name',          max: 200 },
+  member_status:    { label: 'Member status',        max: 500 },
+  message:          { label: 'Message',              max: 5000 },
+};
+
+// Crude per-IP throttle. This route sends mail, so without it the endpoint is
+// an open relay for anyone who can spoof an allowed Origin. In-memory is
+// adequate: the Node service is a single long-lived process, and a restart
+// clearing the table is a rounding error against a 1/hour budget.
+const INQUIRY_RATE = { max: 5, windowMs: 60 * 60 * 1000 };
+const inquirySeen = new Map();
+
+function rateLimited(ip) {
+  const now = Date.now();
+  const hits = (inquirySeen.get(ip) || []).filter((t) => now - t < INQUIRY_RATE.windowMs);
+  // Opportunistic sweep so the map cannot grow without bound.
+  if (inquirySeen.size > 5000) {
+    for (const [k, v] of inquirySeen) {
+      if (!v.some((t) => now - t < INQUIRY_RATE.windowMs)) inquirySeen.delete(k);
+    }
+  }
+  if (hits.length >= INQUIRY_RATE.max) return true;
+  hits.push(now);
+  inquirySeen.set(ip, hits);
+  return false;
+}
+
+// Caddy terminates TLS and proxies to us, so the socket address is always
+// localhost; the real client is the first hop in X-Forwarded-For.
+function clientIp(request) {
+  const xff = request.headers.get('X-Forwarded-For') || '';
+  return xff.split(',')[0].trim() || 'unknown';
+}
+
+async function inquiry(request, env, origin) {
+  if (!origin) return json({ error: 'Origin not allowed' }, 403, origin);
+
+  const send = env.SEND_MAIL;
+  if (typeof send !== 'function') {
+    // Worker path, or SMTP not configured on the box. Say so plainly so the
+    // page can fall back to mailto rather than silently swallowing a person's
+    // declaration.
+    return json({ error: 'Inquiry mail is not configured.' }, 503, origin);
+  }
+
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return json({ error: 'Invalid request body' }, 400, origin);
+  }
+
+  // Honeypot: bots fill it, humans never see it. Accept silently so the bot
+  // learns nothing from the response shape.
+  if (body.botcheck) return json({ ok: true }, 200, origin);
+
+  if (rateLimited(clientIp(request))) {
+    return json({ error: 'Too many submissions. Please try again later.' }, 429, origin);
+  }
+
+  const email = String(body.email || '').trim();
+  if (!email || !/^[^@\s]+@[^@\s.]+\.[^@\s]+$/.test(email) || email.length > 320) {
+    return json({ error: 'A valid email is required.' }, 400, origin);
+  }
+
+  const lines = [];
+  for (const [key, spec] of Object.entries(INQUIRY_FIELDS)) {
+    const raw = body[key];
+    if (raw == null || raw === '') continue;
+    const value = String(raw).slice(0, spec.max).trim();
+    if (value) lines.push(`${spec.label}:\n${value}\n`);
+  }
+  if (!lines.length) return json({ error: 'Nothing to send.' }, 400, origin);
+
+  const subject = String(body.subject || 'A message via templesof.earth').slice(0, 200);
+
+  try {
+    await send({ subject, text: lines.join('\n'), replyTo: email });
+  } catch {
+    // Deliberately opaque: the underlying error can quote message content or
+    // credentials, and neither belongs in a response or a log line.
+    return json({ error: 'We could not send that just now.' }, 502, origin);
+  }
+  return json({ ok: true }, 200, origin);
 }
 
 // CORS proxy for the shared Substack feed widget (shared/substack-feed.js).

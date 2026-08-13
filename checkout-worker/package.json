@@ -9,6 +9,9 @@
     "dev:worker": "wrangler dev",
     "deploy:worker": "wrangler deploy"
   },
+  "dependencies": {
+    "nodemailer": "^6.9.16"
+  },
   "devDependencies": {
     "wrangler": "^3.90.0"
   }

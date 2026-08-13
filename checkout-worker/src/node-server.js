@@ -18,6 +18,7 @@
 
 import { createServer } from 'node:http';
 import handler from './index.js';
+import { createMailer } from './mailer.js';
 
 const PORT = Number(process.env.PORT) || 8787;
 const HOST = process.env.HOST || '127.0.0.1';
@@ -27,6 +28,21 @@ for (const key of ['STRIPE_SECRET_KEY', 'ALLOWED_ORIGINS', 'PRODUCT_ID']) {
     console.error(`Missing required env var: ${key}`);
     process.exit(1);
   }
+}
+
+// The env handed to the shared handler: the process environment plus the one
+// capability that only exists on Node. index.js checks for SEND_MAIL and
+// degrades /inquiry to a 503 when it is absent, which is what the Worker path
+// sees. Mail is optional on purpose — checkout is the revenue path and must
+// still boot if SMTP is unconfigured.
+// Top-level await: the service must not begin accepting requests before it
+// knows whether it can send mail. createMailer never throws — a missing module
+// or missing config yields null, and /inquiry answers 503.
+const sendMail = await createMailer(process.env);
+const ENV = { ...process.env, SEND_MAIL: sendMail };
+
+if (!sendMail) {
+  console.log('tor-checkout: mail unavailable — /inquiry will return 503');
 }
 
 function readBody(req) {
@@ -50,7 +66,7 @@ const server = createServer(async (req, res) => {
       body: body && body.length ? body : undefined,
     });
 
-    const response = await handler.fetch(request, process.env);
+    const response = await handler.fetch(request, ENV);
 
     res.statusCode = response.status;
     response.headers.forEach((value, key) => res.setHeader(key, value));
