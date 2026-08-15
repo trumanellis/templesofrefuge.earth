@@ -39,14 +39,9 @@ const COVENANT_MESSAGE =
   'This contribution is made with the understanding that the donee organization has ' +
   'complete control and administration over the use of the donated funds.';
 
-// Printed on the invoice Stripe issues for an offering — the document a donor
-// keeps and a contribution statement is later built from. Same substance as the
-// page and the payment form; naming no destination, by design.
-const INVOICE_FOOTER =
-  'Your gift supports the mission of Temples of Refuge — the network of temples, ' +
-  'the Synchronicity Engine, and the stewardship of sacred lands. This contribution ' +
-  'is made with the understanding that the donee organization has complete control ' +
-  'and administration over the use of the donated funds.';
+// (INVOICE_FOOTER removed with invoice_creation. The exact wording is preserved
+// verbatim in plans/MEMBERSHIP-SERVICE.md as a hard requirement on the statement
+// renderer — it must not be paraphrased when it moves to our own document.)
 
 // ── The Ceremony Mat — first physical offering ──────────────────────────────
 // A fixed-catalog product, so its price is SERVER-authoritative: the client
@@ -216,21 +211,25 @@ async function createSession(request, env, origin) {
   // local currency — the sacred numeral must stay exact (no $247 → €231).
   form.set('adaptive_pricing[enabled]', 'false');
 
-  // Attach every payment to a Customer, and mint an Invoice for it.
+  // Attach every payment to a Customer. Free, not retroactive, and it gives
+  // Stripe-side grouping for anyone reading the Dashboard.
   //
-  // NEITHER IS RETROACTIVE, which is the whole reason they are here early.
-  // Without customer_creation, payment-mode Checkout defaults to 'if_required'
-  // and most gifts land with no Customer at all — the donor's email survives
-  // only on the Session's customer_details. That makes "show me my giving"
-  // impossible to answer as a lookup, and a contribution statement impossible
-  // to build. Every day these stay off is a day of gifts that can never have
-  // one. See plans/DONOR-LOGIN.md.
+  // invoice_creation was REVERTED: Stripe prices post-payment invoices for
+  // one-time Checkout payments separately, per gift, and we are building our own
+  // ledger and statement renderer (plans/MEMBERSHIP-SERVICE.md).
   //
-  // Caveat for whoever builds that page: Stripe does NOT dedupe Customers by
-  // email, so a donor who gives three times becomes three Customer objects.
-  // Email stays the merge key; the Customer is what carries the invoice.
+  // ⚠ OPEN COMPLIANCE GAP, accepted deliberately. The invoice was the donor's
+  // kept record carrying the Rev. Rul. 63-252 control acknowledgment (see
+  // COVENANT_MESSAGE, which still shows it on the payment form — but a form read
+  // once is not a record kept). Until the membership service issues statements,
+  // no kept document carries that language. Closing this gap is the reason the
+  // statement renderer exists; do not ship it without the acknowledgment.
+  //
+  // Note for that service: Stripe does NOT dedupe Customers by email, so a donor
+  // who gives three times becomes three Customer objects. Do not treat the
+  // Stripe Customer as the donor identity — attribution comes from
+  // metadata[account_id] set at session creation, which is exact.
   form.set('customer_creation', 'always');
-  form.set('invoice_creation[enabled]', 'true');
   form.set('line_items[0][price_data][currency]', currency);
 
   if (body.order_type === 'ceremony-mat') {
@@ -287,11 +286,11 @@ async function createSession(request, env, origin) {
     form.set('line_items[0][price_data][product]', env.PRODUCT_ID);
     form.set('custom_text[submit][message]', COVENANT_MESSAGE);
 
-    // The invoice is the donor's kept record, so the control acknowledgment has
-    // to travel on it and not only on the page they paid from. Offerings only —
-    // a Ceremony Mat is a purchase, not a contribution, and must not carry
-    // contribution language.
-    form.set('invoice_creation[invoice_data][footer]', INVOICE_FOOTER);
+    // The control acknowledgment used to ride the Stripe invoice here. It was
+    // removed with invoice_creation (see the note above) and now lives only on
+    // the payment form via COVENANT_MESSAGE, until our own statement carries it.
+    // Offerings only — a Ceremony Mat is a purchase, not a contribution, and
+    // must never carry contribution language.
   }
 
   const session = await stripe('/checkout/sessions', env, { method: 'POST', form });
