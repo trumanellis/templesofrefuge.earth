@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" data-site="refuge">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Charter — Temples of Refuge</title>
+    <meta name="description" content="The draft Charter of Temples of Refuge: one seat for each temple, no single head, and a network that owns nothing, takes no money and confers no standing. It comes into force when the first temples adopt it together.">
+
+    <!-- Temples of Refuge page. Until SITE-SPLIT phase C it answers at
+         /refuge/charter on the shared web root; afterwards at /charter on
+         templesofrefuge.earth. Links between Refuge pages are relative so
+         both arrangements work. Update the canonical at phase C. -->
+    <link rel="canonical" href="https://templesof.earth/refuge/charter">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Temples of Refuge">
+    <meta property="og:title" content="The Charter — Temples of Refuge">
+    <meta property="og:description" content="The draft Charter of Temples of Refuge: one seat for each temple, no single head, and a network that owns nothing, takes no money and confers no standing. It comes into force when the first temples adopt it together.">
+    <meta property="og:url" content="https://templesof.earth/refuge/charter">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="stylesheet" href="/shared/brand.css">
+    <link rel="stylesheet" href="/shared/theme-refuge.css">
+    <link rel="stylesheet" href="/shared/document.css">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+</head>
+<body>
+
+    <main>
+        <div class="container-narrow">
+            <section class="document-hero">
+                <p class="document-eyebrow">A draft, offered to the first temples</p>
+                <h1 class="document-title">The Charter</h1>
+                <p class="document-subtitle">What a temple is, what it promises, and what the network may never do</p>
+                <div class="document-divider"></div>
+            </section>
+
+            <article id="document-body">
+                <p class="loading">Loading…</p>
+            </article>
+
+            <div id="error-state" style="display:none">
+                <p class="error-title">Document not available</p>
+                <p class="error-text"></p>
+                <a href="./" class="back-link">Back to Temples of Refuge</a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="refuge-foot">
+      <div>
+        <p class="name">Temples of Refuge</p>
+        <!-- [DECISION PENDING — plans/SITE-SPLIT.md §6] Makes NO tax or exemption claim under any outcome. -->
+        <p class="info">A network of temples in formation, with no member temples yet. It accepts no donations, sells nothing and holds no property. Write to <a href="mailto:ola@templesofrefuge.earth">ola@templesofrefuge.earth</a>.</p>
+      </div>
+    </footer>
+
+    <!-- No membership prompt and no newsletter here: this site asks for
+         nothing. -->
+    <script src="/shared/brand.js" defer></script>
+    <script src="/shared/vendor/marked.min.js"></script>
+    <script src="/shared/document-loader.js"></script>
+    <script>
+      DocumentLoader.load({ path: 'CHARTER.md' });
+    </script>
+
+</body>
+</html>

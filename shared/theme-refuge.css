@@ -126,6 +126,9 @@
 :root[data-site="refuge"] .refuge-foot a { color: var(--t-a2); }
 
 /* Nothing moves. */
+/* Reveal-on-scroll classes start invisible and wait for a transition that
+   this site does not run. Everything is simply there. */
+:root[data-site="refuge"] .fade-up, :root[data-site="refuge"] .r, :root[data-site="refuge"] .descent { opacity: 1 !important; transform: none !important; }
 :root[data-site="refuge"] *, :root[data-site="refuge"] *::before, :root[data-site="refuge"] *::after {
   animation: none !important; transition: none !important; scroll-behavior: auto !important;
 }
