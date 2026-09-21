@@ -4,9 +4,10 @@
 // path, or a box whose unit has no StateDirectory yet).
 //
 // Unlike /inquiry, this DOES store: a vote is a first name, three design picks,
-// an optional yes/maybe/no, an optional short comment, and an optional email
-// given only to be told when the mats are available — not special-category
-// data. When a poll closes, export the notify list and delete the file.
+// an optional yes/maybe/no, an optional short comment, and optional contact
+// details (email, WhatsApp, Telegram) given only to be told when the
+// mats are available. None of it is special-category data. When a poll
+// closes, export the notify list and delete the file.
 
 import { appendFile, readFile } from 'node:fs/promises';
 import { join } from 'node:path';

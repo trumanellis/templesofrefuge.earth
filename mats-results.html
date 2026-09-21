@@ -51,6 +51,12 @@ th{font-weight:500;color:var(--t2);font-size:.78rem;letter-spacing:.1em;text-tra
 td.c{max-width:22rem;color:var(--t2)}
 .note{font-family:var(--mono);font-size:.82rem;color:var(--green)}
 .err{color:var(--err)}
+.notify{display:grid;grid-template-columns:repeat(auto-fit,minmax(16rem,1fr));gap:1rem;margin-bottom:.6rem}
+.notify .ch{background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:1rem;display:flex;flex-direction:column;gap:.6rem}
+.notify .ch h3{margin:0;font-weight:500;font-size:.95rem;display:flex;justify-content:space-between;align-items:center}
+.notify ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.35rem;font-size:.9rem}
+.notify a{color:var(--gold)}
+.notify .btn{padding:.35rem .9rem;font-size:.8rem}
 </style>
 </head>
 <body>
@@ -80,12 +86,13 @@ td.c{max-width:22rem;color:var(--t2)}
     </div>
     <div>
       <h2>Every vote</h2>
-      <div class="table-wrap"><table><thead><tr><th>Name</th><th>1st</th><th>2nd</th><th>3rd</th><th>Buy?</th><th>Comment</th></tr></thead><tbody id="votes"></tbody></table></div>
+      <div class="table-wrap"><table><thead><tr><th>Name</th><th>1st</th><th>2nd</th><th>3rd</th><th>Buy?</th><th>Notify via</th><th>Comment</th></tr></thead><tbody id="votes"></tbody></table></div>
     </div>
     <div>
       <h2>Notify when available</h2>
-      <p class="muted" id="emails-lede" style="margin-bottom:.8rem"></p>
-      <div class="row"><button class="btn" id="copy-emails">Copy emails</button><span class="note" id="toast" role="status"></span></div>
+      <p class="muted" id="emails-lede" style="margin-bottom:1rem"></p>
+      <div id="notify" class="notify"></div>
+      <span class="note" id="toast" role="status"></span>
     </div>
   </section>
 </main>
@@ -131,7 +138,11 @@ td.c{max-width:22rem;color:var(--t2)}
     const rows = Object.entries(t).sort((a, b) => b[1].pts - a[1].pts || b[1].r[0] - a[1].r[0]);
     const max = Math.max(1, ...rows.map(([, x]) => x.pts));
     const buy = { yes: 0, maybe: 0, no: 0 }; votes.forEach(v => v.buy && buy[v.buy]++);
-    emails = votes.filter(v => v.email).map(v => `${v.name} <${v.email}>`);
+    const CH = { whatsapp: "WhatsApp", email: "Email", telegram: "Telegram" };
+    const contactOf = v => v.contact || (v.email ? { email: v.email } : {});
+    const lists = { whatsapp: [], email: [], telegram: [] };
+    votes.forEach(v => { const c = contactOf(v); for (const k in lists) if (c[k]) lists[k].push({ name: v.name, value: c[k] }); });
+    emails = votes.filter(v => Object.keys(contactOf(v)).length);
 
     $("#kpis").innerHTML = [[votes.length, "votes"], [buy.yes, "would buy"], [buy.maybe, "maybe"], [buy.no, "not for them"], [emails.length, "want to be notified"]]
       .map(([n, l]) => `<div class="kpi"><b>${n}</b><span>${l}</span></div>`).join("");
@@ -140,13 +151,23 @@ td.c{max-width:22rem;color:var(--t2)}
       ${bySlug[s] ? `<img src="/assets/web/sky-${s}-480.jpg" alt="">` : "<span></span>"}
       <div><div class="nm">${esc(nm(s))}<span>${x.pts} pts · ${x.r[0]} first · ${x.r[0] + x.r[1] + x.r[2]} mention${x.r[0] + x.r[1] + x.r[2] === 1 ? "" : "s"}</span></div>
       <div class="bar">${x.r.map((n, k) => `<i class="b${k + 1}" style="width:${(n * (3 - k)) / max * 100}%"></i>`).join("")}</div></div>`).join("");
-    $("#votes").innerHTML = votes.length ? votes.slice().reverse().map(v => `<tr><td>${esc(v.name)}</td>${v.ranks.map(s => `<td>${esc(nm(s))}</td>`).join("")}<td>${esc(v.buy || "")}</td><td class="c">${esc(v.comment)}</td></tr>`).join("")
-      : `<tr><td colspan="6" class="muted">No votes yet.</td></tr>`;
-    $("#emails-lede").textContent = emails.length ? `${emails.length} ${emails.length === 1 ? "person has" : "people have"} asked to hear when the mats are available.` : "Nobody has left an email yet.";
+    $("#votes").innerHTML = votes.length ? votes.slice().reverse().map(v => `<tr><td>${esc(v.name)}</td>${v.ranks.map(s => `<td>${esc(nm(s))}</td>`).join("")}<td>${esc(v.buy || "")}</td><td>${esc(Object.keys(contactOf(v)).map(k => CH[k] || k).join(", "))}</td><td class="c">${esc(v.comment)}</td></tr>`).join("")
+      : `<tr><td colspan="7" class="muted">No votes yet.</td></tr>`;
+    $("#emails-lede").textContent = emails.length ? `${emails.length} ${emails.length === 1 ? "person has" : "people have"} asked to hear when the mats are available.` : "Nobody has asked to be notified yet.";
+    const link = (k, x) => k === "whatsapp" ? `https://wa.me/${x.replace(/\D/g, "")}` : k === "telegram" && x.startsWith("@") ? `https://t.me/${x.slice(1)}` : k === "email" ? `mailto:${x}` : "";
+    copyText = {};
+    $("#notify").innerHTML = Object.entries(lists).filter(([, l]) => l.length).map(([k, l]) => {
+      copyText[k] = l.map(x => k === "email" ? `${x.name} <${x.value}>` : `${x.name}: ${x.value}`).join("\n");
+      return `<div class="ch"><h3>${CH[k]} · ${l.length}<button class="btn" data-copy="${k}">Copy</button></h3><ul>${l.map(x => {
+        const href = link(k, x.value);
+        return `<li>${esc(x.name)}: ${href ? `<a href="${esc(href)}" target="_blank" rel="noopener">${esc(x.value)}</a>` : esc(x.value)}</li>`;
+      }).join("")}</ul></div>`;
+    }).join("");
   }
-  $("#copy-emails").onclick = async () => {
-    if (!emails.length) return;
-    try { await navigator.clipboard.writeText(emails.join(",\n")); $("#toast").textContent = "Copied"; } catch { prompt("Copy:", emails.join(",\n")); }
+  let copyText = {};
+  $("#notify").onclick = async e => {
+    const k = e.target.closest("[data-copy]")?.dataset.copy; if (!k) return;
+    try { await navigator.clipboard.writeText(copyText[k]); $("#toast").textContent = "Copied"; } catch { prompt("Copy:", copyText[k]); }
     setTimeout(() => $("#toast").textContent = "", 2000);
   };
   load();

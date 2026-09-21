@@ -557,21 +557,44 @@ async function pollVote(request, env, origin) {
     return json({ error: 'Please pick three different designs.' }, 400, origin);
   }
 
-  // Optional: only to tell this person when the mats are available.
-  const email = String(body.email || '').trim();
-  if (email && (email.length > 320 || !/^[^@\s]+@[^@\s.]+\.[^@\s]+$/.test(email))) {
-    return json({ error: 'That email doesn’t look right.' }, 400, origin);
-  }
+  // Optional: ways to tell this person when the mats are available, and nothing else.
+  const contact = pollContact(body);
+  if (contact.error) return json({ error: contact.error }, 400, origin);
 
   const buy = BUY.has(body.buy) ? body.buy : null;
   const comment = String(body.comment || '').trim().slice(0, 1000);
 
   try {
-    await store.append({ t: new Date().toISOString(), poll, name, email: email || null, ranks, buy, comment });
+    await store.append({ t: new Date().toISOString(), poll, name, contact: contact.value, ranks, buy, comment });
   } catch {
     return json({ error: 'We could not save that just now.' }, 502, origin);
   }
   return json({ ok: true }, 200, origin);
+}
+
+// Each channel is optional and independent. Phones are kept as + and digits
+// (8–15 digits, E.164), so a WhatsApp link can be built from them directly.
+const CONTACT_CHANNELS = {
+  email:    { label: 'email',          check: (v) => v.length <= 320 && /^[^@\s]+@[^@\s.]+\.[^@\s]+$/.test(v) ? v : null },
+  whatsapp: { label: 'WhatsApp number', check: phone },
+  telegram: { label: 'Telegram username or number', check: (v) => phone(v) || (/^@?[a-z][a-z0-9_]{4,31}$/i.test(v) ? '@' + v.replace(/^@/, '') : null) },
+};
+function phone(v) {
+  const digits = v.replace(/[\s().-]/g, '');
+  return /^\+?[0-9]{8,15}$/.test(digits) ? '+' + digits.replace(/^\+/, '') : null;
+}
+function pollContact(body) {
+  const given = { ...(body.contact && typeof body.contact === 'object' ? body.contact : {}) };
+  if (body.email && !given.email) given.email = body.email;   // older page shape
+  const value = {};
+  for (const [key, spec] of Object.entries(CONTACT_CHANNELS)) {
+    const raw = String(given[key] || '').trim();
+    if (!raw) continue;
+    const ok = spec.check(raw);
+    if (!ok) return { error: `That ${spec.label} doesn’t look right.` };
+    value[key] = ok;
+  }
+  return { value };
 }
 
 function sameSecret(a, b) {
@@ -594,9 +617,10 @@ async function pollResults(url, env, origin) {
   for (const v of await env.POLL_STORE.all()) {
     if (v.poll !== poll) continue;
     const key = String(v.name).toLowerCase();
-    // A changed vote that leaves the email blank keeps the one given earlier.
-    const email = v.email || latest.get(key)?.email || null;
-    latest.set(key, { ...v, email });
+    // A changed vote keeps any contact given earlier that it leaves blank.
+    const before = latest.get(key)?.contact || {};
+    const now = v.contact || (v.email ? { email: v.email } : {});
+    latest.set(key, { ...v, contact: { ...before, ...now } });
   }
   const votes = [...latest.values()].sort((a, b) => a.t.localeCompare(b.t));
   return json({ poll, votes }, 200, origin);
