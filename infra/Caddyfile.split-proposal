@@ -1,35 +1,122 @@
-# PROPOSAL — not applied. Replaces the single four-name block in
-# infra/Caddyfile when phase C of plans/SITE-SPLIT.md is reached.
+# PROPOSAL — not applied. SITE-SPLIT phase C.
 #
-# One checkout on disk, two roots. Temples of Earth keeps the repo root.
-# Temples of Refuge serves refuge/, and borrows the shared brand files from
-# the parent. There is no second deploy target.
+# Generated 2026-09-21 from the working-tree infra/Caddyfile (the longer
+# one, with the /members mount), so it can replace the single four-name
+# templesof block verbatim. Everything in the Earth block below is that
+# block unchanged except: the two Refuge hostnames are gone from the name
+# line, and the SITE SPLIT redirects are added after the markdown rule.
+#
+# To apply: replace that block in infra/Caddyfile with the two blocks below,
+# `caddy validate --config /etc/caddy/Caddyfile` on the box, then reload.
+# Caddy will issue a separate certificate for the Refuge names on first load.
+# Afterwards: update the canonical and og:url in the four refuge/*.html pages
+# to https://templesofrefuge.earth/…, and delete the three forwarding stubs.
+#
+# Do NOT apply while the membership service is mid-rollout unless you have
+# decided Refuge needs no /members mount. This proposal gives it none.
 
 # ── Temples of Earth ────────────────────────────────────────────────
 templesof.earth, www.templesof.earth {
 	encode zstd gzip
-	# header { … }   ← keep the existing header block, CSP included, as is.
+	header {
+		?Cache-Control "public, max-age=3600"
+
+		# Stripe.js leans on a CSP for its XSS protections, and we had none.
+		#
+		# REPORT-ONLY ON PURPOSE. This block serves the live donation path; an
+		# over-tight policy would break Stripe's embedded checkout iframes
+		# quietly, and a donor hitting a dead /join is worse than a missing
+		# header. Load /join and /mats, run a test-mode checkout, confirm the
+		# console logs no violations, then rename this header to
+		# `Content-Security-Policy` to enforce it.
+		#
+		# 'unsafe-inline' is unavoidable here: these are static HTML files with
+		# ~19 inline <script> and ~10 <style> blocks, and nonces need
+		# server-side templating. So this is a HOST ALLOWLIST — it constrains
+		# where scripts, frames and fetches may come from — not full XSS
+		# protection. Removing the inline scripts is what would earn that.
+		Content-Security-Policy-Report-Only "default-src 'self'; script-src 'self' 'unsafe-inline' https://js.stripe.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://substackcdn.com https://*.substack.com; frame-src https://*.stripe.com https://*.stripe.network https://aeonmyths.substack.com; connect-src 'self' https://*.stripe.com https://*.stripe.network https://checkout.templesof.earth https://api.templesof.earth https://checkout.templesofrefuge.earth https://api.templesofrefuge.earth https://api.web3forms.com https://api.github.com https://raw.githubusercontent.com; form-action 'self' https://*.stripe.com; base-uri 'self'; object-src 'none'; frame-ancestors 'none'"
+	}
 
 	handle /_deploy {
 		reverse_proxy 127.0.0.1:9000
 	}
+
+	# Membership service (tor-membership, 127.0.0.1:8789) — accounts, giving
+	# ledger, donor codes, and single sign-on across our sites.
+	#
+	# Mounted UNDER each site domain on purpose, NOT on a shared members.* or
+	# api.* host. A shared host would make every session cookie third-party,
+	# which Safari blocks outright and Chrome is removing; mounting here keeps
+	# them first-party, which is also why there is no CORS anywhere in this
+	# service. Do not "tidy" this into a subdomain later — it would pass testing
+	# and fail for real users.
+	#
+	# `handle` rather than `handle_path`: the /members prefix is kept and the
+	# service routes on it. This MUST come before the catch-all handle{} below,
+	# because Caddy takes the first matching handle and the file server would
+	# otherwise swallow these paths and 404 them.
+	handle /members/* {
+		reverse_proxy 127.0.0.1:8789
+	}
 	handle {
 		root * /var/www/templesofrefuge
 		route {
+			# Repo working docs (BYLAWS.md, COVENANT.md, BRAND.md, DESIGN.md,
+			# Cosmology.md, LICENSE.md, COVENANT-section-VI-revised.md) sit in
+			# the web root because the root IS the git checkout, and were all
+			# answering 200. Blanket block is safe HERE specifically: this
+			# site's articles/read.html fetches from raw.githubusercontent, not
+			# same-origin, and nothing links to an on-domain .md. Do NOT copy
+			# this rule verbatim into syncengine -- see the note in that block.
 			@markdown path_regexp md (?i)\.md$
 			respond @markdown 404
 
-			# The Refuge root must not answer on this domain.
-			@refugeroot path /refuge /refuge/*
-			redir @refugeroot https://templesofrefuge.earth/ 301
+			# ── SITE SPLIT ── The Refuge root must not answer on this domain,
+			# and the three pages that moved keep their old addresses alive.
+			# The forwarding stubs at /cosmology, /bylaws and /found-a-temple
+			# can be deleted from the repo once these are live.
+			@refugeroot path_regexp rr ^/refuge(/.*)?$
+			redir @refugeroot https://templesofrefuge.earth{re.rr.1} 301
+			redir /cosmology       https://templesofrefuge.earth/cosmology 301
+			redir /bylaws          https://templesofrefuge.earth/charter 301
+			redir /found-a-temple  https://templesofrefuge.earth/found-a-temple 301
+			# The Ceremony Mat page is /mats on disk (mats.html) — the short
+			# URL printed on the QR / posters is now the real one, not a
+			# rewrite. Its former path keeps answering so already-shared
+			# links and anything indexed survive. Two matchers so a
+			# query-less URL does not pick up a trailing "?" — same reason
+			# as the .html rules below. Must come before those rules, or
+			# /ceremony-mats.html bounces through /ceremony-mats first.
+			@matsq {
+				path /ceremony-mats /ceremony-mats.html
+				expression {query} != ""
+			}
+			redir @matsq /mats?{query} 301
+			@matsnq {
+				path /ceremony-mats /ceremony-mats.html
+				expression {query} == ""
+			}
+			redir @matsnq /mats 301
 
-			# Pages that moved to Temples of Refuge.
-			redir /cosmology        https://templesofrefuge.earth/cosmology 301
-			redir /bylaws           https://templesofrefuge.earth/charter 301
-			redir /found-a-temple   https://templesofrefuge.earth/found-a-temple 301
+			# /index.html -> /  and  /articles/index.html -> /articles/
+			@indexhtml path_regexp idx ^(.*/)?index\.html$
+			redir @indexhtml {re.idx.1} 301
 
-			# … existing /ceremony-mats, index.html and .html rules unchanged …
+			# /join.html -> /join (two matchers so a query-less URL
+			# does not pick up a trailing "?")
+			@htmlq {
+				path_regexp oldhtml ^/(.*)\.html$
+				expression {query} != ""
+			}
+			redir @htmlq /{re.oldhtml.1}?{query} 301
+			@htmlnq {
+				path_regexp oldhtml2 ^/(.*)\.html$
+				expression {query} == ""
+			}
+			redir @htmlnq /{re.oldhtml2.1} 301
 
+			# /join -> join.html on disk
 			try_files {path} {path}.html {path}/index.html
 			file_server
 		}
@@ -37,22 +124,28 @@ templesof.earth, www.templesof.earth {
 }
 
 # ── Temples of Refuge ───────────────────────────────────────────────
+# Same checkout on disk, its own web root: /var/www/templesofrefuge/refuge.
+# No second deploy target. No /members mount and no Stripe in the policy:
+# this site has no membership and no checkout, and the config says so.
 templesofrefuge.earth, www.templesofrefuge.earth {
 	encode zstd gzip
 	header {
 		?Cache-Control "public, max-age=3600"
-		# No Stripe, no third-party frames: this site has no checkout, and the
-		# policy says so. connect-src keeps only the inquiry endpoint used by
-		# the Found a Temple declaration.
-		Content-Security-Policy-Report-Only "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob:; connect-src 'self' https://checkout.templesofrefuge.earth https://checkout.templesof.earth; form-action 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'"
+		# REPORT-ONLY, like the Earth block, until a clean console is confirmed.
+		# connect-src keeps only the /inquiry endpoint used by the Found a
+		# Temple declaration. Everything else is same-origin, fonts included.
+		Content-Security-Policy-Report-Only "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob:; connect-src 'self' https://checkout.templesof.earth https://checkout.templesofrefuge.earth; form-action 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'"
 	}
 
 	handle /_deploy {
 		reverse_proxy 127.0.0.1:9000
 	}
 
-	# Shared brand files come from the parent root.
-	@shared path /shared/* /assets/* /favicon.ico /favicon-*.png /apple-touch-icon.png /site.webmanifest
+	# The brand files, images and the two published documents live in the
+	# parent root. Cosmology.md and CHARTER.md are served on purpose: the
+	# document pages fetch them same-origin, so nothing falls back to
+	# raw.githubusercontent.com on this domain.
+	@shared path /shared/* /assets/* /favicon.ico /favicon-*.png /apple-touch-icon.png /site.webmanifest /Cosmology.md /CHARTER.md
 	handle @shared {
 		root * /var/www/templesofrefuge
 		file_server
@@ -64,14 +157,22 @@ templesofrefuge.earth, www.templesofrefuge.earth {
 			@markdown path_regexp md (?i)\.md$
 			respond @markdown 404
 
-			# Pages that live on Temples of Earth. Old links and printed QR
-			# codes keep working. CHECK which domain the mat QR prints before
-			# relying on the /mats rule (SITE-SPLIT §6.4).
+			# Before the split these pages answered under /refuge/ on the
+			# shared root. Keep those addresses alive here too.
+			@oldprefix path_regexp op ^/refuge(/.*)?$
+			@oldroot path /refuge /refuge/
+			redir @oldroot / 301
+			redir @oldprefix {re.op.1} 301
+
+			# Pages that live on Temples of Earth. Old links and the printed
+			# mat QR code keep working. CHECK which domain the QR prints
+			# (plans/SITE-SPLIT.md §6.4) before relying on the /mats rule.
 			redir /mats              https://templesof.earth/mats 301
 			redir /ceremony-mats     https://templesof.earth/mats 301
 			redir /join              https://templesof.earth/join 301
 			redir /covenant          https://templesof.earth/covenant 301
 			redir /coherence-engine  https://templesof.earth/coherence-engine 301
+			redir /articles          https://templesof.earth/articles/ 301
 			redir /articles/*        https://templesof.earth{uri} 301
 			redir /bylaws            /charter 301
 

@@ -44,36 +44,45 @@ below is an application of that rule.
 
 ## 3. Phases
 
-### Phase A — identity, safe to do now (begun)
+### Phase A — identity and content (done on branch `site-split`, 2026-09-21)
 
-Nothing in this phase asserts a new legal fact, so none of it waits on the
-company or on a decision about the Utah entity.
+Launched to the live site on 2026-09-21: both design systems, the path-aware
+chrome and the first Refuge page. Then, on the branch, awaiting review:
 
-- [x] `shared/brand.js` picks its identity per site: wordmark, nav and call to
-      action come from a `SITES` table. A page opts into Refuge with
-      `<html data-site="refuge">`. Existing pages carry no attribute and stay
-      Temples of Earth. Verified in a browser: `/covenant` shows the Earth
-      chrome, `/refuge/` shows the Refuge chrome, no console errors, no
-      horizontal scroll at 375px.
-- [x] `refuge/index.html` — first Temples of Refuge home page. States plainly
-      that the network is in formation, has no member temples, takes no
-      donations, sells nothing, owns nothing and confers no legal or tax
-      standing. Canonical to `templesofrefuge.earth`.
-- [x] `infra/Caddyfile.split-proposal` — the two-block server config (§7). Not
-      applied.
-- [ ] Move `/cosmology` to `refuge/cosmology.html` with Refuge titles and
-      canonical.
-- [ ] Move `/found-a-temple` to `refuge/found-a-temple.html`; remove the
-      Members' door and the "Legal shelter" card; declaration form posts to the
-      same `/inquiry` route (`templesofrefuge.earth` is already in
-      `ALLOWED_ORIGINS` and stays there).
-- [ ] Draft `refuge/charter.html` from `BYLAWS.md` per §5.
-- [ ] Move the religious sections of `index.html` into the Refuge home (the
-      cosmology scrollytelling is the heart of that page and belongs there).
-- [ ] New Earth home: the mat, the engine, non-extraction, Água Lila, and one
-      link to Temples of Refuge as kindred, separate work.
-- [ ] Refuge gets its own Open Graph image and, if wanted, its own mark. Until
-      then it shares the fractal icon.
+- [x] `refuge/cosmology.html`. `/cosmology` is a forwarding stub.
+- [x] `CHARTER.md` and `refuge/charter.html`: the draft Charter (§5). `/bylaws`
+      forwards to it. `BYLAWS.md` stays in the repo as the Utah entity's
+      historical instrument. Counsel-annotated copy: Structure Drafts, file 61.
+- [x] `refuge/found-a-temple.html`. The Members' door is gone (open-door seam,
+      inert hidden elements kept for the script). "What the network holds"
+      became "What comes with the Charter"; the Legal shelter card is removed.
+      The form still posts to `/inquiry`; tested end to end locally.
+- [x] Home split by slicing the existing sections. Earth: hero, mat, engine,
+      Gift Over Extraction, a short kindred section, writings. Refuge: the
+      facade, then Religion in Its True Sense, the cosmology scrollytelling,
+      the Central Teaching, Body as Temple, Radical Inclusion, Death Is Not
+      Failure, the Twelve Affirmations and the Network of Temples map.
+- [x] `shared/brand.js` tells from the path whether Refuge answers under
+      `/refuge/` or at a domain root. Refuge pages link to each other
+      relatively. Nothing needs flipping at phase C.
+- [x] `infra/Caddyfile.split-proposal` regenerated from the current, longer
+      Caddyfile. `caddy validate` passes, and it was run locally on two ports:
+      every Refuge route, every redirect in both directions, same-origin
+      `Cosmology.md` and `CHARTER.md`, and zero third-party requests on the
+      Refuge domain were checked.
+
+**For Truman to review on the branch before it merges:**
+
+1. The Charter text, especially the bracketed choices and Articles 1.3, 4.5
+   and 9.2.
+2. The four new cards on Found a Temple, and the removal of the Members' door.
+3. The new Earth hero line and the "kindred work" paragraph.
+4. Whether the Refuge home is too long now that it carries the whole
+   cosmology. The Illuminated system says nothing moves, so the scrollytelling
+   switches stages without transitions there.
+
+Still open from this phase: a Refuge Open Graph image and mark; the Earth
+pages' uppercase mono eyebrows.
 
 ### Phase B — seller and money, blocked on the structure
 
