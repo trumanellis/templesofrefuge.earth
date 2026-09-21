@@ -5,3 +5,12 @@ node_modules/
 # Spool file the deploy webhook drops for the root post-deploy path-unit (VPS only)
 .deploy-request
 .deploy-request.tmp
+# Local agent/engine state and session notes (never deployed)
+.claude/
+.omc/
+.syncengine*
+HANDOFF.md
+PLAN.md
+DM.md
+membership/data/
+**/node_modules/
