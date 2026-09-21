@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow, noarchive, noimageindex">
+<meta name="referrer" content="no-referrer">
+<title>Seven Skies Vote — Results</title>
+<link rel="stylesheet" href="/shared/fonts/fonts.css">
+<link rel="canonical" href="https://templesof.earth/mats-results">
+<style>
+:root{
+  --bg:#141210; --sf:#1c1915; --cd:#221e18; --tx:#f2ede2; --t2:#b3a992; --bd:#352e22;
+  --green:#7fb069; --gold:#e9c46a; --err:#e07a5f;
+  --font:"Ubuntu",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"Ubuntu Mono",ui-monospace,Menlo,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:var(--font);line-height:1.5;padding-inline:16px}
+main{max-width:62rem;margin:0 auto;padding-block:2.2rem 4rem;display:flex;flex-direction:column;gap:2rem}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+[hidden]{display:none!important}
+.eyebrow{font-family:var(--mono);font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--t2)}
+h1{font-weight:500;letter-spacing:.14em;text-transform:uppercase;font-size:clamp(1.5rem,5vw,2.2rem);margin:.3rem 0 0}
+h2{font-weight:500;letter-spacing:.12em;text-transform:uppercase;font-size:.95rem;margin:0 0 .9rem}
+p{margin:0}
+.muted{color:var(--t2)}
+.row{display:flex;gap:.7rem;flex-wrap:wrap;align-items:center}
+.btn{border:1px solid var(--bd);background:var(--cd);border-radius:999px;padding:.6rem 1.2rem}
+.btn.primary{background:var(--gold);border-color:var(--gold);color:#1c1915;font-weight:500}
+input{background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:.65rem .9rem;min-width:min(22rem,100%)}
+.kpis{display:flex;gap:2.2rem;flex-wrap:wrap}
+.kpi b{display:block;font-size:2rem;font-weight:500;font-variant-numeric:tabular-nums}
+.kpi span{font-size:.82rem;color:var(--t2)}
+.rank{display:grid;grid-template-columns:auto 3.4rem minmax(0,1fr);gap:.8rem 1rem;align-items:center}
+.rank .pos{font-family:var(--mono);color:var(--t2);font-size:.9rem;width:1.6rem;text-align:right}
+.rank img{width:3.4rem;aspect-ratio:2/3;object-fit:cover;border-radius:6px;display:block}
+.rank .nm{display:flex;justify-content:space-between;gap:1rem;font-size:.95rem;margin-bottom:.3rem}
+.rank .nm span{font-family:var(--mono);color:var(--t2);font-size:.82rem;font-variant-numeric:tabular-nums;white-space:nowrap}
+.bar{height:.7rem;background:var(--sf);border-radius:999px;overflow:hidden;display:flex}
+.bar i{display:block;height:100%}
+.bar .b1{background:var(--gold)} .bar .b2{background:#b89a4e} .bar .b3{background:#6f5f38}
+.legend{display:flex;gap:1.2rem;font-size:.8rem;color:var(--t2);margin-top:.8rem;flex-wrap:wrap}
+.legend i{display:inline-block;width:.8rem;height:.8rem;border-radius:3px;margin-right:.35rem;vertical-align:-1px}
+.table-wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{text-align:left;padding:.55rem .7rem;border-bottom:1px solid var(--bd);vertical-align:top}
+th{font-weight:500;color:var(--t2);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase}
+td.c{max-width:22rem;color:var(--t2)}
+.note{font-family:var(--mono);font-size:.82rem;color:var(--green)}
+.err{color:var(--err)}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="eyebrow">Temples of Earth · Private</div>
+    <h1>Seven Skies Vote</h1>
+  </header>
+
+  <section id="gate" hidden>
+    <form class="row" id="gate-form">
+      <input id="token" type="password" placeholder="Results token" autocomplete="off" aria-label="Results token">
+      <button class="btn primary">Open results</button>
+    </form>
+  </section>
+
+  <p class="err" id="err" role="alert"></p>
+
+  <section id="out" hidden style="display:flex;flex-direction:column;gap:2.4rem">
+    <div class="row"><button class="btn" id="refresh">Refresh</button><span class="muted" id="stamp"></span></div>
+    <div class="kpis" id="kpis"></div>
+    <div>
+      <h2>Ranking</h2>
+      <p class="muted" style="margin:-.4rem 0 1rem;font-size:.88rem">Points: 3 for a first pick, 2 for second, 1 for third. Each person's latest vote counts.</p>
+      <div class="rank" id="rank"></div>
+      <div class="legend"><span><i style="background:var(--gold)"></i>1st picks</span><span><i style="background:#b89a4e"></i>2nd</span><span><i style="background:#6f5f38"></i>3rd</span></div>
+    </div>
+    <div>
+      <h2>Every vote</h2>
+      <div class="table-wrap"><table><thead><tr><th>Name</th><th>1st</th><th>2nd</th><th>3rd</th><th>Buy?</th><th>Comment</th></tr></thead><tbody id="votes"></tbody></table></div>
+    </div>
+    <div>
+      <h2>Notify when available</h2>
+      <p class="muted" id="emails-lede" style="margin-bottom:.8rem"></p>
+      <div class="row"><button class="btn" id="copy-emails">Copy emails</button><span class="note" id="toast" role="status"></span></div>
+    </div>
+  </section>
+</main>
+<script>
+(async function(){
+  const POLL = "ceremony-mat-2026-09";
+  const local = ["localhost", "127.0.0.1"].includes(location.hostname);
+  const API = local ? "http://localhost:8787" : "https://checkout.templesof.earth";
+  const $ = s => document.querySelector(s);
+  const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  // must match the data-s slugs on /mats
+  const designs = [["blotter","Blotter"],["chacruna","Chacruna"],["cosmos","Cosmos"],["metatrons-slice","Metatron's Slice"],
+    ["ocean","Ocean"],["reverie","Reverie"],["tree-of-life","Tree of Life"]].map(([slug, name]) => ({ slug, name }));
+  const bySlug = Object.fromEntries(designs.map(d => [d.slug, d]));
+  const nm = s => bySlug[s]?.name || s;
+
+  // the token travels in the fragment, which browsers never send to the server
+  let token = new URLSearchParams(location.hash.slice(1)).get("token");
+  if (token) { try { localStorage.setItem("poll.results", token); } catch {} history.replaceState(null, "", location.pathname); }
+  else { try { token = localStorage.getItem("poll.results"); } catch {} }
+
+  $("#gate-form").onsubmit = e => { e.preventDefault(); token = $("#token").value.trim(); try { localStorage.setItem("poll.results", token); } catch {} load(); };
+  $("#refresh").onclick = load;
+
+  let emails = [];
+  async function load(){
+    $("#err").textContent = "";
+    if (!token) { $("#gate").hidden = false; return; }
+    try {
+      const r = await fetch(`${API}/poll-results?poll=${encodeURIComponent(POLL)}&token=${encodeURIComponent(token)}`);
+      const data = await r.json().catch(() => ({}));
+      if (r.status === 403) { try { localStorage.removeItem("poll.results"); } catch {} token = null; $("#gate").hidden = false; $("#out").hidden = true; throw new Error("That token wasn't accepted."); }
+      if (!r.ok) throw new Error(data.error || `Server said ${r.status}`);
+      $("#gate").hidden = true; render(data.votes || []);
+    } catch (e) { $("#err").textContent = e.message.includes("fetch") ? "Couldn't reach the server." : e.message; }
+  }
+
+  function render(votes){
+    $("#out").hidden = false;
+    $("#stamp").textContent = `Updated ${new Date().toLocaleTimeString()}`;
+    const t = {}; designs.forEach(d => t[d.slug] = { pts: 0, r: [0, 0, 0] });
+    for (const v of votes) v.ranks.forEach((s, i) => { t[s] ??= { pts: 0, r: [0, 0, 0] }; t[s].pts += 3 - i; t[s].r[i]++; });
+    const rows = Object.entries(t).sort((a, b) => b[1].pts - a[1].pts || b[1].r[0] - a[1].r[0]);
+    const max = Math.max(1, ...rows.map(([, x]) => x.pts));
+    const buy = { yes: 0, maybe: 0, no: 0 }; votes.forEach(v => v.buy && buy[v.buy]++);
+    emails = votes.filter(v => v.email).map(v => `${v.name} <${v.email}>`);
+
+    $("#kpis").innerHTML = [[votes.length, "votes"], [buy.yes, "would buy"], [buy.maybe, "maybe"], [buy.no, "not for them"], [emails.length, "want to be notified"]]
+      .map(([n, l]) => `<div class="kpi"><b>${n}</b><span>${l}</span></div>`).join("");
+    $("#rank").innerHTML = rows.map(([s, x], i) => `
+      <span class="pos">${i + 1}</span>
+      ${bySlug[s] ? `<img src="/assets/web/sky-${s}-480.jpg" alt="">` : "<span></span>"}
+      <div><div class="nm">${esc(nm(s))}<span>${x.pts} pts · ${x.r[0]} first · ${x.r[0] + x.r[1] + x.r[2]} mention${x.r[0] + x.r[1] + x.r[2] === 1 ? "" : "s"}</span></div>
+      <div class="bar">${x.r.map((n, k) => `<i class="b${k + 1}" style="width:${(n * (3 - k)) / max * 100}%"></i>`).join("")}</div></div>`).join("");
+    $("#votes").innerHTML = votes.length ? votes.slice().reverse().map(v => `<tr><td>${esc(v.name)}</td>${v.ranks.map(s => `<td>${esc(nm(s))}</td>`).join("")}<td>${esc(v.buy || "")}</td><td class="c">${esc(v.comment)}</td></tr>`).join("")
+      : `<tr><td colspan="6" class="muted">No votes yet.</td></tr>`;
+    $("#emails-lede").textContent = emails.length ? `${emails.length} ${emails.length === 1 ? "person has" : "people have"} asked to hear when the mats are available.` : "Nobody has left an email yet.";
+  }
+  $("#copy-emails").onclick = async () => {
+    if (!emails.length) return;
+    try { await navigator.clipboard.writeText(emails.join(",\n")); $("#toast").textContent = "Copied"; } catch { prompt("Copy:", emails.join(",\n")); }
+    setTimeout(() => $("#toast").textContent = "", 2000);
+  };
+  load();
+})();
+</script>
+</body>
+</html>
