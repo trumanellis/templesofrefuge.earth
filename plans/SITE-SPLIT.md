@@ -121,7 +121,16 @@ is true.
       checkout. No second deploy target is needed because both roots live in
       one repo.
 
-## 4. Claims to resolve (flagged, not rewritten)
+## 4. Claims — RESOLVED 2026-09-21
+
+**Truman's decision: remove them.** Commit `site: remove the 501(c)(3), 508(c)(1)(A) and
+tax-deductibility claims` on `main`, merged into `site-split`. Every served page is now
+free of "501(c)(3)", "508(c)(1)(A)" and "tax deductible". What stays: "the public name of
+Temples of Refuge, an association of churches", the Utah founding line on the home footer,
+and the control-and-administration sentence on `/join`. Those go when the seller changes
+(phase B). The table below is kept as the record of what was flagged and why.
+
+### As flagged on 2026-09-18
 
 `plans/COMPLIANCE.md` sets a standing rule on tax copy: **flag, do not
 rewrite**. These are flagged under that rule. Proposed wording is given so the
