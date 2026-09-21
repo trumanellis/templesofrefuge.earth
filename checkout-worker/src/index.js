@@ -128,6 +128,12 @@ export default {
       if (request.method === 'POST' && url.pathname === '/inquiry') {
         return await inquiry(request, env, okOrigin);
       }
+      if (request.method === 'POST' && url.pathname === '/poll-vote') {
+        return await pollVote(request, env, okOrigin);
+      }
+      if (request.method === 'GET' && url.pathname === '/poll-results') {
+        return await pollResults(url, env, okOrigin);
+      }
       return json({ error: 'Not found' }, 404, okOrigin);
     } catch (err) {
       return json({ error: err.message || 'Server error' }, 500, okOrigin);
@@ -489,6 +495,111 @@ async function inquiry(request, env, origin) {
     return json({ error: 'We could not send that just now.' }, 502, origin);
   }
   return json({ ok: true }, 200, origin);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   /poll-vote, /poll-results — private design polls
+   ══════════════════════════════════════════════════════════════════════════
+
+   A friends-only page asks for a first name and a ranked top three of design
+   slugs. Votes are appended to the service's state directory (see
+   poll-store.js); the latest vote per name counts, so a friend can change
+   their mind. Results need POLL_RESULTS_TOKEN from /etc/tor-checkout/env.
+
+   Slugs are checked by shape only, so no unreleased design name ever has to
+   appear in this public repo. No IP address is stored. */
+
+const SLUG = /^[a-z0-9-]{1,48}$/;
+const BUY = new Set(['yes', 'maybe', 'no']);
+const POLL_RATE = { max: 12, windowMs: 60 * 60 * 1000 };
+const pollSeen = new Map();
+
+function pollLimited(ip) {
+  const now = Date.now();
+  const hits = (pollSeen.get(ip) || []).filter((t) => now - t < POLL_RATE.windowMs);
+  if (pollSeen.size > 5000) {
+    for (const [k, v] of pollSeen) {
+      if (!v.some((t) => now - t < POLL_RATE.windowMs)) pollSeen.delete(k);
+    }
+  }
+  if (hits.length >= POLL_RATE.max) return true;
+  hits.push(now);
+  pollSeen.set(ip, hits);
+  return false;
+}
+
+async function pollVote(request, env, origin) {
+  if (!origin) return json({ error: 'Origin not allowed' }, 403, origin);
+  const store = env.POLL_STORE;
+  if (!store) return json({ error: 'Voting is not open yet.' }, 503, origin);
+
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return json({ error: 'Invalid request body' }, 400, origin);
+  }
+  if (body.botcheck) return json({ ok: true }, 200, origin);
+  if (pollLimited(clientIp(request))) {
+    return json({ error: 'Too many votes from here. Please try again later.' }, 429, origin);
+  }
+
+  const poll = String(body.poll || '');
+  if (!SLUG.test(poll)) return json({ error: 'Unknown poll.' }, 400, origin);
+
+  const name = String(body.name || '').replace(/\s+/g, ' ').trim();
+  if (!name || name.length > 40) {
+    return json({ error: 'Please add your first name.' }, 400, origin);
+  }
+
+  const ranks = Array.isArray(body.ranks) ? body.ranks.map(String) : [];
+  if (ranks.length !== 3 || new Set(ranks).size !== 3 || !ranks.every((s) => SLUG.test(s))) {
+    return json({ error: 'Please pick three different designs.' }, 400, origin);
+  }
+
+  // Optional: only to tell this person when the mats are available.
+  const email = String(body.email || '').trim();
+  if (email && (email.length > 320 || !/^[^@\s]+@[^@\s.]+\.[^@\s]+$/.test(email))) {
+    return json({ error: 'That email doesn’t look right.' }, 400, origin);
+  }
+
+  const buy = BUY.has(body.buy) ? body.buy : null;
+  const comment = String(body.comment || '').trim().slice(0, 1000);
+
+  try {
+    await store.append({ t: new Date().toISOString(), poll, name, email: email || null, ranks, buy, comment });
+  } catch {
+    return json({ error: 'We could not save that just now.' }, 502, origin);
+  }
+  return json({ ok: true }, 200, origin);
+}
+
+function sameSecret(a, b) {
+  if (!a || !b || a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return diff === 0;
+}
+
+async function pollResults(url, env, origin) {
+  if (!origin) return json({ error: 'Origin not allowed' }, 403, origin);
+  if (!env.POLL_STORE || !env.POLL_RESULTS_TOKEN) {
+    return json({ error: 'Results are not configured.' }, 503, origin);
+  }
+  if (!sameSecret(url.searchParams.get('token') || '', env.POLL_RESULTS_TOKEN)) {
+    return json({ error: 'Not authorised.' }, 403, origin);
+  }
+  const poll = url.searchParams.get('poll') || '';
+  const latest = new Map();                 // lower-cased name → latest vote
+  for (const v of await env.POLL_STORE.all()) {
+    if (v.poll !== poll) continue;
+    const key = String(v.name).toLowerCase();
+    // A changed vote that leaves the email blank keeps the one given earlier.
+    const email = v.email || latest.get(key)?.email || null;
+    latest.set(key, { ...v, email });
+  }
+  const votes = [...latest.values()].sort((a, b) => a.t.localeCompare(b.t));
+  return json({ poll, votes }, 200, origin);
 }
 
 // CORS proxy for the shared Substack feed widget (shared/substack-feed.js).

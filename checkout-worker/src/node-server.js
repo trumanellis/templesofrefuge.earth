@@ -19,6 +19,7 @@
 import { createServer } from 'node:http';
 import handler from './index.js';
 import { createMailer } from './mailer.js';
+import { createPollStore } from './poll-store.js';
 
 const PORT = Number(process.env.PORT) || 8787;
 const HOST = process.env.HOST || '127.0.0.1';
@@ -39,10 +40,14 @@ for (const key of ['STRIPE_SECRET_KEY', 'ALLOWED_ORIGINS', 'PRODUCT_ID']) {
 // knows whether it can send mail. createMailer never throws — a missing module
 // or missing config yields null, and /inquiry answers 503.
 const sendMail = await createMailer(process.env);
-const ENV = { ...process.env, SEND_MAIL: sendMail };
+const pollStore = createPollStore(process.env);
+const ENV = { ...process.env, SEND_MAIL: sendMail, POLL_STORE: pollStore };
 
 if (!sendMail) {
   console.log('tor-checkout: mail unavailable — /inquiry will return 503');
+}
+if (!pollStore) {
+  console.log('tor-checkout: no STATE_DIRECTORY — /poll-vote will return 503');
 }
 
 function readBody(req) {

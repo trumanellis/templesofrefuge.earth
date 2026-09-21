@@ -3,8 +3,9 @@
 # Modeled on ../../work.agualila.earth/infra/work-agualila.service.
 #
 # The code ships inside the templesofrefuge site clone, so it deploys with the
-# site's normal `git pull` — no separate rsync. Stateless (no DB, no writable
-# paths); config/secrets come from /etc/tor-checkout/env.
+# site's normal `git pull` — no separate rsync. No DB; the one writable path is
+# the StateDirectory below, which holds private design-poll votes
+# (src/poll-store.js). Config/secrets come from /etc/tor-checkout/env.
 
 [Unit]
 Description=Temples of Refuge — Stripe checkout backend (Node)
@@ -28,6 +29,10 @@ NoNewPrivileges=true
 ProtectSystem=strict
 ProtectHome=true
 PrivateTmp=true
+# /var/lib/tor-checkout, owned by the DynamicUser and passed as $STATE_DIRECTORY.
+# The only path ProtectSystem=strict leaves writable.
+StateDirectory=tor-checkout
+StateDirectoryMode=0700
 
 [Install]
 WantedBy=multi-user.target
