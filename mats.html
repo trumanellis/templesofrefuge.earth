@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Ceremony Mat — Temples of Earth</title>
-    <meta name="description" content="A portable temple. The Ceremony Mat is an oversized 140 × 210 cm coconut-rubber mat with a printed surface of fractal sacred geometry, designed to create a sacred place anywhere. The first physical offering from Temples of Earth — now in pre-order.">
+    <meta name="description" content="A portable temple. The Ceremony Mat is an oversized 140 × 210 cm coconut-rubber mat with a printed surface of fractal sacred geometry, designed to create a sacred place anywhere. The first physical offering from Temples of Earth — now choosing its print from seven new designs.">
 
     <!-- Canonical domain is templesof.earth; templesofrefuge.earth serves
          these same files and folds into it. Extensionless form — this is the
@@ -16,13 +16,15 @@
     <meta property="og:type" content="product">
     <meta property="og:site_name" content="Temples of Earth">
     <meta property="og:title" content="The Ceremony Mat — A Portable Temple">
-    <meta property="og:description" content="An oversized 140 × 210 cm coconut-rubber mat with a printed surface of fractal sacred geometry — a portable temple you can bring to create a sacred place anywhere. Now in pre-order.">
+    <meta property="og:description" content="An oversized 140 × 210 cm coconut-rubber mat with a printed surface of fractal sacred geometry — a portable temple you can bring to create a sacred place anywhere. Seven new designs: help us choose the print.">
     <meta property="og:url" content="https://templesof.earth/mats">
-    <meta property="og:image" content="https://templesof.earth/assets/web/fractal-metatron-1600.jpg">
+    <meta property="og:image" content="https://templesof.earth/assets/web/sky-og-1200x630.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="The Ceremony Mat — A Portable Temple">
-    <meta name="twitter:description" content="Fractal sacred geometry on oversized coconut rubber. The first physical offering from Temples of Earth.">
-    <meta name="twitter:image" content="https://templesof.earth/assets/web/fractal-metatron-1600.jpg">
+    <meta name="twitter:description" content="Fractal sacred geometry on oversized coconut rubber. Seven new designs: vote for the one we print.">
+    <meta name="twitter:image" content="https://templesof.earth/assets/web/sky-og-1200x630.jpg">
 
     <!-- Fonts -->
     <link rel="stylesheet" href="/shared/brand.css">
@@ -589,6 +591,66 @@
             .hero-mats { height: min(52vh, 440px); }
             .hero { padding-top: 2.25rem; padding-bottom: 1.5rem; }
         }
+
+        /* ---- Seven skies + vote ---- */
+        [hidden] { display: none !important; }   /* the vote panels toggle with the hidden attribute */
+        .skies-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap: 2.5rem 1.75rem; }
+        .sky { display: flex; flex-direction: column; }
+        .sky-frame { position: relative; padding: 0; border: 0; background: none; cursor: zoom-in; animation: none; }
+        .sky-frame::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 3px transparent; transition: box-shadow .2s; pointer-events: none; }
+        .sky.is-picked .sky-frame::after { box-shadow: inset 0 0 0 3px var(--t-ac); }
+        .sky-frame img { width: 100%; height: auto; aspect-ratio: 2 / 3; object-fit: cover; }
+        .sky-badge { position: absolute; top: .75rem; left: .75rem; background: var(--t-ac); color: var(--t-on-ac);
+            border-radius: 999px; padding: .2rem .8rem; font-weight: 500; font-size: .85rem; letter-spacing: .04em; }
+        .sky-caption { padding: 1.25rem .25rem 0; display: flex; flex-direction: column; gap: .55rem; align-items: flex-start; }
+        .sky-caption .edition-name { margin: 0; }
+        .sky-pick { margin-top: .35rem; font: inherit; font-size: .88rem; letter-spacing: .04em; color: var(--t-tx);
+            background: transparent; border: 1px solid var(--t-bd); border-radius: 999px; padding: .5rem 1.15rem; cursor: pointer;
+            transition: border-color .2s, background .2s, color .2s; }
+        .sky-pick:hover { border-color: var(--t-ac); }
+        .sky-pick[aria-pressed="true"] { background: var(--t-tx); border-color: var(--t-tx); color: var(--t-bg); }
+
+        .vote { max-width: 520px; margin: 0 auto; text-align: left; display: flex; flex-direction: column; gap: 1.25rem; }
+        .picks { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem; }
+        .picks li { display: flex; flex-direction: column; align-items: center; gap: .45rem; text-align: center;
+            border: 1px dashed var(--t-bd); border-radius: 6px; padding: .8rem .5rem; font-size: .85rem; color: var(--t-mt); min-height: 5.2rem; justify-content: center; }
+        .picks li.on { border-style: solid; border-color: var(--t-ac); color: var(--t-tx); }
+        .pick-n { width: 1.7rem; height: 1.7rem; border-radius: 50%; display: grid; place-items: center; font-size: .8rem;
+            background: var(--t-b2); color: var(--t-t2); }
+        .picks li.on .pick-n { background: var(--t-ac); color: var(--t-on-ac); }
+        .picks-hint { font-size: .85rem; color: var(--t-mt); text-align: center; margin-top: -.4rem; }
+        .picks-hint a { color: var(--t-ac); }
+        .field { display: flex; flex-direction: column; gap: .45rem; border: 0; font-size: .95rem; color: var(--t-tx); }
+        .field small { color: var(--t-mt); }
+        .field legend { margin-bottom: .45rem; }
+        .field input, .field textarea { font: inherit; font-weight: 300; color: var(--t-tx); background: var(--t-cd);
+            border: 1px solid var(--t-bd); border-radius: 6px; padding: .75rem .9rem; width: 100%; }
+        .field input:focus, .field textarea:focus { outline: 2px solid var(--t-ac); outline-offset: 1px; }
+        .field textarea { resize: vertical; min-height: 5rem; }
+        .chips-row { display: flex; gap: .5rem; flex-wrap: wrap; }
+        .chip-radio { cursor: pointer; }
+        .chip-radio input { position: absolute; opacity: 0; pointer-events: none; }
+        .chip-radio span { display: inline-block; border: 1px solid var(--t-bd); border-radius: 999px; padding: .45rem 1rem; font-size: .9rem; color: var(--t-t2); }
+        .chip-radio input:checked + span { background: var(--t-tx); border-color: var(--t-tx); color: var(--t-bg); }
+        .chip-radio input:focus-visible + span { outline: 2px solid var(--t-ac); outline-offset: 2px; }
+        .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+        .vote-need { font-size: .85rem; color: var(--t-mt); min-height: 1.2em; }
+        .vote-btn { width: 100%; text-align: center; border: none; cursor: pointer; }
+        .vote-btn:disabled { opacity: .45; cursor: default; }
+        .order-fineprint { text-align: center; font-size: .72rem; letter-spacing: .04em; line-height: 1.6; color: var(--t-mt); }
+        #voteThanks { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+        .thanks-picks { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .8rem; max-width: 420px; width: 100%; }
+        .thanks-picks img { width: 100%; aspect-ratio: 2 / 3; object-fit: cover; border-radius: 6px; display: block; }
+        .thanks-picks span { display: block; margin-top: .35rem; font-size: .8rem; color: var(--t-t2); }
+        .vote-float { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(1rem + env(safe-area-inset-bottom, 0px)); z-index: 50;
+            display: flex; gap: 1rem; align-items: center; background: var(--t-glass); border: 1px solid var(--t-glass-bd);
+            -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border-radius: 999px; padding: .55rem .6rem .55rem 1.2rem;
+            font-size: .88rem; color: var(--t-tx); box-shadow: 0 10px 30px rgba(0,0,0,.35); max-width: calc(100% - 32px); }
+        #voteFloatText { white-space: nowrap; }
+        .vote-float-go { background: var(--t-tx); color: var(--t-bg); border-radius: 999px; padding: .45rem 1rem; text-decoration: none; white-space: nowrap; }
+        .lightbox { position: fixed; inset: 0; z-index: 100; background: rgba(8, 7, 20, .94); display: grid; place-items: center; padding: 16px; cursor: zoom-out; }
+        .lightbox img { max-width: 100%; max-height: 100%; border-radius: 6px; }
+        @media (max-width: 480px) { .picks li { font-size: .78rem; } }
     </style>
 </head>
 <body>
@@ -597,7 +659,7 @@
     <section class="hero">
         <div class="hero-grid">
             <div class="hero-copy">
-                <span class="preorder-badge">Founding Pre-Order</span>
+                <span class="preorder-badge">Choosing the Print</span>
                 <p class="eyebrow">The First Physical Offering</p>
                 <h1>The Ceremony Mat</h1>
                 <p class="hero-tagline">A portable temple.</p>
@@ -606,32 +668,30 @@
                     fractal sacred geometry — carry it anywhere and create a sacred place
                     wherever you unroll it.
                 </p>
-                <p class="hero-price"><span class="hp-was">$333</span> <strong>$247</strong> <span class="ship">— founding price, shipping included</span></p>
+                <p class="hero-price">Seven new designs · <strong>help us choose the one we print</strong></p>
                 <div class="hero-actions">
-                    <a href="#preorder" class="btn-primary">Reserve Yours</a>
-                    <a href="#editions" class="btn-ghost">
-                        See the two prints
+                    <a href="#vote" class="btn-primary">Vote for your favorite</a>
+                    <a href="#skies" class="btn-ghost">
+                        See the seven skies
                         <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </a>
                 </div>
             </div>
 
-            <div class="hero-mats" role="img" aria-label="The Ceremony Mat in two prints — Cosmic and Heaven on Earth">
+            <div class="hero-mats" role="img" aria-label="Two of the seven new Ceremony Mat designs: Cosmos and Metatron's Slice">
                 <div class="mat-frame back">
-                    <picture>
-                        <source type="image/avif" srcset="assets/web/heaven-on-earth-480.avif 480w, assets/web/heaven-on-earth-960.avif 960w, assets/web/heaven-on-earth-1600.avif 1600w" sizes="(max-width: 900px) 50vw, 320px">
-                        <source type="image/webp" srcset="assets/web/heaven-on-earth-480.webp 480w, assets/web/heaven-on-earth-960.webp 960w, assets/web/heaven-on-earth-1600.webp 1600w" sizes="(max-width: 900px) 50vw, 320px">
-                        <img src="assets/web/heaven-on-earth-960.jpg" width="2400" height="3429"
-                             alt="Heaven on Earth print — Metatron's Cube over a soft iridescent dawn" decoding="async">
-                    </picture>
+                        <picture>
+                            <source type="image/avif" srcset="assets/web/sky-cosmos-480.avif 480w, assets/web/sky-cosmos-960.avif 960w" sizes="(max-width: 900px) 50vw, 320px">
+                            <source type="image/webp" srcset="assets/web/sky-cosmos-480.webp 480w, assets/web/sky-cosmos-960.webp 960w" sizes="(max-width: 900px) 50vw, 320px">
+                            <img src="assets/web/sky-cosmos-960.jpg" width="960" height="1440" alt="Cosmos design: Metatron's Cube over a soft mauve and seafoam nebula" decoding="async" draggable="false">
+                        </picture>
                 </div>
                 <div class="mat-frame front">
-                    <picture>
-                        <source type="image/avif" srcset="assets/web/fractal-metatron-480.avif 480w, assets/web/fractal-metatron-960.avif 960w, assets/web/fractal-metatron-1600.avif 1600w" sizes="(max-width: 900px) 50vw, 320px">
-                        <source type="image/webp" srcset="assets/web/fractal-metatron-480.webp 480w, assets/web/fractal-metatron-960.webp 960w, assets/web/fractal-metatron-1600.webp 1600w" sizes="(max-width: 900px) 50vw, 320px">
-                        <img src="assets/web/fractal-metatron-960.jpg" width="2400" height="3429"
-                             alt="Cosmic print — Metatron's Cube over a deep-space starfield" decoding="async">
-                    </picture>
+                        <picture>
+                            <source type="image/avif" srcset="assets/web/sky-metatrons-slice-480.avif 480w, assets/web/sky-metatrons-slice-960.avif 960w" sizes="(max-width: 900px) 50vw, 320px">
+                            <source type="image/webp" srcset="assets/web/sky-metatrons-slice-480.webp 480w, assets/web/sky-metatrons-slice-960.webp 960w" sizes="(max-width: 900px) 50vw, 320px">
+                            <img src="assets/web/sky-metatrons-slice-960.jpg" width="960" height="1440" alt="Metatron's Slice design: gold Metatron's Cube over an indigo night" decoding="async" draggable="false">
+                        </picture>
                 </div>
             </div>
         </div>
@@ -671,58 +731,124 @@
 
     <div class="divider"></div>
 
-    <!-- Two editions -->
-    <section id="editions">
+    <!-- Seven skies: the print is chosen by vote -->
+    <section id="skies">
         <div class="container">
             <div class="section-head fade-up">
-                <p class="eyebrow">Two Prints</p>
-                <h2>One Pattern, Two Skies</h2>
+                <p class="eyebrow">Seven Skies</p>
+                <h2>One Pattern, Seven Skies</h2>
                 <p class="lead">
-                    The same living geometry rendered in two atmospheres — choose the one
-                    that calls you, or claim both.
+                    The same living geometry, rendered in seven atmospheres. We will print
+                    the one you choose. Tap <em>Choose</em> on your three favorites, in order.
                 </p>
             </div>
 
-            <div class="editions-grid fade-up">
-                <div class="edition">
-                    <div class="mat-frame">
+            <div class="skies-grid" id="skiesGrid">
+                <article class="sky" data-s="metatrons-slice">
+                    <button type="button" class="mat-frame sky-frame" aria-label="View Metatron's Slice larger">
                         <picture>
-                            <source type="image/avif" srcset="assets/web/fractal-metatron-480.avif 480w, assets/web/fractal-metatron-960.avif 960w, assets/web/fractal-metatron-1600.avif 1600w" sizes="(max-width: 780px) 90vw, 480px">
-                            <source type="image/webp" srcset="assets/web/fractal-metatron-480.webp 480w, assets/web/fractal-metatron-960.webp 960w, assets/web/fractal-metatron-1600.webp 1600w" sizes="(max-width: 780px) 90vw, 480px">
-                            <img src="assets/web/fractal-metatron-960.jpg" width="2400" height="3429"
-                                 alt="Cosmic edition — Metatron's Cube over a luminous geometric field"
-                                 loading="lazy" decoding="async">
+                            <source type="image/avif" srcset="assets/web/sky-metatrons-slice-480.avif 480w, assets/web/sky-metatrons-slice-960.avif 960w" sizes="(max-width: 620px) 90vw, (max-width: 1000px) 45vw, 330px">
+                            <source type="image/webp" srcset="assets/web/sky-metatrons-slice-480.webp 480w, assets/web/sky-metatrons-slice-960.webp 960w" sizes="(max-width: 620px) 90vw, (max-width: 1000px) 45vw, 330px">
+                            <img src="assets/web/sky-metatrons-slice-960.jpg" width="960" height="1440" alt="Metatron's Slice ceremony mat design: Gold over an indigo night, lit from within by waves of light that never repeat" loading="lazy" decoding="async" draggable="false">
                         </picture>
+                        <span class="sky-badge" hidden></span>
+                    </button>
+                    <div class="sky-caption">
+                        <h3 class="edition-name">Metatron's Slice</h3>
+                        <p class="edition-desc">Gold over an indigo night, lit from within by waves of light that never repeat.</p>
+                        <button type="button" class="sky-pick" aria-pressed="false">Choose</button>
                     </div>
-                    <div class="edition-caption">
-                        <p class="edition-sub">Edition I</p>
-                        <h3 class="edition-name">Cosmic</h3>
-                        <p class="edition-desc">
-                            Metatron's Cube in a deep-space field — the celestial scribe's
-                            geometry drawn across the night.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="edition">
-                    <div class="mat-frame">
+                </article>
+                <article class="sky" data-s="cosmos">
+                    <button type="button" class="mat-frame sky-frame" aria-label="View Cosmos larger">
                         <picture>
-                            <source type="image/avif" srcset="assets/web/heaven-on-earth-480.avif 480w, assets/web/heaven-on-earth-960.avif 960w, assets/web/heaven-on-earth-1600.avif 1600w" sizes="(max-width: 780px) 90vw, 480px">
-                            <source type="image/webp" srcset="assets/web/heaven-on-earth-480.webp 480w, assets/web/heaven-on-earth-960.webp 960w, assets/web/heaven-on-earth-1600.webp 1600w" sizes="(max-width: 780px) 90vw, 480px">
-                            <img src="assets/web/heaven-on-earth-960.jpg" width="2400" height="3429"
-                                 alt="Heaven on Earth edition — Metatron's Cube over a soft iridescent watercolor sky with butterflies"
-                                 loading="lazy" decoding="async">
+                            <source type="image/avif" srcset="assets/web/sky-cosmos-480.avif 480w, assets/web/sky-cosmos-960.avif 960w" sizes="(max-width: 620px) 90vw, (max-width: 1000px) 45vw, 330px">
+                            <source type="image/webp" srcset="assets/web/sky-cosmos-480.webp 480w, assets/web/sky-cosmos-960.webp 960w" sizes="(max-width: 620px) 90vw, (max-width: 1000px) 45vw, 330px">
+                            <img src="assets/web/sky-cosmos-960.jpg" width="960" height="1440" alt="Cosmos ceremony mat design: A soft nebula of mauve and seafoam, the cube drawn in dusky rose around a quiet star" loading="lazy" decoding="async" draggable="false">
                         </picture>
+                        <span class="sky-badge" hidden></span>
+                    </button>
+                    <div class="sky-caption">
+                        <h3 class="edition-name">Cosmos</h3>
+                        <p class="edition-desc">A soft nebula of mauve and seafoam, the cube drawn in dusky rose around a quiet star.</p>
+                        <button type="button" class="sky-pick" aria-pressed="false">Choose</button>
                     </div>
-                    <div class="edition-caption">
-                        <p class="edition-sub">Edition II</p>
-                        <h3 class="edition-name">Heaven on Earth</h3>
-                        <p class="edition-desc">
-                            The same geometry over a soft iridescent dawn — luminous, gentle,
-                            alive with butterflies.
-                        </p>
+                </article>
+                <article class="sky" data-s="ocean">
+                    <button type="button" class="mat-frame sky-frame" aria-label="View Ocean larger">
+                        <picture>
+                            <source type="image/avif" srcset="assets/web/sky-ocean-480.avif 480w, assets/web/sky-ocean-960.avif 960w" sizes="(max-width: 620px) 90vw, (max-width: 1000px) 45vw, 330px">
+                            <source type="image/webp" srcset="assets/web/sky-ocean-480.webp 480w, assets/web/sky-ocean-960.webp 960w" sizes="(max-width: 620px) 90vw, (max-width: 1000px) 45vw, 330px">
+                            <img src="assets/web/sky-ocean-960.jpg" width="960" height="1440" alt="Ocean ceremony mat design: White linework over deep teal water and starfield: cool, clear and still" loading="lazy" decoding="async" draggable="false">
+                        </picture>
+                        <span class="sky-badge" hidden></span>
+                    </button>
+                    <div class="sky-caption">
+                        <h3 class="edition-name">Ocean</h3>
+                        <p class="edition-desc">White linework over deep teal water and starfield: cool, clear and still.</p>
+                        <button type="button" class="sky-pick" aria-pressed="false">Choose</button>
                     </div>
-                </div>
+                </article>
+                <article class="sky" data-s="chacruna">
+                    <button type="button" class="mat-frame sky-frame" aria-label="View Chacruna larger">
+                        <picture>
+                            <source type="image/avif" srcset="assets/web/sky-chacruna-480.avif 480w, assets/web/sky-chacruna-960.avif 960w" sizes="(max-width: 620px) 90vw, (max-width: 1000px) 45vw, 330px">
+                            <source type="image/webp" srcset="assets/web/sky-chacruna-480.webp 480w, assets/web/sky-chacruna-960.webp 960w" sizes="(max-width: 620px) 90vw, (max-width: 1000px) 45vw, 330px">
+                            <img src="assets/web/sky-chacruna-960.jpg" width="960" height="1440" alt="Chacruna ceremony mat design: Cream and rose lines over a deep forest green, like leaf-light at dusk" loading="lazy" decoding="async" draggable="false">
+                        </picture>
+                        <span class="sky-badge" hidden></span>
+                    </button>
+                    <div class="sky-caption">
+                        <h3 class="edition-name">Chacruna</h3>
+                        <p class="edition-desc">Cream and rose lines over a deep forest green, like leaf-light at dusk.</p>
+                        <button type="button" class="sky-pick" aria-pressed="false">Choose</button>
+                    </div>
+                </article>
+                <article class="sky" data-s="reverie">
+                    <button type="button" class="mat-frame sky-frame" aria-label="View Reverie larger">
+                        <picture>
+                            <source type="image/avif" srcset="assets/web/sky-reverie-480.avif 480w, assets/web/sky-reverie-960.avif 960w" sizes="(max-width: 620px) 90vw, (max-width: 1000px) 45vw, 330px">
+                            <source type="image/webp" srcset="assets/web/sky-reverie-480.webp 480w, assets/web/sky-reverie-960.webp 960w" sizes="(max-width: 620px) 90vw, (max-width: 1000px) 45vw, 330px">
+                            <img src="assets/web/sky-reverie-960.jpg" width="960" height="1440" alt="Reverie ceremony mat design: Lilac and violet lines drifting through a dusk-purple haze" loading="lazy" decoding="async" draggable="false">
+                        </picture>
+                        <span class="sky-badge" hidden></span>
+                    </button>
+                    <div class="sky-caption">
+                        <h3 class="edition-name">Reverie</h3>
+                        <p class="edition-desc">Lilac and violet lines drifting through a dusk-purple haze.</p>
+                        <button type="button" class="sky-pick" aria-pressed="false">Choose</button>
+                    </div>
+                </article>
+                <article class="sky" data-s="blotter">
+                    <button type="button" class="mat-frame sky-frame" aria-label="View Blotter larger">
+                        <picture>
+                            <source type="image/avif" srcset="assets/web/sky-blotter-480.avif 480w, assets/web/sky-blotter-960.avif 960w" sizes="(max-width: 620px) 90vw, (max-width: 1000px) 45vw, 330px">
+                            <source type="image/webp" srcset="assets/web/sky-blotter-480.webp 480w, assets/web/sky-blotter-960.webp 960w" sizes="(max-width: 620px) 90vw, (max-width: 1000px) 45vw, 330px">
+                            <img src="assets/web/sky-blotter-960.jpg" width="960" height="1440" alt="Blotter ceremony mat design: Violet linework over a full-spectrum bloom of pink, lime and tangerine" loading="lazy" decoding="async" draggable="false">
+                        </picture>
+                        <span class="sky-badge" hidden></span>
+                    </button>
+                    <div class="sky-caption">
+                        <h3 class="edition-name">Blotter</h3>
+                        <p class="edition-desc">Violet linework over a full-spectrum bloom of pink, lime and tangerine.</p>
+                        <button type="button" class="sky-pick" aria-pressed="false">Choose</button>
+                    </div>
+                </article>
+                <article class="sky" data-s="tree-of-life">
+                    <button type="button" class="mat-frame sky-frame" aria-label="View Tree of Life larger">
+                        <picture>
+                            <source type="image/avif" srcset="assets/web/sky-tree-of-life-480.avif 480w, assets/web/sky-tree-of-life-960.avif 960w" sizes="(max-width: 620px) 90vw, (max-width: 1000px) 45vw, 330px">
+                            <source type="image/webp" srcset="assets/web/sky-tree-of-life-480.webp 480w, assets/web/sky-tree-of-life-960.webp 960w" sizes="(max-width: 620px) 90vw, (max-width: 1000px) 45vw, 330px">
+                            <img src="assets/web/sky-tree-of-life-960.jpg" width="960" height="1440" alt="Tree of Life ceremony mat design: The cube in a full spectrum, red through violet, around a bright white heart" loading="lazy" decoding="async" draggable="false">
+                        </picture>
+                        <span class="sky-badge" hidden></span>
+                    </button>
+                    <div class="sky-caption">
+                        <h3 class="edition-name">Tree of Life</h3>
+                        <p class="edition-desc">The cube in a full spectrum, red through violet, around a bright white heart.</p>
+                        <button type="button" class="sky-pick" aria-pressed="false">Choose</button>
+                    </div>
+                </article>
             </div>
         </div>
     </section>
@@ -767,9 +893,9 @@
             <div class="practice-stage fade-up" id="practiceStage" data-mode="solo"
                  role="button" tabindex="0" aria-label="Practice configurations — tap to advance">
                 <img class="stage-bg" alt=""
-                     src="/assets/web/fractal-metatron-960.jpg"
-                     srcset="/assets/web/fractal-metatron-480.jpg 480w,
-                             /assets/web/fractal-metatron-960.jpg 960w"
+                     src="/assets/web/sky-metatrons-slice-960.jpg"
+                     srcset="/assets/web/sky-metatrons-slice-480.jpg 480w,
+                             /assets/web/sky-metatrons-slice-960.jpg 960w"
                      sizes="640px" loading="lazy" decoding="async">
                 <div class="stage-veil"></div>
                 <svg class="stage-overlay" viewBox="0 0 142.8 100"
@@ -858,144 +984,70 @@
         </div>
     </section>
 
-    <!-- Pre-order (Stripe embedded checkout) -->
-    <style>
-        .hero-price .hp-was{color:var(--t-mt);text-decoration:line-through;
-            text-decoration-thickness:1px;margin-right:.35rem}
-        .deal{max-width:520px;margin:0 auto 2.5rem;text-align:center;
-            border:1px solid color-mix(in srgb,var(--t-ac) 35%,transparent);border-radius:18px;
-            padding:2rem 2.25rem;
-            background:radial-gradient(ellipse at 50% 0%,var(--t-bc) 0%,transparent 78%),var(--t-cd)}
-        .deal-edition{display:block;font-family:var(--s-display);font-size:.62rem;
-            letter-spacing:.3em;text-transform:uppercase;color:var(--t-ac);margin-bottom:1.1rem}
-        .deal-price{display:flex;align-items:baseline;justify-content:center;gap:1rem}
-        .deal-was{font-family:var(--s-display);font-size:1.5rem;color:var(--t-mt);
-            text-decoration:line-through;text-decoration-thickness:1px}
-        .deal-now{font-family:var(--s-display);font-size:clamp(2.4rem,7vw,3.4rem);
-            letter-spacing:.02em;color:var(--t-tx);line-height:1}
-        .deal-ship{display:block;margin-top:.7rem;font-size:.68rem;letter-spacing:.2em;
-            text-transform:uppercase;color:var(--t-ac)}
-        .deal-meter{margin-top:1.6rem}
-        .deal-meter-bar{height:5px;border-radius:99px;background:var(--t-b2);
-            border:1px solid var(--t-bd);overflow:hidden}
-        .deal-meter-bar span{display:block;height:100%;width:0;border-radius:99px;
-            background:linear-gradient(90deg,var(--t-ac),var(--t-a2));transition:width .8s ease}
-        .deal-meter-label{display:block;margin-top:.65rem;font-size:.66rem;letter-spacing:.16em;
-            text-transform:uppercase;color:var(--t-mt)}
-        .order{max-width:520px;margin:0 auto}
-        .order-row{display:flex;align-items:center;justify-content:space-between;gap:1rem;
-            padding:1rem 0;border-bottom:1px solid var(--t-bd)}
-        .order-label{font-family:var(--s-display);font-size:.68rem;letter-spacing:.22em;
-            text-transform:uppercase;color:var(--t-mt)}
-        .chips{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:flex-end}
-        .chip{font-family:var(--s-display);font-size:.72rem;letter-spacing:.08em;
-            color:var(--t-t2);background:var(--t-b2);border:1px solid var(--t-bd);
-            border-radius:999px;padding:.5rem .9rem;cursor:pointer;transition:border-color .2s,color .2s,background .2s}
-        .chip:hover{border-color:var(--t-ac);color:var(--t-tx)}
-        .chip[aria-pressed="true"]{border-color:var(--t-ac);color:var(--t-tx);
-            background:color-mix(in srgb,var(--t-ac) 12%,transparent)}
-        .order-row-print{flex-wrap:wrap}
-        .edition-preview{flex-basis:100%;display:flex;gap:1rem;align-items:center;
-            margin-top:1rem;padding:.85rem;border:1px solid var(--t-bd);border-radius:14px;
-            background:var(--t-b2)}
-        .edition-preview img{width:96px;height:144px;object-fit:cover;border-radius:8px;
-            flex-shrink:0;box-shadow:0 4px 14px rgba(0,0,0,.18)}
-        .edition-preview-body{display:flex;flex-direction:column;gap:.35rem}
-        .edition-preview-name{font-family:var(--s-display);font-size:.95rem;
-            letter-spacing:.02em;color:var(--t-tx)}
-        .edition-preview-desc{font-size:.8rem;line-height:1.45;color:var(--t-t2)}
-        .qty{display:flex;align-items:center;gap:1rem}
-        .qty-btn{width:2rem;height:2rem;border-radius:50%;border:1px solid var(--t-bd);
-            background:var(--t-b2);color:var(--t-tx);font-size:1.1rem;line-height:1;cursor:pointer;
-            transition:border-color .2s}
-        .qty-btn:hover{border-color:var(--t-ac)}
-        .qty-val{font-family:var(--s-display);font-size:1.1rem;color:var(--t-tx);
-            min-width:1.5ch;text-align:center}
-        .order-total{text-align:center;margin:1.75rem 0 1.25rem;color:var(--t-t2);
-            font-family:var(--s-display);letter-spacing:.04em}
-        .order-total strong{color:var(--t-tx);font-weight:500}
-        .order-btn{display:block;width:100%;text-align:center;border:none;cursor:pointer}
-        .order-fineprint{text-align:center;margin-top:1rem;font-size:.68rem;
-            letter-spacing:.1em;color:var(--t-mt)}
-        #checkout{margin:1.5rem auto 0;max-width:560px}
-    </style>
-    <section class="preorder" id="preorder">
+    <!-- Vote (pre-orders are paused while the print is chosen) -->
+    <section class="preorder" id="vote">
         <div class="container-narrow">
             <div class="fade-up">
-                <p class="eyebrow">Founding Pre-Order</p>
-                <h2>Reserve Your Ceremony Mat</h2>
+                <p class="eyebrow">Help Choose the Print</p>
+                <h2>Vote for Your Sky</h2>
                 <p class="preorder-note">
-                    The <strong>first physical offering from Temples of Earth</strong>.
-                    The first 100 mats are offered at the founding price — then it rises to 333.
+                    Pre-orders are paused while we choose. Pick your <strong>three favorites, in order</strong>,
+                    and leave your email if you'd like to hear when the mats are available.
                 </p>
             </div>
 
-            <div class="deal fade-up" id="deal">
-                <span class="deal-edition" id="deal-edition">Founding Edition · First 100 Units</span>
-                <div class="deal-price">
-                    <span class="deal-was" id="deal-was">$333</span>
-                    <span class="deal-now" id="deal-now">$247</span>
-                </div>
-                <span class="deal-ship" id="deal-ship">Save $86 · shipping included</span>
-                <div class="deal-meter" id="deal-meter" hidden>
-                    <div class="deal-meter-bar"><span id="deal-meter-fill"></span></div>
-                    <span class="deal-meter-label" id="deal-meter-label"></span>
-                </div>
-            </div>
+            <form class="vote" id="voteForm" novalidate>
+                <ol class="picks" id="picks" aria-live="polite">
+                    <li data-r="0"><span class="pick-n">1</span><span class="pick-v">First choice</span></li>
+                    <li data-r="1"><span class="pick-n">2</span><span class="pick-v">Second</span></li>
+                    <li data-r="2"><span class="pick-n">3</span><span class="pick-v">Third</span></li>
+                </ol>
+                <p class="picks-hint" id="picksHint"><a href="#skies">Choose three skies above</a>. Tap a choice again to remove it.</p>
 
-            <div class="order fade-up" id="order-step">
-                <div class="order-row">
-                    <span class="order-label">Currency</span>
-                    <div class="chips" id="currency-row">
-                        <button type="button" class="chip" data-cur="usd" data-sym="$" aria-pressed="true">USD $</button>
-                        <button type="button" class="chip" data-cur="eur" data-sym="€" aria-pressed="false">EUR €</button>
-                        <button type="button" class="chip" data-cur="gbp" data-sym="£" aria-pressed="false">GBP £</button>
+                <label class="field"><span>First name</span>
+                    <input type="text" id="voteName" name="name" autocomplete="given-name" maxlength="40" required></label>
+                <label class="field"><span>Email <small>(optional): we'll write once, when the mats are available</small></span>
+                    <input type="email" id="voteEmail" name="email" autocomplete="email" inputmode="email" maxlength="320"></label>
+                <fieldset class="field">
+                    <legend>Would you buy one? <small>(optional)</small></legend>
+                    <div class="chips-row">
+                        <label class="chip-radio"><input type="radio" name="buy" value="yes"><span>Yes</span></label>
+                        <label class="chip-radio"><input type="radio" name="buy" value="maybe"><span>Maybe</span></label>
+                        <label class="chip-radio"><input type="radio" name="buy" value="no"><span>Not for me</span></label>
                     </div>
-                </div>
-                <div class="order-row order-row-print">
-                    <span class="order-label">Print</span>
-                    <div class="chips" id="edition-row">
-                        <button type="button" class="chip" data-ed="cosmic" aria-pressed="true">Cosmic</button>
-                        <button type="button" class="chip" data-ed="heaven-on-earth" aria-pressed="false">Heaven on Earth</button>
-                    </div>
-                    <div class="edition-preview" id="edition-preview">
-                        <img id="edition-preview-img" src="assets/web/fractal-metatron-480.jpg" alt="" decoding="async" width="96" height="144">
-                        <div class="edition-preview-body">
-                            <span class="edition-preview-name" id="edition-preview-name">Cosmic</span>
-                            <span class="edition-preview-desc" id="edition-preview-desc">Metatron's Cube over a luminous geometric field.</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="order-row">
-                    <span class="order-label">Quantity</span>
-                    <div class="qty">
-                        <button type="button" class="qty-btn" id="qty-dec" aria-label="Decrease quantity">−</button>
-                        <span class="qty-val" id="qty-val">1</span>
-                        <button type="button" class="qty-btn" id="qty-inc" aria-label="Increase quantity">+</button>
-                    </div>
-                </div>
-                <p class="order-total" id="order-total">Total <strong>$247</strong> · shipping included</p>
-                <p class="cta-form-error" id="order-error" hidden></p>
-                <button type="button" class="btn-primary order-btn" id="order-btn">Reserve at $247 →</button>
-                <p class="order-fineprint">Secure checkout by Stripe · no account needed</p>
-            </div>
+                </fieldset>
+                <label class="field"><span>Anything that drew you in, or put you off? <small>(optional)</small></span>
+                    <textarea id="voteComment" name="comment" maxlength="1000" rows="3"></textarea></label>
+                <div class="hp" aria-hidden="true"><label>Leave empty <input type="text" name="botcheck" tabindex="-1" autocomplete="off"></label></div>
 
-            <!-- Stripe embedded checkout mounts here -->
-            <div id="checkout"></div>
+                <p class="vote-need" id="voteNeed"></p>
+                <p class="cta-form-error" id="voteError" role="alert" hidden></p>
+                <button type="submit" class="btn-primary vote-btn" id="voteBtn" disabled>Send my vote</button>
+                <p class="order-fineprint">We keep your first name, picks and comment only to choose the print, and delete them when the vote closes. If you leave your email, we use it once: to tell you the mats are available.</p>
+            </form>
 
-            <div class="cta-form-success" id="order-success" hidden>
+            <div class="cta-form-success" id="voteThanks" hidden>
                 <div class="ok-mark">✦</div>
-                <h3>Your Ceremony Mat is reserved</h3>
-                <p id="order-success-text">Thank you. We'll email your shipping details as the founding run is prepared.</p>
+                <h3>Thank you, <span id="thanksName"></span></h3>
+                <p id="thanksText">Your vote is in.</p>
+                <ol class="thanks-picks" id="thanksPicks"></ol>
+                <button type="button" class="btn-ghost" id="voteChange">Change my vote</button>
             </div>
         </div>
     </section>
+
+    <div class="vote-float" id="voteFloat" hidden>
+        <span id="voteFloatText"></span>
+        <a href="#vote" class="vote-float-go">Continue to vote</a>
+    </div>
+
+    <div class="lightbox" id="lightbox" hidden><img alt=""></div>
 
     <!-- Footer -->
     <footer>
         <p class="footer-logo">Temples of Earth</p>
         <p class="footer-info">
-            The first physical offering · Now in pre-order<br>
+            The first physical offering · Now choosing its print<br>
             Temples of Earth is the public name of Temples of Refuge,<br>
             an Association of Churches
         </p>
@@ -1003,181 +1055,119 @@
 
     <script src="/shared/brand.js" defer></script>
     <script src="/shared/cta-widgets.js"></script>
-    <script src="https://js.stripe.com/v3/"></script>
     <script>
-    // Pre-order checkout — Stripe embedded, priced server-side (founding vs regular).
-    (function preOrder() {
+    // Seven skies vote: tap three in order, then POST to our checkout service's /poll-vote.
+    (function voteForSky() {
+        var POLL = 'ceremony-mat-2026-09';
         var cfg = window.CTAConfig || {};
-        var FOUNDING = 247, REGULAR = 333;
-        var SYM = { usd: '$', eur: '€', gbp: '£' };
-        var apiUrl = (window.CTAWidgets && CTAWidgets.isConfigured(cfg.CHECKOUT_API_URL))
-            ? cfg.CHECKOUT_API_URL : null;
-
+        var API = cfg.CHECKOUT_API_URL || 'https://checkout.templesof.earth';
+        var ORD = ['1st', '2nd', '3rd'];
+        var grid = document.getElementById('skiesGrid');
+        if (!grid) return;
+        var skies = Array.prototype.slice.call(grid.querySelectorAll('.sky'));
+        var names = {};
+        skies.forEach(function (el) { names[el.dataset.s] = el.querySelector('.edition-name').textContent; });
         var $ = function (id) { return document.getElementById(id); };
-        var deal = $('deal'), dealNow = $('deal-now'), dealWas = $('deal-was'),
-            dealShip = $('deal-ship'), dealEdition = $('deal-edition'),
-            meter = $('deal-meter'), meterFill = $('deal-meter-fill'), meterLabel = $('deal-meter-label'),
-            orderStep = $('order-step'), orderTotal = $('order-total'), orderBtn = $('order-btn'),
-            orderErr = $('order-error'), success = $('order-success'), successText = $('order-success-text');
+        var store = {
+            get: function (k) { try { return JSON.parse(localStorage.getItem('skies.' + k)); } catch (e) { return null; } },
+            set: function (k, v) { try { localStorage.setItem('skies.' + k, JSON.stringify(v)); } catch (e) {} }
+        };
+        var ranks = [];
 
-        var state = { currency: 'usd', edition: 'cosmic', qty: 1, price: FOUNDING, open: true };
-        function sym() { return SYM[state.currency] || '$'; }
+        // Show the seven in a per-visitor random order, so no sky gains from sitting first.
+        var order = store.get('order');
+        if (!Array.isArray(order) || order.length !== skies.length || !order.every(function (s) { return names[s]; })) {
+            order = skies.map(function (el) { return el.dataset.s; });
+            for (var i = order.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = order[i]; order[i] = order[j]; order[j] = t; }
+            store.set('order', order);
+        }
+        order.forEach(function (s) { grid.appendChild(grid.querySelector('.sky[data-s="' + s + '"]')); });
 
         function render() {
-            var s = sym(), total = state.price * state.qty;
-            dealNow.textContent = s + state.price;
-            if (state.open) {
-                dealWas.hidden = false; dealWas.textContent = s + REGULAR;
-                dealShip.textContent = 'Save ' + s + (REGULAR - FOUNDING) + ' · shipping included';
-                dealEdition.textContent = 'Founding Edition · First 100 Units';
-            } else {
-                dealWas.hidden = true;
-                dealShip.textContent = 'Shipping included';
-                dealEdition.textContent = 'The Ceremony Mat';
-            }
-            orderTotal.innerHTML = 'Total <strong>' + s + total + '</strong> · shipping included';
-            orderBtn.textContent = 'Reserve at ' + s + total + ' →';
-        }
-
-        // ── 1. Return from a completed checkout (?session_id=) ──
-        var sessionId = new URLSearchParams(location.search).get('session_id');
-        if (sessionId && apiUrl) {
-            deal.hidden = true; orderStep.hidden = true; success.hidden = false;
-            var head = success.querySelector('h3'), doneHead = head ? head.textContent : '';
-            if (head) head.textContent = 'Confirming your order…';
-            var tries = 0;
-            (function confirm() {
-                tries++;
-                fetch(apiUrl + '/session-status?session_id=' + encodeURIComponent(sessionId))
-                    .then(function (r) { return r.json(); })
-                    .then(function (sx) {
-                        if (sx.status === 'complete') {
-                            if (head) head.textContent = doneHead;
-                            if (sx.customer_name) successText.textContent =
-                                'Thank you, ' + sx.customer_name + '. Your Ceremony Mat is reserved — ' +
-                                'we’ll email your shipping details as the founding run is prepared.';
-                        } else if (tries < 6) { setTimeout(confirm, 1500); }
-                        else { success.hidden = true; deal.hidden = false; orderStep.hidden = false; }
-                    })
-                    .catch(function () {
-                        if (tries < 6) { setTimeout(confirm, 1500); }
-                        else { success.hidden = true; deal.hidden = false; orderStep.hidden = false; }
-                    });
-            })();
-            return;
-        }
-
-        // ── 2. Live founding count (best-effort; the deal still shows if it fails) ──
-        if (apiUrl) {
-            fetch(apiUrl + '/founding-status')
-                .then(function (r) { return r.json(); })
-                .then(function (st) {
-                    if (typeof st.remaining !== 'number') return;
-                    state.open = !!st.open;
-                    state.price = state.open ? (st.founding_price || FOUNDING) : (st.regular_price || REGULAR);
-                    if (st.open && st.limit) {
-                        meterFill.style.width = Math.min(100, Math.round((st.sold / st.limit) * 100)) + '%';
-                        meterLabel.textContent = st.remaining + ' of ' + st.limit + ' founding mats left';
-                        meter.hidden = false;
-                    }
-                    render();
-                })
-                .catch(function () { /* keep founding default */ });
-        }
-
-        // ── 3. Controls ──
-        $('currency-row').addEventListener('click', function (e) {
-            var b = e.target.closest('.chip'); if (!b) return;
-            Array.prototype.forEach.call(this.children, function (c) {
-                c.setAttribute('aria-pressed', c === b ? 'true' : 'false');
+            skies.forEach(function (el) {
+                var r = ranks.indexOf(el.dataset.s), btn = el.querySelector('.sky-pick'), badge = el.querySelector('.sky-badge');
+                el.classList.toggle('is-picked', r >= 0);
+                btn.setAttribute('aria-pressed', r >= 0);
+                btn.textContent = r >= 0 ? ORD[r] + ' choice' : 'Choose';
+                badge.hidden = r < 0; badge.textContent = r >= 0 ? ORD[r] : '';
             });
-            state.currency = b.getAttribute('data-cur'); render();
-        });
-        var EDITIONS = {
-            'cosmic': {
-                img: 'assets/web/fractal-metatron-480.jpg',
-                name: 'Cosmic',
-                desc: "Metatron's Cube over a luminous geometric field."
-            },
-            'heaven-on-earth': {
-                img: 'assets/web/heaven-on-earth-480.jpg',
-                name: 'Heaven on Earth',
-                desc: "Metatron's Cube over a soft iridescent watercolor sky with butterflies."
-            }
-        };
-        function updateEditionPreview() {
-            var ed = EDITIONS[state.edition]; if (!ed) return;
-            $('edition-preview-img').src = ed.img;
-            $('edition-preview-img').alt = ed.name + ' print';
-            $('edition-preview-name').textContent = ed.name;
-            $('edition-preview-desc').textContent = ed.desc;
-        }
-        $('edition-row').addEventListener('click', function (e) {
-            var b = e.target.closest('.chip'); if (!b) return;
-            Array.prototype.forEach.call(this.children, function (c) {
-                c.setAttribute('aria-pressed', c === b ? 'true' : 'false');
+            Array.prototype.forEach.call(document.querySelectorAll('#picks li'), function (li, i) {
+                li.classList.toggle('on', !!ranks[i]);
+                li.querySelector('.pick-v').textContent = ranks[i] ? names[ranks[i]] : ['First choice', 'Second', 'Third'][i];
             });
-            state.edition = b.getAttribute('data-ed');
-            updateEditionPreview();
+            var need = [];
+            if (ranks.length < 3) need.push((3 - ranks.length) + ' more ' + (ranks.length === 2 ? 'sky' : 'skies'));
+            if (!$('voteName').value.trim()) need.push('your first name');
+            $('voteNeed').textContent = need.length ? 'Still needed: ' + need.join(' and ') + '.' : '';
+            $('voteBtn').disabled = need.length > 0;
+            floatBar();
+        }
+
+        // A small bar keeps the running choice in view until the vote section is on screen.
+        var voteInView = false;
+        function floatBar() {
+            var f = $('voteFloat');
+            f.hidden = voteInView || !$('voteThanks').hidden || ranks.length === 0;
+            $('voteFloatText').textContent = ranks.length < 3 ? ranks.length + ' of 3 chosen' : 'Three chosen';
+        }
+        if ('IntersectionObserver' in window) {
+            new IntersectionObserver(function (es) { voteInView = es[0].isIntersecting; floatBar(); }, { threshold: 0.15 }).observe($('vote'));
+        }
+
+        function error(msg) { var e = $('voteError'); e.textContent = msg; e.hidden = !msg; }
+        grid.addEventListener('click', function (e) {
+            var el = e.target.closest('.sky'); if (!el) return;
+            if (e.target.closest('.sky-frame')) { openLightbox(el.querySelector('img').currentSrc || el.querySelector('img').src); return; }
+            if (!e.target.closest('.sky-pick')) return;
+            var s = el.dataset.s, i = ranks.indexOf(s);
+            if (i >= 0) ranks.splice(i, 1);
+            else if (ranks.length < 3) ranks.push(s);
+            else { error('You have chosen three. Tap one of them to remove it first.'); return; }
+            error(''); render();
         });
-        updateEditionPreview();
-        $('qty-inc').addEventListener('click', function () {
-            state.qty = Math.min(10, state.qty + 1); $('qty-val').textContent = state.qty; render();
+        $('voteName').addEventListener('input', render);
+
+        $('voteForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            var f = new FormData(e.target);
+            var vote = { poll: POLL, name: $('voteName').value.trim(), email: $('voteEmail').value.trim(),
+                ranks: ranks.slice(), buy: f.get('buy') || null, comment: $('voteComment').value.trim(), botcheck: f.get('botcheck') || '' };
+            if (vote.email && !$('voteEmail').checkValidity()) { error("That email doesn't look right."); return; }
+            var btn = $('voteBtn'); btn.disabled = true; btn.textContent = 'Sending…'; error('');
+            fetch(API + '/poll-vote', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(vote) })
+                .then(function (r) { return r.json().catch(function () { return {}; }).then(function (o) { if (!r.ok) throw new Error(o.error || 'Something went wrong. Please try again.'); }); })
+                .then(function () { delete vote.botcheck; store.set('vote', vote); thanks(vote); })
+                .catch(function (err) { error(/fetch|network/i.test(err.message) ? "We couldn't reach the server. Check your connection and try again." : err.message); })
+                .then(function () { btn.textContent = 'Send my vote'; render(); });
         });
-        $('qty-dec').addEventListener('click', function () {
-            state.qty = Math.max(1, state.qty - 1); $('qty-val').textContent = state.qty; render();
+
+        function thanks(v) {
+            $('voteForm').hidden = true; $('voteThanks').hidden = false;
+            $('thanksName').textContent = v.name;
+            $('thanksText').textContent = v.email ? "Your vote is in. We'll write to " + v.email + ' when the mats are available.' : 'Your vote is in.';
+            $('thanksPicks').innerHTML = v.ranks.map(function (s, i) {
+                return '<li><img src="assets/web/sky-' + s + '-480.jpg" alt="" draggable="false"><span>' + ORD[i] + ' · ' + names[s] + '</span></li>';
+            }).join('');
+            floatBar();
+        }
+        $('voteChange').addEventListener('click', function () {
+            var v = store.get('vote') || {};
+            ranks = (v.ranks || []).filter(function (s) { return names[s]; });
+            $('voteName').value = v.name || ''; $('voteEmail').value = v.email || ''; $('voteComment').value = v.comment || '';
+            Array.prototype.forEach.call(document.querySelectorAll('input[name="buy"]'), function (r) { r.checked = r.value === v.buy; });
+            $('voteThanks').hidden = true; $('voteForm').hidden = false; render();
+            document.getElementById('skies').scrollIntoView({ behavior: 'smooth' });
         });
+
+        var lb = $('lightbox');
+        function openLightbox(src) { lb.querySelector('img').src = src.replace(/-480\.(avif|webp|jpg)$/, '-960.$1'); lb.hidden = false; }
+        lb.addEventListener('click', function () { lb.hidden = true; });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') lb.hidden = true; });
+        grid.addEventListener('contextmenu', function (e) { if (e.target.tagName === 'IMG') e.preventDefault(); });
+
+        var prior = store.get('vote');
+        if (prior && Array.isArray(prior.ranks) && prior.ranks.every(function (s) { return names[s]; })) { ranks = prior.ranks.slice(); thanks(prior); }
         render();
-
-        // ── 4. Checkout (or graceful email fallback) ──
-        var hasStripe = apiUrl && window.CTAWidgets &&
-            CTAWidgets.isConfigured(cfg.STRIPE_PUBLISHABLE_KEY) && typeof Stripe !== 'undefined';
-
-        if (!hasStripe) {
-            orderBtn.textContent = 'Reserve by email →';
-            orderBtn.addEventListener('click', function () {
-                var to = cfg.CONTACT_EMAIL || 'hello@templesofrefuge.earth';
-                location.href = 'mailto:' + to +
-                    '?subject=' + encodeURIComponent('Ceremony Mat pre-order') +
-                    '&body=' + encodeURIComponent('I would like to reserve ' + state.qty +
-                        ' Ceremony Mat(s), ' + state.edition + ' print, at ' + sym() + state.price + ' each.');
-            });
-            return;
-        }
-
-        var stripe = Stripe(cfg.STRIPE_PUBLISHABLE_KEY);
-        orderBtn.addEventListener('click', function () {
-            orderErr.hidden = true;
-            orderBtn.textContent = 'Preparing…'; orderBtn.style.pointerEvents = 'none';
-            stripe.initEmbeddedCheckout({
-                fetchClientSecret: function () {
-                    return fetch(apiUrl + '/create-session', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            order_type: 'ceremony-mat',
-                            currency: state.currency,
-                            edition: state.edition,
-                            quantity: state.qty,
-                            return_path: '/mats.html'
-                        })
-                    }).then(function (r) {
-                        return r.json().then(function (d) {
-                            if (!r.ok) throw new Error(d.error || 'Could not start checkout.');
-                            return d.client_secret;
-                        });
-                    });
-                }
-            }).then(function (checkout) {
-                deal.hidden = true; orderStep.hidden = true;
-                checkout.mount('#checkout');
-                document.getElementById('checkout').scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }).catch(function (err) {
-                orderBtn.style.pointerEvents = ''; render();
-                orderErr.textContent = err.message || 'Something went wrong. Please try again.';
-                orderErr.hidden = false;
-            });
-        });
     })();
     </script>
     <script>
