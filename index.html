@@ -71,6 +71,7 @@
 
     <!-- Fonts -->
     <link rel="stylesheet" href="/shared/brand.css">
+    <link rel="stylesheet" href="/shared/theme-earth.css">
 
     <!-- Favicons (reduced Seed-of-Life mark, optimized for small sizes) -->
     <link rel="icon" href="/favicon.ico" sizes="any">
@@ -157,6 +158,7 @@
 
         /* ═══ HERO ═══ */
         .hero {
+            --hero-center-wash: 34%;
             min-height: 100vh;
             padding: 0 2rem;
             display: flex; align-items: center; justify-content: center;
@@ -182,8 +184,13 @@
             position: absolute;
             inset: 0;
             background:
-                radial-gradient(ellipse at 50% 46%, rgba(20,18,16,0.34) 0%, rgba(20,18,16,0.68) 62%, rgba(20,18,16,0.88) 100%),
-                linear-gradient(180deg, rgba(20,18,16,0.38) 0%, rgba(20,18,16,0.1) 45%, var(--t-bg) 100%);
+                radial-gradient(ellipse at 50% 46%, color-mix(in srgb, var(--t-bg) var(--hero-center-wash), transparent) 0%, color-mix(in srgb, var(--t-bg) 68%, transparent) 62%, color-mix(in srgb, var(--t-bg) 88%, transparent) 100%),
+                linear-gradient(180deg, color-mix(in srgb, var(--t-bg) 38%, transparent) 0%, color-mix(in srgb, var(--t-bg) 10%, transparent) 45%, var(--t-bg) 100%);
+        }
+        /* The dusk photograph needs a pale veil behind light-theme ink. */
+        :root[data-theme="light"] .hero { --hero-center-wash: 82%; }
+        @media (prefers-color-scheme: light) {
+            :root:not([data-theme]) .hero { --hero-center-wash: 82%; }
         }
         .hero-content { position: relative; z-index: 1; }
         .hero h1 {
@@ -253,6 +260,9 @@
         .syncengine       { --atmo: url("assets/web/digital-garden.webp"); --atmo-op: 0.16; }
         .community        { --atmo: url("assets/web/radical-inclusion-hearth-1600.webp"); --atmo-op: 0.16; }
         .transformation   { --atmo: url("assets/web/death-composting-dawn-1600.webp"); }
+        .first-temple     { --atmo: url("assets/web/temple-network-1600.webp"); --atmo-op: 0.3; }
+        .writings         { --atmo: url("assets/web/cosmology-spiral-garden-1600.webp"); --atmo-op: 0.28; }
+        .affirmations     { --atmo: url("assets/web/covenant-woven-roots-1600.webp"); }
 
         /* Divider */
         .section-divider {
@@ -315,8 +325,39 @@
         .cosmology-header { text-align: center; margin-bottom: 2rem; }
 
         .scrolly {
+            position: relative; isolation: isolate; --cosmo-art-opacity: 0.28;
+            margin: 0 -2rem; padding: 0 2rem;
+        }
+        .scrolly-content {
+            position: relative; z-index: 1;
             display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
             gap: 4rem; align-items: start; max-width: 1100px; margin: 0 auto;
+        }
+
+        /* The track follows the entire story; its artwork stays viewport-sized. */
+        .cosmo-backdrop-track { position: absolute; inset: 0; pointer-events: none; }
+        .cosmo-backdrop {
+            position: sticky; top: 0; height: 100vh; height: 100svh;
+            overflow: hidden;
+        }
+        .cosmo-backdrop img {
+            position: absolute; inset: 0; width: 100%; height: 100%;
+            object-fit: cover; object-position: center;
+            opacity: 0; transition: opacity 1.2s var(--ease);
+        }
+        .scrolly[data-stage="1"] .cosmo-art-1,
+        .scrolly[data-stage="2"] .cosmo-art-2,
+        .scrolly[data-stage="3"] .cosmo-art-3,
+        .scrolly[data-stage="4"] .cosmo-art-4,
+        .scrolly[data-stage="5"] .cosmo-art-5,
+        .scrolly[data-stage="6"] .cosmo-art-6 { opacity: var(--cosmo-art-opacity); }
+        :root[data-theme="light"] .scrolly { --cosmo-art-opacity: 1; }
+        .cosmo-backdrop::after {
+            content: ''; position: absolute; inset: 0;
+            background:
+                linear-gradient(180deg, var(--t-bg), transparent 16%, transparent 84%, var(--t-bg)),
+                radial-gradient(ellipse at 55% 48%, color-mix(in srgb, var(--t-bg) 82%, transparent) 0%,
+                    color-mix(in srgb, var(--t-bg) 50%, transparent) 40%, transparent 78%);
         }
 
         .mandala-sticky {
@@ -487,12 +528,12 @@
         .principle-counterweight {
             display: block; margin-top: 1.5rem; padding-top: 1.5rem;
             font-size: 0.95rem; font-style: italic; letter-spacing: 0.04em;
-            color: #e8c36a; position: relative;
+            color: var(--t-wn); position: relative;
         }
         .principle-counterweight::before {
             content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
             width: 80px; height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(232,195,106,0.55), transparent);
+            background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--t-wn) 55%, transparent), transparent);
         }
         .community-grid {
             display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem;
@@ -515,20 +556,20 @@
         .community-card {
             padding: 2rem 1.75rem; display: flex; align-items: center; gap: 1.25rem;
             text-align: left; border-radius: 12px;
-            background: linear-gradient(135deg, rgba(232,195,106,0.05), rgba(255,255,255,0.02));
-            border: 1px solid rgba(232,195,106,0.16);
+            background: linear-gradient(135deg, color-mix(in srgb, var(--t-wn) 5%, transparent), rgba(255,255,255,0.02));
+            border: 1px solid color-mix(in srgb, var(--t-wn) 16%, transparent);
             backdrop-filter: blur(10px) saturate(1.05); -webkit-backdrop-filter: blur(10px) saturate(1.05);
             box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 4px 18px rgba(0,0,0,0.2);
             transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
         }
         .community-card:hover {
-            transform: translateY(-2px); border-color: rgba(232,195,106,0.38);
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 6px 28px rgba(0,0,0,0.28), 0 0 32px rgba(232,195,106,0.1);
+            transform: translateY(-2px); border-color: color-mix(in srgb, var(--t-wn) 38%, transparent);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 6px 28px rgba(0,0,0,0.28), 0 0 32px color-mix(in srgb, var(--t-wn) 10%, transparent);
         }
         .community-numeral {
             font-family: var(--s-display); font-style: italic; font-size: 1.6rem;
-            color: #e8c36a; letter-spacing: 0.05em; flex-shrink: 0; opacity: 0.9;
-            text-shadow: 0 0 18px rgba(232,195,106,0.35);
+            color: var(--t-wn); letter-spacing: 0.05em; flex-shrink: 0; opacity: 0.9;
+            text-shadow: 0 0 18px color-mix(in srgb, var(--t-wn) 35%, transparent);
         }
         .community-card p {
             font-family: var(--s-display); font-size: 1.05rem; letter-spacing: 0.02em;
@@ -693,63 +734,36 @@
             .temples-rail { max-width: 560px; margin: 0 auto; width: 100%; }
         }
 
-        /* ═══ Offering (Ceremony Mat) ═══ */
-        .offering { padding: 6rem 2rem 4rem; text-align: center; }
-        .offering-inner { max-width: 900px; margin: 0 auto; }
-        .offering .eyebrow { margin-bottom: 2rem; }
-        .offering-duo {
-            display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr) minmax(0, 1fr);
-            border: 1px solid var(--t-bd); border-radius: 14px;
-            overflow: hidden; text-decoration: none; background: var(--t-cd);
-            box-shadow: 0 30px 80px -48px rgba(0,0,0,0.55);
-            transition: border-color 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease;
+        /* Ceremony Mats — two skies, each given room in the story. */
+        .offering { padding: 6rem 0 0; overflow: visible; }
+        .offering-intro { text-align: center; padding: 0 2rem 4rem; max-width: 850px; margin: auto; }
+        .offering-intro h2 { font-size: clamp(2.8rem, 6vw, 5rem); line-height: 1.06; margin-bottom: 1.5rem; }
+        .offering-intro .lead { max-width: 48ch; margin: auto; }
+        .mat-scene { position: relative; isolation: isolate; padding: 4rem 3rem; }
+        .mat-scene::before {
+            content: ''; position: absolute; inset: 0; z-index: -1;
+            background: var(--mat-art) center / cover; opacity: .18;
+            mask-image: linear-gradient(transparent, #000 24%, #000 76%, transparent);
+            -webkit-mask-image: linear-gradient(transparent, #000 24%, #000 76%, transparent);
         }
-        .offering-duo:hover {
-            border-color: var(--t-ac); transform: translateY(-3px);
-            box-shadow: 0 40px 90px -44px rgba(0,0,0,0.6), 0 0 60px -24px var(--t-ac);
-        }
-        .duo-panel { margin: 0; position: relative; min-height: 400px; overflow: hidden; background: var(--t-bg); }
-        .duo-panel img {
-            position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;
-            transition: transform 6s ease;
-        }
-        .offering-duo:hover .duo-panel img { transform: scale(1.05); }
-        /* Blend each mat into the copy column on its inner edge */
-        .duo-cosmic::before, .duo-dawn::before {
-            content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
-        }
-        .duo-cosmic::before { background: linear-gradient(90deg, transparent 78%, var(--t-cd) 100%); }
-        .duo-dawn::before { background: linear-gradient(270deg, transparent 78%, var(--t-cd) 100%); }
-        .duo-panel figcaption {
-            position: absolute; left: 0; right: 0; bottom: 0; z-index: 2;
-            display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
-            padding: 2.25rem 1rem 1.1rem;
-            background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.62) 100%);
-        }
-        .duo-name {
-            font-family: var(--font-mono); font-size: 0.62rem; font-weight: 500;
-            letter-spacing: 0.28em; text-transform: uppercase; color: #f2ede2;
-        }
-        .duo-sky { font-family: var(--s-display); font-style: italic; font-size: 0.85rem; color: rgba(242,237,226,0.72); }
-        .duo-body {
-            padding: 3rem 2.25rem; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; text-align: center;
-        }
-        .duo-tagline {
-            font-family: var(--s-display); font-style: italic;
-            font-size: 1.05rem; color: var(--t-a2); margin-bottom: 1rem;
-        }
-        .duo-body .offering-subtitle { margin-left: auto; margin-right: auto; }
-        .offering-eyebrow { font-family: var(--s-display); font-style: italic; font-size: 0.95rem; letter-spacing: 0.04em; color: var(--t-ac); margin-bottom: 0.75rem; }
-        .offering-title { font-family: var(--s-display); font-size: clamp(1.3rem, 3vw, 1.8rem); font-weight: 400; color: var(--t-tx); letter-spacing: 0.05em; margin-bottom: 0.75rem; line-height: 1.2; }
-        .offering-subtitle { font-family: var(--s-font); font-size: 0.9rem; font-weight: 300; color: var(--t-t2); line-height: 1.6; margin-bottom: 1.25rem; max-width: 48ch; }
-        .offering-read { font-family: var(--s-display); font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--t-ac); transition: opacity 0.3s; }
-        .offering-duo:hover .offering-read { opacity: 0.8; }
-        @media (max-width: 900px) {
-            .offering-duo { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
-            .duo-panel { min-height: 300px; }
-            .duo-cosmic::before, .duo-dawn::before { background: linear-gradient(180deg, transparent 78%, var(--t-cd) 100%); }
-            .duo-body { grid-column: 1 / -1; order: 2; padding: 2.25rem 1.5rem; }
+        :root[data-theme="light"] .mat-scene::before { opacity: .1; }
+        .mat-scene-inner { max-width: 1100px; margin: auto; display: grid; grid-template-columns: minmax(0,1.25fr) minmax(0,1fr); gap: clamp(2rem,5vw,5rem); align-items: start; }
+        .mat-visual { position: sticky; top: calc(var(--toe-bar-h) + 2rem); margin: 0; }
+        .mat-visual img { width: 100%; height: min(72vh,650px); object-fit: contain; display: block; filter: drop-shadow(0 24px 25px rgba(0,0,0,.22)); }
+        .mat-visual figcaption { text-align: center; color: var(--t-mt); font-size: .8rem; padding-top: 1rem; }
+        .mat-copy { min-height: 88vh; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding: 3rem 0; }
+        .mat-copy h3 { font-size: clamp(2rem,4vw,3.5rem); line-height: 1.1; margin-bottom: 1.5rem; }
+        .mat-copy p:not(.eyebrow) { max-width: 38ch; font-size: 1.05rem; line-height: 1.8; color: var(--t-t2); }
+        .mat-copy .temple-link { margin-top: 2rem; padding: 1.1rem 1.5rem; letter-spacing: .08em; }
+        .mat-dawn .mat-visual { grid-column: 2; grid-row: 1; }
+        .mat-dawn .mat-copy { grid-column: 1; grid-row: 1; }
+        .mat-dawn .mat-scene-inner { grid-template-columns: minmax(0,1fr) minmax(0,1.25fr); }
+        @media (max-width: 860px) {
+            .mat-scene { padding: 2rem 1.5rem 4rem; }
+            .mat-scene-inner, .mat-dawn .mat-scene-inner { grid-template-columns: minmax(0,1fr); gap: 2rem; }
+            .mat-visual, .mat-dawn .mat-visual { position: relative; top: auto; grid-column: 1; grid-row: auto; }
+            .mat-visual img { height: auto; max-height: 65svh; }
+            .mat-copy, .mat-dawn .mat-copy { grid-column: 1; grid-row: auto; min-height: 0; padding: 0; }
         }
 
         /* ═══ Writings ═══ */
@@ -758,6 +772,7 @@
         .writings .eyebrow { margin-bottom: 1.5rem; }
         .writings h2 { font-family: var(--s-display); font-size: clamp(1.5rem, 4vw, 2.5rem); letter-spacing: 0.1em; font-weight: 400; margin-bottom: 1rem; }
         .writings .lead { color: var(--t-t2); font-size: 1.05rem; max-width: 500px; margin: 0 auto 3rem; }
+        .writings #writings-heading { font-size: clamp(2.8rem, 6vw, 5rem); letter-spacing: 0; line-height: 1.1; }
         /* One combined card: uncropped essay hero melting into the copy,
            with the publication row as the card's footer. */
         .temple-writings-card {
@@ -771,14 +786,14 @@
             border-color: var(--t-ac); transform: translateY(-3px);
             box-shadow: 0 40px 90px -44px rgba(0,0,0,0.6), 0 0 60px -24px var(--t-ac);
         }
-        .tw-feature { display: block; text-decoration: none; color: inherit; }
+        .tw-feature { display: grid; grid-template-columns: minmax(0,1.15fr) minmax(0,1fr); align-items: center; text-decoration: none; color: inherit; text-align: left; }
         .tw-image { position: relative; }
         .tw-image img { width: 100%; height: auto; display: block; }
         .tw-image::after {
             content: ''; position: absolute; inset: 0; pointer-events: none;
-            background: linear-gradient(180deg, transparent 62%, var(--t-cd) 100%);
+            background: linear-gradient(90deg, transparent 82%, var(--t-cd) 100%);
         }
-        .tw-body { padding: 0 2.5rem 2.5rem; margin-top: -0.5rem; position: relative; }
+        .tw-body { padding: 2.5rem; position: relative; }
         .tw-eyebrow { font-family: var(--s-display); font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--t-a2); margin-bottom: 1rem; }
         .tw-title { font-family: var(--s-display); font-size: clamp(1.2rem, 2.8vw, 1.7rem); font-weight: 400; color: var(--t-tx); line-height: 1.35; margin-bottom: 0.6rem; }
         .tw-subtitle { font-family: var(--s-font); font-size: 0.9rem; font-weight: 300; color: var(--t-t2); line-height: 1.6; margin: 0 auto 1.25rem; max-width: 48ch; }
@@ -803,7 +818,9 @@
         .tw-pub-links a:hover { opacity: 0.75; }
         .tw-pub-links svg { width: 15px; height: 15px; flex-shrink: 0; }
         @media (max-width: 768px) {
-            .tw-body { padding: 0 1.5rem 2rem; }
+            .tw-feature { grid-template-columns: minmax(0,1fr); }
+            .tw-image::after { background: linear-gradient(180deg, transparent 82%, var(--t-cd) 100%); }
+            .tw-body { padding: 1.5rem; }
             .tw-footer { padding: 1.25rem 1.5rem; }
         }
 
@@ -818,9 +835,14 @@
 
         /* ═══ Responsive ═══ */
         @media (max-width: 860px) {
-            .scrolly { display: block; }
+            .scrolly-content { display: block; }
+            .cosmo-backdrop::after {
+                background:
+                    linear-gradient(180deg, var(--t-bg), transparent 20%, transparent 84%, var(--t-bg)),
+                    linear-gradient(color-mix(in srgb, var(--t-bg) 55%, transparent), color-mix(in srgb, var(--t-bg) 55%, transparent));
+            }
             .mandala-sticky {
-                position: sticky; top: 0; height: auto; z-index: 5;
+                position: sticky; top: var(--toe-bar-h, 0px); height: auto; z-index: 5;
                 padding: 1.25rem 0 1rem;
                 background: linear-gradient(180deg, var(--t-bg) 78%, transparent);
             }
@@ -832,6 +854,7 @@
         @media (max-width: 768px) {
             section { padding: 6rem 1.5rem; }
             .cosmology { padding-top: 5rem; }
+            .scrolly { margin-inline: -1.5rem; padding-inline: 1.5rem; }
             .etymology { padding: 2rem; }
             .etymology::before, .etymology::after { width: 50px; height: 50px; }
             .etymology-word { font-size: 1.75rem; }
@@ -898,6 +921,17 @@
         </div>
 
         <div class="scrolly" id="cosmos" data-stage="6">
+            <div class="cosmo-backdrop-track" aria-hidden="true">
+                <div class="cosmo-backdrop">
+                    <img class="cosmo-art-1" src="assets/cosmology-backgrounds/01-divine-monad.webp" alt="" loading="lazy" decoding="async">
+                    <img class="cosmo-art-2" src="assets/cosmology-backgrounds/02-fractal-emanation.webp" alt="" loading="lazy" decoding="async">
+                    <img class="cosmo-art-3" src="assets/cosmology-backgrounds/03-consciousness-field.webp" alt="" loading="lazy" decoding="async">
+                    <img class="cosmo-art-4" src="assets/cosmology-backgrounds/04-gnosis.webp" alt="" loading="lazy" decoding="async">
+                    <img class="cosmo-art-5" src="assets/cosmology-backgrounds/05-lila-sacred-play.webp" alt="" loading="lazy" decoding="async">
+                    <img class="cosmo-art-6" src="assets/cosmology-backgrounds/06-earth-teacher.webp" alt="" loading="lazy" decoding="async">
+                </div>
+            </div>
+            <div class="scrolly-content">
 
             <!-- Pinned mandala: the mark assembles layer by layer -->
             <div class="mandala-sticky">
@@ -996,6 +1030,7 @@
                 </div>
             </div>
 
+            </div>
         </div>
     </section>
 
@@ -1160,7 +1195,7 @@
     </section>
 
     <!-- Affirmations -->
-    <section class="affirmations">
+    <section class="affirmations atmo" id="affirmations">
         <div class="container">
             <div class="affirmations-header r">
                 <p class="eyebrow">What We Hold</p>
@@ -1184,7 +1219,7 @@
     </section>
 
     <!-- The Network -->
-    <section class="first-temple">
+    <section class="first-temple atmo" id="temple-network">
         <div class="container">
             <h2 class="network-title r">Network of Temples</h2>
             <div class="network-layout r r-d1">
@@ -1230,52 +1265,49 @@
         </div>
     </section>
 
-    <!-- Offering: The Ceremony Mat -->
-    <section class="offering">
-        <div class="container">
-            <div class="offering-inner r">
-                <p class="eyebrow">The First Physical Offering</p>
-                <a href="/mats" class="offering-duo" aria-label="The Ceremony Mat — explore both designs">
-                    <figure class="duo-panel duo-cosmic">
-                        <picture>
-                            <source type="image/avif" srcset="assets/web/fractal-metatron-480.avif 480w, assets/web/fractal-metatron-960.avif 960w" sizes="(max-width: 900px) 50vw, 340px">
-                            <source type="image/webp" srcset="assets/web/fractal-metatron-480.webp 480w, assets/web/fractal-metatron-960.webp 960w" sizes="(max-width: 900px) 50vw, 340px">
-                            <img src="assets/web/fractal-metatron-480.jpg" alt="Fractal Metatron ceremony mat — Metatron's Cube in sacred geometry over a cosmic starfield" loading="lazy" decoding="async">
-                        </picture>
-                        <figcaption>
-                            <span class="duo-name">Fractal Metatron</span>
-                            <span class="duo-sky">Cosmic Sky</span>
-                        </figcaption>
-                    </figure>
-                    <div class="duo-body">
-                        <p class="offering-eyebrow">A portable temple.</p>
-                        <h2 class="offering-title">The Ceremony Mat</h2>
-                        <p class="duo-tagline">One pattern — two skies.</p>
-                        <p class="offering-subtitle">An oversized coconut-rubber mat printed with fractal sacred geometry — carry it anywhere and create a sacred place wherever you unroll it.</p>
-                        <span class="offering-read">Explore both designs →</span>
-                    </div>
-                    <figure class="duo-panel duo-dawn">
-                        <picture>
-                            <source type="image/avif" srcset="assets/web/heaven-on-earth-480.avif 480w, assets/web/heaven-on-earth-960.avif 960w" sizes="(max-width: 900px) 50vw, 340px">
-                            <source type="image/webp" srcset="assets/web/heaven-on-earth-480.webp 480w, assets/web/heaven-on-earth-960.webp 960w" sizes="(max-width: 900px) 50vw, 340px">
-                            <img src="assets/web/heaven-on-earth-480.jpg" alt="Heaven on Earth ceremony mat — fractal sacred geometry over a dawn sky" loading="lazy" decoding="async">
-                        </picture>
-                        <figcaption>
-                            <span class="duo-name">Heaven on Earth</span>
-                            <span class="duo-sky">Dawn Sky</span>
-                        </figcaption>
-                    </figure>
-                </a>
+    <!-- Ceremony Mats: from a shared temple to a portable sacred place. -->
+    <section class="offering" id="ceremony-mats" aria-labelledby="mats-heading">
+        <div class="offering-intro r">
+            <p class="eyebrow">A portable temple</p>
+            <h2 id="mats-heading">The Ceremony Mat</h2>
+            <p class="lead">Carry a sacred place with you. One pattern, two skies.</p>
+        </div>
+        <div class="mat-scene mat-cosmic" style="--mat-art:url('assets/web/fractal-metatron-1600.webp')">
+            <div class="mat-scene-inner">
+                <figure class="mat-visual">
+                    <img src="assets/web/fractal-metatron-1600.webp" alt="The full Fractal Metatron mat design: sacred geometry against a cosmic starfield" loading="lazy" decoding="async">
+                    <figcaption>Fractal Metatron · Cosmic Sky</figcaption>
+                </figure>
+                <div class="mat-copy">
+                    <p class="eyebrow">Cosmic Sky</p>
+                    <h3>Fractal Metatron</h3>
+                    <p>Fractal sacred geometry opens onto a field of stars. A pattern to return to, wherever your practice takes you.</p>
+                    <a class="temple-link" href="/mats">Explore the ceremony mats →</a>
+                </div>
+            </div>
+        </div>
+        <div class="mat-scene mat-dawn" style="--mat-art:url('assets/web/heaven-on-earth-1600.webp')">
+            <div class="mat-scene-inner">
+                <figure class="mat-visual">
+                    <img src="assets/web/heaven-on-earth-1600.webp" alt="The full Heaven on Earth mat design: fractal sacred geometry across a dawn sky" loading="lazy" decoding="async">
+                    <figcaption>Heaven on Earth · Dawn Sky</figcaption>
+                </figure>
+                <div class="mat-copy">
+                    <p class="eyebrow">Dawn Sky</p>
+                    <h3>Heaven on Earth</h3>
+                    <p>The same geometry meets the light of dawn. Unroll an oversized coconut-rubber mat and make room for ceremony, movement, or stillness.</p>
+                    <a class="temple-link" href="/mats">Find your sky →</a>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Writings Section -->
-    <section class="writings">
+    <section class="writings atmo" id="writings">
         <div class="container">
             <div class="writings-content">
                 <p class="eyebrow r">Writings</p>
-                <h2 class="r r-d1">From the Temple</h2>
+                <h2 class="r r-d1" id="writings-heading">From the Temple</h2>
                 <p class="lead r r-d2">Essays, reflections, and transmissions from the edge of the possible.</p>
                 <div class="temple-writings-card r r-d2">
                     <a href="/articles/read?slug=gene-editing-collective" class="tw-feature">
@@ -1284,7 +1316,7 @@
                         </div>
                         <div class="tw-body">
                             <p class="tw-eyebrow">Featured Essay</p>
-                            <h2 class="tw-title">Gene Editing a Collective Consciousness</h2>
+                            <h3 class="tw-title">Gene Editing a Collective Consciousness</h3>
                             <p class="tw-subtitle">Every organization is alive. The question is what kind of creature you're building.</p>
                             <span class="tw-read">Read →</span>
                         </div>
