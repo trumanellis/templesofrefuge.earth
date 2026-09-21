@@ -688,6 +688,20 @@
             -webkit-appearance: none; appearance: none; transition: border-color .2s, color .2s; }
         .vote-again:hover { border-color: var(--t-ac); color: var(--t-ac); }
         .vote-again:focus-visible { outline: 2px solid var(--t-ac); outline-offset: 3px; }
+        .tally { width: 100%; max-width: 480px; text-align: left; border-top: 1px solid var(--t-bd); margin-top: .6rem; padding-top: 1.4rem;
+            display: flex; flex-direction: column; gap: .8rem; }
+        .tally-h { font-family: var(--s-display); font-weight: 400; font-size: 1.05rem; letter-spacing: .04em; margin: 0; text-align: center; }
+        .tally-sub, .tally-key { font-size: .82rem; color: var(--t-mt); text-align: center; }
+        .tally-list { list-style: none; display: flex; flex-direction: column; gap: .55rem; }
+        .tally-list li { display: grid; grid-template-columns: 1.9rem minmax(0, 1fr); gap: .75rem; align-items: center; }
+        .tally-list img { width: 1.9rem; aspect-ratio: 2 / 3; object-fit: cover; border-radius: 4px; display: block; }
+        .tally-row { display: flex; justify-content: space-between; gap: .6rem; font-size: .88rem; margin-bottom: .3rem; color: var(--t-tx); }
+        .tally-row span { font-size: .78rem; color: var(--t-mt); white-space: nowrap; font-variant-numeric: tabular-nums; }
+        .tally-row em { font-style: normal; font-size: .7rem; font-weight: 500; background: var(--t-ac); color: var(--t-on-ac); border-radius: 999px; padding: .05rem .5rem; margin-left: .4rem; }
+        .tally-bar { height: .45rem; border-radius: 999px; background: var(--t-b2); overflow: hidden; }
+        .tally-bar i { display: block; height: 100%; border-radius: 999px; background: var(--t-mt); width: 0; transition: width .7s ease-out; }
+        .tally-list li.mine .tally-bar i { background: var(--t-ac); }
+        @media (prefers-reduced-motion: reduce) { .tally-bar i { transition: none; } }
         .thanks-picks { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .8rem; max-width: 420px; width: 100%; }
         .thanks-picks img { width: 100%; aspect-ratio: 2 / 3; object-fit: cover; border-radius: 6px; display: block; }
         .thanks-picks span { display: block; margin-top: .35rem; font-size: .8rem; color: var(--t-t2); }
@@ -998,7 +1012,7 @@
                         <label class="ch-field" data-for="telegram" hidden><span>Telegram username or number</span>
                             <input class="text-in" type="text" id="ch-telegram" autocomplete="off" placeholder="@username" maxlength="40"></label>
                     </div>
-                    <p class="step-hint">Choose as many as you like. We'll send one message when the mats are available, and nothing else.</p>
+                    <p class="step-hint">Choose as many as you like. Email also gets a copy of your vote now; otherwise we send one message, when the mats are available, and nothing else.</p>
                 </div>
 
                 <details class="more">
@@ -1021,7 +1035,7 @@
                 <p class="cta-form-error" id="voteError" role="alert" hidden></p>
                 <button type="submit" class="btn-primary vote-btn" id="voteBtn" disabled>Send my vote</button>
                 <p class="vote-need" id="voteNeed" aria-live="polite"></p>
-                <p class="order-fineprint">We keep your first name, picks and any thought you add only to choose the print, and delete them when the vote closes. Contact details are used once, to tell you the mats are available.</p>
+                <p class="order-fineprint">We keep your first name, picks and any thought you add only to choose the print, and delete them when the vote closes. Contact details are used only to confirm your vote and to tell you the mats are available. To allow a few votes per household, we keep a scrambled fingerprint of your connection, never the address itself.</p>
             </form>
 
             <div class="vote-thanks" id="voteThanks" hidden>
@@ -1029,6 +1043,12 @@
                 <h3>Thank you, <span id="thanksName"></span></h3>
                 <p id="thanksText">Your vote is in.</p>
                 <ol class="thanks-picks" id="thanksPicks"></ol>
+                <div class="tally" id="tally" hidden>
+                    <h4 class="tally-h">How everyone's voting</h4>
+                    <p class="tally-sub" id="tallySub"></p>
+                    <ol class="tally-list" id="tallyList"></ol>
+                    <p class="tally-key">Points: 3 for a first choice, 2 for a second, 1 for a third.</p>
+                </div>
                 <button type="button" class="vote-again" id="voteChange">Change my vote</button>
             </div>
         </div>
@@ -1352,7 +1372,31 @@
                 return '<li><img src="' + thumb(s) + '" alt="" draggable="false"><span>' + ORD[i] + ' · ' + names[s] + '</span></li>';
             }).join('');
             floatBar();
+            loadTally(v);
             $('vote').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // After voting: everyone's totals (points and first places only, no names).
+        function loadTally(v) {
+            fetch(API + '/poll-tally?poll=' + encodeURIComponent(POLL))
+                .then(function (r) { if (!r.ok) throw new Error(); return r.json(); })
+                .then(function (d) {
+                    var t = d.tally || {}, rows = Object.keys(names).map(function (s) {
+                        var x = t[s] || { points: 0, first: 0 };
+                        return { s: s, points: x.points, first: x.first, mine: v.ranks.indexOf(s) };
+                    }).sort(function (a, b) { return b.points - a.points || b.first - a.first || names[a.s].localeCompare(names[b.s]); });
+                    var max = Math.max(1, rows[0] ? rows[0].points : 1);
+                    $('tallySub').textContent = d.voters + (d.voters === 1 ? ' person has' : ' people have') + ' voted so far. Your picks are highlighted.';
+                    $('tallyList').innerHTML = rows.map(function (r) {
+                        return '<li class="' + (r.mine >= 0 ? 'mine' : '') + '"><img src="' + thumb(r.s) + '" alt="">' +
+                            '<div><div class="tally-row"><strong>' + names[r.s] + (r.mine >= 0 ? '<em>your ' + ORD[r.mine] + '</em>' : '') + '</strong>' +
+                            '<span>' + r.points + ' pts' + (r.first ? ' · ' + r.first + ' first' : '') + '</span></div>' +
+                            '<div class="tally-bar"><i data-w="' + (r.points / max * 100) + '%"></i></div></div></li>';
+                    }).join('');
+                    $('tally').hidden = false;
+                    requestAnimationFrame(function () { Array.prototype.forEach.call(document.querySelectorAll('.tally-bar i'), function (i) { i.style.width = i.dataset.w; }); });
+                })
+                .catch(function () { $('tally').hidden = true; });
         }
         $('voteChange').addEventListener('click', function () {
             var v = store.get('vote') || {};

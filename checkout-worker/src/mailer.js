@@ -59,12 +59,14 @@ export async function createMailer(env) {
   });
 
   /**
-   * @param {{subject: string, text: string, replyTo?: string}} msg
+   * @param {{subject: string, text: string, replyTo?: string, to?: string}} msg
+   * `to` defaults to INQUIRY_TO (our own inbox). Only the poll's vote
+   * confirmation passes one: the voter's own address, validated in index.js.
    */
   return async function sendMail(msg) {
     await transport.sendMail({
       from: env.SMTP_FROM || env.SMTP_USER,
-      to: env.INQUIRY_TO,
+      to: msg.to || env.INQUIRY_TO,
       subject: msg.subject,
       text: msg.text,
       // Lets whoever reads it reply straight to the applicant. The address is

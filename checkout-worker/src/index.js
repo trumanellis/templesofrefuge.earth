@@ -134,6 +134,9 @@ export default {
       if (request.method === 'GET' && url.pathname === '/poll-results') {
         return await pollResults(url, env, okOrigin);
       }
+      if (request.method === 'GET' && url.pathname === '/poll-tally') {
+        return await pollTally(url, env, okOrigin);
+      }
       return json({ error: 'Not found' }, 404, okOrigin);
     } catch (err) {
       return json({ error: err.message || 'Server error' }, 500, okOrigin);
@@ -506,8 +509,9 @@ async function inquiry(request, env, origin) {
    poll-store.js); the latest vote per voter id counts, so a friend can change
    their mind from the same browser. Results need POLL_RESULTS_TOKEN from /etc/tor-checkout/env.
 
-   Slugs are checked by shape only, so no unreleased design name ever has to
-   appear in this public repo. No IP address is stored. */
+   Each connection may carry at most POLL_VOTERS_PER_IP voters; the address is
+   stored only as a salted HMAC. Each vote mails us, and mails the voter a
+   confirmation when they gave an email. */
 
 const SLUG = /^[a-z0-9-]{1,48}$/;
 const BUY = new Set(['yes', 'maybe', 'no']);
@@ -570,11 +574,35 @@ async function pollVote(request, env, origin) {
   const buy = BUY.has(body.buy) ? body.buy : null;
   const comment = String(body.comment || '').trim().slice(0, 1000);
 
+  // At most POLL_VOTERS_PER_IP different voters per connection, so a household
+  // can each vote but one person cannot stuff the ballot with fresh browsers.
+  // A voter already counted here may always change their vote. The address is
+  // kept only as a salted one-way hash.
+  const ipk = await ipKey(clientIp(request), env);
+  let prior;
   try {
-    await store.append({ t: new Date().toISOString(), poll, voter, name, contact: contact.value, ranks, buy, comment });
+    prior = (await store.all()).filter((v) => v.poll === poll);
   } catch {
     return json({ error: 'We could not save that just now.' }, 502, origin);
   }
+  const here = new Set(prior.filter((v) => v.ipk === ipk).map((v) => v.voter));
+  if (!here.has(voter) && here.size >= POLL_VOTERS_PER_IP) {
+    return json({ error: 'Three people have already voted from this connection. If one of them is you, change your vote from the same browser.' }, 429, origin);
+  }
+
+  const record = { t: new Date().toISOString(), poll, voter, ipk, name, contact: contact.value, ranks, buy, comment };
+  try {
+    await store.append(record);
+  } catch {
+    return json({ error: 'We could not save that just now.' }, 502, origin);
+  }
+  // Mail after the vote is safe: a failed send never loses a vote or delays the
+  // answer, and says nothing out loud about what it carried.
+  const voters = new Set(prior.map((v) => v.voter || v.name)).add(voter).size;
+  // Mail uses every contact this voter has given, not just this submission's,
+  // the same way the results page merges them.
+  const known = prior.filter((v) => v.voter === voter).reduce((c, v) => ({ ...c, ...(v.contact || {}) }), {});
+  voteMail(env, { ...record, contact: { ...known, ...record.contact } }, voters).catch(() => {});
   return json({ ok: true }, 200, origin);
 }
 
@@ -603,11 +631,107 @@ function pollContact(body) {
   return { value };
 }
 
+const POLL_VOTERS_PER_IP = 3;
+const POLL_RESULTS_URL = 'https://templesof.earth/mats-results';
+// The prints on /mats, for mail. A slug missing here is shown title-cased.
+const POLL_NAMES = {
+  'metatrons-slice': "Metatron's Slice", cosmos: 'Cosmos', ocean: 'Ocean', chacruna: 'Chacruna',
+  reverie: 'Reverie', blotter: 'Blotter', 'tree-of-life': 'Tree of Life', sunset: 'Sunset', cernunnos: 'Cernunnos',
+};
+const printName = (s) => POLL_NAMES[s] || s.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+
+let ipSalt = null;
+async function ipKey(ip, env) {
+  // Salted so the stored value cannot be reversed by hashing every address.
+  // Without a configured secret the salt is per process, so the cap resets on restart.
+  if (!ipSalt) {
+    const secret = env.POLL_IP_SALT || env.POLL_RESULTS_TOKEN ||
+      Array.from(crypto.getRandomValues(new Uint8Array(16)), (b) => b.toString(16).padStart(2, '0')).join('');
+    ipSalt = await crypto.subtle.importKey('raw', new TextEncoder().encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+  }
+  const mac = new Uint8Array(await crypto.subtle.sign('HMAC', ipSalt, new TextEncoder().encode(ip)));
+  return Array.from(mac.slice(0, 16), (b) => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function voteMail(env, v, voters) {
+  const send = env.SEND_MAIL;
+  if (typeof send !== 'function') return;
+  const ORD = ['1st', '2nd', '3rd'];
+  const picks = v.ranks.map((s, i) => `  ${ORD[i]}  ${printName(s)}`).join('\n');
+  const channels = Object.keys(v.contact || {});
+  const via = channels.map((c) => ({ whatsapp: 'WhatsApp', email: 'email', telegram: 'Telegram' }[c] || c));
+  const sends = [];
+
+  // To the voter, only if they gave an email.
+  if (v.contact && v.contact.email) {
+    const also = via.filter((c) => c !== 'email');
+    sends.push(send({
+      to: v.contact.email,
+      subject: 'Your vote for the Ceremony Mat print',
+      text: [
+        `Thank you, ${v.name}.`, '',
+        'Your vote is in:', picks, '',
+        `We'll write once, when the mats are available${also.length ? ', and message you on ' + also.join(' and ') : ''}.`,
+        'Changed your mind? Vote again from the same browser at https://templesof.earth/mats#vote. Your latest vote counts.', '',
+        'Temples of Earth', 'https://templesof.earth/mats',
+      ].join('\n'),
+    }));
+  }
+
+  // To us, every vote.
+  sends.push(send({
+    subject: `Mat vote: ${v.name} · 1st ${printName(v.ranks[0])}`,
+    text: [
+      `${v.name} voted (${voters} ${voters === 1 ? 'voter' : 'voters'} so far).`, '',
+      picks, '',
+      `Would buy: ${v.buy || 'not said'}`,
+      `Notify via: ${channels.length ? channels.map((c) => `${c} ${v.contact[c]}`).join(', ') : 'none'}`,
+      ...(v.comment ? ['', 'Comment:', v.comment] : []),
+      '', `All results: ${POLL_RESULTS_URL}`,
+    ].join('\n'),
+    ...(v.contact && v.contact.email ? { replyTo: v.contact.email } : {}),
+  }));
+  await Promise.allSettled(sends);
+}
+
 function sameSecret(a, b) {
   if (!a || !b || a.length !== b.length) return false;
   let diff = 0;
   for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
   return diff === 0;
+}
+
+// Each voter's latest vote for one poll, oldest first.
+async function latestVotes(env, poll) {
+  const latest = new Map();                 // voter id → latest vote
+  for (const v of await env.POLL_STORE.all()) {
+    if (v.poll !== poll) continue;
+    const key = v.voter || 'name:' + String(v.name).toLowerCase();   // lines stored before voter ids
+    // A changed vote keeps any contact given earlier that it leaves blank.
+    const before = latest.get(key)?.contact || {};
+    const now = v.contact || (v.email ? { email: v.email } : {});
+    latest.set(key, { ...v, contact: { ...before, ...now } });
+  }
+  return [...latest.values()].sort((a, b) => a.t.localeCompare(b.t));
+}
+
+// Public, and deliberately only totals: points (3/2/1) and first places per
+// print, and how many have voted. No names, contacts or comments. The page
+// shows it to a visitor only after they have voted.
+async function pollTally(url, env, origin) {
+  if (!origin) return json({ error: 'Origin not allowed' }, 403, origin);
+  if (!env.POLL_STORE) return json({ error: 'Voting is not open yet.' }, 503, origin);
+  const poll = url.searchParams.get('poll') || '';
+  if (!SLUG.test(poll)) return json({ error: 'Unknown poll.' }, 400, origin);
+  const tally = {};
+  const votes = await latestVotes(env, poll);
+  for (const v of votes) {
+    v.ranks.forEach((s, i) => {
+      const t = tally[s] || (tally[s] = { points: 0, first: 0, mentions: 0 });
+      t.points += 3 - i; t.mentions += 1; if (i === 0) t.first += 1;
+    });
+  }
+  return json({ poll, voters: votes.length, tally }, 200, origin);
 }
 
 async function pollResults(url, env, origin) {
@@ -619,16 +743,8 @@ async function pollResults(url, env, origin) {
     return json({ error: 'Not authorised.' }, 403, origin);
   }
   const poll = url.searchParams.get('poll') || '';
-  const latest = new Map();                 // voter id → latest vote
-  for (const v of await env.POLL_STORE.all()) {
-    if (v.poll !== poll) continue;
-    const key = v.voter || 'name:' + String(v.name).toLowerCase();   // lines stored before voter ids
-    // A changed vote keeps any contact given earlier that it leaves blank.
-    const before = latest.get(key)?.contact || {};
-    const now = v.contact || (v.email ? { email: v.email } : {});
-    latest.set(key, { ...v, contact: { ...before, ...now } });
-  }
-  const votes = [...latest.values()].sort((a, b) => a.t.localeCompare(b.t));
+  // The connection hash stays on the box; nobody needs it on screen.
+  const votes = (await latestVotes(env, poll)).map(({ ipk, ...v }) => v);
   return json({ poll, votes }, 200, origin);
 }
 
