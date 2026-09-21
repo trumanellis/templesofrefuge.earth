@@ -70,7 +70,13 @@
      still answer from one web root, the hostname cannot tell the pages
      apart, and a Refuge page opened on the other domain must still look
      like itself. The hostname is only the fallback, for a page that
-     carries no attribute once the roots are separate. */
+     carries no attribute once the roots are separate.
+
+     INTERIM, until SITE-SPLIT phase C: both domains serve the Earth
+     home at /, so the Refuge site lives at /refuge/. Earth links there
+     rather than to templesofrefuge.earth, the Refuge home is /refuge/
+     rather than /, and Charter is hidden until /charter exists. At
+     phase C restore the domain link, home: '/', and the Charter link. */
   var SITES = {
     earth: {
       name: 'Temples of Earth',
@@ -86,7 +92,7 @@
           ['/articles/', 'Writings']
         ] },
         { label: 'More', links: [
-          ['https://templesofrefuge.earth', 'Temples of Refuge'],
+          ['/refuge/', 'Temples of Refuge'],
           ['https://agualila.earth', 'Água Lila']
         ] }
       ],
@@ -94,12 +100,11 @@
     },
     refuge: {
       name: 'Temples of Refuge',
-      home: '/',
+      home: '/refuge/',
       nav: [
-        { links: [['/', 'Home']] },
+        { links: [['/refuge/', 'Home']] },
         { label: 'Foundations', links: [
-          ['/cosmology', 'Cosmology'],
-          ['/charter', 'Charter']
+          ['/cosmology', 'Cosmology']
         ] },
         { label: 'The Network', links: [
           ['/found-a-temple', 'Found a Temple']
