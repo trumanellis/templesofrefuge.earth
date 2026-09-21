@@ -190,13 +190,13 @@
         }
         .hero-mats .mat-frame img { height: 100%; width: auto; max-width: none; display: block; }
         /* the side prints sit a little smaller and behind, so the fan has depth */
+        .hero-mats .fan-center { top: 12%; height: 72%; left: 50%; transform: translateX(-50%) translateY(-2%); z-index: 3; }
         .hero-mats .fan-left,
-        .hero-mats .fan-right  { top: 13%; height: 76%; }
-        .hero-mats .fan-left   { left: 5%;  transform: rotate(-8deg) translateY(3%); z-index: 1; }
-        .hero-mats .fan-right  { right: 5%; transform: rotate(7deg) translateY(3%);  z-index: 2; }
-        .hero-mats .fan-center { left: 50%; transform: translateX(-50%) translateY(-2%); z-index: 3; }
-        .hero-mats:hover .fan-left   { transform: rotate(-11deg) translate(-6%, 1%); }
-        .hero-mats:hover .fan-right  { transform: rotate(10deg) translate(6%, 1%); }
+        .hero-mats .fan-right  { top: 19%; height: 62%; }
+        .hero-mats .fan-left   { left: 2%;  transform: rotate(-11deg) translateY(4%); z-index: 1; }
+        .hero-mats .fan-right  { right: 2%; transform: rotate(10deg) translateY(4%);  z-index: 2; }
+        .hero-mats:hover .fan-left   { transform: rotate(-14deg) translate(-5%, 2%); }
+        .hero-mats:hover .fan-right  { transform: rotate(13deg) translate(5%, 2%); }
         .hero-mats:hover .fan-center { transform: translateX(-50%) translateY(-4%) scale(1.02); }
 
         /* ---- Section shells ---- */
@@ -565,8 +565,9 @@
             .hero { text-align: center; min-height: auto; padding-top: 2.5rem; }
             .hero-copy { order: 2; }
             .hero-mats { margin: 0 auto; order: 1; max-width: 400px; }
-            .hero-mats .fan-center { height: 72%; top: 10%; }
-            .hero-mats .fan-left, .hero-mats .fan-right { height: 62%; top: 20%; }
+            .hero-mats { height: min(46vh, 400px) !important; }
+            .hero-mats .fan-center { height: 76%; top: 6%; }
+            .hero-mats .fan-left, .hero-mats .fan-right { height: 65%; top: 16%; }
             .hero-mats .fan-left  { left: 0; }
             .hero-mats .fan-right { right: 0; }
             .hero .lead { margin-left: auto; margin-right: auto; }
@@ -758,7 +759,7 @@
                 </div>
             </div>
 
-            <div class="hero-mats" role="img" aria-label="Three of the nine new Ceremony Mat prints: Cosmos, Metatron's Slice and Sunset">
+            <div class="hero-mats" role="img" aria-label="Three of the nine new Ceremony Mat prints: Tree of Life in front, with Cosmos and Sunset behind">
                 <div class="mat-frame fan-left">
                         <picture>
                             <source type="image/avif" srcset="assets/web/sky-cosmos-480.avif 480w, assets/web/sky-cosmos-960.avif 960w" sizes="(max-width: 900px) 40vw, 300px">
@@ -775,9 +776,9 @@
                 </div>
                 <div class="mat-frame fan-center">
                         <picture>
-                            <source type="image/avif" srcset="assets/web/sky-metatrons-slice-480.avif 480w, assets/web/sky-metatrons-slice-960.avif 960w" sizes="(max-width: 900px) 40vw, 300px">
-                            <source type="image/webp" srcset="assets/web/sky-metatrons-slice-480.webp 480w, assets/web/sky-metatrons-slice-960.webp 960w" sizes="(max-width: 900px) 40vw, 300px">
-                            <img src="assets/web/sky-metatrons-slice-960.jpg" width="960" height="1440" alt="Metatron's Slice print: a gold Metatron's Cube over an indigo night" decoding="async" draggable="false">
+                            <source type="image/avif" srcset="assets/web/sky-tree-of-life-480.avif 480w, assets/web/sky-tree-of-life-960.avif 960w" sizes="(max-width: 900px) 40vw, 300px">
+                            <source type="image/webp" srcset="assets/web/sky-tree-of-life-480.webp 480w, assets/web/sky-tree-of-life-960.webp 960w" sizes="(max-width: 900px) 40vw, 300px">
+                            <img src="assets/web/sky-tree-of-life-960.jpg" width="960" height="1440" alt="Tree of Life print: Metatron's Cube in a full spectrum around a bright white heart" decoding="async" draggable="false">
                         </picture>
                 </div>
             </div>
