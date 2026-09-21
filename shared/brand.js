@@ -77,6 +77,17 @@
      rather than to templesofrefuge.earth, the Refuge home is /refuge/
      rather than /, and Charter is hidden until /charter exists. At
      phase C restore the domain link, home: '/', and the Charter link. */
+  /* Where the Refuge site's root is, from this visitor's side. Until
+     SITE-SPLIT phase C both domains share one web root and the Refuge
+     pages answer under /refuge/. After it they answer at the root of
+     templesofrefuge.earth. The pages themselves link to one another
+     relatively, so the same files serve both arrangements; only this
+     chrome needs to know, and it can tell from the path. */
+  var R = (location.pathname.indexOf('/refuge') === 0) ? '/refuge/' : '/';
+  /* From a Refuge page, Temples of Earth is next door before the split
+     and another domain after it. */
+  var EARTH_HOME = (R === '/refuge/') ? '/' : 'https://templesof.earth/';
+
   var SITES = {
     earth: {
       name: 'Temples of Earth',
@@ -91,7 +102,9 @@
           ['/covenant', 'Covenant'],
           ['/articles/', 'Writings']
         ] },
-        { label: 'More', links: [
+        { label: 'Kindred', links: [
+          /* Always /refuge/. After phase C, Caddy 301s that path on this
+             domain to templesofrefuge.earth, so nothing here changes. */
           ['/refuge/', 'Temples of Refuge'],
           ['https://agualila.earth', 'Água Lila']
         ] }
@@ -100,23 +113,24 @@
     },
     refuge: {
       name: 'Temples of Refuge',
-      home: '/refuge/',
+      home: R,
       nav: [
-        { links: [['/refuge/', 'Home']] },
+        { links: [[R, 'Home']] },
         { label: 'Foundations', links: [
-          ['/cosmology', 'Cosmology']
+          [R + 'cosmology', 'Cosmology'],
+          [R + 'charter', 'Charter']
         ] },
         { label: 'The Network', links: [
-          ['/found-a-temple', 'Found a Temple']
+          [R + 'found-a-temple', 'Found a Temple']
         ] },
-        { label: 'More', links: [
-          ['https://templesof.earth', 'Temples of Earth'],
+        { label: 'Kindred', links: [
+          [EARTH_HOME, 'Temples of Earth'],
           ['https://agualila.earth', 'Água Lila']
         ] }
       ],
       /* No membership, no offering, no checkout on this site. The only
          call to action is a conversation. */
-      cta: ['/found-a-temple', 'Begin the Conversation']
+      cta: [R + 'found-a-temple', 'Begin the Conversation']
     }
   };
 
@@ -143,9 +157,10 @@
     if (href.indexOf('http') === 0) return false;
     var path = location.pathname.replace(/\/index\.html$/, '/')
                                 .replace(/\.html$/, '');
-    if (href === '/') return path === '/' || path === '';
+    var bare = function (p) { return p.replace(/\/$/, ''); };
+    if (href === '/' || href === '/refuge/') return bare(path) === bare(href);
     if (href === '/articles/') return path.indexOf('/articles') === 0;
-    return path === href || path === href.replace(/\/$/, '');
+    return bare(path) === bare(href);
   }
 
   function buildNav() {
