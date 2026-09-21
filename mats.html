@@ -171,12 +171,12 @@
             animation: fadeIn 1.8s ease-out 0.2s both;
         }
         .mat-frame img { width: 100%; height: auto; display: block; }
-        /* Two prints, fanned and overlapping. Height-capped so the pair never
+        /* Three prints, fanned and overlapping. Height-capped so the fan never
            overflows the fold. */
         .hero-mats {
             position: relative;
             width: 100%;
-            max-width: 470px;
+            max-width: 540px;
             height: min(62vh, 540px);
             margin-left: auto;
         }
@@ -189,10 +189,15 @@
             transition: transform 0.55s ease;
         }
         .hero-mats .mat-frame img { height: 100%; width: auto; max-width: none; display: block; }
-        .hero-mats .back  { left: 0;  transform: rotate(-5deg); z-index: 1; }
-        .hero-mats .front { right: 0; transform: rotate(3deg);  z-index: 2; }
-        .hero-mats:hover .back  { transform: rotate(-7deg) translate(-4%, -2%); }
-        .hero-mats:hover .front { transform: rotate(4deg) translate(4%, 0); }
+        /* the side prints sit a little smaller and behind, so the fan has depth */
+        .hero-mats .fan-left,
+        .hero-mats .fan-right  { top: 13%; height: 76%; }
+        .hero-mats .fan-left   { left: 5%;  transform: rotate(-8deg) translateY(3%); z-index: 1; }
+        .hero-mats .fan-right  { right: 5%; transform: rotate(7deg) translateY(3%);  z-index: 2; }
+        .hero-mats .fan-center { left: 50%; transform: translateX(-50%) translateY(-2%); z-index: 3; }
+        .hero-mats:hover .fan-left   { transform: rotate(-11deg) translate(-6%, 1%); }
+        .hero-mats:hover .fan-right  { transform: rotate(10deg) translate(6%, 1%); }
+        .hero-mats:hover .fan-center { transform: translateX(-50%) translateY(-4%) scale(1.02); }
 
         /* ---- Section shells ---- */
         .divider { height: 1px; background: linear-gradient(90deg, transparent, var(--t-bd), transparent); max-width: 400px; margin: 0 auto; }
@@ -559,7 +564,11 @@
             .hero-grid { grid-template-columns: 1fr; gap: 2.5rem; }
             .hero { text-align: center; min-height: auto; padding-top: 2.5rem; }
             .hero-copy { order: 2; }
-            .hero-mats { margin: 0 auto; order: 1; max-width: 380px; }
+            .hero-mats { margin: 0 auto; order: 1; max-width: 400px; }
+            .hero-mats .fan-center { height: 72%; top: 10%; }
+            .hero-mats .fan-left, .hero-mats .fan-right { height: 62%; top: 20%; }
+            .hero-mats .fan-left  { left: 0; }
+            .hero-mats .fan-right { right: 0; }
             .hero .lead { margin-left: auto; margin-right: auto; }
             .hero-actions { justify-content: center; }
             .preorder-badge { margin-left: auto; margin-right: auto; }
@@ -749,19 +758,26 @@
                 </div>
             </div>
 
-            <div class="hero-mats" role="img" aria-label="Two of the nine new Ceremony Mat designs: Cosmos and Metatron's Slice">
-                <div class="mat-frame back">
+            <div class="hero-mats" role="img" aria-label="Three of the nine new Ceremony Mat prints: Cosmos, Metatron's Slice and Sunset">
+                <div class="mat-frame fan-left">
                         <picture>
-                            <source type="image/avif" srcset="assets/web/sky-cosmos-480.avif 480w, assets/web/sky-cosmos-960.avif 960w" sizes="(max-width: 900px) 50vw, 320px">
-                            <source type="image/webp" srcset="assets/web/sky-cosmos-480.webp 480w, assets/web/sky-cosmos-960.webp 960w" sizes="(max-width: 900px) 50vw, 320px">
-                            <img src="assets/web/sky-cosmos-960.jpg" width="960" height="1440" alt="Cosmos design: Metatron's Cube over a soft mauve and seafoam nebula" decoding="async" draggable="false">
+                            <source type="image/avif" srcset="assets/web/sky-cosmos-480.avif 480w, assets/web/sky-cosmos-960.avif 960w" sizes="(max-width: 900px) 40vw, 300px">
+                            <source type="image/webp" srcset="assets/web/sky-cosmos-480.webp 480w, assets/web/sky-cosmos-960.webp 960w" sizes="(max-width: 900px) 40vw, 300px">
+                            <img src="assets/web/sky-cosmos-960.jpg" width="960" height="1440" alt="Cosmos print: Metatron's Cube over a soft mauve and seafoam nebula" decoding="async" draggable="false">
                         </picture>
                 </div>
-                <div class="mat-frame front">
+                <div class="mat-frame fan-right">
                         <picture>
-                            <source type="image/avif" srcset="assets/web/sky-metatrons-slice-480.avif 480w, assets/web/sky-metatrons-slice-960.avif 960w" sizes="(max-width: 900px) 50vw, 320px">
-                            <source type="image/webp" srcset="assets/web/sky-metatrons-slice-480.webp 480w, assets/web/sky-metatrons-slice-960.webp 960w" sizes="(max-width: 900px) 50vw, 320px">
-                            <img src="assets/web/sky-metatrons-slice-960.jpg" width="960" height="1440" alt="Metatron's Slice design: gold Metatron's Cube over an indigo night" decoding="async" draggable="false">
+                            <source type="image/avif" srcset="assets/web/sky-sunset-480.avif 480w, assets/web/sky-sunset-960.avif 960w" sizes="(max-width: 900px) 40vw, 300px">
+                            <source type="image/webp" srcset="assets/web/sky-sunset-480.webp 480w, assets/web/sky-sunset-960.webp 960w" sizes="(max-width: 900px) 40vw, 300px">
+                            <img src="assets/web/sky-sunset-960.jpg" width="960" height="1440" alt="Sunset print: copper lines around a glowing white sun" decoding="async" draggable="false">
+                        </picture>
+                </div>
+                <div class="mat-frame fan-center">
+                        <picture>
+                            <source type="image/avif" srcset="assets/web/sky-metatrons-slice-480.avif 480w, assets/web/sky-metatrons-slice-960.avif 960w" sizes="(max-width: 900px) 40vw, 300px">
+                            <source type="image/webp" srcset="assets/web/sky-metatrons-slice-480.webp 480w, assets/web/sky-metatrons-slice-960.webp 960w" sizes="(max-width: 900px) 40vw, 300px">
+                            <img src="assets/web/sky-metatrons-slice-960.jpg" width="960" height="1440" alt="Metatron's Slice print: a gold Metatron's Cube over an indigo night" decoding="async" draggable="false">
                         </picture>
                 </div>
             </div>
@@ -1357,13 +1373,13 @@
             var btn = $('voteBtn'); btn.disabled = true; btn.textContent = 'Sending…'; error('');
             fetch(API + '/poll-vote', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(vote) })
                 .then(function (r) { return r.json().catch(function () { return {}; }).then(function (o) { if (!r.ok) throw new Error(o.error || 'Something went wrong. Please try again.'); }); })
-                .then(function () { delete vote.botcheck; vote.channels = channels.slice(); store.set('vote', vote); thanks(vote); })
+                .then(function () { delete vote.botcheck; vote.channels = channels.slice(); store.set('vote', vote); thanks(vote, true); })
                 .catch(function (err) { error(/fetch|network|load failed/i.test(err.message) ? "We couldn't reach the server. Check your connection and try again." : err.message); })
                 .then(function () { btn.textContent = 'Send my vote'; render(); });
         });
 
         function listJoin(a) { return a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1]; }
-        function thanks(v) {
+        function thanks(v, justVoted) {
             $('voteForm').hidden = true; $('voteThanks').hidden = false;
             $('thanksName').textContent = v.name;
             var via = Object.keys(v.contact || {}).map(function (c) { return CH_LABEL[c]; });
@@ -1373,7 +1389,8 @@
             }).join('');
             floatBar();
             loadTally(v);
-            $('vote').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Only after a fresh vote; a returning visitor stays at the top.
+            if (justVoted) $('vote').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
         // After voting: everyone's totals (points and first places only, no names).
