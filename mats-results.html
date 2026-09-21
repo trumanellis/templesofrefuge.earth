@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow, noarchive, noimageindex">
 <meta name="referrer" content="no-referrer">
-<title>Seven Skies Vote — Results</title>
+<title>Ceremony Mat Vote — Results</title>
 <link rel="stylesheet" href="/shared/fonts/fonts.css">
 <link rel="canonical" href="https://templesof.earth/mats-results">
 <style>
@@ -57,7 +57,7 @@ td.c{max-width:22rem;color:var(--t2)}
 <main>
   <header>
     <div class="eyebrow">Temples of Earth · Private</div>
-    <h1>Seven Skies Vote</h1>
+    <h1>Ceremony Mat Vote</h1>
   </header>
 
   <section id="gate" hidden>
@@ -97,8 +97,8 @@ td.c{max-width:22rem;color:var(--t2)}
   const $ = s => document.querySelector(s);
   const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   // must match the data-s slugs on /mats
-  const designs = [["blotter","Blotter"],["chacruna","Chacruna"],["cosmos","Cosmos"],["metatrons-slice","Metatron's Slice"],
-    ["ocean","Ocean"],["reverie","Reverie"],["tree-of-life","Tree of Life"]].map(([slug, name]) => ({ slug, name }));
+  const designs = [["blotter","Blotter"],["cernunnos","Cernunnos"],["chacruna","Chacruna"],["cosmos","Cosmos"],["metatrons-slice","Metatron's Slice"],
+    ["ocean","Ocean"],["reverie","Reverie"],["sunset","Sunset"],["tree-of-life","Tree of Life"]].map(([slug, name]) => ({ slug, name }));
   const bySlug = Object.fromEntries(designs.map(d => [d.slug, d]));
   const nm = s => bySlug[s]?.name || s;
 
