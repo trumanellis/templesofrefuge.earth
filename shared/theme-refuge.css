@@ -78,7 +78,7 @@
 }
 
 /* Lapis is for links and nothing else. */
-:root[data-site="refuge"] main a:not(.btn):not(.temple) {
+:root[data-site="refuge"] main a:not(.btn):not(.temple):not(.temple-preview):not(.hero-cta) {
   color: var(--t-a2); text-decoration: underline;
   text-decoration-thickness: 1px; text-underline-offset: 3px;
 }
@@ -124,6 +124,11 @@
 :root[data-site="refuge"] .refuge-foot .name { font-family: var(--font-display); letter-spacing: 0.16em; text-transform: uppercase; font-size: 0.82rem; margin: 0; }
 :root[data-site="refuge"] .refuge-foot .info { font-size: 0.98rem; line-height: 1.7; color: var(--t-mt); margin: 0.7rem 0 0; max-width: 60ch; }
 :root[data-site="refuge"] .refuge-foot a { color: var(--t-a2); }
+
+/* Square corners everywhere; the arch is the one curve. Inherited sections
+   hard-code their radii, so this is set on the elements, not the tokens.
+   Pseudo-elements are not matched, which is what keeps the inner arch. */
+:root[data-site="refuge"] main :not(.niche):not(.document-figure) { border-radius: 0 !important; }
 
 /* Nothing moves. */
 /* Reveal-on-scroll classes start invisible and wait for a transition that

@@ -23,13 +23,811 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
     <link rel="stylesheet" href="/shared/theme-refuge.css">
+    <link rel="stylesheet" href="/shared/vendor/jsvectormap.min.css">
     <style>
+      /* ── Inherited from the former shared home page: these sections were
+            written for it and keep its layout. Colours and type come from
+            the Illuminated tokens. ── */
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+
+        body {
+            font-family: var(--s-font);
+            font-weight: 300;
+            background: var(--t-bg);
+            color: var(--t-tx);
+            line-height: 1.8;
+            font-size: 17px;
+        }
+
+        /* Typography */
+        h1, h2, h3 {
+            font-family: var(--s-display);
+            font-weight: 500;
+            line-height: 1.2;
+            letter-spacing: -0.005em;
+        }
+        h1 { font-size: clamp(40px, 7.5vw, 84px); font-weight: 700; line-height: 1.02; letter-spacing: -0.01em; }
+        h2 { font-size: clamp(32px, 5.5vw, 60px); line-height: 1.12; }
+        h3 { font-size: clamp(1rem, 2vw, 1.25rem); }
+
+        .eyebrow {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--t-ac);
+            margin-bottom: 1.5rem;
+        }
+
+        .lead {
+            font-size: clamp(1.05rem, 2vw, 1.25rem);
+            font-weight: 300;
+            color: var(--t-t2);
+            max-width: 55ch;
+            letter-spacing: 0.02em;
+        }
+
+        /* Sections */
+        section { padding: 10rem 2rem; position: relative; overflow: hidden; }
+        .container { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+        .container-narrow { max-width: 750px; margin: 0 auto; position: relative; z-index: 1; }
+
+        /* ═══ Scroll progress bar ═══ */
+        .progress-track {
+            position: fixed; top: 0; left: var(--toe-rail-w); right: 0;
+            height: 2px; z-index: 1000; background: rgba(255,255,255,0.04);
+        }
+        .progress-fill {
+            height: 100%; width: 0%;
+            background: linear-gradient(90deg, var(--t-ac), var(--t-a2), var(--t-ac));
+            background-size: 300% 100%;
+            animation: gradShift 8s linear infinite;
+            transition: width 0.2s ease;
+        }
+        @keyframes gradShift { 0% { background-position: 0% 0; } 100% { background-position: 300% 0; } }
+
+        /* ═══ Scroll-reveal primitives ═══ */
+        .r {
+            opacity: 0; transform: translateY(28px);
+            transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
+            will-change: opacity, transform;
+        }
+        .r.v { opacity: 1; transform: none; }
+        .r-d1 { transition-delay: 0.10s; }
+        .r-d2 { transition-delay: 0.20s; }
+        .r-d3 { transition-delay: 0.30s; }
+        .r-d4 { transition-delay: 0.40s; }
+
+        /* ═══ HERO ═══ */
+        .hero {
+            --hero-center-wash: 34%;
+            min-height: 100vh;
+            padding: 0 2rem;
+            display: flex; align-items: center; justify-content: center;
+            text-align: center;
+            background:
+                radial-gradient(ellipse at 50% 0%, var(--t-bc) 0%, transparent 60%),
+                radial-gradient(ellipse at 50% 100%, var(--t-glass-bd) 0%, transparent 50%),
+                var(--t-bg);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: url("/assets/web/temple-dusk-hero-1600.webp");
+            background-size: cover;
+            background-position: center;
+            opacity: 0.82;
+        }
+        .hero::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 50% 46%, color-mix(in srgb, var(--t-bg) var(--hero-center-wash), transparent) 0%, color-mix(in srgb, var(--t-bg) 68%, transparent) 62%, color-mix(in srgb, var(--t-bg) 88%, transparent) 100%),
+                linear-gradient(180deg, color-mix(in srgb, var(--t-bg) 38%, transparent) 0%, color-mix(in srgb, var(--t-bg) 10%, transparent) 45%, var(--t-bg) 100%);
+        }
+        /* The dusk photograph needs a pale veil behind light-theme ink. */
+        :root[data-theme="light"] .hero { --hero-center-wash: 82%; }
+        @media (prefers-color-scheme: light) {
+            :root:not([data-theme]) .hero { --hero-center-wash: 82%; }
+        }
+        .hero-content { position: relative; z-index: 1; }
+        .hero h1 {
+            margin-bottom: 1rem;
+            background: linear-gradient(180deg, var(--t-tx) 0%, var(--t-t2) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            opacity: 0; animation: riseIn 1.4s 0.2s var(--ease) forwards;
+        }
+        .hero .eyebrow { margin-bottom: 1rem; opacity: 0; animation: riseIn 1.4s 0.5s var(--ease) forwards; }
+        .hero .lead {
+            max-width: 48ch; margin: 0 auto;
+            opacity: 0; animation: riseIn 1.4s 0.7s var(--ease) forwards;
+        }
+        .hero-symbol {
+            width: min(300px, calc(100vh - 520px), 62vw);
+            margin: 0 auto 1.25rem;
+            opacity: 0; animation: symbolIn 2s 0.1s var(--ease) forwards;
+        }
+        .hero-symbol img { width: 100%; height: auto; display: block; }
+        .hero-cta {
+            display: inline-block; margin-top: 2.5rem;
+            font-family: var(--s-display);
+            font-size: .8rem; letter-spacing: .22em; text-transform: uppercase;
+            color: var(--t-bg); background: var(--t-ac); border: 1px solid var(--t-ac);
+            border-radius: 10px; padding: 1rem 2rem; text-decoration: none;
+            transition: opacity .25s, transform .2s, box-shadow .3s;
+            opacity: 0; animation: riseIn 1.4s 0.9s var(--ease) forwards;
+        }
+        .hero-cta:hover {
+            opacity: .9; transform: translateY(-2px);
+            box-shadow: 0 16px 40px -20px color-mix(in srgb, var(--t-ac) 60%, transparent);
+        }
+        @keyframes riseIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes symbolIn { from { opacity: 0; transform: translateY(20px) scale(0.9) rotate(-8deg); } to { opacity: 1; transform: none; } }
+
+        .scroll-indicator {
+            /* Hidden in the brand design (was hidden by the old engine skin);
+               it collides with the hero CTA at short viewport heights. */
+            display: none;
+        }
+        .scroll-indicator span {
+            font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--t-mt);
+        }
+        .scroll-line {
+            width: 1px; height: 50px;
+            background: linear-gradient(to bottom, var(--t-dm), transparent);
+        }
+        @keyframes bob { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-6px); } }
+
+        /* ═══ Atmosphere layers — scene art melted into section backgrounds ═══
+           Low opacity + masked top/bottom edges so each image reads as light
+           and air behind the prose, never as a framed picture. */
+        .atmo::before {
+            content: "";
+            position: absolute; inset: 0;
+            background: var(--atmo) center / cover no-repeat;
+            opacity: var(--atmo-op, 0.2);
+            -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 22%, #000 78%, transparent 100%);
+            mask-image: linear-gradient(180deg, transparent 0%, #000 22%, #000 78%, transparent 100%);
+            pointer-events: none;
+        }
+        :root[data-theme="light"] .atmo::before { opacity: calc(var(--atmo-op, 0.2) * 0.5); }
+        .meaning          { --atmo: url("/assets/web/religion-true-sense-1600.webp"); }
+        .central-teaching { --atmo: url("/assets/web/fractal-cosmos-soil-1600.webp"); background: var(--t-bg); }
+        .body-section     { --atmo: url("/assets/web/body-as-temple-1600.webp"); }
+        .economy          { --atmo: url("/assets/web/gift-over-extraction-1600.webp"); --atmo-op: 0.16; }
+        .syncengine       { --atmo: url("/assets/web/digital-garden.webp"); --atmo-op: 0.16; }
+        .community        { --atmo: url("/assets/web/radical-inclusion-hearth-1600.webp"); --atmo-op: 0.16; }
+        .transformation   { --atmo: url("/assets/web/death-composting-dawn-1600.webp"); }
+        .first-temple     { --atmo: url("/assets/web/temple-network-1600.webp"); --atmo-op: 0.3; }
+        .writings         { --atmo: url("/assets/web/cosmology-spiral-garden-1600.webp"); --atmo-op: 0.28; }
+        .affirmations     { --atmo: url("/assets/web/covenant-woven-roots-1600.webp"); }
+
+        /* Divider */
+        .section-divider {
+            height: 1px; background: linear-gradient(90deg, transparent, var(--t-bd), transparent);
+            max-width: 400px; margin: 0 auto;
+        }
+
+        /* ═══ Breath sections (the pauses between showpieces) ═══ */
+        .breath { text-align: center; }
+        .meaning { background: var(--t-sf); }
+        .meaning h2 { margin-bottom: 2rem; }
+        .meaning-text { color: var(--t-t2); max-width: 55ch; margin: 0 auto 4rem; }
+
+        .etymology { display: inline-block; padding: 3rem 4rem; position: relative; }
+        .etymology::before, .etymology::after {
+            content: ''; position: absolute; width: 80px; height: 80px; border: 1px solid var(--t-dm);
+        }
+        .etymology::before { top: 0; left: 0; border-right: none; border-bottom: none; }
+        .etymology::after { bottom: 0; right: 0; border-left: none; border-top: none; }
+        .etymology-word {
+            font-family: var(--s-display); font-size: 2.5rem; letter-spacing: 0.15em;
+            color: var(--t-ac); margin-bottom: 1rem;
+        }
+        .etymology-meaning { color: var(--t-mt); font-size: 0.9rem; letter-spacing: 0.05em; }
+
+        /* Morphing thesis line — key words resolve out of a blur + underline-sweep */
+        .thesis-line {
+            font-family: var(--s-display);
+            font-size: clamp(1.4rem, 3.4vw, 2.4rem);
+            letter-spacing: 0.02em; line-height: 1.4;
+            max-width: 24ch; margin: 0 auto;
+            color: var(--t-t2);
+        }
+        .thesis-line .m {
+            position: relative; white-space: nowrap; color: var(--t-ac);
+            opacity: 0; filter: blur(12px);
+            transition: opacity 0.8s var(--ease), filter 0.8s var(--ease);
+        }
+        .thesis-line .m::after {
+            content: ''; position: absolute; left: 0; right: 0; bottom: -0.12em; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--t-ac), transparent);
+            transform: scaleX(0); transform-origin: center;
+            transition: transform 0.9s var(--ease);
+        }
+        .thesis-line.v .m { opacity: 1; filter: blur(0); }
+        .thesis-line.v .m::after { transform: scaleX(1); }
+        .thesis-line .m-from { transition-delay: 0.10s; }
+        .thesis-line .m-from::after { transition-delay: 0.28s; }
+        .thesis-line .m-to { transition-delay: 0.66s; }
+        .thesis-line .m-to::after { transition-delay: 0.84s; }
+
+        /* ═══════════════════════════════════════════════════════
+           COSMOLOGY — SCROLLYTELLING CENTERPIECE
+           A pinned Flower-of-Life mandala assembles layer by layer,
+           driven by [data-stage] on .scrolly. Default markup is the
+           finished mandala, so it renders complete without JS.
+           ═══════════════════════════════════════════════════════ */
+        /* overflow:visible is required — a clipped ancestor breaks position:sticky */
+        .cosmology { background: var(--t-bg); padding-top: 7rem; overflow: visible; }
+        .cosmology-header { text-align: center; margin-bottom: 2rem; }
+
+        .scrolly {
+            position: relative; isolation: isolate; --cosmo-art-opacity: 0.28;
+            margin: 0 -2rem; padding: 0 2rem;
+        }
+        .scrolly-content {
+            position: relative; z-index: 1;
+            display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: 4rem; align-items: start; max-width: 1100px; margin: 0 auto;
+        }
+
+        /* The track follows the entire story; its artwork stays viewport-sized. */
+        .cosmo-backdrop-track { position: absolute; inset: 0; pointer-events: none; }
+        .cosmo-backdrop {
+            position: sticky; top: 0; height: 100vh; height: 100svh;
+            overflow: hidden;
+        }
+        .cosmo-backdrop img {
+            position: absolute; inset: 0; width: 100%; height: 100%;
+            object-fit: cover; object-position: center;
+            opacity: 0; transition: opacity 1.2s var(--ease);
+        }
+        .scrolly[data-stage="1"] .cosmo-art-1,
+        .scrolly[data-stage="2"] .cosmo-art-2,
+        .scrolly[data-stage="3"] .cosmo-art-3,
+        .scrolly[data-stage="4"] .cosmo-art-4,
+        .scrolly[data-stage="5"] .cosmo-art-5,
+        .scrolly[data-stage="6"] .cosmo-art-6 { opacity: var(--cosmo-art-opacity); }
+        :root[data-theme="light"] .scrolly { --cosmo-art-opacity: 1; }
+        .cosmo-backdrop::after {
+            content: ''; position: absolute; inset: 0;
+            background:
+                linear-gradient(180deg, var(--t-bg), transparent 16%, transparent 84%, var(--t-bg)),
+                radial-gradient(ellipse at 55% 48%, color-mix(in srgb, var(--t-bg) 82%, transparent) 0%,
+                    color-mix(in srgb, var(--t-bg) 50%, transparent) 40%, transparent 78%);
+        }
+
+        .mandala-sticky {
+            position: sticky; top: 0;
+            height: 100vh;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            gap: 1.5rem;
+        }
+        .mandala-wrap {
+            position: relative; width: 100%; max-width: 440px; aspect-ratio: 1;
+        }
+        .mandala-wrap::before {
+            content: ''; position: absolute; inset: 8%;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--t-bc) 0%, transparent 68%);
+            opacity: 0.8;
+        }
+        .mandala {
+            position: relative; width: 100%; height: 100%; display: block;
+            animation: spin 140s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Mandala layer styling — token-driven so it adapts to every skin */
+        .mandala [class^="m-"] {
+            transition: opacity 1.2s var(--ease);
+        }
+        .m-flower circle { fill: none; stroke: var(--t-a2); stroke-width: 1.1; opacity: 0.4; }
+        .m-seed   circle { fill: none; stroke: var(--t-a2); stroke-width: 2.4; }
+        .m-fractal circle { fill: none; stroke: var(--t-ac); stroke-width: 0.9; opacity: 0.8; }
+        .m-rays line { stroke: var(--t-ac); stroke-width: 0.9; opacity: 0.55; stroke-linecap: round; }
+        .m-hex polygon { fill: none; stroke: var(--t-ac); stroke-width: 0.7; opacity: 0.45; stroke-linejoin: round; }
+        .m-ring .ring-a { fill: none; stroke: var(--t-mt); stroke-width: 1; opacity: 0.5; }
+        .m-ring .ring-b { fill: none; stroke: var(--t-ac); stroke-width: 3; opacity: 0.85; }
+        .m-source .src-halo { fill: none; stroke: var(--t-ac); stroke-width: 0.8; opacity: 0.5; }
+        .m-source .src-core {
+            fill: var(--t-ac);
+            filter: drop-shadow(0 0 10px var(--t-ac)) drop-shadow(0 0 22px var(--t-ac));
+            animation: sourcePulse 4s ease-in-out infinite;
+        }
+        .m-source .src-spark { fill: var(--t-tx); }
+        @keyframes sourcePulse { 0%,100% { opacity: 1; } 50% { opacity: 0.55; } }
+
+        /* Stage subtraction — hide layers not yet reached (default = all visible) */
+        .scrolly[data-stage="1"] :is(.m-seed,.m-fractal,.m-rays,.m-hex,.m-flower,.m-ring),
+        .scrolly[data-stage="2"] :is(.m-fractal,.m-rays,.m-hex,.m-flower,.m-ring),
+        .scrolly[data-stage="3"] :is(.m-rays,.m-hex,.m-flower,.m-ring),
+        .scrolly[data-stage="4"] :is(.m-flower,.m-ring),
+        .scrolly[data-stage="5"] :is(.m-ring) { opacity: 0; }
+
+        .mandala-cap {
+            font-family: var(--s-display); font-style: italic;
+            font-size: 0.95rem; letter-spacing: 0.12em;
+            color: var(--t-ac); text-align: center; min-height: 1.4em;
+        }
+        .mandala-cap::after { content: "One Consciousness"; }
+        .scrolly[data-stage="1"] .mandala-cap::after { content: "The One · Source"; }
+        .scrolly[data-stage="2"] .mandala-cap::after { content: "Fractal Emanation"; }
+        .scrolly[data-stage="3"] .mandala-cap::after { content: "Consciousness as Field"; }
+        .scrolly[data-stage="4"] .mandala-cap::after { content: "Gnosis · The Web of Faces"; }
+        .scrolly[data-stage="5"] .mandala-cap::after { content: "Lila · Sacred Play"; }
+        .scrolly[data-stage="6"] .mandala-cap::after { content: "Earth · The Living Whole"; }
+
+        /* Prose steps */
+        .cosmo-steps { padding: 6vh 0; }
+        .cosmo-step {
+            min-height: 84vh; display: flex; flex-direction: column; justify-content: center;
+            opacity: 0.28; transition: opacity 0.5s var(--ease);
+        }
+        .cosmo-step.on { opacity: 1; }
+        .cosmo-step .step-num {
+            font-family: var(--s-display); font-style: italic;
+            font-size: 0.85rem; letter-spacing: 0.2em; color: var(--t-a2);
+            margin-bottom: 0.75rem;
+        }
+        .cosmo-step h3 {
+            font-size: clamp(1.4rem, 3vw, 2rem); color: var(--t-tx);
+            text-transform: uppercase; margin-bottom: 1.25rem; letter-spacing: 0.06em;
+        }
+        .cosmo-step p { color: var(--t-t2); font-size: 1rem; line-height: 1.85; max-width: 44ch; }
+
+        /* ═══ The Body ═══ */
+        .body-section {
+            background:
+                radial-gradient(ellipse at center, var(--t-bd) 0%, transparent 70%),
+                var(--t-sf);
+            text-align: center;
+        }
+        .body-intro { color: var(--t-t2); max-width: 50ch; margin: 0 auto 4rem; font-size: 1.1rem; }
+        .body-practices {
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem 4rem; margin-bottom: 4rem;
+        }
+        .practice { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+        .practice-word { font-family: var(--s-display); font-size: 1.25rem; letter-spacing: 0.1em; color: var(--t-ac); }
+        .practice-meaning { font-size: 0.85rem; color: var(--t-mt); font-style: italic; }
+        .body-closing { color: var(--t-t2); max-width: 55ch; margin: 0 auto; font-size: 0.95rem; }
+
+        /* ═══ Sacred Economy ═══ */
+        .economy { background: var(--t-bg); text-align: center; }
+        .economy-header { margin-bottom: 4rem; }
+        .economy-grid { display: grid; grid-template-columns: 1fr 2fr 1fr; gap: 2rem; align-items: center; }
+        @media (max-width: 900px) { .economy-grid { grid-template-columns: 1fr; gap: 3rem; } }
+        .economy-card { padding: 2rem; }
+        .economy-principle {
+            font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
+            color: var(--t-mt); margin-bottom: 1.5rem;
+        }
+        .economy-list { list-style: none; padding: 0; }
+        .economy-list li {
+            font-family: var(--s-display); font-size: 1rem; letter-spacing: 0.1em;
+            color: var(--t-t2); padding: 0.5rem 0; border-bottom: 1px solid var(--t-bd);
+        }
+        .economy-list li:last-child { border-bottom: none; }
+        .economy-center { border: 1px solid var(--t-bd); padding: 3rem 2rem; }
+        .economy-statement {
+            font-family: var(--s-display); font-size: 1.25rem; letter-spacing: 0.05em;
+            color: var(--t-tx); margin-bottom: 1.5rem; line-height: 1.6;
+        }
+        .economy-sub { color: var(--t-mt); font-size: 0.9rem; line-height: 1.7; }
+
+        /* ═══ Sovereign Technology — the Synchronicity Engine ═══ */
+        .syncengine { background: var(--t-bg); text-align: center; }
+        .se-header { margin-bottom: 3rem; }
+        .se-header .lead { margin: 1.5rem auto 0; }
+        .se-loop-wrap { max-width: 400px; margin: 0 auto 2.5rem; position: relative; }
+        .se-loop-wrap::before {
+            content: ''; position: absolute; inset: 12%; border-radius: 50%;
+            background: radial-gradient(circle, var(--t-bc) 0%, transparent 70%);
+        }
+        .se-loop { position: relative; width: 100%; height: auto; display: block; }
+        .se-ring { fill: none; stroke: var(--t-bd); stroke-width: 1.5; stroke-dasharray: 3 6; opacity: 0.85; }
+        .se-node-glow { fill: var(--t-bc); }
+        .se-node-core { fill: var(--t-cd); stroke: var(--t-ac); stroke-width: 2; filter: drop-shadow(0 0 6px var(--t-ac)); }
+        .se-node-label { font-family: var(--s-display); font-size: 16px; fill: var(--t-tx); letter-spacing: 0.03em; }
+        .se-center { font-family: var(--s-font); font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; fill: var(--t-mt); }
+        .se-orbit { transform-box: view-box; transform-origin: 180px 180px; animation: seSpin 7s linear infinite; }
+        @keyframes seSpin { to { transform: rotate(360deg); } }
+        .se-pulse { fill: var(--t-a2); filter: drop-shadow(0 0 6px var(--t-a2)); }
+        .se-note { color: var(--t-mt); font-size: 0.9rem; max-width: 48ch; margin: 0 auto 2.5rem; line-height: 1.85; }
+        .se-note strong { color: var(--t-t2); font-weight: 400; }
+        .se-cta-link {
+            display: inline-flex; align-items: center; gap: 0.85rem;
+            font-family: var(--s-display); font-size: 0.78rem; letter-spacing: 0.2em; text-transform: uppercase;
+            color: var(--t-ac); border: 1px solid var(--t-ac); border-radius: 10px;
+            padding: 1rem 2rem; text-decoration: none; transition: all 0.35s var(--ease);
+        }
+        .se-cta-link:hover {
+            background: var(--t-ac); color: var(--t-bg); transform: translateY(-2px);
+            box-shadow: 0 16px 40px -20px color-mix(in srgb, var(--t-ac) 60%, transparent);
+        }
+        .se-cta-link svg { width: 15px; height: 15px; transition: transform 0.3s; }
+        .se-cta-link:hover svg { transform: translateX(4px); }
+
+        /* ═══ Community ═══ */
+        .community {
+            background:
+                radial-gradient(ellipse at center, var(--t-bd) 0%, transparent 70%),
+                var(--t-sf);
+            text-align: center;
+        }
+        .community-header { margin-bottom: 4rem; }
+        .community-principle { margin-bottom: 4rem; }
+        .principle-main {
+            font-family: var(--s-display);
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem); letter-spacing: 0.02em;
+            color: var(--t-tx); line-height: 1.6; max-width: 32ch; margin: 0 auto;
+        }
+        .principle-counterweight {
+            display: block; margin-top: 1.5rem; padding-top: 1.5rem;
+            font-size: 0.95rem; font-style: italic; letter-spacing: 0.04em;
+            color: var(--t-wn); position: relative;
+        }
+        .principle-counterweight::before {
+            content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+            width: 80px; height: 1px;
+            background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--t-wn) 55%, transparent), transparent);
+        }
+        .community-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem;
+            margin: 0 auto 5rem; max-width: 880px; position: relative;
+        }
+        .community-grid::before {
+            content: attr(data-pair-left); position: absolute; top: -2.25rem; left: 25%;
+            transform: translateX(-50%); font-family: var(--s-display); font-size: 0.65rem;
+            letter-spacing: 0.35em; text-transform: uppercase; color: var(--t-mt);
+        }
+        .community-grid::after {
+            content: attr(data-pair-right); position: absolute; top: -2.25rem; left: 75%;
+            transform: translateX(-50%); font-family: var(--s-display); font-size: 0.65rem;
+            letter-spacing: 0.35em; text-transform: uppercase; color: var(--t-mt);
+        }
+        @media (max-width: 640px) {
+            .community-grid { grid-template-columns: 1fr; }
+            .community-grid::before, .community-grid::after { display: none; }
+        }
+        .community-card {
+            padding: 2rem 1.75rem; display: flex; align-items: center; gap: 1.25rem;
+            text-align: left; border-radius: 12px;
+            background: linear-gradient(135deg, color-mix(in srgb, var(--t-wn) 5%, transparent), rgba(255,255,255,0.02));
+            border: 1px solid color-mix(in srgb, var(--t-wn) 16%, transparent);
+            backdrop-filter: blur(10px) saturate(1.05); -webkit-backdrop-filter: blur(10px) saturate(1.05);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 4px 18px rgba(0,0,0,0.2);
+            transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .community-card:hover {
+            transform: translateY(-2px); border-color: color-mix(in srgb, var(--t-wn) 38%, transparent);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 6px 28px rgba(0,0,0,0.28), 0 0 32px color-mix(in srgb, var(--t-wn) 10%, transparent);
+        }
+        .community-numeral {
+            font-family: var(--s-display); font-style: italic; font-size: 1.6rem;
+            color: var(--t-wn); letter-spacing: 0.05em; flex-shrink: 0; opacity: 0.9;
+            text-shadow: 0 0 18px color-mix(in srgb, var(--t-wn) 35%, transparent);
+        }
+        .community-card p {
+            font-family: var(--s-display); font-size: 1.05rem; letter-spacing: 0.02em;
+            color: var(--t-tx); line-height: 1.4; margin: 0;
+        }
+        .generations { max-width: 600px; margin: 0 auto; padding-top: 3rem; border-top: 1px solid var(--t-bd); }
+        .generations h3 { color: var(--t-tx); margin-bottom: 1rem; text-transform: uppercase; }
+        .generations p { color: var(--t-mt); font-size: 0.95rem; line-height: 1.8; }
+
+        /* ═══ Transformation breath ═══ */
+        .transformation { background: var(--t-bg); text-align: center; padding: 8rem 2rem; }
+        .transformation-content { margin-top: 3rem; }
+        .transform-main {
+            font-family: var(--s-display); font-size: clamp(1.25rem, 3vw, 1.75rem);
+            letter-spacing: 0.1em; color: var(--t-ac); margin-bottom: 2rem;
+        }
+        .transform-body { color: var(--t-t2); font-size: 1rem; max-width: 45ch; margin: 0 auto 2rem; }
+        .transform-closing {
+            font-family: var(--s-display); font-size: 1rem; letter-spacing: 0.15em;
+            text-transform: uppercase; color: var(--t-mt);
+        }
+
+        /* ═══ Affirmations ═══ */
+        .affirmations { background: var(--t-bg); }
+        .affirmations-header { text-align: center; margin-bottom: 5rem; }
+        .affirmations-list {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 0; counter-reset: affirmation;
+        }
+        .affirmation {
+            display: flex; align-items: center; gap: 1.5rem; padding: 2rem;
+            border: 1px solid var(--t-bd); margin: -0.5px; transition: all 0.4s ease;
+        }
+        .affirmation:hover { background: var(--t-sf); border-color: var(--t-dm); z-index: 1; }
+        .affirmation::before {
+            counter-increment: affirmation; content: counter(affirmation, decimal-leading-zero);
+            font-family: var(--s-display); font-size: 1.25rem; letter-spacing: 0.1em;
+            color: var(--t-a2); flex-shrink: 0;
+        }
+        .affirmation p { color: var(--t-t2); font-size: 0.9rem; line-height: 1.5; letter-spacing: 0.02em; }
+
+        /* ═══ The Network ═══ */
+        .first-temple {
+            background:
+                radial-gradient(ellipse at 50% 100%, var(--t-bc) 0%, transparent 60%),
+                var(--t-sf);
+            text-align: center; padding-bottom: 12rem;
+        }
+        .first-temple h2 { margin-bottom: 1.5rem; }
+        .first-temple .lead { margin: 0 auto 4rem; }
+        .temple-preview { display: block; max-width: 760px; margin: 0 auto; text-decoration: none; color: inherit; }
+        .temple-preview-frame {
+            position: relative; border: 1px solid rgba(255,255,255,0.08); border-radius: 14px;
+            overflow: hidden; background: rgba(0,0,0,0.4);
+            box-shadow: 0 30px 80px -20px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.02);
+            transition: transform 0.5s ease, box-shadow 0.5s ease, border-color 0.5s ease;
+        }
+        .temple-preview:hover .temple-preview-frame {
+            transform: translateY(-4px); border-color: rgba(193,154,219,0.4);
+            box-shadow: 0 40px 100px -20px rgba(0,0,0,0.7), 0 0 60px -20px var(--t-ac);
+        }
+        .temple-preview-chrome {
+            display: flex; align-items: center; gap: 0.5rem; padding: 0.85rem 1.1rem;
+            background: rgba(0,0,0,0.55); border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .temple-preview-chrome span.dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.18); }
+        .temple-preview-url {
+            margin: 0 auto; transform: translateX(-18px); font-family: var(--s-display);
+            font-size: 0.7rem; letter-spacing: 0.18em; color: rgba(255,255,255,0.45); text-transform: lowercase;
+        }
+        .temple-preview-image { position: relative; aspect-ratio: 16 / 9; overflow: hidden; background: #000; }
+        .temple-preview-image img {
+            width: 100%; height: 100%; object-fit: cover; opacity: 0.55;
+            transition: transform 6s ease, opacity 0.6s ease;
+        }
+        .temple-preview:hover .temple-preview-image img { transform: scale(1.06); opacity: 0.7; }
+        .temple-preview-overlay {
+            position: absolute; inset: 0; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; text-align: center; padding: 2rem;
+            background: linear-gradient(180deg, rgba(10,8,20,0.15) 0%, rgba(10,8,20,0.55) 100%);
+        }
+        .temple-preview-eyebrow {
+            font-family: var(--s-display); font-size: 0.65rem; letter-spacing: 0.32em;
+            text-transform: uppercase; color: var(--t-ac); margin: 0 0 1rem; opacity: 0.9;
+        }
+        .temple-preview-title {
+            font-family: var(--s-display); font-size: clamp(2rem, 5vw, 3.25rem); letter-spacing: 0.04em;
+            font-weight: 400; color: #fff; margin: 0 0 0.75rem; line-height: 1;
+        }
+        .temple-preview-tagline {
+            font-style: italic; color: rgba(255,255,255,0.78); margin: 0; font-size: 1rem;
+            max-width: 28ch; line-height: 1.5;
+        }
+        .temple-link {
+            display: inline-flex; align-items: center; gap: 1.5rem; margin-top: 3rem;
+            padding: 1.5rem 3rem; border: 1px solid var(--t-ac); color: var(--t-ac);
+            text-decoration: none; font-family: var(--s-display); font-size: 0.8rem;
+            letter-spacing: 0.2em; text-transform: uppercase; transition: all 0.4s ease;
+        }
+        .temple-preview:hover .temple-link, .temple-link:hover { background: var(--t-ac); color: var(--t-bg); }
+        .temple-link svg { width: 16px; height: 16px; transition: transform 0.3s ease; }
+        .temple-preview:hover .temple-link svg, .temple-link:hover svg { transform: translateX(4px); }
+        @media (max-width: 640px) {
+            .temple-preview-url { font-size: 0.6rem; letter-spacing: 0.12em; }
+            .temple-preview-overlay { padding: 1.25rem; }
+            .temple-link { padding: 1.25rem 2rem; margin-top: 2rem; }
+        }
+        .first-temple .network-title { font-size: clamp(1.6rem, 4vw, 2.4rem); margin-bottom: 1.25rem; }
+        .network-layout { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 2rem; align-items: stretch; }
+        .temples-rail { display: flex; flex-direction: column; gap: 1rem; min-width: 0; }
+        .temples-rail .temple-preview { max-width: none; width: 100%; margin: 0; }
+        .temples-rail .temple-preview-title { font-size: clamp(1.4rem, 2.4vw, 2rem); }
+        .temples-rail .temple-preview-eyebrow { font-size: 0.6rem; margin-bottom: 0.5rem; }
+        .temples-rail .temple-preview-tagline { font-size: 0.85rem; max-width: 22ch; }
+        .temples-rail .temple-preview-overlay { padding: 1.25rem; }
+        .temples-rail .temple-preview-chrome { padding: 0.6rem 0.85rem; }
+        .temples-rail .temple-preview-url { font-size: 0.6rem; }
+        .network-map {
+            margin: 0; padding: 1.25rem 1.5rem; border: 1px solid var(--t-bd); border-radius: 14px;
+            background:
+                radial-gradient(ellipse at 50% 50%, var(--t-sf) 0%, transparent 75%),
+                var(--t-bg);
+            position: relative; display: flex; flex-direction: column;
+        }
+        .network-map::before, .network-map::after { content: ''; position: absolute; inset: 0; border-radius: 14px; pointer-events: none; }
+        .network-map::before { border: 1px solid var(--t-bc); transform: scale(1.005); opacity: 0.4; }
+        #temple-network-map { width: 100%; flex: 1; min-height: 320px; position: relative; }
+        #temple-network-map .jvm-container { background: transparent; }
+        #temple-network-map .jvm-region { transition: fill 0.4s ease, stroke 0.4s ease; }
+        .jvm-tooltip {
+            background: var(--t-cd); color: var(--t-tx); border: 1px solid var(--t-bd);
+            font-family: var(--s-display); font-size: 0.65rem; letter-spacing: 0.22em;
+            text-transform: uppercase; padding: 0.55rem 0.9rem; border-radius: 6px;
+            box-shadow: 0 8px 30px -8px rgba(0,0,0,0.45);
+        }
+        @keyframes templeMarkerPulse { 0%,100% { transform: scale(1); opacity: 0.35; } 50% { transform: scale(2.4); opacity: 0; } }
+        .marker-pulse-halo {
+            fill: var(--t-ac); transform-box: fill-box; transform-origin: center;
+            animation: templeMarkerPulse 2.8s ease-in-out infinite; pointer-events: none;
+        }
+        .jvm-marker.marker-active { filter: drop-shadow(0 0 6px var(--t-ac)); transition: r 0.3s ease, fill 0.3s ease; }
+        .jvm-marker { cursor: default; }
+        .jvm-marker.marker-active { cursor: pointer; }
+        .temple-cta .temple-preview-frame { border: 1px solid var(--t-ac); box-shadow: 0 24px 60px -28px var(--t-ac), 0 0 0 1px var(--t-bc); }
+        .temple-cta .temple-preview-chrome { border-bottom: 1px solid var(--t-ac); background: var(--t-cd); }
+        .temple-cta .temple-preview-url { color: var(--t-ac); opacity: 0.85; font-style: italic; }
+        .temple-cta .cta-body {
+            padding: 2rem 1.75rem 2.25rem; text-align: center;
+            background: radial-gradient(ellipse at 50% 0%, var(--t-hv) 0%, transparent 70%), var(--t-cd);
+        }
+        .temples-rail .temple-cta .temple-preview-eyebrow { color: var(--t-ac); opacity: 0.95; margin-bottom: 0.85rem; font-size: 0.62rem; letter-spacing: 0.32em; }
+        .temples-rail .temple-cta .temple-preview-title { color: var(--t-tx); margin: 0 0 1rem; font-size: clamp(1.5rem, 2.6vw, 2.1rem); }
+        .temple-cta .cta-text { color: var(--t-t2); font-size: 0.9rem; line-height: 1.6; max-width: 38ch; margin: 0 auto 1.75rem; }
+        .temple-cta .temple-link { margin-top: 0; padding: 1rem 1.75rem; font-size: 0.7rem; }
+        .temple-cta:hover .temple-preview-frame { transform: translateY(-3px); box-shadow: 0 30px 70px -20px var(--t-ac), 0 0 0 1px var(--t-ac); }
+        .temple-cta:hover .temple-link { background: var(--t-ac); color: var(--t-bg); }
+        .temple-cta:hover .temple-link svg { transform: translateX(4px); }
+        @media (max-width: 860px) {
+            .network-layout { grid-template-columns: 1fr; gap: 1.5rem; }
+            .network-map { padding: 1rem; }
+            #temple-network-map { height: clamp(280px, 56vw, 400px); }
+            .temples-rail { max-width: 560px; margin: 0 auto; width: 100%; }
+        }
+
+        /* Ceremony Mats — two skies, each given room in the story. */
+        .offering { padding: 6rem 0 0; overflow: visible; }
+        .offering-intro { text-align: center; padding: 0 2rem 4rem; max-width: 850px; margin: auto; }
+        .offering-intro h2 { font-size: clamp(2.8rem, 6vw, 5rem); line-height: 1.06; margin-bottom: 1.5rem; }
+        .offering-intro .lead { max-width: 48ch; margin: auto; }
+        .mat-scene { position: relative; isolation: isolate; padding: 4rem 3rem; }
+        .mat-scene::before {
+            content: ''; position: absolute; inset: 0; z-index: -1;
+            background: var(--mat-art) center / cover; opacity: .18;
+            mask-image: linear-gradient(transparent, #000 24%, #000 76%, transparent);
+            -webkit-mask-image: linear-gradient(transparent, #000 24%, #000 76%, transparent);
+        }
+        :root[data-theme="light"] .mat-scene::before { opacity: .1; }
+        .mat-scene-inner { max-width: 1100px; margin: auto; display: grid; grid-template-columns: minmax(0,1.25fr) minmax(0,1fr); gap: clamp(2rem,5vw,5rem); align-items: start; }
+        .mat-visual { position: sticky; top: calc(var(--toe-bar-h) + 2rem); margin: 0; }
+        .mat-visual img { width: 100%; height: min(72vh,650px); object-fit: contain; display: block; filter: drop-shadow(0 24px 25px rgba(0,0,0,.22)); }
+        .mat-visual figcaption { text-align: center; color: var(--t-mt); font-size: .8rem; padding-top: 1rem; }
+        .mat-copy { min-height: 88vh; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding: 3rem 0; }
+        .mat-copy h3 { font-size: clamp(2rem,4vw,3.5rem); line-height: 1.1; margin-bottom: 1.5rem; }
+        .mat-copy p:not(.eyebrow) { max-width: 38ch; font-size: 1.05rem; line-height: 1.8; color: var(--t-t2); }
+        .mat-copy .temple-link { margin-top: 2rem; padding: 1.1rem 1.5rem; letter-spacing: .08em; }
+        .mat-dawn .mat-visual { grid-column: 2; grid-row: 1; }
+        .mat-dawn .mat-copy { grid-column: 1; grid-row: 1; }
+        .mat-dawn .mat-scene-inner { grid-template-columns: minmax(0,1fr) minmax(0,1.25fr); }
+        @media (max-width: 860px) {
+            .mat-scene { padding: 2rem 1.5rem 4rem; }
+            .mat-scene-inner, .mat-dawn .mat-scene-inner { grid-template-columns: minmax(0,1fr); gap: 2rem; }
+            .mat-visual, .mat-dawn .mat-visual { position: relative; top: auto; grid-column: 1; grid-row: auto; }
+            .mat-visual img { height: auto; max-height: 65svh; }
+            .mat-copy, .mat-dawn .mat-copy { grid-column: 1; grid-row: auto; min-height: 0; padding: 0; }
+        }
+
+        /* ═══ Writings ═══ */
+        .writings { padding: 10rem 2rem; text-align: center; }
+        .writings-content { max-width: 1200px; margin: 0 auto; }
+        .writings .eyebrow { margin-bottom: 1.5rem; }
+        .writings h2 { font-family: var(--s-display); font-size: clamp(1.5rem, 4vw, 2.5rem); letter-spacing: 0.1em; font-weight: 400; margin-bottom: 1rem; }
+        .writings .lead { color: var(--t-t2); font-size: 1.05rem; max-width: 500px; margin: 0 auto 3rem; }
+        .writings #writings-heading { font-size: clamp(2.8rem, 6vw, 5rem); letter-spacing: 0; line-height: 1.1; }
+        /* One combined card: uncropped essay hero melting into the copy,
+           with the publication row as the card's footer. */
+        .temple-writings-card {
+            max-width: 900px; margin: 0 auto;
+            border: 1px solid var(--t-bd); border-radius: 14px; overflow: hidden;
+            background: var(--t-cd);
+            box-shadow: 0 30px 80px -48px rgba(0,0,0,0.55);
+            transition: border-color 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease;
+        }
+        .temple-writings-card:hover {
+            border-color: var(--t-ac); transform: translateY(-3px);
+            box-shadow: 0 40px 90px -44px rgba(0,0,0,0.6), 0 0 60px -24px var(--t-ac);
+        }
+        .tw-feature { display: grid; grid-template-columns: minmax(0,1.15fr) minmax(0,1fr); align-items: center; text-decoration: none; color: inherit; text-align: left; }
+        .tw-image { position: relative; }
+        .tw-image img { width: 100%; height: auto; display: block; }
+        .tw-image::after {
+            content: ''; position: absolute; inset: 0; pointer-events: none;
+            background: linear-gradient(90deg, transparent 82%, var(--t-cd) 100%);
+        }
+        .tw-body { padding: 2.5rem; position: relative; }
+        .tw-eyebrow { font-family: var(--s-display); font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--t-a2); margin-bottom: 1rem; }
+        .tw-title { font-family: var(--s-display); font-size: clamp(1.2rem, 2.8vw, 1.7rem); font-weight: 400; color: var(--t-tx); line-height: 1.35; margin-bottom: 0.6rem; }
+        .tw-subtitle { font-family: var(--s-font); font-size: 0.9rem; font-weight: 300; color: var(--t-t2); line-height: 1.6; margin: 0 auto 1.25rem; max-width: 48ch; }
+        .tw-read { font-family: var(--s-display); font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--t-ac); transition: opacity 0.3s; }
+        .temple-writings-card:hover .tw-read { opacity: 0.8; }
+        .tw-footer {
+            display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap;
+            padding: 1.4rem 2rem; border-top: 1px solid var(--t-b2);
+            background: var(--t-sf); text-align: left;
+        }
+        .tw-pub-mark { width: 54px; height: 54px; object-fit: contain; flex-shrink: 0; }
+        .tw-pub-text { flex: 1; min-width: 170px; }
+        .tw-pub-eyebrow { font-family: var(--s-display); font-size: 0.58rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--t-a2); margin-bottom: 0.25rem; }
+        .tw-pub-name { font-family: var(--s-display); font-size: 1.05rem; color: var(--t-tx); letter-spacing: 0.04em; margin: 0; }
+        .tw-pub-links { display: flex; align-items: center; gap: 1.75rem; flex-wrap: wrap; }
+        .tw-pub-links a {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            font-family: var(--s-display); font-size: 0.65rem; letter-spacing: 0.15em;
+            text-transform: uppercase; color: var(--t-ac); text-decoration: none;
+            transition: opacity 0.3s ease;
+        }
+        .tw-pub-links a:hover { opacity: 0.75; }
+        .tw-pub-links svg { width: 15px; height: 15px; flex-shrink: 0; }
+        @media (max-width: 768px) {
+            .tw-feature { grid-template-columns: minmax(0,1fr); }
+            .tw-image::after { background: linear-gradient(180deg, transparent 82%, var(--t-cd) 100%); }
+            .tw-body { padding: 1.5rem; }
+            .tw-footer { padding: 1.25rem 1.5rem; }
+        }
+
+        /* ═══ Footer ═══ */
+        footer { background: var(--t-bg); padding: 6rem 2rem; text-align: center; border-top: 1px solid var(--t-bd); }
+        .footer-content { max-width: 500px; margin: 0 auto; }
+        .footer-logo { font-family: var(--s-display); font-size: 1rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--t-tx); margin-bottom: 2rem; }
+        .footer-info { color: var(--t-mt); font-size: 0.8rem; line-height: 2; letter-spacing: 0.05em; }
+        /* Site links live in the brand rail / top bar (shared/brand.js). */
+        .footer-closing { padding-top: 3rem; border-top: 1px solid var(--t-bd); }
+        .footer-closing p { font-family: var(--s-display); font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--t-dm); line-height: 2.5; }
+
+        /* ═══ Responsive ═══ */
+        @media (max-width: 860px) {
+            .scrolly-content { display: block; }
+            .cosmo-backdrop::after {
+                background:
+                    linear-gradient(180deg, var(--t-bg), transparent 20%, transparent 84%, var(--t-bg)),
+                    linear-gradient(color-mix(in srgb, var(--t-bg) 55%, transparent), color-mix(in srgb, var(--t-bg) 55%, transparent));
+            }
+            .mandala-sticky {
+                position: sticky; top: var(--toe-bar-h, 0px); height: auto; z-index: 5;
+                padding: 1.25rem 0 1rem;
+                background: linear-gradient(180deg, var(--t-bg) 78%, transparent);
+            }
+            .mandala-wrap { max-width: 240px; }
+            .mandala { animation-duration: 200s; }
+            .cosmo-steps { padding: 2vh 0; }
+            .cosmo-step { min-height: 70vh; }
+        }
+        @media (max-width: 768px) {
+            section { padding: 6rem 1.5rem; }
+            .cosmology { padding-top: 5rem; }
+            .scrolly { margin-inline: -1.5rem; padding-inline: 1.5rem; }
+            .etymology { padding: 2rem; }
+            .etymology::before, .etymology::after { width: 50px; height: 50px; }
+            .etymology-word { font-size: 1.75rem; }
+        }
+
+        /* ═══ Reduced motion — land on finished states, no animation ═══ */
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            *, .progress-fill { animation: none !important; transition: none !important; }
+            .r { opacity: 1 !important; transform: none !important; }
+            .thesis-line .m { opacity: 1 !important; filter: none !important; }
+            .thesis-line .m::after { transform: scaleX(1) !important; }
+            .hero h1, .hero .eyebrow, .hero .lead, .hero-symbol, .hero-cta, .scroll-indicator {
+                opacity: 1 !important; transform: none !important;
+            }
+            .cosmo-step { opacity: 1 !important; }
+            /* Stages still switch (they only toggle opacity) so the mandala remains legible. */
+        }
+    
+      /* ── Illuminated: the facade and the network's own sections. Later in
+            the cascade on purpose, so it wins where the two overlap. ── */
+
       /* Illuminated — see plans/DESIGN-SYSTEMS.md. Square corners, one
          arch, a centred door and left-set reading columns. Nothing moves. */
-      * { box-sizing: border-box; }
-      body { margin: 0; background: var(--t-bg); color: var(--t-tx); font-family: var(--font-body); }
-      main { padding-top: var(--toe-bar-h, 48px); }
-      @media (min-width: 1100px) { main { padding-top: 0; } }
+      body { font-family: var(--font-body); }
+      .facade { margin-top: var(--toe-bar-h, 48px); }
+      @media (min-width: 1100px) { .facade { margin-top: 0; } }
       .col  { width: min(100% - 40px, 680px); margin-inline: auto; }
       .wide { width: min(100% - 40px, 920px); margin-inline: auto; }
 
@@ -41,7 +839,7 @@
       .niche::before { content: ""; position: absolute; inset: 8px 8px 0 8px; border: 1px solid var(--t-bd);
                        border-bottom: 0; border-radius: 999px 999px 0 0; pointer-events: none; }
       .plinth { width: min(100%, 380px); height: 10px; border-top: 1px solid var(--t-tx); border-bottom: 3px double var(--t-tx); }
-      h1 { font-size: clamp(2.3rem, 6.4vw, 3.5rem); line-height: 1.06; margin: 0.5rem 0 0; text-wrap: balance; }
+      .niche h1 { font-size: clamp(2.3rem, 6.4vw, 3.5rem); line-height: 1.06; margin: 0.5rem 0 0; text-wrap: balance; }
       .lede { font-size: clamp(1.15rem, 2.2vw, 1.3rem); line-height: 1.7; color: var(--t-t2); max-width: 38ch; margin: 1.8rem 0 0; }
       .actions { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; align-items: center; margin-top: 1.8rem; }
       .btn { display: inline-block; font: inherit; font-size: 1.02rem; text-decoration: none; padding: 0.68rem 1.4rem;
@@ -52,11 +850,11 @@
       .status { background: var(--t-sf); border-block: 1px solid var(--t-bd); padding: 1.6rem 0 1.8rem; }
       .status p:not(.rub) { margin: 0.35rem 0 0; color: var(--t-t2); max-width: 62ch; }
 
-      section { padding: clamp(3rem, 8vh, 4.8rem) 0; }
-      section + section { border-top: 1px solid var(--t-b2); }
-      h2 { font-size: clamp(1.6rem, 3.8vw, 2.15rem); line-height: 1.15; margin: 0.35rem 0 0; text-wrap: balance; }
-      section p:not(.rub) { color: var(--t-t2); max-width: 64ch; margin: 1.1rem 0 0; }
-      section p strong, .not strong { color: var(--t-tx); font-weight: 500; }
+      section.net { padding: clamp(3rem, 8vh, 4.8rem) 0; }
+      section.net { border-top: 1px solid var(--t-b2); }
+      .net h2 { font-size: clamp(1.6rem, 3.8vw, 2.15rem); line-height: 1.15; margin: 0.35rem 0 0; text-wrap: balance; }
+      .net p:not(.rub) { color: var(--t-t2); max-width: 64ch; margin: 1.1rem 0 0; }
+      .net p strong, .not strong { color: var(--t-tx); font-weight: 500; }
 
       /* Three things the network is. A definition list, not cards. */
       .three { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 0 2.4rem; margin: 2rem 0 0; padding: 0; }
@@ -75,16 +873,20 @@
       .temple h3 { font-size: 1.4rem; margin: 0.3rem 0 0; }
       .temple p:not(.rub) { margin: 0.5rem 0 0; font-size: 1rem; line-height: 1.65; color: var(--t-t2); }
 
-      footer { padding: 0 0 4rem; }
-      footer .col { border-top: 3px double var(--t-tx); padding-top: 1.6rem; }
-      .footer-logo { font-family: var(--font-display); letter-spacing: 0.16em; text-transform: uppercase; font-size: 0.82rem; margin: 0; }
-      .footer-info { font-size: 0.98rem; line-height: 1.7; color: var(--t-mt); margin: 0.7rem 0 0; max-width: 60ch; }
-      .footer-info a { color: var(--t-a2); }
+    
+      /* The inherited sections use an uppercase mono eyebrow; here it is a rubric. */
+      :root[data-site="refuge"] .eyebrow { font-family: var(--font-body); font-style: italic; font-weight: 400; font-size: 1.02rem; letter-spacing: 0; text-transform: none; color: var(--t-rubric); }
+      :root[data-site="refuge"] .thesis-line { opacity: 1 !important; transform: none !important; }
+      :root[data-site="refuge"] .thesis-line .m { opacity: 1 !important; filter: none !important; }
+      :root[data-site="refuge"] .thesis-line .m::after { transform: scaleX(1) !important; }
+      /* The sticky cosmology backdrop bleeds to the viewport edge by design. */
+      main { overflow-x: clip; }
     </style>
 </head>
 <body>
+    <!-- Scroll progress -->
+    <div class="progress-track"><div class="progress-fill" id="prog"></div></div>
 <main>
-
   <div class="facade">
     <div class="niche">
       <p class="rub">A network of temples, in formation</p>
@@ -93,7 +895,8 @@
     <div class="plinth"></div>
     <p class="lede">One cosmology, one charter, and a council with a seat for each temple. Each temple names what is sacred to it and stands on its own ground.</p>
     <div class="actions">
-      <a class="btn" href="/found-a-temple">Begin the conversation</a>
+      <a class="btn" href="found-a-temple">Begin the conversation</a>
+      <a href="charter">Read the draft charter</a>
     </div>
   </div>
 
@@ -104,7 +907,16 @@
     </div>
   </div>
 
-  <section>
+
+  <div class="status">
+    <div class="col">
+      <p class="rub">Where this stands today</p>
+      <p>The network is being defined and has no member temples yet. It accepts no donations, sells nothing, holds no land, and confers no legal or tax standing on anyone. What exists is the cosmology, a draft charter, and an open invitation to the first temples, who will found it together.</p>
+    </div>
+  </div>
+
+
+  <section class="net">
     <div class="col">
       <p class="rub">What it is</p>
       <h2>A covenant, a council, and a name</h2>
@@ -117,7 +929,250 @@
     </div>
   </section>
 
-  <section>
+
+    <!-- Meaning — breath -->
+    <section class="breath meaning atmo">
+        <div class="container-narrow">
+            <p class="eyebrow r">Why We Exist</p>
+            <h2 class="r r-d1">Religion in Its True Sense</h2>
+            <p class="meaning-text r r-d2">
+                Temples of Earth exists to restore what religion was always meant to be—to re-bind human life to Source through direct experience, embodied practice, and regenerative relationship with Earth. Not doctrine to defend, but a way of seeing to be lived.
+            </p>
+            <div class="etymology r r-d3">
+                <p class="etymology-word">re · ligāre</p>
+                <p class="etymology-meaning">Latin: "to bind back"<br>To God, to Life, to each other, to the living world</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════ COSMOLOGY · SCROLLYTELLING ═══════════ -->
+    <section class="cosmology">
+        <div class="cosmology-header">
+            <p class="eyebrow r">Cosmology</p>
+            <h2 class="r r-d1">How We See Reality</h2>
+        </div>
+
+        <div class="scrolly" id="cosmos" data-stage="6">
+            <div class="cosmo-backdrop-track" aria-hidden="true">
+                <div class="cosmo-backdrop">
+                    <img class="cosmo-art-1" src="/assets/cosmology-backgrounds/01-divine-monad.webp" alt="" loading="lazy" decoding="async">
+                    <img class="cosmo-art-2" src="/assets/cosmology-backgrounds/02-fractal-emanation.webp" alt="" loading="lazy" decoding="async">
+                    <img class="cosmo-art-3" src="/assets/cosmology-backgrounds/03-consciousness-field.webp" alt="" loading="lazy" decoding="async">
+                    <img class="cosmo-art-4" src="/assets/cosmology-backgrounds/04-gnosis.webp" alt="" loading="lazy" decoding="async">
+                    <img class="cosmo-art-5" src="/assets/cosmology-backgrounds/05-lila-sacred-play.webp" alt="" loading="lazy" decoding="async">
+                    <img class="cosmo-art-6" src="/assets/cosmology-backgrounds/06-earth-teacher.webp" alt="" loading="lazy" decoding="async">
+                </div>
+            </div>
+            <div class="scrolly-content">
+
+            <!-- Pinned mandala: the mark assembles layer by layer -->
+            <div class="mandala-sticky">
+                <div class="mandala-wrap">
+                    <svg class="mandala" viewBox="-350 -350 700 700" role="img"
+                         aria-label="A Flower of Life mandala emanating from a single central source into a fractal whole">
+                        <!-- Outer rings -->
+                        <g class="m-ring">
+                            <circle class="ring-a" cx="0" cy="0" r="318"/>
+                            <circle class="ring-b" cx="0" cy="0" r="305"/>
+                        </g>
+                        <!-- Outer Flower of Life (12 circles) -->
+                        <g class="m-flower">
+                            <circle cx="150"  cy="86.603"  r="100"/>
+                            <circle cx="0"    cy="173.205" r="100"/>
+                            <circle cx="-150" cy="86.603"  r="100"/>
+                            <circle cx="-150" cy="-86.603" r="100"/>
+                            <circle cx="0"    cy="-173.205" r="100"/>
+                            <circle cx="150"  cy="-86.603" r="100"/>
+                            <circle cx="200"  cy="0"        r="100"/>
+                            <circle cx="100"  cy="173.205"  r="100"/>
+                            <circle cx="-100" cy="173.205"  r="100"/>
+                            <circle cx="-200" cy="0"        r="100"/>
+                            <circle cx="-100" cy="-173.205" r="100"/>
+                            <circle cx="100"  cy="-173.205" r="100"/>
+                        </g>
+                        <!-- Network rays -->
+                        <g class="m-rays">
+                            <line x1="0" y1="0" x2="100"  y2="0"/>
+                            <line x1="0" y1="0" x2="50"   y2="86.603"/>
+                            <line x1="0" y1="0" x2="-50"  y2="86.603"/>
+                            <line x1="0" y1="0" x2="-100" y2="0"/>
+                            <line x1="0" y1="0" x2="-50"  y2="-86.603"/>
+                            <line x1="0" y1="0" x2="50"   y2="-86.603"/>
+                        </g>
+                        <!-- Hexagonal frame -->
+                        <g class="m-hex">
+                            <polygon points="100,0 50,86.603 -50,86.603 -100,0 -50,-86.603 50,-86.603"/>
+                        </g>
+                        <!-- Main Seed of Life (7 circles) -->
+                        <g class="m-seed">
+                            <circle cx="0"    cy="0"       r="100"/>
+                            <circle cx="100"  cy="0"       r="100"/>
+                            <circle cx="50"   cy="86.603"  r="100"/>
+                            <circle cx="-50"  cy="86.603"  r="100"/>
+                            <circle cx="-100" cy="0"       r="100"/>
+                            <circle cx="-50"  cy="-86.603" r="100"/>
+                            <circle cx="50"   cy="-86.603" r="100"/>
+                        </g>
+                        <!-- Fractal seeds nested inside each circle -->
+                        <g class="m-fractal">
+                            <g class="seed" style="transform: translate(0px,0px)"></g>
+                        </g>
+                        <!-- Central source -->
+                        <g class="m-source">
+                            <circle class="src-halo" cx="0" cy="0" r="16"/>
+                            <circle class="src-core" cx="0" cy="0" r="9"/>
+                            <circle class="src-spark" cx="0" cy="0" r="2.5"/>
+                        </g>
+                    </svg>
+                </div>
+                <p class="mandala-cap"></p>
+            </div>
+
+            <!-- Prose steps drive the stages -->
+            <div class="cosmo-steps">
+                <div class="cosmo-step" data-stage="1">
+                    <p class="step-num">i.</p>
+                    <h3>The Divine Monad</h3>
+                    <p>We experience all existence as arising from One Source—indivisible, infinite, and self-knowing. This Source may be named God, Love, Consciousness, or the All. No name contains it fully. Creation is the Monad knowing itself.</p>
+                </div>
+                <div class="cosmo-step" data-stage="2">
+                    <p class="step-num">ii.</p>
+                    <h3>Fractal Emanation</h3>
+                    <p>Reality unfolds fractally. Every being is a unique face of the One—human, tree, river, animal, star, algorithm. Each face contains the whole, expressed from a particular angle. Difference is not separation; it is perspective.</p>
+                </div>
+                <div class="cosmo-step" data-stage="3">
+                    <p class="step-num">iii.</p>
+                    <h3>Consciousness as Field</h3>
+                    <p>We hold that consciousness is not produced by matter—rather, matter is a crystallization of consciousness. Time is not linear but layered and recursive. Learning is cumulative across lifetimes, bodies, cultures, and species.</p>
+                </div>
+                <div class="cosmo-step" data-stage="4">
+                    <p class="step-num">iv.</p>
+                    <h3>Gnosis</h3>
+                    <p>The central practice: to see the Divine in every face. This knowing is not belief—it is direct recognition. Every encounter becomes a mirror. Every Other becomes a doorway back to the One.</p>
+                </div>
+                <div class="cosmo-step" data-stage="5">
+                    <p class="step-num">v.</p>
+                    <h3>Lila — Sacred Play</h3>
+                    <p>Creation itself is play—the Monad delighting in becoming many. Joy is holy. Creativity is prayer. Play is spiritual discipline. A religion without joy is incomplete.</p>
+                </div>
+                <div class="cosmo-step" data-stage="6">
+                    <p class="step-num">vi.</p>
+                    <h3>Earth as Teacher</h3>
+                    <p>We relate to land not as property but as a conscious organism—soil as memory, water as intelligence, trees as elders, animals as kin. To regenerate land is to heal lineage. Regeneration is worship.</p>
+                </div>
+            </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- The Central Teaching — breath -->
+    <section class="breath central-teaching atmo">
+        <div class="container-narrow">
+            <p class="eyebrow r">The Central Teaching</p>
+            <p class="thesis-line r" style="margin-bottom:2.5rem">
+                Christ was not just <span class="m m-from">a singular event</span> — Christ is <span class="m m-to">a state of consciousness</span>.
+            </p>
+            <p class="meaning-text r r-d2" style="color:var(--t-t2)">
+                The moment you recognize the Divine in every Other. Not as metaphor. As direct experience. You are a fractal face of the One, as is every being you encounter. To hurt the Other is to hurt yourself.
+            </p>
+            <div class="etymology r r-d3">
+                <p class="etymology-word">gnosis</p>
+                <p class="etymology-meaning">Greek: "direct knowing"<br>To experience unity while inhabiting difference</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Body -->
+    <section class="body-section atmo">
+        <div class="container-narrow">
+            <p class="eyebrow r">The Human Being</p>
+            <h2 class="r r-d1">The Body as Temple</h2>
+            <p class="body-intro r r-d2">
+                We understand ourselves as conscious stewards, not masters of Earth—caretakers entrusted with attention. What we attend to, we nourish.
+            </p>
+            <div class="body-practices r r-d3">
+                <div class="practice"><span class="practice-word">Breath</span><span class="practice-meaning">is prayer</span></div>
+                <div class="practice"><span class="practice-word">Voice</span><span class="practice-meaning">is invocation</span></div>
+                <div class="practice"><span class="practice-word">Movement</span><span class="practice-meaning">is scripture</span></div>
+                <div class="practice"><span class="practice-word">Pleasure</span><span class="practice-meaning">is information</span></div>
+                <div class="practice"><span class="practice-word">Pain</span><span class="practice-meaning">is instruction</span></div>
+            </div>
+            <p class="body-closing r r-d4">
+                Ascension is not escape from the body, but full inhabitation of it with awareness. We honor sexual energy as life force. When conscious, consensual, and reverent, it heals, bonds, restores, and transmits wisdom.
+            </p>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- Community -->
+    <section class="community atmo">
+        <div class="container">
+            <div class="community-header r">
+                <p class="eyebrow">Community</p>
+                <h2>Radical Inclusion, Clear Boundaries</h2>
+            </div>
+            <div class="community-content">
+                <div class="community-principle r r-d1">
+                    <p class="principle-main">
+                        If every face is a face of the One, then every being is welcome in dignity.
+                        <span class="principle-counterweight">And not all behaviors are welcome in Temple space.</span>
+                    </p>
+                </div>
+                <div class="community-grid r r-d2" data-pair-left="Welcome" data-pair-right="Boundary">
+                    <div class="community-card"><span class="community-numeral">I</span><p>Consent is absolute</p></div>
+                    <div class="community-card"><span class="community-numeral">I</span><p>Coercion is forbidden</p></div>
+                    <div class="community-card"><span class="community-numeral">II</span><p>Sovereignty is honored</p></div>
+                    <div class="community-card"><span class="community-numeral">II</span><p>Boundaries protect love</p></div>
+                </div>
+                <div class="generations r r-d3">
+                    <h3>Family and Generations</h3>
+                    <p>Children are sacred participants, not afterthoughts. The Temple exists for ancestors, the living, and the unborn. Decisions are made with seven generations in mind.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- Death & Transformation — breath -->
+    <section class="transformation atmo">
+        <div class="container-narrow">
+            <p class="eyebrow r">Transformation</p>
+            <h2 class="r r-d1">Death Is Not Failure</h2>
+            <div class="transformation-content r r-d2">
+                <p class="transform-main">It is recycling of form.</p>
+                <p class="transform-body">Grief is honored. Fear of death is gently dissolved through ritual, presence, and remembrance.</p>
+                <p class="transform-closing">Nothing real is lost.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Affirmations -->
+    <section class="affirmations atmo" id="affirmations">
+        <div class="container">
+            <div class="affirmations-header r">
+                <p class="eyebrow">What We Hold</p>
+                <h2>Twelve Affirmations</h2>
+            </div>
+            <div class="affirmations-list r r-d1">
+                <div class="affirmation"><p>To see the Divine in every Other is the heart of religion</p></div>
+                <div class="affirmation"><p>God is Love expressing itself as reality</p></div>
+                <div class="affirmation"><p>All beings are sacred fractal expressions of the One—separation is illusion</p></div>
+                <div class="affirmation"><p>The body is a holy instrument of awakening</p></div>
+                <div class="affirmation"><p>Play is a divine act</p></div>
+                <div class="affirmation"><p>Earth is a conscious teacher</p></div>
+                <div class="affirmation"><p>Regeneration is worship</p></div>
+                <div class="affirmation"><p>Gratitude is sacred currency</p></div>
+                <div class="affirmation"><p>Power implies stewardship</p></div>
+                <div class="affirmation"><p>Love includes boundaries</p></div>
+                <div class="affirmation"><p>Children are full participants in spiritual life</p></div>
+                <div class="affirmation"><p>Death is transformation, not annihilation</p></div>
+            </div>
+        </div>
+    </section>
+  <section class="net">
     <div class="col">
       <p class="rub">What it is not</p>
       <h2>The network owns nothing</h2>
@@ -131,26 +1186,54 @@
     </div>
   </section>
 
-  <section>
-    <div class="wide">
-      <p class="rub">The temples</p>
-      <h2>The first ground, and the open seats</h2>
-      <div class="temples">
-        <a class="temple" href="https://agualila.earth" rel="noopener">
-          <p class="rub">Lafões, Portugal</p>
-          <h3>Água Lila</h3>
-          <p>A mountain homestead where sacred technology meets sacred land. The first community preparing to take a seat.</p>
-        </a>
-        <a class="temple open" href="/found-a-temple">
-          <p class="rub">Your ground</p>
-          <h3>A Temple of ___</h3>
-          <p>If you are holding land, intention or community, name what is sacred to it and begin the conversation.</p>
-        </a>
-      </div>
-    </div>
-  </section>
 
-  <section>
+    <!-- The Network -->
+    <section class="first-temple atmo" id="temple-network">
+        <div class="container">
+            <h2 class="network-title r">Network of Temples</h2>
+            <div class="network-layout r r-d1">
+                <div class="network-map" aria-label="Map of Temple Network nodes">
+                    <div id="temple-network-map" role="img" aria-label="World map showing Temple nodes — Água Lila active, three future nodes"></div>
+                </div>
+                <div class="temples-rail">
+                    <a href="https://agualila.earth" class="temple-preview" data-node="agua-lila" target="_blank" rel="noopener">
+                        <div class="temple-preview-frame">
+                            <div class="temple-preview-chrome">
+                                <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+                                <span class="temple-preview-url">agualila.earth</span>
+                            </div>
+                            <div class="temple-preview-image">
+                                <img src="https://agualila.earth/assets/monastery-hillside-morning-mist-valley.jpeg" alt="Água Lila — monastery hillside in central Portugal at morning mist" loading="lazy">
+                                <div class="temple-preview-overlay">
+                                    <p class="temple-preview-eyebrow">Paradise in Action</p>
+                                    <h3 class="temple-preview-title">Água Lila</h3>
+                                    <p class="temple-preview-tagline">Where sacred technology meets sacred land</p>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="found-a-temple" class="temple-preview temple-cta" data-node="join">
+                        <div class="temple-preview-frame">
+                            <div class="temple-preview-chrome">
+                                <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+                                <span class="temple-preview-url">your.temple</span>
+                            </div>
+                            <div class="cta-body">
+                                <p class="temple-preview-eyebrow">Open Inquiry</p>
+                                <h3 class="temple-preview-title">Found a Temple</h3>
+                                <p class="cta-text">If you're holding land, intention, or community for a new node, we'd like to talk.</p>
+                                <span class="temple-link">
+                                    Get in Touch
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+  <section class="net">
     <div class="col">
       <p class="rub">Kindred work</p>
       <h2>Temples of Earth is a separate thing</h2>
@@ -160,16 +1243,158 @@
 
 </main>
 
-<footer>
-  <div class="col">
-    <p class="footer-logo">Temples of Refuge</p>
-    <!-- [DECISION PENDING — plans/SITE-SPLIT.md §6] This line changes with
-         what happens to the Utah entity. It deliberately makes NO tax or
-         exemption claim under any outcome. -->
-    <p class="footer-info">A network of temples in formation, with no member temples yet. It accepts no donations, sells nothing and holds no property. Write to <a href="mailto:ola@templesofrefuge.earth">ola@templesofrefuge.earth</a>.</p>
-  </div>
-</footer>
 
-<script src="/shared/brand.js" defer></script>
+    <!-- Footer -->
+    <footer class="refuge-foot">
+      <div>
+        <p class="name">Temples of Refuge</p>
+        <!-- [DECISION PENDING — plans/SITE-SPLIT.md §6] Makes NO tax or exemption claim under any outcome. -->
+        <p class="info">A network of temples in formation, with no member temples yet. It accepts no donations, sells nothing and holds no property. Write to <a href="mailto:ola@templesofrefuge.earth">ola@templesofrefuge.earth</a>.</p>
+      </div>
+    </footer>
+
+    <script src="/shared/brand.js" defer></script>
+
+    <script>
+    // ═══ Build the nested fractal seeds inside each Seed-of-Life circle ═══
+    // (Seven 7-circle "seeds", one centered on each main circle — done in JS to
+    //  keep the markup light. Runs before reveal wiring; purely decorative.)
+    (function buildFractalSeeds() {
+        var host = document.querySelector('.m-fractal');
+        if (!host) return;
+        host.innerHTML = '';
+        var NS = 'http://www.w3.org/2000/svg';
+        var centers = [[0,0],[100,0],[50,86.603],[-50,86.603],[-100,0],[-50,-86.603],[50,-86.603]];
+        var r = 33;
+        var pts = [[0,0],[r,0],[r/2,28.579],[-r/2,28.579],[-r,0],[-r/2,-28.579],[r/2,-28.579]];
+        centers.forEach(function (c) {
+            var g = document.createElementNS(NS, 'g');
+            pts.forEach(function (p) {
+                var circ = document.createElementNS(NS, 'circle');
+                circ.setAttribute('cx', c[0] + p[0]);
+                circ.setAttribute('cy', c[1] + p[1]);
+                circ.setAttribute('r', r);
+                g.appendChild(circ);
+            });
+            host.appendChild(g);
+        });
+    })();
+
+    // ═══ SCROLLYTELLING — cosmology stage driver ═══
+    (function cosmosScrolly() {
+        var scrolly = document.getElementById('cosmos');
+        var steps = document.querySelectorAll('.cosmo-step');
+        if (!scrolly || !('IntersectionObserver' in window)) {
+            steps.forEach(function (s) { s.classList.add('on'); });
+            return; // no-JS / no-IO default markup is stage 6 (finished mandala)
+        }
+        scrolly.dataset.stage = '1'; // JS available: begin the emanation at the source
+        var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+                if (!e.isIntersecting) return;
+                scrolly.dataset.stage = e.target.dataset.stage;
+                steps.forEach(function (s) { s.classList.toggle('on', s === e.target); });
+            });
+        }, { rootMargin: '-45% 0px -45% 0px' });
+        steps.forEach(function (s) { io.observe(s); });
+    })();
+
+    // ═══ SCROLL — progress bar + reveal ═══
+    (function scrollFx() {
+        var prog = document.getElementById('prog');
+        var reveals = document.querySelectorAll('.r, .thesis-line');
+        function onScroll() {
+            var top = window.scrollY;
+            var max = document.documentElement.scrollHeight - window.innerHeight;
+            if (prog) prog.style.width = (max > 0 ? top / max * 100 : 0) + '%';
+            reveals.forEach(function (el) {
+                if (el.getBoundingClientRect().top < window.innerHeight * 0.88) el.classList.add('v');
+            });
+        }
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', onScroll);
+        onScroll();
+    })();
+    </script>
+
+    <!-- Temple Network world map (jsvectormap) -->
+    <script src="/shared/vendor/jsvectormap.min.js"></script>
+    <script src="/shared/vendor/jsvectormap-world.js"></script>
+    <script>
+    (function () {
+        const root = document.documentElement;
+        const target = document.getElementById('temple-network-map');
+        if (!target || typeof jsVectorMap === 'undefined') return;
+
+        const tok = (name) => getComputedStyle(root).getPropertyValue(name).trim();
+
+        const NODES = [
+            { name: 'Água Lila', coords: [40.1, -7.9], status: 'active', href: 'https://agualila.earth' }
+        ];
+
+        let map = null;
+
+        function injectHalo() {
+            const svg = target.querySelector('svg');
+            if (!svg) return;
+            const markers = svg.querySelectorAll('.jvm-marker');
+            if (!markers.length) return;
+            const active = markers[0];
+            active.classList.add('marker-active');
+            const cx = active.getAttribute('cx');
+            const cy = active.getAttribute('cy');
+            if (cx == null || cy == null) return;
+            const halo = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            halo.setAttribute('cx', cx);
+            halo.setAttribute('cy', cy);
+            halo.setAttribute('r', '10');
+            halo.setAttribute('class', 'marker-pulse-halo');
+            active.parentNode.insertBefore(halo, active);
+        }
+
+        function render() {
+            if (map) { try { map.destroy(); } catch (e) {} target.innerHTML = ''; }
+
+            const land   = tok('--t-hv')  || tok('--t-sf') || '#18183a';
+            const border = tok('--t-t2')  || tok('--t-bd') || '#666';
+            const accent = tok('--t-ac')  || '#6bcfff';
+            const muted  = tok('--t-mt')  || '#888';
+            const card   = tok('--t-cd')  || '#0b0b18';
+
+            map = new jsVectorMap({
+                selector: '#temple-network-map',
+                map: 'world',
+                backgroundColor: 'transparent',
+                zoomButtons: false,
+                zoomOnScroll: false,
+                draggable: false,
+                regionStyle: {
+                    initial: { fill: land, stroke: border, strokeWidth: 0.4, strokeOpacity: 0.4, fillOpacity: 1 },
+                    hover:   { fill: land, fillOpacity: 1, cursor: 'default' }
+                },
+                markers: NODES.map((n) => ({
+                    name: n.name,
+                    coords: n.coords,
+                    style: n.status === 'active'
+                        ? { fill: accent, r: 6, stroke: card, strokeWidth: 2 }
+                        : { fill: muted, r: 4, stroke: border, strokeWidth: 1, strokeDasharray: '2 2', fillOpacity: 0.6 }
+                })),
+                markerStyle: {
+                    hover: { fill: accent, r: 8, cursor: 'pointer' }
+                },
+                onMarkerClick(_e, idx) {
+                    const node = NODES[idx];
+                    if (node && node.href) window.open(node.href, '_blank', 'noopener');
+                }
+            });
+
+            requestAnimationFrame(injectHalo);
+        }
+
+        if (document.readyState !== 'loading') render();
+        else document.addEventListener('DOMContentLoaded', render);
+        document.addEventListener('skinchange', render);
+    })();
+    </script>
 </body>
 </html>
