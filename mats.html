@@ -91,8 +91,8 @@
             max-width: 1200px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: minmax(0, 1fr) minmax(0, 0.92fr);
-            gap: clamp(2rem, 5vw, 5rem);
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);   /* the fan gets the wider column */
+            gap: clamp(1.5rem, 3vw, 3rem);
             align-items: center;
             width: 100%;
         }
@@ -190,13 +190,14 @@
         }
         .hero-mats .mat-frame img { height: 100%; width: auto; max-width: none; display: block; }
         /* the side prints sit a little smaller and behind, so the fan has depth */
+        .hero-mats { max-width: 640px; }
         .hero-mats .fan-center { top: 12%; height: 72%; left: 50%; transform: translateX(-50%) translateY(-2%); z-index: 3; }
         .hero-mats .fan-left,
-        .hero-mats .fan-right  { top: 19%; height: 62%; }
-        .hero-mats .fan-left   { left: 2%;  transform: rotate(-11deg) translateY(4%); z-index: 1; }
-        .hero-mats .fan-right  { right: 2%; transform: rotate(10deg) translateY(4%);  z-index: 2; }
-        .hero-mats:hover .fan-left   { transform: rotate(-14deg) translate(-5%, 2%); }
-        .hero-mats:hover .fan-right  { transform: rotate(13deg) translate(5%, 2%); }
+        .hero-mats .fan-right  { top: 20%; height: 62%; }
+        .hero-mats .fan-left   { left: 4%;  transform: rotate(-14deg) translateY(5%); z-index: 1; }
+        .hero-mats .fan-right  { right: 4%; transform: rotate(13deg) translateY(5%);  z-index: 2; }
+        .hero-mats:hover .fan-left   { transform: rotate(-17deg) translate(-4%, 3%); }
+        .hero-mats:hover .fan-right  { transform: rotate(16deg) translate(4%, 3%); }
         .hero-mats:hover .fan-center { transform: translateX(-50%) translateY(-4%) scale(1.02); }
 
         /* ---- Section shells ---- */
@@ -565,9 +566,11 @@
             .hero { text-align: center; min-height: auto; padding-top: 2.5rem; }
             .hero-copy { order: 2; }
             .hero-mats { margin: 0 auto; order: 1; max-width: 400px; }
-            .hero-mats { height: min(46vh, 400px) !important; }
-            .hero-mats .fan-center { height: 76%; top: 6%; }
-            .hero-mats .fan-left, .hero-mats .fan-right { height: 65%; top: 16%; }
+            .hero-mats { height: min(46vh, 400px) !important; width: 100%; margin-left: auto; }
+            .hero-mats .fan-center { height: 70%; top: 7%; }
+            .hero-mats .fan-left, .hero-mats .fan-right { height: 58%; top: 18%; }
+            .hero-mats .fan-left  { left: -3%; }
+            .hero-mats .fan-right { right: -3%; }
             .hero-mats .fan-left  { left: 0; }
             .hero-mats .fan-right { right: 0; }
             .hero .lead { margin-left: auto; margin-right: auto; }
