@@ -1,0 +1,95 @@
+/* ================================================================
+   theme-refuge.css — "Illuminated", the Temples of Refuge design system.
+
+   A token layer, scoped to <html data-site="refuge">. Link it AFTER
+   /shared/brand.css. Plaster and iron-gall ink by day, slate and
+   candlelit vellum by night. Three pigments, used as a scribe used
+   them: red marks what to read next, blue points elsewhere, gold is
+   for the door. See plans/DESIGN-SYSTEMS.md.
+
+   FONTS: Marcellus and Alegreya are self-hosted in /shared/fonts/ and
+   declared in fonts-refuge.css, imported below. No third-party requests
+   (plans/COMPLIANCE.md 3.1).
+   ================================================================ */
+@import url('/shared/fonts/fonts-refuge.css');
+
+/* ── Vigil (dark) ── */
+:root[data-site="refuge"] {
+  --font-display: "Marcellus", "Trajan Pro", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --font-body: "Alegreya", "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+
+  --t-bg: #14161A;  --t-sf: #1B1E23;  --t-cd: #22262C;  --t-hv: #2C3138;
+  --t-tx: #EAE4D6;  --t-t2: #B4AFA2;  --t-mt: #807E78;  --t-dm: #4A4A48;
+  --t-bd: #343940;  --t-b2: #25292F;  --t-bc: rgba(212, 175, 90, 0.14);
+  --t-ac: #D4AF5A;   /* gold leaf: the action colour at night */
+  --t-a2: #93A9EA;   /* lapis, lit: links and nothing else */
+  --t-rubric: #E27A66;
+  --t-on-ac: #14161A;
+  --t-ok: #9DB88A;  --t-wn: #D4AF5A;  --t-er: #E27A66;
+  --t-glass: rgba(20, 22, 26, 0.92);
+  --t-glass-bd: rgba(234, 228, 214, 0.08);
+
+  --signature: none;
+  --s-radius: 0;
+  --radius-sm: 0; --radius-md: 0; --radius-lg: 0; --radius-xl: 0; --radius-pill: 0;
+  --shadow-sm: none; --shadow-md: none; --shadow-lg: none;
+  color-scheme: dark;
+}
+
+/* ── Limewash (light) ── */
+:root[data-site="refuge"][data-theme="light"] {
+  --t-bg: #ECEBE6;  --t-sf: #E1E0DA;  --t-cd: #F6F5F1;  --t-hv: #D5D4CD;
+  --t-tx: #1A1D24;  --t-t2: #4A4E59;  --t-mt: #7C7F88;  --t-dm: #B4B5B9;
+  --t-bd: #CBCAC3;  --t-b2: #DBDAD3;  --t-bc: rgba(163, 36, 27, 0.10);
+  --t-ac: #A3241B;   /* rubric: the action colour by day */
+  --t-a2: #24408E;   /* lapis */
+  --t-rubric: #A3241B;
+  --t-on-ac: #F6F5F1;
+  --t-ok: #3F6B3A;  --t-wn: #8C6A1E;  --t-er: #A3241B;
+  --t-glass: rgba(236, 235, 230, 0.94);
+  --t-glass-bd: rgba(26, 29, 36, 0.08);
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: light) {
+  :root[data-site="refuge"]:not([data-theme]) {
+    --t-bg: #ECEBE6;  --t-sf: #E1E0DA;  --t-cd: #F6F5F1;  --t-hv: #D5D4CD;
+    --t-tx: #1A1D24;  --t-t2: #4A4E59;  --t-mt: #7C7F88;  --t-dm: #B4B5B9;
+    --t-bd: #CBCAC3;  --t-b2: #DBDAD3;  --t-bc: rgba(163, 36, 27, 0.10);
+    --t-ac: #A3241B;  --t-a2: #24408E;  --t-rubric: #A3241B;  --t-on-ac: #F6F5F1;
+    --t-ok: #3F6B3A;  --t-wn: #8C6A1E;  --t-er: #A3241B;
+    --t-glass: rgba(236, 235, 230, 0.94);
+    --t-glass-bd: rgba(26, 29, 36, 0.08);
+    color-scheme: light;
+  }
+}
+
+/* ── The voice ── */
+:root[data-site="refuge"] body { font-weight: 400; line-height: 1.75; font-size: 1.08rem; }
+:root[data-site="refuge"] h1,
+:root[data-site="refuge"] h2,
+:root[data-site="refuge"] h3 { font-family: var(--font-display); font-weight: 400; letter-spacing: 0; }
+
+/* A rubric: red, italic, sentence case. Says something true about the
+   heading beneath it, or is not there. */
+:root[data-site="refuge"] .rub {
+  font-family: var(--font-body); font-style: italic; font-size: 1.02rem;
+  letter-spacing: 0; text-transform: none; color: var(--t-rubric); margin: 0;
+}
+
+/* Lapis is for links and nothing else. */
+:root[data-site="refuge"] main a:not(.btn):not(.temple) {
+  color: var(--t-a2); text-decoration: underline;
+  text-decoration-thickness: 1px; text-underline-offset: 3px;
+}
+
+/* Site chrome: inscriptional wordmark, italic navigation, no pill. */
+:root[data-site="refuge"] .toe-lockup span { font-family: var(--font-display); font-weight: 400; letter-spacing: 0.16em; }
+:root[data-site="refuge"] .toe-nav-link { font-family: var(--font-body); font-style: italic; font-size: 1.02rem; }
+:root[data-site="refuge"] .toe-nav-label { font-family: var(--font-body); font-style: italic; text-transform: none; letter-spacing: 0; color: var(--t-rubric); font-size: 0.95rem; }
+:root[data-site="refuge"] .toe-nav-cta { border-radius: 0; font-family: var(--font-body); background: var(--t-ac); color: var(--t-on-ac); }
+
+/* Nothing moves. */
+:root[data-site="refuge"] *, :root[data-site="refuge"] *::before, :root[data-site="refuge"] *::after {
+  animation: none !important; transition: none !important; scroll-behavior: auto !important;
+}

@@ -1,0 +1,115 @@
+/* ================================================================
+   theme-earth.css — "Two Skies", the Temples of Earth design system.
+
+   A token layer. Link it AFTER /shared/brand.css:
+     <link rel="stylesheet" href="/shared/brand.css">
+     <link rel="stylesheet" href="/shared/theme-earth.css">
+   It redefines the same --t-* / --font-* tokens the pages already
+   read, so no page markup changes to wear it.
+
+   Night takes its ground from the Cosmic mat, day from the Heaven on
+   Earth mat. Ink is the mat's own indigo. See plans/DESIGN-SYSTEMS.md.
+
+   TYPE: the Ubuntu family stays (Truman, 2026-09-18). It is already
+   self-hosted. What changes is how it is set: display sizes drop to
+   weight 300, so headlines read like the mat's linework.
+   ================================================================ */
+
+/* ── Night (default, as in brand.css) ── */
+:root {
+  --t-bg: #0F0E24;  --t-sf: #161533;  --t-cd: #1D1B42;  --t-hv: #272455;
+  --t-tx: #EEEAFB;  --t-t2: #B5B0DC;  --t-mt: #807BB0;  --t-dm: #48447A;
+  --t-bd: #2F2C61;  --t-b2: #211F4B;  --t-bc: rgba(95, 224, 190, 0.14);
+  --t-ac: #5FE0BE;  --t-a2: #B99BFF;
+  --t-ok: #5FE0BE;  --t-wn: #E8D04A;  --t-er: #FF8096;
+  --t-glass: rgba(15, 14, 36, 0.88);
+  --t-glass-bd: rgba(238, 234, 251, 0.08);
+  --t-on-ac: #0F0E24;
+
+  /* The refraction line. Once per page, under the header. */
+  --refraction: linear-gradient(90deg, #6F45BD, #3C6FE0, #1FB7A6, #7BD06A, #F0D24A, #F2994A, #E5506E);
+  /* --signature was the old gradient button fill. Buttons are ink now,
+     so anything still reading it gets the text colour. */
+  --signature: var(--t-tx);
+
+  --s-radius: 6px;
+  --radius-sm: 4px; --radius-md: 6px; --radius-lg: 6px; --radius-xl: 6px;
+  --shadow-lg: 0 18px 40px -18px rgba(0, 0, 0, 0.6);
+  color-scheme: dark;
+}
+
+/* ── Day ── */
+:root[data-theme="light"] {
+  --t-bg: #EFF5F2;  --t-sf: #E3EDE8;  --t-cd: #FAFCFB;  --t-hv: #D6E4DD;
+  --t-tx: #1B1A3A;  --t-t2: #4A4B6B;  --t-mt: #787C96;  --t-dm: #B3BAC4;
+  --t-bd: #C9D8D1;  --t-b2: #DCE7E2;  --t-bc: rgba(15, 123, 108, 0.10);
+  --t-ac: #0F7B6C;  --t-a2: #6F45BD;
+  --t-ok: #0F7B6C;  --t-wn: #A8740C;  --t-er: #B83A4B;
+  --t-glass: rgba(239, 245, 242, 0.9);
+  --t-glass-bd: rgba(27, 26, 58, 0.08);
+  --t-on-ac: #FFFFFF;
+  --shadow-lg: 0 18px 40px -18px rgba(27, 26, 58, 0.45);
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    --t-bg: #EFF5F2;  --t-sf: #E3EDE8;  --t-cd: #FAFCFB;  --t-hv: #D6E4DD;
+    --t-tx: #1B1A3A;  --t-t2: #4A4B6B;  --t-mt: #787C96;  --t-dm: #B3BAC4;
+    --t-bd: #C9D8D1;  --t-b2: #DCE7E2;  --t-bc: rgba(15, 123, 108, 0.10);
+    --t-ac: #0F7B6C;  --t-a2: #6F45BD;
+    --t-ok: #0F7B6C;  --t-wn: #A8740C;  --t-er: #B83A4B;
+    --t-glass: rgba(239, 245, 242, 0.9);
+    --t-glass-bd: rgba(27, 26, 58, 0.08);
+    --t-on-ac: #FFFFFF;
+    --shadow-lg: 0 18px 40px -18px rgba(27, 26, 58, 0.45);
+    color-scheme: light;
+  }
+}
+
+/* The refraction line under the site bar (top bar below 1100px). */
+.toe-bar { border-bottom: 2px solid; border-image: var(--refraction) 1; }
+@media (min-width: 1100px) { .toe-bar { border-bottom: 0; border-image: none; } }
+
+/* Buttons are ink, not accent. Jade arrives on hover: colour is a
+   response. Pages carry their own button rules in page-local <style>
+   blocks that load after this file, so these selectors lead with :root
+   to win on specificity rather than on order. */
+:root .hero-cta, :root .toe-nav-cta, :root .gate-action,
+:root .submit-row .cta-submit, :root .btn-primary, :root .offering-btn {
+  background: var(--t-tx);
+  border: 1.5px solid var(--t-tx);
+  color: var(--t-bg);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.95rem;
+  letter-spacing: 0;
+  text-transform: none;
+  box-shadow: none;
+  filter: none;
+}
+:root .hero-cta:hover, :root .toe-nav-cta:hover, :root .gate-action:hover,
+:root .submit-row .cta-submit:hover, :root .btn-primary:hover, :root .offering-btn:hover,
+:root .hero-cta:focus-visible, :root .toe-nav-cta:focus-visible, :root .gate-action:focus-visible,
+:root .submit-row .cta-submit:focus-visible, :root .btn-primary:focus-visible, :root .offering-btn:focus-visible {
+  background: var(--t-ac);
+  border-color: var(--t-ac);
+  color: var(--t-on-ac);
+  box-shadow: none;
+  filter: none;
+  opacity: 1;
+}
+:root .btn-ghost {
+  border-radius: var(--radius-pill);
+  font-family: var(--font-body); font-weight: 500; font-size: 0.95rem;
+  letter-spacing: 0; text-transform: none;
+}
+:focus-visible { outline: 2px solid var(--t-a2); outline-offset: 3px; }
+
+/* Display type is set light, in sentence case, like the mat's linework. */
+:root h1, :root .hero h1 {
+  font-weight: 300;
+  letter-spacing: -0.025em;
+  text-transform: none;
+}

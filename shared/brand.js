@@ -1,5 +1,5 @@
 /**
- * brand.js — Temples of Earth site chrome.
+ * brand.js — site chrome for Temples of Earth and Temples of Refuge.
  *
  * Replaces the old ThemeEngine skin switcher with the single brand
  * identity (see BRAND.md):
@@ -58,26 +58,78 @@
   var CLOSE =
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>';
 
-  /* The whole site, in one place. Groups mirror the old footer nav. */
-  var NAV = [
-    { links: [['/', 'Home']] },
-    { label: 'Foundations', links: [
-      ['/cosmology', 'Cosmology'],
-      ['/covenant', 'Covenant'],
-      ['/bylaws', 'Bylaws']
-    ] },
-    { label: 'Offerings', links: [
-      ['/found-a-temple', 'Found a Temple'],
-      ['/mats', 'Ceremony Mat']
-    ] },
-    { label: 'More', links: [
-      ['/articles/', 'Writings'],
-      ['https://syncengine.earth', 'Synchronicity Engine'],
-      ['https://agualila.earth', 'Água Lila']
-    ] }
-  ];
+  /* Two sites, one chrome. Temples of Earth (templesof.earth) is the
+     brand and, in time, the steward-owned company: the Ceremony Mat, the
+     Synchronicity Engine, the Covenant. Temples of Refuge
+     (templesofrefuge.earth) is the network of temples: a cosmology, a
+     charter and a council, which owns nothing and sells nothing. See
+     plans/SITE-SPLIT.md.
 
-  var CTA = ['/join', 'Become a Member'];
+     A page opts into the Refuge identity with <html data-site="refuge">.
+     That attribute wins over the hostname on purpose: while both domains
+     still answer from one web root, the hostname cannot tell the pages
+     apart, and a Refuge page opened on the other domain must still look
+     like itself. The hostname is only the fallback, for a page that
+     carries no attribute once the roots are separate. */
+  var SITES = {
+    earth: {
+      name: 'Temples of Earth',
+      home: '/',
+      nav: [
+        { links: [['/', 'Home']] },
+        { label: 'Offerings', links: [
+          ['/mats', 'Ceremony Mat'],
+          ['https://syncengine.earth', 'Synchronicity Engine']
+        ] },
+        { label: 'Foundations', links: [
+          ['/covenant', 'Covenant'],
+          ['/articles/', 'Writings']
+        ] },
+        { label: 'More', links: [
+          ['https://templesofrefuge.earth', 'Temples of Refuge'],
+          ['https://agualila.earth', 'Água Lila']
+        ] }
+      ],
+      cta: ['/join', 'Become a Member']
+    },
+    refuge: {
+      name: 'Temples of Refuge',
+      home: '/',
+      nav: [
+        { links: [['/', 'Home']] },
+        { label: 'Foundations', links: [
+          ['/cosmology', 'Cosmology'],
+          ['/charter', 'Charter']
+        ] },
+        { label: 'The Network', links: [
+          ['/found-a-temple', 'Found a Temple']
+        ] },
+        { label: 'More', links: [
+          ['https://templesof.earth', 'Temples of Earth'],
+          ['https://agualila.earth', 'Água Lila']
+        ] }
+      ],
+      /* No membership, no offering, no checkout on this site. The only
+         call to action is a conversation. */
+      cta: ['/found-a-temple', 'Begin the Conversation']
+    }
+  };
+
+  function siteKey() {
+    var attr = document.documentElement.getAttribute('data-site');
+    if (attr && SITES[attr]) return attr;
+    try {
+      if (location.hostname.indexOf('templesofrefuge') !== -1 &&
+          document.documentElement.hasAttribute('data-site-by-host')) {
+        return 'refuge';
+      }
+    } catch (e) {}
+    return 'earth';
+  }
+
+  var SITE = SITES[siteKey()];
+  var NAV = SITE.nav;
+  var CTA = SITE.cta;
 
   /* Which nav entry is the page we're on. Paths are extensionless in
      production but the .html files are also servable directly, and
@@ -147,13 +199,13 @@
 
     var lockup = document.createElement('a');
     lockup.className = 'toe-lockup';
-    lockup.href = '/';
-    lockup.setAttribute('aria-label', 'Temples of Earth — home');
+    lockup.href = SITE.home;
+    lockup.setAttribute('aria-label', SITE.name + ' — home');
     var icon = document.createElement('img');
     icon.src = '/assets/Final-Logo/01-Royal/icon/icon-transparent.svg';
     icon.alt = '';
     var word = document.createElement('span');
-    word.textContent = 'Temples of Earth';
+    word.textContent = SITE.name;
     lockup.appendChild(icon);
     lockup.appendChild(word);
 
