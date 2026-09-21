@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" data-site="refuge">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temples of Refuge — A Network of Temples, in Formation</title>
+    <meta name="description" content="Temples of Refuge is a network of temples in formation: a shared cosmology, a charter, and a council with one voice from each temple. It owns nothing and sells nothing. Each temple stands on its own ground.">
+
+    <!-- This page belongs to templesofrefuge.earth and is canonical there.
+         It is NOT a mirror of templesof.earth. See plans/SITE-SPLIT.md. -->
+    <link rel="canonical" href="https://templesofrefuge.earth/">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Temples of Refuge">
+    <meta property="og:title" content="Temples of Refuge — A Network of Temples, in Formation">
+    <meta property="og:description" content="A shared cosmology, a charter, and a council with one voice from each temple. It owns nothing and sells nothing.">
+    <meta property="og:url" content="https://templesofrefuge.earth/">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="stylesheet" href="/shared/brand.css">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <link rel="stylesheet" href="/shared/theme-refuge.css">
+    <style>
+      /* Illuminated — see plans/DESIGN-SYSTEMS.md. Square corners, one
+         arch, a centred door and left-set reading columns. Nothing moves. */
+      * { box-sizing: border-box; }
+      body { margin: 0; background: var(--t-bg); color: var(--t-tx); font-family: var(--font-body); }
+      main { padding-top: var(--toe-bar-h, 48px); }
+      @media (min-width: 1100px) { main { padding-top: 0; } }
+      .col  { width: min(100% - 40px, 680px); margin-inline: auto; }
+      .wide { width: min(100% - 40px, 920px); margin-inline: auto; }
+
+      /* The facade: the only centred thing on the site. */
+      .facade { display: flex; flex-direction: column; align-items: center; text-align: center;
+                padding: clamp(3.5rem, 10vh, 6.5rem) 20px clamp(2.5rem, 6vh, 4rem); }
+      .niche { width: min(100%, 380px); border: 1px solid var(--t-tx); border-bottom: 0;
+               border-radius: 999px 999px 0 0; padding: clamp(4rem, 12vw, 6rem) 28px 2rem; position: relative; }
+      .niche::before { content: ""; position: absolute; inset: 8px 8px 0 8px; border: 1px solid var(--t-bd);
+                       border-bottom: 0; border-radius: 999px 999px 0 0; pointer-events: none; }
+      .plinth { width: min(100%, 380px); height: 10px; border-top: 1px solid var(--t-tx); border-bottom: 3px double var(--t-tx); }
+      h1 { font-size: clamp(2.3rem, 6.4vw, 3.5rem); line-height: 1.06; margin: 0.5rem 0 0; text-wrap: balance; }
+      .lede { font-size: clamp(1.15rem, 2.2vw, 1.3rem); line-height: 1.7; color: var(--t-t2); max-width: 38ch; margin: 1.8rem 0 0; }
+      .actions { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; align-items: center; margin-top: 1.8rem; }
+      .btn { display: inline-block; font: inherit; font-size: 1.02rem; text-decoration: none; padding: 0.68rem 1.4rem;
+             border: 1px solid var(--t-ac); background: var(--t-ac); color: var(--t-on-ac); border-radius: 0; }
+      .btn:hover { background: transparent; color: var(--t-ac); }
+      a:focus-visible, .btn:focus-visible { outline: 2px solid var(--t-a2); outline-offset: 3px; }
+
+      .status { background: var(--t-sf); border-block: 1px solid var(--t-bd); padding: 1.6rem 0 1.8rem; }
+      .status p:not(.rub) { margin: 0.35rem 0 0; color: var(--t-t2); max-width: 62ch; }
+
+      section { padding: clamp(3rem, 8vh, 4.8rem) 0; }
+      section + section { border-top: 1px solid var(--t-b2); }
+      h2 { font-size: clamp(1.6rem, 3.8vw, 2.15rem); line-height: 1.15; margin: 0.35rem 0 0; text-wrap: balance; }
+      section p:not(.rub) { color: var(--t-t2); max-width: 64ch; margin: 1.1rem 0 0; }
+      section p strong, .not strong { color: var(--t-tx); font-weight: 500; }
+
+      /* Three things the network is. A definition list, not cards. */
+      .three { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 0 2.4rem; margin: 2rem 0 0; padding: 0; }
+      .three div { border-top: 1px solid var(--t-tx); padding: 0.9rem 0 1.4rem; }
+      .three dt { font-family: var(--font-display); font-size: 1.2rem; }
+      .three dd { margin: 0.4rem 0 0; color: var(--t-t2); font-size: 1rem; line-height: 1.65; }
+
+      .not { list-style: none; padding: 0; margin: 1.6rem 0 0; max-width: 64ch; }
+      .not li { padding: 0.85rem 0; border-top: 1px solid var(--t-b2); color: var(--t-t2); }
+      .not li:last-child { border-bottom: 1px solid var(--t-b2); }
+
+      .temples { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.2rem; margin-top: 2rem; }
+      .temple { display: block; text-decoration: none; color: inherit; border: 1px solid var(--t-bd); background: var(--t-cd); padding: 1.5rem 1.5rem 1.6rem; }
+      .temple:hover, .temple:focus-visible { border-color: var(--t-tx); }
+      .temple.open { border-style: dashed; background: transparent; }
+      .temple h3 { font-size: 1.4rem; margin: 0.3rem 0 0; }
+      .temple p:not(.rub) { margin: 0.5rem 0 0; font-size: 1rem; line-height: 1.65; color: var(--t-t2); }
+
+      footer { padding: 0 0 4rem; }
+      footer .col { border-top: 3px double var(--t-tx); padding-top: 1.6rem; }
+      .footer-logo { font-family: var(--font-display); letter-spacing: 0.16em; text-transform: uppercase; font-size: 0.82rem; margin: 0; }
+      .footer-info { font-size: 0.98rem; line-height: 1.7; color: var(--t-mt); margin: 0.7rem 0 0; max-width: 60ch; }
+      .footer-info a { color: var(--t-a2); }
+    </style>
+</head>
+<body>
+<main>
+
+  <div class="facade">
+    <div class="niche">
+      <p class="rub">A network of temples, in formation</p>
+      <h1>Temples of Refuge</h1>
+    </div>
+    <div class="plinth"></div>
+    <p class="lede">One cosmology, one charter, and a council with a seat for each temple. Each temple names what is sacred to it and stands on its own ground.</p>
+    <div class="actions">
+      <a class="btn" href="/found-a-temple">Begin the conversation</a>
+      <a href="/charter">Read the draft charter</a>
+    </div>
+  </div>
+
+  <div class="status">
+    <div class="col">
+      <p class="rub">Where this stands today</p>
+      <p>The network is being defined and has no member temples yet. It accepts no donations, sells nothing, holds no land, and confers no legal or tax standing on anyone. What exists is the cosmology, a draft charter, and an open invitation to the first temples, who will found it together.</p>
+    </div>
+  </div>
+
+  <section>
+    <div class="col">
+      <p class="rub">What it is</p>
+      <h2>A covenant, a council, and a name</h2>
+      <p>A temple is a community that holds a place, a practice or a people as sacred, and says so plainly. The network is what such communities make when they recognise one another: a shared ground of meaning, a small set of promises, and a table where each temple has a seat.</p>
+      <dl class="three">
+        <div><dt>The cosmology</dt><dd>The ground the temples share. The nature of reality, the human being, sacred play, and Earth as teacher.</dd></div>
+        <div><dt>The charter</dt><dd>What a temple is and promises, how delegates are chosen, what the council may decide, and how a temple leaves.</dd></div>
+        <div><dt>The council</dt><dd>One delegate from each temple. It keeps the charter and the name, and begins when the first temples constitute it.</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section>
+    <div class="col">
+      <p class="rub">What it is not</p>
+      <h2>The network owns nothing</h2>
+      <p>This is the design, not a disclaimer. A body that holds the money or the land of its members becomes the thing the members serve. So the network is kept empty on purpose.</p>
+      <ul class="not">
+        <li><strong>It does not own land, buildings, companies, software or marks.</strong> Each temple owns its own things, in its own country, under its own law.</li>
+        <li><strong>It does not take donations or sell anything.</strong> There is no checkout on this site. A gift to a temple goes to that temple.</li>
+        <li><strong>It does not confer legal or tax standing.</strong> A temple's standing is its own, decided with its own counsel where it lives.</li>
+        <li><strong>It is not a membership.</strong> People belong to temples. Temples belong to the network.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="wide">
+      <p class="rub">The temples</p>
+      <h2>The first ground, and the open seats</h2>
+      <div class="temples">
+        <a class="temple" href="https://agualila.earth" rel="noopener">
+          <p class="rub">Lafões, Portugal</p>
+          <h3>Água Lila</h3>
+          <p>A mountain homestead where sacred technology meets sacred land. The first community preparing to take a seat.</p>
+        </a>
+        <a class="temple open" href="/found-a-temple">
+          <p class="rub">Your ground</p>
+          <h3>A Temple of ___</h3>
+          <p>If you are holding land, intention or community, name what is sacred to it and begin the conversation.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="col">
+      <p class="rub">Kindred work</p>
+      <h2>Temples of Earth is a separate thing</h2>
+      <p><a href="https://templesof.earth" rel="noopener">Temples of Earth</a> makes the Ceremony Mat and the Synchronicity Engine. It is a working enterprise with its own covenant of non-extraction. It is not part of this network's governance, and the network is not part of its ownership. They share a root and a founder, and they are kept apart so that neither can be used to carry the other.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="col">
+    <p class="footer-logo">Temples of Refuge</p>
+    <!-- [DECISION PENDING — plans/SITE-SPLIT.md §6] This line changes with
+         what happens to the Utah entity. It deliberately makes NO tax or
+         exemption claim under any outcome. -->
+    <p class="footer-info">A network of temples in formation, with no member temples yet. It accepts no donations, sells nothing and holds no property. Write to <a href="mailto:ola@templesofrefuge.earth">ola@templesofrefuge.earth</a>.</p>
+  </div>
+</footer>
+
+<script src="/shared/brand.js" defer></script>
+</body>
+</html>
