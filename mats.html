@@ -683,6 +683,11 @@
         .vote-thanks { max-width: 560px; margin: 0 auto; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 1rem;
             background: var(--t-cd); border: 1px solid var(--t-bd); border-radius: 6px; padding: 2rem 1.25rem; }
         .vote-thanks p { color: var(--t-t2); }
+        .vote-again { font: inherit; font-size: .92rem; letter-spacing: .02em; color: var(--t-tx); background: transparent;
+            border: 1px solid var(--t-bd); border-radius: 999px; padding: .65rem 1.4rem; margin-top: .4rem; cursor: pointer;
+            -webkit-appearance: none; appearance: none; transition: border-color .2s, color .2s; }
+        .vote-again:hover { border-color: var(--t-ac); color: var(--t-ac); }
+        .vote-again:focus-visible { outline: 2px solid var(--t-ac); outline-offset: 3px; }
         .thanks-picks { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .8rem; max-width: 420px; width: 100%; }
         .thanks-picks img { width: 100%; aspect-ratio: 2 / 3; object-fit: cover; border-radius: 6px; display: block; }
         .thanks-picks span { display: block; margin-top: .35rem; font-size: .8rem; color: var(--t-t2); }
@@ -1024,7 +1029,7 @@
                 <h3>Thank you, <span id="thanksName"></span></h3>
                 <p id="thanksText">Your vote is in.</p>
                 <ol class="thanks-picks" id="thanksPicks"></ol>
-                <button type="button" class="btn-ghost" id="voteChange">Change my vote</button>
+                <button type="button" class="vote-again" id="voteChange">Change my vote</button>
             </div>
         </div>
     </section>
