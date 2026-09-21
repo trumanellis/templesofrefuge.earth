@@ -596,21 +596,27 @@
         [hidden] { display: none !important; }   /* the vote panels toggle with the hidden attribute */
         .skies-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap: 2.5rem 1.75rem; }
         .sky { display: flex; flex-direction: column; }
-        .sky-frame { position: relative; padding: 0; border: 0; background: none; cursor: zoom-in; animation: none; }
+        .sky-frame { position: relative; animation: none; }
+        .sky-view { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; }
         .sky-frame::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 3px transparent; transition: box-shadow .2s; pointer-events: none; }
         .sky.is-picked .sky-frame::after { box-shadow: inset 0 0 0 3px var(--t-ac); }
         .sky-frame img { width: 100%; height: auto; aspect-ratio: 2 / 3; object-fit: cover; }
-        .sky-badge { position: absolute; top: .75rem; left: .75rem; background: var(--t-ac); color: var(--t-on-ac);
+        .sky-badge { position: absolute; top: .75rem; left: .75rem; background: var(--t-ac); color: var(--t-on-ac); pointer-events: none;
             border-radius: 999px; padding: .2rem .8rem; font-weight: 500; font-size: .85rem; letter-spacing: .04em; }
         .sky-caption { padding: 1.25rem .25rem 0; display: flex; flex-direction: column; gap: .55rem; align-items: flex-start; }
         .sky-caption .edition-name { margin: 0; }
-        .sky-pick { margin-top: .35rem; font: inherit; font-size: .88rem; letter-spacing: .04em; color: var(--t-tx);
-            background: transparent; border: 1px solid var(--t-bd); border-radius: 999px; padding: .5rem 1.15rem; cursor: pointer;
-            transition: border-color .2s, background .2s, color .2s, transform .15s; }
-        .sky-pick:hover { border-color: var(--t-ac); }
-        .sky-pick:active { transform: scale(.96); }
-        .sky-pick[aria-pressed="true"] { background: var(--t-tx); border-color: var(--t-tx); color: var(--t-bg); }
-        .sky-pick:disabled { opacity: .4; cursor: default; }
+        .sky-pick { position: absolute; right: .7rem; bottom: .7rem; z-index: 2; width: 2.75rem; height: 2.75rem; padding: 0;
+            border-radius: 50%; display: grid; place-items: center; cursor: pointer; color: #fff;
+            background: rgba(10, 9, 30, .45); border: 2px solid rgba(255, 255, 255, .85);
+            -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); box-shadow: 0 4px 14px rgba(0, 0, 0, .35);
+            transition: background .18s, border-color .18s, transform .15s; }
+        .sky-pick svg { width: 1.35rem; height: 1.35rem; opacity: .55; transition: opacity .18s; }
+        .sky-pick:hover { transform: scale(1.08); background: rgba(10, 9, 30, .6); }
+        .sky-pick:hover svg { opacity: .9; }
+        .sky-pick:active { transform: scale(.92); }
+        .sky-pick[aria-pressed="true"] { background: var(--t-ac); border-color: var(--t-ac); color: var(--t-on-ac); animation: pop .28s ease-out; }
+        .sky-pick[aria-pressed="true"] svg { opacity: 1; }
+        .sky-pick:focus-visible { outline: 3px solid var(--t-ac); outline-offset: 3px; }
 
         .vote-section { padding-top: 1rem; }
         .vote { max-width: 560px; margin: 0 auto; display: flex; flex-direction: column; gap: 1rem; }
@@ -785,144 +791,162 @@
                 <h2>One Pattern, Nine Prints</h2>
                 <p class="lead">
                     The same living geometry, rendered in nine palettes. We will print
-                    the one you choose. Tap <em>Choose</em> on your three favorites, in order.
+                    the one you choose. Tap the ✓ on your three favorites, in order.
                 </p>
             </div>
 
             <div class="skies-grid" id="skiesGrid">
                 <article class="sky" data-s="metatrons-slice">
-                    <button type="button" class="mat-frame sky-frame" aria-label="View Metatron's Slice larger">
-                        <picture>
+                    <div class="mat-frame sky-frame">
+                        <button type="button" class="sky-view" aria-label="View Metatron's Slice larger">
+                            <picture>
                             <source type="image/avif" srcset="assets/web/sky-metatrons-slice-480.avif 480w, assets/web/sky-metatrons-slice-960.avif 960w" sizes="(max-width: 620px) 90vw, (max-width: 1000px) 45vw, 330px">
                             <source type="image/webp" srcset="assets/web/sky-metatrons-slice-480.webp 480w, assets/web/sky-metatrons-slice-960.webp 960w" sizes="(max-width: 620px) 90vw, (max-width: 1000px) 45vw, 330px">
                             <img src="assets/web/sky-metatrons-slice-960.jpg" width="960" height="1440" alt="Metatron's Slice ceremony mat design: Gold over an indigo night, lit from within by waves of light that never repeat" loading="lazy" decoding="async" draggable="false">
                         </picture>
+                        </button>
                         <span class="sky-badge" hidden></span>
-                    </button>
+                        <button type="button" class="sky-pick" aria-pressed="false" aria-label="Choose Metatron's Slice" title="Choose"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                    </div>
                     <div class="sky-caption">
                         <h3 class="edition-name">Metatron's Slice</h3>
                         <p class="edition-desc">Metatron's Cube is eternity's map. This print is a slice through it at the golden angle, the way time lives it: a light that rhymes everywhere and never repeats.</p>
-                        <button type="button" class="sky-pick" aria-pressed="false">Choose</button>
                     </div>
                 </article>
                 <article class="sky" data-s="cosmos">
-                    <button type="button" class="mat-frame sky-frame" aria-label="View Cosmos larger">
-                        <picture>
+                    <div class="mat-frame sky-frame">
+                        <button type="button" class="sky-view" aria-label="View Cosmos larger">
+                            <picture>
                             <source type="image/avif" srcset="assets/web/sky-cosmos-480.avif 480w, assets/web/sky-cosmos-960.avif 960w" sizes="(max-width: 620px) 90vw, (max-width: 1000px) 45vw, 330px">
                             <source type="image/webp" srcset="assets/web/sky-cosmos-480.webp 480w, assets/web/sky-cosmos-960.webp 960w" sizes="(max-width: 620px) 90vw, (max-width: 1000px) 45vw, 330px">
                             <img src="assets/web/sky-cosmos-960.jpg" width="960" height="1440" alt="Cosmos ceremony mat design: A soft nebula of mauve and seafoam, the cube drawn in dusky rose around a quiet star" loading="lazy" decoding="async" draggable="false">
                         </picture>
+                        </button>
                         <span class="sky-badge" hidden></span>
-                    </button>
+                        <button type="button" class="sky-pick" aria-pressed="false" aria-label="Choose Cosmos" title="Choose"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                    </div>
                     <div class="sky-caption">
                         <h3 class="edition-name">Cosmos</h3>
                         <p class="edition-desc">The Greeks called the universe kosmos, a word that means both order and adornment. The geometry rests in a soft nebula: order and beauty as one thing.</p>
-                        <button type="button" class="sky-pick" aria-pressed="false">Choose</button>
                     </div>
                 </article>
                 <article class="sky" data-s="ocean">
-                    <button type="button" class="mat-frame sky-frame" aria-label="View Ocean larger">
-                        <picture>
+                    <div class="mat-frame sky-frame">
+                        <button type="button" class="sky-view" aria-label="View Ocean larger">
+                            <picture>
                             <source type="image/avif" srcset="assets/web/sky-ocean-480.avif 480w, assets/web/sky-ocean-960.avif 960w" sizes="(max-width: 620px) 90vw, (max-width: 1000px) 45vw, 330px">
                             <source type="image/webp" srcset="assets/web/sky-ocean-480.webp 480w, assets/web/sky-ocean-960.webp 960w" sizes="(max-width: 620px) 90vw, (max-width: 1000px) 45vw, 330px">
                             <img src="assets/web/sky-ocean-960.jpg" width="960" height="1440" alt="Ocean ceremony mat design: White linework over deep teal water and starfield: cool, clear and still" loading="lazy" decoding="async" draggable="false">
                         </picture>
+                        </button>
                         <span class="sky-badge" hidden></span>
-                    </button>
+                        <button type="button" class="sky-pick" aria-pressed="false" aria-label="Choose Ocean" title="Choose"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                    </div>
                     <div class="sky-caption">
                         <h3 class="edition-name">Ocean</h3>
                         <p class="edition-desc">Okeanos was the great river circling the world, which Homer calls the source of all waters and of the gods. The pattern rests on deep water, the stillness everything rises from.</p>
-                        <button type="button" class="sky-pick" aria-pressed="false">Choose</button>
                     </div>
                 </article>
                 <article class="sky" data-s="chacruna">
-                    <button type="button" class="mat-frame sky-frame" aria-label="View Chacruna larger">
-                        <picture>
+                    <div class="mat-frame sky-frame">
+                        <button type="button" class="sky-view" aria-label="View Chacruna larger">
+                            <picture>
                             <source type="image/avif" srcset="assets/web/sky-chacruna-480.avif 480w, assets/web/sky-chacruna-960.avif 960w" sizes="(max-width: 620px) 90vw, (max-width: 1000px) 45vw, 330px">
                             <source type="image/webp" srcset="assets/web/sky-chacruna-480.webp 480w, assets/web/sky-chacruna-960.webp 960w" sizes="(max-width: 620px) 90vw, (max-width: 1000px) 45vw, 330px">
                             <img src="assets/web/sky-chacruna-960.jpg" width="960" height="1440" alt="Chacruna ceremony mat design: Cream and rose lines over a deep forest green, like leaf-light at dusk" loading="lazy" decoding="async" draggable="false">
                         </picture>
+                        </button>
                         <span class="sky-badge" hidden></span>
-                    </button>
+                        <button type="button" class="sky-pick" aria-pressed="false" aria-label="Choose Chacruna" title="Choose"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                    </div>
                     <div class="sky-caption">
                         <h3 class="edition-name">Chacruna</h3>
                         <p class="edition-desc">The chacruna leaf brings the light to the ayahuasca brew; its Quechua name comes from a word meaning to mix. The plant teacher's green, lit from within.</p>
-                        <button type="button" class="sky-pick" aria-pressed="false">Choose</button>
                     </div>
                 </article>
                 <article class="sky" data-s="reverie">
-                    <button type="button" class="mat-frame sky-frame" aria-label="View Reverie larger">
-                        <picture>
+                    <div class="mat-frame sky-frame">
+                        <button type="button" class="sky-view" aria-label="View Reverie larger">
+                            <picture>
                             <source type="image/avif" srcset="assets/web/sky-reverie-480.avif 480w, assets/web/sky-reverie-960.avif 960w" sizes="(max-width: 620px) 90vw, (max-width: 1000px) 45vw, 330px">
                             <source type="image/webp" srcset="assets/web/sky-reverie-480.webp 480w, assets/web/sky-reverie-960.webp 960w" sizes="(max-width: 620px) 90vw, (max-width: 1000px) 45vw, 330px">
                             <img src="assets/web/sky-reverie-960.jpg" width="960" height="1440" alt="Reverie ceremony mat design: Lilac and violet lines drifting through a dusk-purple haze" loading="lazy" decoding="async" draggable="false">
                         </picture>
+                        </button>
                         <span class="sky-badge" hidden></span>
-                    </button>
+                        <button type="button" class="sky-pick" aria-pressed="false" aria-label="Choose Reverie" title="Choose"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                    </div>
                     <div class="sky-caption">
                         <h3 class="edition-name">Reverie</h3>
                         <p class="edition-desc">From the old French for wandering: the waking dream in which the mind lets go and images arise on their own. Violet lines drifting through a dusk haze.</p>
-                        <button type="button" class="sky-pick" aria-pressed="false">Choose</button>
                     </div>
                 </article>
                 <article class="sky" data-s="blotter">
-                    <button type="button" class="mat-frame sky-frame" aria-label="View Blotter larger">
-                        <picture>
+                    <div class="mat-frame sky-frame">
+                        <button type="button" class="sky-view" aria-label="View Blotter larger">
+                            <picture>
                             <source type="image/avif" srcset="assets/web/sky-blotter-480.avif 480w, assets/web/sky-blotter-960.avif 960w" sizes="(max-width: 620px) 90vw, (max-width: 1000px) 45vw, 330px">
                             <source type="image/webp" srcset="assets/web/sky-blotter-480.webp 480w, assets/web/sky-blotter-960.webp 960w" sizes="(max-width: 620px) 90vw, (max-width: 1000px) 45vw, 330px">
                             <img src="assets/web/sky-blotter-960.jpg" width="960" height="1440" alt="Blotter ceremony mat design: Violet linework over a full-spectrum bloom of pink, lime and tangerine" loading="lazy" decoding="async" draggable="false">
                         </picture>
+                        </button>
                         <span class="sky-badge" hidden></span>
-                    </button>
+                        <button type="button" class="sky-pick" aria-pressed="false" aria-label="Choose Blotter" title="Choose"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                    </div>
                     <div class="sky-caption">
                         <h3 class="edition-name">Blotter</h3>
                         <p class="edition-desc">Named for the small printed squares that carried the visionary sacrament of the sixties and opened, in Blake's phrase, the doors of perception. The whole spectrum at once.</p>
-                        <button type="button" class="sky-pick" aria-pressed="false">Choose</button>
                     </div>
                 </article>
                 <article class="sky" data-s="tree-of-life">
-                    <button type="button" class="mat-frame sky-frame" aria-label="View Tree of Life larger">
-                        <picture>
+                    <div class="mat-frame sky-frame">
+                        <button type="button" class="sky-view" aria-label="View Tree of Life larger">
+                            <picture>
                             <source type="image/avif" srcset="assets/web/sky-tree-of-life-480.avif 480w, assets/web/sky-tree-of-life-960.avif 960w" sizes="(max-width: 620px) 90vw, (max-width: 1000px) 45vw, 330px">
                             <source type="image/webp" srcset="assets/web/sky-tree-of-life-480.webp 480w, assets/web/sky-tree-of-life-960.webp 960w" sizes="(max-width: 620px) 90vw, (max-width: 1000px) 45vw, 330px">
                             <img src="assets/web/sky-tree-of-life-960.jpg" width="960" height="1440" alt="Tree of Life ceremony mat design: The cube in a full spectrum, red through violet, around a bright white heart" loading="lazy" decoding="async" draggable="false">
                         </picture>
+                        </button>
                         <span class="sky-badge" hidden></span>
-                    </button>
+                        <button type="button" class="sky-pick" aria-pressed="false" aria-label="Choose Tree of Life" title="Choose"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                    </div>
                     <div class="sky-caption">
                         <h3 class="edition-name">Tree of Life</h3>
                         <p class="edition-desc">The axis of the world in nearly every tradition, from the ten spheres of the Kabbalah to Yggdrasil, joining roots, earth and heaven. The spectrum climbs to a white crown.</p>
-                        <button type="button" class="sky-pick" aria-pressed="false">Choose</button>
                     </div>
                 </article>
                 <article class="sky" data-s="sunset">
-                    <button type="button" class="mat-frame sky-frame" aria-label="View Sunset larger">
-                        <picture>
+                    <div class="mat-frame sky-frame">
+                        <button type="button" class="sky-view" aria-label="View Sunset larger">
+                            <picture>
                             <source type="image/avif" srcset="assets/web/sky-sunset-480.avif 480w, assets/web/sky-sunset-960.avif 960w" sizes="(max-width: 620px) 90vw, (max-width: 1000px) 45vw, 330px">
                             <source type="image/webp" srcset="assets/web/sky-sunset-480.webp 480w, assets/web/sky-sunset-960.webp 960w" sizes="(max-width: 620px) 90vw, (max-width: 1000px) 45vw, 330px">
                             <img src="assets/web/sky-sunset-960.jpg" width="960" height="1440" alt="Sunset ceremony mat design: Copper and ember lines over a dusky rose-and-teal ground, around a glowing white sun" loading="lazy" decoding="async" draggable="false">
                         </picture>
+                        </button>
                         <span class="sky-badge" hidden></span>
-                    </button>
+                        <button type="button" class="sky-pick" aria-pressed="false" aria-label="Choose Sunset" title="Choose"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                    </div>
                     <div class="sky-caption">
                         <h3 class="edition-name">Sunset</h3>
                         <p class="edition-desc">The threshold hour. In many traditions the sacred day begins at sundown, as the sun descends to make its night journey. Copper lines around a glowing white sun.</p>
-                        <button type="button" class="sky-pick" aria-pressed="false">Choose</button>
                     </div>
                 </article>
                 <article class="sky" data-s="cernunnos">
-                    <button type="button" class="mat-frame sky-frame" aria-label="View Cernunnos larger">
-                        <picture>
+                    <div class="mat-frame sky-frame">
+                        <button type="button" class="sky-view" aria-label="View Cernunnos larger">
+                            <picture>
                             <source type="image/avif" srcset="assets/web/sky-cernunnos-480.avif 480w, assets/web/sky-cernunnos-960.avif 960w" sizes="(max-width: 620px) 90vw, (max-width: 1000px) 45vw, 330px">
                             <source type="image/webp" srcset="assets/web/sky-cernunnos-480.webp 480w, assets/web/sky-cernunnos-960.webp 960w" sizes="(max-width: 620px) 90vw, (max-width: 1000px) 45vw, 330px">
                             <img src="assets/web/sky-cernunnos-960.jpg" width="960" height="1440" alt="Cernunnos ceremony mat design: Spring-green and moss-gold lines over deep forest, like a clearing lit from within" loading="lazy" decoding="async" draggable="false">
                         </picture>
+                        </button>
                         <span class="sky-badge" hidden></span>
-                    </button>
+                        <button type="button" class="sky-pick" aria-pressed="false" aria-label="Choose Cernunnos" title="Choose"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                    </div>
                     <div class="sky-caption">
                         <h3 class="edition-name">Cernunnos</h3>
                         <p class="edition-desc">The antlered Celtic lord of the wild. On the Gundestrup cauldron he sits cross-legged among the animals, as you will at the center of this mat.</p>
-                        <button type="button" class="sky-pick" aria-pressed="false">Choose</button>
                     </div>
                 </article>
             </div>
@@ -946,7 +970,7 @@
                         <li><button type="button" class="slot" data-r="1"></button></li>
                         <li><button type="button" class="slot" data-r="2"></button></li>
                     </ol>
-                    <p class="step-hint">Tap <strong>Choose</strong> on the prints above, favorite first. Tap a pick here to take it out. <a href="#prints">Back to the prints</a></p>
+                    <p class="step-hint">Tap the <strong>✓</strong> on the prints above, favorite first. Tap a pick here to take it out. <a href="#prints">Back to the prints</a></p>
                 </div>
 
                 <div class="step" id="step2">
@@ -1212,7 +1236,9 @@
                 var r = ranks.indexOf(el.dataset.s), btn = el.querySelector('.sky-pick'), badge = el.querySelector('.sky-badge');
                 el.classList.toggle('is-picked', r >= 0);
                 btn.setAttribute('aria-pressed', r >= 0);
-                btn.textContent = r >= 0 ? ORD[r] + ' choice ✓' : (ranks.length === 3 ? 'Swap in' : 'Choose');
+                var nm = names[el.dataset.s];
+                btn.setAttribute('aria-label', r >= 0 ? nm + ': your ' + ORD[r] + ' choice. Tap to remove.' : (ranks.length === 3 ? 'Swap ' + nm + ' in as your 3rd choice' : 'Choose ' + nm));
+                btn.title = r >= 0 ? 'Remove' : (ranks.length === 3 ? 'Swap in as 3rd' : 'Choose');
                 badge.hidden = r < 0; badge.textContent = r >= 0 ? ORD[r] : '';
             });
             Array.prototype.forEach.call(document.querySelectorAll('#picks .slot'), function (slot, i) {
@@ -1221,7 +1247,7 @@
                 slot.setAttribute('aria-label', s ? ORD[i] + ' choice: ' + names[s] + '. Tap to remove.' : ORD[i] + ' choice: empty');
                 slot.innerHTML = s
                     ? '<img src="' + thumb(s) + '" alt="" draggable="false"><span class="x" aria-hidden="true">×</span><span class="tag"><b>' + ORD[i] + '</b>' + names[s] + '</span>'
-                    : '<span class="rank">' + ORD[i] + '</span><span class="empty">Tap Choose on a print</span>';
+                    : '<span class="rank">' + ORD[i] + '</span><span class="empty">Tap ✓ on a print</span>';
             });
             $('picksCount').textContent = ranks.length + ' of 3';
             $('step1').classList.toggle('is-done', ranks.length === 3);
@@ -1256,7 +1282,7 @@
 
         grid.addEventListener('click', function (e) {
             var el = e.target.closest('.sky'); if (!el) return;
-            if (e.target.closest('.sky-frame')) { openLightbox(el.dataset.s); return; }
+            if (e.target.closest('.sky-view')) { openLightbox(el.dataset.s); return; }
             if (!e.target.closest('.sky-pick')) return;
             var s = el.dataset.s, i = ranks.indexOf(s);
             if (i >= 0) ranks.splice(i, 1);
