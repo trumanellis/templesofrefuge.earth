@@ -1209,7 +1209,14 @@
             set: function (k, v) { try { localStorage.setItem('skies.' + k, JSON.stringify(v)); } catch (e) {} }
         };
         var ranks = [];
-        var channels = [];     // selected contact channels, in the order chosen
+        var channels = [];
+        // One random id per browser: the server keeps each voter's latest vote by it.
+        var voter = store.get('voter');
+        if (!/^[a-z0-9-]{16,64}$/i.test(voter || '')) {
+            voter = window.crypto && crypto.randomUUID ? crypto.randomUUID()
+                : Array.prototype.map.call((window.crypto || window.msCrypto).getRandomValues(new Uint8Array(16)), function (b) { return ('0' + b.toString(16)).slice(-2); }).join('');
+            store.set('voter', voter);
+        }     // selected contact channels, in the order chosen
 
         // A per-visitor random order, so no print gains from sitting first.
         var order = store.get('order');
@@ -1325,7 +1332,7 @@
             if ($('voteBtn').disabled) return;
             var f = new FormData(e.target), contact = {};
             channels.forEach(function (c) { var v = $('ch-' + c).value.trim(); if (v) contact[c] = v; });
-            var vote = { poll: POLL, name: $('voteName').value.trim(), contact: contact, ranks: ranks.slice(),
+            var vote = { poll: POLL, voter: voter, name: $('voteName').value.trim(), contact: contact, ranks: ranks.slice(),
                 buy: f.get('buy') || null, comment: $('voteComment').value.trim(), botcheck: f.get('botcheck') || '' };
             var btn = $('voteBtn'); btn.disabled = true; btn.textContent = 'Sending…'; error('');
             fetch(API + '/poll-vote', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(vote) })

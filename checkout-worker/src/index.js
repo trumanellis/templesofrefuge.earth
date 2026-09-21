@@ -503,8 +503,8 @@ async function inquiry(request, env, origin) {
 
    A friends-only page asks for a first name and a ranked top three of design
    slugs. Votes are appended to the service's state directory (see
-   poll-store.js); the latest vote per name counts, so a friend can change
-   their mind. Results need POLL_RESULTS_TOKEN from /etc/tor-checkout/env.
+   poll-store.js); the latest vote per voter id counts, so a friend can change
+   their mind from the same browser. Results need POLL_RESULTS_TOKEN from /etc/tor-checkout/env.
 
    Slugs are checked by shape only, so no unreleased design name ever has to
    appear in this public repo. No IP address is stored. */
@@ -547,6 +547,12 @@ async function pollVote(request, env, origin) {
   const poll = String(body.poll || '');
   if (!SLUG.test(poll)) return json({ error: 'Unknown poll.' }, 400, origin);
 
+  // A random id the page mints once per browser. It, not the name, decides
+  // which vote is someone's latest, so two friends called Ana are two votes and
+  // no one can replace another's vote by typing their name.
+  const voter = String(body.voter || '');
+  if (!/^[a-z0-9-]{16,64}$/i.test(voter)) return json({ error: 'Please reload the page and try again.' }, 400, origin);
+
   const name = String(body.name || '').replace(/\s+/g, ' ').trim();
   if (!name || name.length > 40) {
     return json({ error: 'Please add your first name.' }, 400, origin);
@@ -565,7 +571,7 @@ async function pollVote(request, env, origin) {
   const comment = String(body.comment || '').trim().slice(0, 1000);
 
   try {
-    await store.append({ t: new Date().toISOString(), poll, name, contact: contact.value, ranks, buy, comment });
+    await store.append({ t: new Date().toISOString(), poll, voter, name, contact: contact.value, ranks, buy, comment });
   } catch {
     return json({ error: 'We could not save that just now.' }, 502, origin);
   }
@@ -613,10 +619,10 @@ async function pollResults(url, env, origin) {
     return json({ error: 'Not authorised.' }, 403, origin);
   }
   const poll = url.searchParams.get('poll') || '';
-  const latest = new Map();                 // lower-cased name → latest vote
+  const latest = new Map();                 // voter id → latest vote
   for (const v of await env.POLL_STORE.all()) {
     if (v.poll !== poll) continue;
-    const key = String(v.name).toLowerCase();
+    const key = v.voter || 'name:' + String(v.name).toLowerCase();   // lines stored before voter ids
     // A changed vote keeps any contact given earlier that it leaves blank.
     const before = latest.get(key)?.contact || {};
     const now = v.contact || (v.email ? { email: v.email } : {});
