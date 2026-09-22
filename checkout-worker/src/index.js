@@ -637,6 +637,7 @@ const POLL_RESULTS_URL = 'https://templesof.earth/mats-results';
 const POLL_NAMES = {
   'metatrons-slice': "Metatron's Slice", cosmos: 'Cosmos', ocean: 'Ocean', chacruna: 'Chacruna',
   reverie: 'Reverie', blotter: 'Blotter', 'tree-of-life': 'Tree of Life', sunset: 'Sunset', cernunnos: 'Cernunnos',
+  afterglow: 'Afterglow', mjolnir: 'Mjölnir', jungle: 'Jungle',
 };
 const printName = (s) => POLL_NAMES[s] || s.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
 
