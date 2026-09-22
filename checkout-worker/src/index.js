@@ -599,11 +599,15 @@ async function pollVote(request, env, origin) {
   // Mail after the vote is safe: a failed send never loses a vote or delays the
   // answer, and says nothing out loud about what it carried.
   const voters = new Set(prior.map((v) => v.voter || v.name)).add(voter).size;
+  const order = foundingOrder([...prior, record], poll);
+  const place = order.get(voter) || null;
+  const founding = { position: place, held: Math.min(order.size, FOUNDING_CAP), cap: FOUNDING_CAP,
+    price: FOUNDING_PRICE, regular: REGULAR_PRICE, inTime: !!place && place <= FOUNDING_CAP };
   // Mail uses every contact this voter has given, not just this submission's,
   // the same way the results page merges them.
   const known = prior.filter((v) => v.voter === voter).reduce((c, v) => ({ ...c, ...(v.contact || {}) }), {});
-  voteMail(env, { ...record, contact: { ...known, ...record.contact } }, voters).catch(() => {});
-  return json({ ok: true }, 200, origin);
+  voteMail(env, { ...record, contact: { ...known, ...record.contact } }, voters, founding).catch(() => {});
+  return json({ ok: true, founding }, 200, origin);
 }
 
 // Each channel is optional and independent. Phones are kept as + and digits
@@ -632,6 +636,23 @@ function pollContact(body) {
 }
 
 const POLL_VOTERS_PER_IP = 3;
+// The founding list: the first FOUNDING_CAP voters to leave any contact keep
+// the founding price when pre-orders open. A place is fixed by the first vote
+// that carried a contact; changing a vote later never loses it.
+const FOUNDING_CAP = 100;
+const FOUNDING_PRICE = '€247', REGULAR_PRICE = '€333';
+
+// voter key → founding position (1-based), in the order places were taken.
+function foundingOrder(records, poll) {
+  const order = new Map();
+  for (const v of records) {                 // the store is append-only, so this is time order
+    if (v.poll !== poll) continue;
+    const key = v.voter || 'name:' + String(v.name).toLowerCase();
+    const c = v.contact || (v.email ? { email: v.email } : {});
+    if (Object.keys(c).length && !order.has(key)) order.set(key, order.size + 1);
+  }
+  return order;
+}
 const POLL_RESULTS_URL = 'https://templesof.earth/mats-results';
 // The prints on /mats, for mail. A slug missing here is shown title-cased.
 const POLL_NAMES = {
@@ -654,7 +675,7 @@ async function ipKey(ip, env) {
   return Array.from(mac.slice(0, 16), (b) => b.toString(16).padStart(2, '0')).join('');
 }
 
-async function voteMail(env, v, voters) {
+async function voteMail(env, v, voters, founding) {
   const send = env.SEND_MAIL;
   if (typeof send !== 'function') return;
   const ORD = ['1st', '2nd', '3rd'];
@@ -672,7 +693,10 @@ async function voteMail(env, v, voters) {
       text: [
         `Thank you, ${v.name}.`, '',
         'Your vote is in:', picks, '',
-        `We'll write once, when the mats are available${also.length ? ', and message you on ' + also.join(' and ') : ''}.`,
+        ...(founding && founding.inTime
+          ? [`You're #${founding.position} on the founding list, so we're holding the founding price of ${founding.price} for you (normally ${founding.regular}).`, '']
+          : founding && founding.position ? ['The founding list had filled before you joined, but you will be among the first to hear.', ''] : []),
+        `We'll write once, when pre-orders open${also.length ? ', and message you on ' + also.join(' and ') : ''}.`,
         'Changed your mind? Vote again from the same browser at https://templesof.earth/mats#vote. Your latest vote counts.', '',
         'Temples of Earth', 'https://templesof.earth/mats',
       ].join('\n'),
@@ -687,6 +711,7 @@ async function voteMail(env, v, voters) {
       picks, '',
       `Would buy: ${v.buy || 'not said'}`,
       `Notify via: ${channels.length ? channels.map((c) => `${c} ${v.contact[c]}`).join(', ') : 'none'}`,
+      `Founding list: ${founding && founding.position ? `#${founding.position}${founding.inTime ? ` (holds ${founding.price})` : ' (after the first ' + founding.cap + ')'}` : 'not joined (no contact left)'}`,
       ...(v.comment ? ['', 'Comment:', v.comment] : []),
       '', `All results: ${POLL_RESULTS_URL}`,
     ].join('\n'),
@@ -732,7 +757,9 @@ async function pollTally(url, env, origin) {
       t.points += 3 - i; t.mentions += 1; if (i === 0) t.first += 1;
     });
   }
-  return json({ poll, voters: votes.length, tally }, 200, origin);
+  const order = foundingOrder(await env.POLL_STORE.all(), poll);
+  return json({ poll, voters: votes.length, tally,
+    founding: { held: Math.min(order.size, FOUNDING_CAP), cap: FOUNDING_CAP, price: FOUNDING_PRICE, regular: REGULAR_PRICE } }, 200, origin);
 }
 
 async function pollResults(url, env, origin) {
@@ -745,8 +772,9 @@ async function pollResults(url, env, origin) {
   }
   const poll = url.searchParams.get('poll') || '';
   // The connection hash stays on the box; nobody needs it on screen.
-  const votes = (await latestVotes(env, poll)).map(({ ipk, ...v }) => v);
-  return json({ poll, votes }, 200, origin);
+  const order = foundingOrder(await env.POLL_STORE.all(), poll);
+  const votes = (await latestVotes(env, poll)).map(({ ipk, ...v }) => ({ ...v, founding: order.get(v.voter || 'name:' + String(v.name).toLowerCase()) || null }));
+  return json({ poll, votes, foundingCap: FOUNDING_CAP }, 200, origin);
 }
 
 // CORS proxy for the shared Substack feed widget (shared/substack-feed.js).

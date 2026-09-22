@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Ceremony Mat — Temples of Earth</title>
-    <meta name="description" content="A portable temple. The Ceremony Mat is an oversized 140 × 210 cm coconut-rubber mat with a printed surface of fractal sacred geometry, designed to create a sacred place anywhere.">
+    <meta name="description" content="A portable temple. The Ceremony Mat is an oversized 140 × 210 cm coconut-rubber mat with a printed surface of fractal sacred geometry, designed to create a sacred place anywhere. Founding price €247 for the first 100 (normally €333).">
 
     <!-- Canonical domain is templesof.earth; templesofrefuge.earth serves
          these same files and folds into it. Extensionless form — this is the
@@ -16,7 +16,7 @@
     <meta property="og:type" content="product">
     <meta property="og:site_name" content="Temples of Earth">
     <meta property="og:title" content="The Ceremony Mat — A Portable Temple">
-    <meta property="og:description" content="An oversized 140 × 210 cm coconut-rubber mat with a printed surface of fractal sacred geometry — a portable temple you can bring to create a sacred place anywhere. Nine new designs: help us choose the print.">
+    <meta property="og:description" content="An oversized 140 × 210 cm coconut-rubber mat with a printed surface of fractal sacred geometry — a portable temple you can bring to create a sacred place anywhere. Nine new designs: help us choose the print. Founding price €247 for the first 100.">
     <meta property="og:url" content="https://templesof.earth/mats">
     <meta property="og:image" content="https://templesof.earth/assets/web/sky-og-1200x630.jpg">
     <meta property="og:image:width" content="1200">
@@ -631,6 +631,17 @@
         .sky-pick[aria-pressed="true"] svg { opacity: 1; }
         .sky-pick:focus-visible { outline: 3px solid var(--t-ac); outline-offset: 3px; }
 
+        .hero-price .hp-was { color: var(--t-mt); text-decoration: line-through; text-decoration-thickness: 1px; margin-right: .35rem; }
+        .hero-price strong { font-size: 1.25em; }
+        .hero-sub { color: var(--t-t2); font-size: .98rem; margin: -.6rem 0 1.4rem; max-width: 44ch; }
+        .hero-sub .spots, .founding-count { color: var(--t-ac); font-weight: 400; white-space: nowrap; }
+        .founding-tag { color: var(--t-ac) !important; font-weight: 500; }
+        .founding-tag s { color: var(--t-mt); font-weight: 300; margin-left: .25rem; }
+        .founding-count { font-size: .85rem; white-space: normal; }
+        .founding-count::before { content: "●"; font-size: .6rem; margin-right: .45rem; vertical-align: .15em; }
+        .thanks-founding { color: var(--t-tx) !important; background: var(--t-bc); border: 1px solid color-mix(in srgb, var(--t-ac) 40%, transparent);
+            border-radius: 6px; padding: .8rem 1rem; max-width: 460px; }
+        .thanks-founding strong { color: var(--t-ac); }
         .vote-section { padding-top: 1rem; }
         .vote { max-width: 560px; margin: 0 auto; display: flex; flex-direction: column; gap: 1rem; }
         .step { background: var(--t-cd); border: 1px solid var(--t-bd); border-radius: 6px; padding: 1.25rem 1.25rem 1.3rem;
@@ -743,7 +754,7 @@
     <section class="hero">
         <div class="hero-grid">
             <div class="hero-copy">
-                <span class="preorder-badge">Choosing the Print</span>
+                <span class="preorder-badge">Founding price · first 100</span>
                 <h1>The Ceremony Mat</h1>
                 <p class="hero-tagline">A portable temple.</p>
                 <p class="lead">
@@ -751,7 +762,8 @@
                     fractal sacred geometry — carry it anywhere and create a sacred place
                     wherever you unroll it.
                 </p>
-                <p class="hero-price">Nine new designs · <strong>help us choose the one we print</strong></p>
+                <p class="hero-price"><span class="hp-was">€333</span> <strong>€247</strong> <span class="ship">founding price for the first 100</span></p>
+                <p class="hero-sub">Vote for one of nine new prints and hold your founding price. <span class="spots" id="heroSpots" hidden></span></p>
                 <div class="hero-actions">
                     <a href="#prints" class="btn-primary">Choose your print</a>
                     <a href="#vote" class="btn-ghost">
@@ -997,7 +1009,7 @@
             <div class="section-head">
                 <p class="eyebrow">Help Choose the Print</p>
                 <h2>Vote for Your Print</h2>
-                <p class="lead">Pre-orders are paused while we choose. Three taps and your first name: that's the whole vote.</p>
+                <p class="lead">Three taps and your first name: that's the whole vote. Leave a way to reach you and you join the founding list: the first 100 keep <strong>€247</strong> when pre-orders open (normally €333).</p>
             </div>
 
             <form class="vote" id="voteForm" novalidate>
@@ -1017,7 +1029,7 @@
                 </div>
 
                 <div class="step" id="step3">
-                    <div class="step-head"><span class="step-n">3</span><span class="step-t">Tell me when they're ready</span><span class="step-s">optional</span></div>
+                    <div class="step-head"><span class="step-n">3</span><span class="step-t">Hold my founding price</span><span class="step-s founding-tag">€247 <s>€333</s></span></div>
                     <div class="channels" role="group" aria-label="How should we tell you?">
                         <button type="button" class="channel" data-ch="whatsapp" aria-pressed="false">WhatsApp</button>
                         <button type="button" class="channel" data-ch="email" aria-pressed="false">Email</button>
@@ -1031,7 +1043,8 @@
                         <label class="ch-field" data-for="telegram" hidden><span>Telegram username or number</span>
                             <input class="text-in" type="text" id="ch-telegram" autocomplete="off" placeholder="@username" maxlength="40"></label>
                     </div>
-                    <p class="step-hint">Choose as many as you like. Email also gets a copy of your vote now; otherwise we send one message, when the mats are available, and nothing else.</p>
+                    <p class="step-hint">The first 100 people to leave a contact keep the founding price of <strong>€247</strong> when pre-orders open (normally €333). Choose as many ways as you like: we'll send a copy of your vote to your email, then one message when pre-orders open, and nothing else.</p>
+                    <p class="founding-count" id="foundingCount" hidden></p>
                 </div>
 
                 <details class="more">
@@ -1054,13 +1067,14 @@
                 <p class="cta-form-error" id="voteError" role="alert" hidden></p>
                 <button type="submit" class="btn-primary vote-btn" id="voteBtn" disabled>Send my vote</button>
                 <p class="vote-need" id="voteNeed" aria-live="polite"></p>
-                <p class="order-fineprint">We keep your first name, picks and any thought you add only to choose the print, and delete them when the vote closes. Contact details are used only to confirm your vote and to tell you the mats are available. To allow a few votes per household, we keep a scrambled fingerprint of your connection, never the address itself.</p>
+                <p class="order-fineprint">We keep your first name, picks and any thought you add only to choose the print, and delete them when the vote closes. Contact details are used only to confirm your vote, hold your founding place and tell you when pre-orders open. To allow a few votes per household, we keep a scrambled fingerprint of your connection, never the address itself.</p>
             </form>
 
             <div class="vote-thanks" id="voteThanks" hidden>
                 <div class="ok-mark">✦</div>
                 <h3>Thank you, <span id="thanksName"></span></h3>
                 <p id="thanksText">Your vote is in.</p>
+                <p class="thanks-founding" id="thanksFounding" hidden></p>
                 <ol class="thanks-picks" id="thanksPicks"></ol>
                 <div class="tally" id="tally" hidden>
                     <h4 class="tally-h">How everyone's voting</h4>
@@ -1370,8 +1384,8 @@
                 buy: f.get('buy') || null, comment: $('voteComment').value.trim(), botcheck: f.get('botcheck') || '' };
             var btn = $('voteBtn'); btn.disabled = true; btn.textContent = 'Sending…'; error('');
             fetch(API + '/poll-vote', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(vote) })
-                .then(function (r) { return r.json().catch(function () { return {}; }).then(function (o) { if (!r.ok) throw new Error(o.error || 'Something went wrong. Please try again.'); }); })
-                .then(function () { delete vote.botcheck; vote.channels = channels.slice(); store.set('vote', vote); thanks(vote, true); })
+                .then(function (r) { return r.json().catch(function () { return {}; }).then(function (o) { if (!r.ok) throw new Error(o.error || 'Something went wrong. Please try again.'); return o; }); })
+                .then(function (o) { delete vote.botcheck; vote.channels = channels.slice(); vote.founding = o.founding || null; store.set('vote', vote); thanks(vote, true); loadFounding(); })
                 .catch(function (err) { error(/fetch|network|load failed/i.test(err.message) ? "We couldn't reach the server. Check your connection and try again." : err.message); })
                 .then(function () { btn.textContent = 'Send my vote'; render(); });
         });
@@ -1381,7 +1395,12 @@
             $('voteForm').hidden = true; $('voteThanks').hidden = false;
             $('thanksName').textContent = v.name;
             var via = Object.keys(v.contact || {}).map(function (c) { return CH_LABEL[c]; });
-            $('thanksText').textContent = via.length ? "Your vote is in. We'll let you know by " + listJoin(via) + ' when the mats are available.' : 'Your vote is in.';
+            $('thanksText').textContent = via.length ? "Your vote is in. We'll let you know by " + listJoin(via) + ' when pre-orders open.' : 'Your vote is in.';
+            var fd = v.founding, tf = $('thanksFounding');
+            if (fd && fd.position && fd.inTime) { tf.innerHTML = "You're <strong>#" + fd.position + '</strong> on the founding list. We\'re holding <strong>' + fd.price + '</strong> for you (normally ' + fd.regular + ').'; tf.hidden = false; }
+            else if (fd && fd.position) { tf.textContent = 'The founding list had already filled, but you will be among the first to hear when pre-orders open.'; tf.hidden = false; }
+            else if (!via.length) { tf.innerHTML = 'Want the founding price? <strong>Change your vote</strong> and leave a way to reach you: the first 100 keep €247.'; tf.hidden = false; }
+            else tf.hidden = true;
             $('thanksPicks').innerHTML = v.ranks.map(function (s, i) {
                 return '<li><img src="' + thumb(s) + '" alt="" draggable="false"><span>' + ORD[i] + ' · ' + names[s] + '</span></li>';
             }).join('');
@@ -1429,6 +1448,22 @@
         lb.addEventListener('click', function () { lb.hidden = true; });
         document.addEventListener('keydown', function (e) { if (e.key === 'Escape') lb.hidden = true; });
         grid.addEventListener('contextmenu', function (e) { if (e.target.tagName === 'IMG') e.preventDefault(); });
+
+        // Founding spots left, shown in the hero and on step 3 (a count only).
+        function loadFounding() {
+            fetch(API + '/poll-tally?poll=' + encodeURIComponent(POLL))
+                .then(function (r) { if (!r.ok) throw new Error(); return r.json(); })
+                .then(function (d) {
+                    var f = d.founding; if (!f) return;
+                    var left = Math.max(0, f.cap - f.held);
+                    var txt = left > 0 ? left + ' of ' + f.cap + ' founding spots left' : 'The founding list is full';
+                    $('heroSpots').textContent = txt + '.'; $('heroSpots').hidden = false;
+                    $('foundingCount').textContent = txt + (left > 0 ? ': leave any contact above to hold yours.' : '. Leave a contact to hear first when pre-orders open.');
+                    $('foundingCount').hidden = false;
+                })
+                .catch(function () {});
+        }
+        loadFounding();
 
         var prior = store.get('vote');
         if (prior && Array.isArray(prior.ranks) && prior.ranks.every(function (s) { return names[s]; })) { ranks = prior.ranks.slice(); thanks(prior); }
